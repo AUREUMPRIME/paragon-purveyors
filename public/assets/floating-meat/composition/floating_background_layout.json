@@ -1,0 +1,454 @@
+{
+  "version": "2.0-homogeneous",
+  "purpose": "Homogeneous floating decorative 3D background layer for Paragon Purveyors.",
+  "sourceModel": "Sketchfab meat OBJ supplied by user; split into ten source objects.",
+  "assetCount": {
+    "total": 10,
+    "meatPieces": 7,
+    "leafSprigs": 1,
+    "woodenPlates": 2
+  },
+  "stage": {
+    "coordinateSystem": "normalized-16x9-world",
+    "width": 16,
+    "height": 9,
+    "cameraRecommendation": {
+      "type": "PerspectiveCamera",
+      "fov": 35,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 10
+      }
+    },
+    "backgroundLayerIntent": "Behind all website text/content and above the main background; low opacity, blurred, slow seamless loop, evenly distributed without clusters."
+  },
+  "items": [
+    {
+      "id": "01_meat_piece_01",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/01_meat_piece_01.obj",
+      "material": "assets/full_atlas_centered/01_meat_piece_01.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": -7.25,
+          "y": 3.05,
+          "z": -5.45
+        },
+        "rotationDegrees": {
+          "x": -10,
+          "y": 16,
+          "z": -18
+        },
+        "scale": 0.96
+      },
+      "renderIntent": {
+        "opacity": 0.28,
+        "blurPx": 14,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 37,
+        "phaseOffset": 0.0,
+        "xAmplitude": 0.14,
+        "yAmplitude": 0.215,
+        "zAmplitude": 0.075,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "02_wooden_plate_01",
+      "role": "wooden_plate",
+      "asset": "assets/full_atlas_centered/02_wooden_plate_01.obj",
+      "material": "assets/full_atlas_centered/02_wooden_plate_01.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": -5.7,
+          "y": -2.85,
+          "z": -6.65
+        },
+        "rotationDegrees": {
+          "x": 4,
+          "y": -18,
+          "z": 10
+        },
+        "scale": 0.72
+      },
+      "renderIntent": {
+        "opacity": 0.2,
+        "blurPx": 20,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 43,
+        "phaseOffset": 0.1,
+        "xAmplitude": 0.175,
+        "yAmplitude": 0.25,
+        "zAmplitude": 0.1,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "03_meat_piece_02",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/03_meat_piece_02.obj",
+      "material": "assets/full_atlas_centered/03_meat_piece_02.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": -3.8,
+          "y": 2.05,
+          "z": -4.85
+        },
+        "rotationDegrees": {
+          "x": -7,
+          "y": 10,
+          "z": 22
+        },
+        "scale": 0.98
+      },
+      "renderIntent": {
+        "opacity": 0.31,
+        "blurPx": 12,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 39,
+        "phaseOffset": 0.2,
+        "xAmplitude": 0.21,
+        "yAmplitude": 0.18,
+        "zAmplitude": 0.075,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "04_meat_piece_03",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/04_meat_piece_03.obj",
+      "material": "assets/full_atlas_centered/04_meat_piece_03.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": -2.05,
+          "y": -3.25,
+          "z": -5.9
+        },
+        "rotationDegrees": {
+          "x": 7,
+          "y": -20,
+          "z": -8
+        },
+        "scale": 0.86
+      },
+      "renderIntent": {
+        "opacity": 0.22,
+        "blurPx": 17,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 46,
+        "phaseOffset": 0.3,
+        "xAmplitude": 0.14,
+        "yAmplitude": 0.215,
+        "zAmplitude": 0.1,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "05_leaf_sprig_01",
+      "role": "leaf",
+      "asset": "assets/full_atlas_centered/05_leaf_sprig_01.obj",
+      "material": "assets/full_atlas_centered/05_leaf_sprig_01.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": -0.1,
+          "y": 3.2,
+          "z": -6.1
+        },
+        "rotationDegrees": {
+          "x": -12,
+          "y": 11,
+          "z": 6
+        },
+        "scale": 1.02
+      },
+      "renderIntent": {
+        "opacity": 0.22,
+        "blurPx": 16,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 41,
+        "phaseOffset": 0.4,
+        "xAmplitude": 0.175,
+        "yAmplitude": 0.25,
+        "zAmplitude": 0.075,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "06_meat_piece_04",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/06_meat_piece_04.obj",
+      "material": "assets/full_atlas_centered/06_meat_piece_04.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": 1.7,
+          "y": -2.15,
+          "z": -4.9
+        },
+        "rotationDegrees": {
+          "x": 10,
+          "y": -14,
+          "z": -20
+        },
+        "scale": 0.92
+      },
+      "renderIntent": {
+        "opacity": 0.29,
+        "blurPx": 13,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 44,
+        "phaseOffset": 0.5,
+        "xAmplitude": 0.21,
+        "yAmplitude": 0.18,
+        "zAmplitude": 0.1,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "07_meat_piece_05",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/07_meat_piece_05.obj",
+      "material": "assets/full_atlas_centered/07_meat_piece_05.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": 3.6,
+          "y": 2.55,
+          "z": -5.6
+        },
+        "rotationDegrees": {
+          "x": -5,
+          "y": 22,
+          "z": 17
+        },
+        "scale": 0.84
+      },
+      "renderIntent": {
+        "opacity": 0.26,
+        "blurPx": 15,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 38,
+        "phaseOffset": 0.6,
+        "xAmplitude": 0.14,
+        "yAmplitude": 0.215,
+        "zAmplitude": 0.075,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "08_meat_piece_06",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/08_meat_piece_06.obj",
+      "material": "assets/full_atlas_centered/08_meat_piece_06.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": 4.95,
+          "y": -3.15,
+          "z": -6.55
+        },
+        "rotationDegrees": {
+          "x": 6,
+          "y": -18,
+          "z": 12
+        },
+        "scale": 0.82
+      },
+      "renderIntent": {
+        "opacity": 0.2,
+        "blurPx": 20,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 47,
+        "phaseOffset": 0.7,
+        "xAmplitude": 0.175,
+        "yAmplitude": 0.25,
+        "zAmplitude": 0.1,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "09_meat_piece_07",
+      "role": "meat",
+      "asset": "assets/full_atlas_centered/09_meat_piece_07.obj",
+      "material": "assets/full_atlas_centered/09_meat_piece_07.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": 6.45,
+          "y": 1.1,
+          "z": -4.95
+        },
+        "rotationDegrees": {
+          "x": -8,
+          "y": 12,
+          "z": -14
+        },
+        "scale": 0.94
+      },
+      "renderIntent": {
+        "opacity": 0.3,
+        "blurPx": 13,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 40,
+        "phaseOffset": 0.8,
+        "xAmplitude": 0.21,
+        "yAmplitude": 0.18,
+        "zAmplitude": 0.075,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    },
+    {
+      "id": "10_wooden_plate_02",
+      "role": "wooden_plate",
+      "asset": "assets/full_atlas_centered/10_wooden_plate_02.obj",
+      "material": "assets/full_atlas_centered/10_wooden_plate_02.mtl",
+      "texture": "assets/textures/DRAW_texture_atlas.png",
+      "staticTransform": {
+        "position": {
+          "x": 7.3,
+          "y": -2.2,
+          "z": -6.85
+        },
+        "rotationDegrees": {
+          "x": 4,
+          "y": -22,
+          "z": -10
+        },
+        "scale": 0.68
+      },
+      "renderIntent": {
+        "opacity": 0.19,
+        "blurPx": 21,
+        "blendMode": "screen-or-normal-low-opacity",
+        "isDecorative": true,
+        "ariaHidden": true
+      },
+      "loopIntent": {
+        "type": "seamless-sine",
+        "durationSeconds": 45,
+        "phaseOffset": 0.9,
+        "xAmplitude": 0.14,
+        "yAmplitude": 0.215,
+        "zAmplitude": 0.1,
+        "rotationAmplitudeDegrees": {
+          "x": 2.5,
+          "y": 4.0,
+          "z": 3.0
+        },
+        "notes": "Homogeneous separated drift: small sine/cosine offsets preserve spacing and loop seamlessly."
+      }
+    }
+  ],
+  "implementationNotes": [
+    "Load each OBJ as a decorative asset with its atlas texture.",
+    "Use the staticTransform values as the base position.",
+    "Apply loopIntent as additive motion, not replacement motion.",
+    "Keep opacity low and blur enabled so the assets support the premium background instead of competing with copy.",
+    "On mobile, reduce item count to 4-6 or increase blur and lower opacity for readability.",
+    "Respect prefers-reduced-motion: freeze loop motion and render a static low-opacity composition.",
+    "This v2.0 layout replaces clustered composition with a homogeneous separated distribution. Copy only this package into public/assets/floating-meat/."
+  ],
+  "distribution": {
+    "mode": "homogeneous-separated-two-row-field",
+    "intent": "Single assets are separated across the 16:9 stage so they cover the space evenly without clustered bundles.",
+    "centerPolicy": "Center remains visually breathable for Paragon section panels; objects live mostly around the frame and mid-background.",
+    "assetPolicy": "Use separate OBJ assets from assets/full_atlas_centered with the shared atlas texture; do not use the combined scene OBJ for final implementation.",
+    "publicInstallPath": "public/assets/floating-meat/"
+  }
+}
