@@ -1,8 +1,9 @@
+import { assetPath } from "./assetPath.js";
 import * as THREE from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 
-const FLOATING_BASE_PATH = "/assets/floating-meat";
+const FLOATING_BASE_PATH = assetPath("assets/floating-meat");
 const LAYOUT_PATH = `${FLOATING_BASE_PATH}/composition/floating_background_layout.json`;
 const REDUCE_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const MOBILE_QUERY = "(max-width: 700px)";

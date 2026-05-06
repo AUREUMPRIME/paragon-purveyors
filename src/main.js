@@ -1,3 +1,4 @@
+import { assetPath } from "./assetPath.js";
 import { initFloatingBackground } from "./floatingBackground.js";
 import { initForwardDepth } from "./forwardDepth.js";
 import "./styles.css";
@@ -60,7 +61,7 @@ app.innerHTML = `
             >
               <span class="section-about-logo-card__mark">
                 <img
-                  src="/assets/brand/paragon-footer-logo.svg"
+                  src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
                   alt=""
                   aria-hidden="true"
                   loading="lazy"
@@ -93,7 +94,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--black-opal">
             <img
               class="brand-card-icon"
-              src="/assets/provider-icons/black-opal.svg"
+              src="${assetPath("assets/provider-icons/black-opal.svg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -106,7 +107,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--mayura-station">
             <img
               class="brand-card-icon"
-              src="/assets/provider-icons/mayura-station.svg"
+              src="${assetPath("assets/provider-icons/mayura-station.svg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -119,7 +120,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--campo-grande">
             <img
               class="brand-card-icon"
-              src="/assets/provider-icons/campo-grande.svg"
+              src="${assetPath("assets/provider-icons/campo-grande.svg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -132,7 +133,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--robbins-island">
             <img
               class="brand-card-icon"
-              src="/assets/provider-icons/robbins-island.svg"
+              src="${assetPath("assets/provider-icons/robbins-island.svg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -145,7 +146,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--wanderer">
             <img
               class="brand-card-icon"
-              src="/assets/provider-icons/wanderer.svg"
+              src="${assetPath("assets/provider-icons/wanderer.svg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -176,7 +177,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--ribeye">
             <img
               class="cut-card-image"
-              src="/assets/cuts/ribeye.jpg"
+              src="${assetPath("assets/cuts/ribeye.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -189,7 +190,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--tenderloin">
             <img
               class="cut-card-image"
-              src="/assets/cuts/tenderloin.jpg"
+              src="${assetPath("assets/cuts/tenderloin.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -202,7 +203,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--striploin">
             <img
               class="cut-card-image"
-              src="/assets/cuts/striploin.jpg"
+              src="${assetPath("assets/cuts/striploin.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -215,7 +216,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--tomahawk">
             <img
               class="cut-card-image"
-              src="/assets/cuts/tomahawk.jpg"
+              src="${assetPath("assets/cuts/tomahawk.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -228,7 +229,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--presa">
             <img
               class="cut-card-image"
-              src="/assets/cuts/presa.jpg"
+              src="${assetPath("assets/cuts/presa.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -241,7 +242,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--secreto">
             <img
               class="cut-card-image"
-              src="/assets/cuts/secreto.jpg"
+              src="${assetPath("assets/cuts/secreto.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -254,7 +255,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--rump-cap">
             <img
               class="cut-card-image"
-              src="/assets/cuts/rump-cap.jpg"
+              src="${assetPath("assets/cuts/rump-cap.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -267,7 +268,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--short-rib">
             <img
               class="cut-card-image"
-              src="/assets/cuts/short-rib.jpg"
+              src="${assetPath("assets/cuts/short-rib.jpg")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -316,7 +317,7 @@ app.innerHTML = `
                               <footer class="site-footer" role="contentinfo" aria-label="Paragon Purveyors footer">
         <img
           class="site-footer-logo"
-          src="/assets/brand/paragon-footer-logo.svg"
+          src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
           alt="Paragon Purveyors"
         />
       </footer>
@@ -371,7 +372,7 @@ function initHeroButtonFeedback() {
         <aside class="about-modal__brand" aria-label="Paragon Purveyors logo">
           <img
             class="about-modal__logo"
-            src="/assets/brand/paragon-footer-logo.svg"
+            src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
             alt="Paragon Purveyors"
           />
         </aside>
@@ -484,7 +485,7 @@ requestAnimationFrame(() => {
       eyebrow: "Australian Wagyu",
       title: "Black Opal",
       description: "Australian Wagyu selections organized by marbling score.",
-      pdf: "/assets/product-lists/PP_australian_wagyu.pdf",
+      pdf: assetPath("assets/product-lists/PP_australian_wagyu.pdf"),
       sections: [
         {
           title: "Marbling Score 4-9+",
@@ -554,7 +555,7 @@ requestAnimationFrame(() => {
       eyebrow: "Full-Blood Wagyu",
       title: "Mayura Station",
       description: "Full-blood Wagyu selections organized by marbling score.",
-      pdf: "/assets/product-lists/PP_full_blood_wagyu.pdf",
+      pdf: assetPath("assets/product-lists/PP_full_blood_wagyu.pdf"),
       sections: [
         {
           title: "Marbling Score 8-9",
@@ -587,7 +588,7 @@ requestAnimationFrame(() => {
       eyebrow: "Ibérico Pork",
       title: "Campo Grande",
       description: "Ibérico pork selections covering fresh cuts and cured retail items.",
-      pdf: "/assets/product-lists/PP_iberico_pork.pdf",
+      pdf: assetPath("assets/product-lists/PP_iberico_pork.pdf"),
       sections: [
         {
           title: "Fresh Ibérico Pork Cuts",
@@ -629,7 +630,7 @@ requestAnimationFrame(() => {
       eyebrow: "Tasmanian Wagyu",
       title: "Robbins Island",
       description: "Tasmanian Wagyu selections organized by marble score.",
-      pdf: "/assets/product-lists/PP_tasmanian_wagyu.pdf",
+      pdf: assetPath("assets/product-lists/PP_tasmanian_wagyu.pdf"),
       sections: [
         {
           title: "Marble Score 7-8+",
@@ -671,7 +672,7 @@ requestAnimationFrame(() => {
       eyebrow: "Free Range Barley Fed Beef",
       title: "Wanderer",
       description: "Free range barley-fed beef selections with reserve offerings.",
-      pdf: "/assets/product-lists/PP_free_range_barley_beef.pdf",
+      pdf: assetPath("assets/product-lists/PP_free_range_barley_beef.pdf"),
       sections: [
         {
           title: "Free Range Barley Fed Beef",
