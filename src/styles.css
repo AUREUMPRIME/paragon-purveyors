@@ -2734,8 +2734,7 @@ body.selected-cut-modal-open {
 
 /* ABOUT_MODAL_MOBILE_TITLE_FLATTEN_START */
 @media (max-width: 899px) {
-  .about-modal__title,
-  .about-modal h2.about-modal__title {
+  .about-modal h2 {
     display: block;
     width: auto;
     max-width: calc(100% - 82px);
@@ -2749,8 +2748,7 @@ body.selected-cut-modal-open {
 }
 
 @media (max-width: 420px), (max-width: 899px) and (max-height: 760px) {
-  .about-modal__title,
-  .about-modal h2.about-modal__title {
+  .about-modal h2 {
     max-width: calc(100% - 68px);
     margin-bottom: 8px;
     font-size: clamp(1.08rem, 4.45vw, 1.34rem);
@@ -2758,4 +2756,5 @@ body.selected-cut-modal-open {
   }
 }
 /* ABOUT_MODAL_MOBILE_TITLE_FLATTEN_END */
+
 
