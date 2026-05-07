@@ -277,6 +277,12 @@ app.innerHTML = `
             <span class="cut-kicker">Wagyu</span>
             <h3>Short Rib</h3>
           </article>
+          <article class="cut-card cut-card--all-cuts" data-product-list-trigger="All Cuts">
+            <span class="cut-card-shade" aria-hidden="true"></span>
+            <span class="cut-kicker">Wagyu Cut Guide</span>
+            <h3>All Cuts</h3>
+            <p class="cut-card-description">View the complete visual cut reference.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -668,6 +674,43 @@ requestAnimationFrame(() => {
         },
       ],
     },
+    // ALL_CUTS_PRODUCT_LIST_START
+    "All Cuts": {
+      eyebrow: "Wagyu Cut Guide",
+      title: "All Cuts",
+      description: "A complete visual reference for selected Wagyu cuts, preserving the original page layout, photography, diagrams, packing specifications, and preparation notes.",
+      pdf: assetPath("assets/product-lists/PP_all_cuts_guide.pdf"),
+      layout: "page-gallery",
+      pages: [
+        { title: "Bolar Blade", src: assetPath("assets/all-cuts/pages/all-cuts-01.webp") },
+        { title: "Chuck Eye Roll", src: assetPath("assets/all-cuts/pages/all-cuts-02.webp") },
+        { title: "Chuck Tail Flap", src: assetPath("assets/all-cuts/pages/all-cuts-03.webp") },
+        { title: "D-Rump", src: assetPath("assets/all-cuts/pages/all-cuts-04.webp") },
+        { title: "Eye Round", src: assetPath("assets/all-cuts/pages/all-cuts-05.webp") },
+        { title: "Flank Steak", src: assetPath("assets/all-cuts/pages/all-cuts-06.webp") },
+        { title: "Flap Meat", src: assetPath("assets/all-cuts/pages/all-cuts-07.webp") },
+        { title: "Inside Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-08.webp") },
+        { title: "Intercostals Long", src: assetPath("assets/all-cuts/pages/all-cuts-09.webp") },
+        { title: "Navel End Brisket", src: assetPath("assets/all-cuts/pages/all-cuts-10.webp") },
+        { title: "OP Ribs", src: assetPath("assets/all-cuts/pages/all-cuts-11.webp") },
+        { title: "Oyster Blade", src: assetPath("assets/all-cuts/pages/all-cuts-12.webp") },
+        { title: "Rib Eye Cap", src: assetPath("assets/all-cuts/pages/all-cuts-13.webp") },
+        { title: "Rostbiff", src: assetPath("assets/all-cuts/pages/all-cuts-14.webp") },
+        { title: "Rump Cap", src: assetPath("assets/all-cuts/pages/all-cuts-15.webp") },
+        { title: "Short Loin", src: assetPath("assets/all-cuts/pages/all-cuts-16.webp") },
+        { title: "Striploin", src: assetPath("assets/all-cuts/pages/all-cuts-17.webp") },
+        { title: "Tenderloin Side Strap Off", src: assetPath("assets/all-cuts/pages/all-cuts-18.webp") },
+        { title: "Tomahawk", src: assetPath("assets/all-cuts/pages/all-cuts-19.webp") },
+        { title: "Topside Cap Off", src: assetPath("assets/all-cuts/pages/all-cuts-20.webp") },
+        { title: "Tri Tip", src: assetPath("assets/all-cuts/pages/all-cuts-21.webp") },
+        { title: "Thick Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-22.webp") },
+        { title: "Thin Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-23.webp") },
+        { title: "Cheek", src: assetPath("assets/all-cuts/pages/all-cuts-24.webp") },
+        { title: "Tail", src: assetPath("assets/all-cuts/pages/all-cuts-25.webp") },
+        { title: "Tongue", src: assetPath("assets/all-cuts/pages/all-cuts-26.webp") },
+      ],
+    },
+    // ALL_CUTS_PRODUCT_LIST_END
     Wanderer: {
       eyebrow: "Free Range Barley Fed Beef",
       title: "Wanderer",
@@ -728,6 +771,27 @@ requestAnimationFrame(() => {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  // ALL_CUTS_PAGE_GALLERY_HELPERS_START
+  const createPageGallery = (pages) => `
+    <div class="product-list-page-gallery">
+      ${pages
+        .map(
+          (page, index) => `
+            <figure class="product-list-page-card">
+              <img
+                src="${escapeHtml(page.src)}"
+                alt="${escapeHtml(page.title)} cut guide page"
+                loading="${index < 2 ? "eager" : "lazy"}"
+                decoding="async"
+              />
+              <figcaption>${String(index + 1).padStart(2, "0")} / ${String(pages.length).padStart(2, "0")} — ${escapeHtml(page.title)}</figcaption>
+            </figure>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+  // ALL_CUTS_PAGE_GALLERY_HELPERS_END
   const createRows = (rows) =>
     rows
       .map(
@@ -741,8 +805,12 @@ requestAnimationFrame(() => {
       )
       .join("");
 
-  const createSections = (sections) =>
-    sections
+  const createSections = (productList) => {
+    if (Array.isArray(productList.pages) && productList.pages.length > 0) {
+      return createPageGallery(productList.pages);
+    }
+
+    return productList.sections
       .map(
         (section) => `
           <section class="product-list-section">
@@ -765,6 +833,7 @@ requestAnimationFrame(() => {
         `,
       )
       .join("");
+  };
 
   const modalContent = `
     <div class="product-list-modal__panel">
@@ -829,7 +898,7 @@ requestAnimationFrame(() => {
     }
 
     if (bodyNode) {
-      bodyNode.innerHTML = createSections(productList.sections);
+      bodyNode.innerHTML = createSections(productList);
       bodyNode.scrollTop = 0;
     }
 
@@ -851,6 +920,7 @@ requestAnimationFrame(() => {
 
   const closeProductList = () => {
     document.body.classList.remove("product-list-modal-open");
+    modal.classList.remove("product-list-modal--page-gallery");
 
     if (typeof modal.close === "function" && modal.open) {
       modal.close();
@@ -867,8 +937,8 @@ requestAnimationFrame(() => {
     }
   };
 
-  document.querySelectorAll(".brand-card").forEach((card) => {
-    const title = card.querySelector("h3")?.textContent?.trim();
+  document.querySelectorAll(".brand-card, [data-product-list-trigger]").forEach((card) => {
+    const title = card.dataset.productListTrigger || card.querySelector("h3")?.textContent?.trim();
 
     if (!title || !productLists[title]) {
       return;
@@ -901,6 +971,7 @@ requestAnimationFrame(() => {
 
   modal.addEventListener("close", () => {
     document.body.classList.remove("product-list-modal-open");
+    modal.classList.remove("product-list-modal--page-gallery");
 
     if (bodyNode) {
       bodyNode.innerHTML = "";
@@ -914,6 +985,7 @@ requestAnimationFrame(() => {
   });
 })();
 // PRODUCT_LIST_MODAL_END
+
 
 
 
