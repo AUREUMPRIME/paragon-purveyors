@@ -2438,3 +2438,131 @@ body.selected-cut-modal-open {
   }
 }
 /* SECTION_2_STORY_ABOUT_CARD_END */
+
+/* MOBILE_LIVE_POLISH_START */
+@media (max-width: 899px) {
+  .scene-hero .panel,
+  .panel-hero,
+  .hero-panel {
+    width: min(88vw, 560px);
+    padding-inline: clamp(18px, 5vw, 28px);
+  }
+
+  .scene-hero h1,
+  .hero-title {
+    max-width: 100%;
+    font-size: clamp(2.35rem, 9.35vw, 3.05rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .scene-hero .hero-copy,
+  .hero-copy {
+    max-width: 30ch;
+    font-size: clamp(1rem, 3.45vw, 1.14rem);
+    line-height: 1.45;
+  }
+
+  .about-modal,
+  .about-modal-overlay,
+  .about-modal-backdrop {
+    align-items: flex-start;
+    padding: max(14px, env(safe-area-inset-top)) 14px max(28px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .about-modal-card,
+  .about-modal-panel,
+  .about-modal-content,
+  .about-dialog,
+  .about-modal [role="dialog"] {
+    max-height: calc(100dvh - 30px);
+    overflow-y: auto;
+    padding-bottom: clamp(76px, 14vh, 128px);
+    overscroll-behavior: contain;
+  }
+
+  .about-modal img,
+  .about-modal-logo,
+  .about-modal-mark,
+  .about-modal__logo,
+  .about-modal__mark {
+    max-width: min(58vw, 190px);
+    height: auto;
+    margin-inline: auto;
+  }
+
+  .about-modal .modal-close,
+  .about-modal-close,
+  .about-close,
+  .modal-close {
+    position: sticky;
+    top: 10px;
+    z-index: 5;
+  }
+
+  .cut-card-image {
+    opacity: 0.44;
+    filter: saturate(1.12) brightness(1.2) contrast(1.04);
+  }
+
+  .cut-card-shade {
+    background:
+      linear-gradient(90deg, rgba(13, 13, 13, 0.96) 0%, rgba(13, 13, 13, 0.82) 44%, rgba(13, 13, 13, 0.42) 100%),
+      radial-gradient(circle at 88% 52%, rgba(243, 240, 234, 0.07), transparent 44%);
+  }
+}
+
+@media (max-width: 420px), (max-height: 760px) {
+  .scene-hero .panel,
+  .panel-hero,
+  .hero-panel {
+    width: min(90vw, 520px);
+    padding-inline: 18px;
+  }
+
+  .scene-hero h1,
+  .hero-title {
+    font-size: clamp(2.12rem, 8.75vw, 2.72rem);
+    line-height: 0.98;
+    letter-spacing: -0.038em;
+  }
+
+  .scene-hero .hero-copy,
+  .hero-copy {
+    max-width: 29ch;
+    font-size: clamp(0.94rem, 3.35vw, 1.02rem);
+  }
+
+  .about-modal-card,
+  .about-modal-panel,
+  .about-modal-content,
+  .about-dialog,
+  .about-modal [role="dialog"] {
+    max-height: calc(100dvh - 24px);
+    padding-bottom: clamp(92px, 16vh, 144px);
+  }
+
+  .about-modal img,
+  .about-modal-logo,
+  .about-modal-mark,
+  .about-modal__logo,
+  .about-modal__mark {
+    max-width: min(52vw, 160px);
+  }
+
+  .cut-card-image {
+    opacity: 0.5;
+    filter: saturate(1.16) brightness(1.26) contrast(1.06);
+  }
+
+  .cut-card-shade {
+    background:
+      linear-gradient(90deg, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.76) 46%, rgba(13, 13, 13, 0.3) 100%),
+      radial-gradient(circle at 88% 52%, rgba(243, 240, 234, 0.08), transparent 44%);
+  }
+}
+/* MOBILE_LIVE_POLISH_END */
+
