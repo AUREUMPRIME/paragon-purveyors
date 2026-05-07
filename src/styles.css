@@ -2515,7 +2515,7 @@ body.selected-cut-modal-open {
   }
 }
 
-@media (max-width: 420px), (max-height: 760px) {
+@media (max-width: 420px), (max-width: 899px) and (max-height: 760px) {
   .scene-hero .panel,
   .panel-hero,
   .hero-panel {
@@ -2647,7 +2647,7 @@ body.selected-cut-modal-open {
   }
 }
 
-@media (max-width: 420px), (max-height: 760px) {
+@media (max-width: 420px), (max-width: 899px) and (max-height: 760px) {
   .about-modal {
     padding: max(6px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
   }
@@ -2705,7 +2705,7 @@ body.selected-cut-modal-open {
   }
 }
 
-@media (max-height: 680px) {
+@media (max-width: 899px) and (max-height: 680px) {
   .about-modal__panel {
     padding: 12px 15px;
   }
@@ -2731,4 +2731,5 @@ body.selected-cut-modal-open {
   }
 }
 /* ABOUT_MODAL_MOBILE_FIT_END */
+
 
