@@ -2732,4 +2732,30 @@ body.selected-cut-modal-open {
 }
 /* ABOUT_MODAL_MOBILE_FIT_END */
 
+/* ABOUT_MODAL_MOBILE_TITLE_FLATTEN_START */
+@media (max-width: 899px) {
+  .about-modal__title,
+  .about-modal h2.about-modal__title {
+    display: block;
+    width: auto;
+    max-width: calc(100% - 82px);
+    margin-bottom: clamp(8px, 1.2vh, 11px);
+    overflow: visible;
+    font-size: clamp(1.16rem, 4.85vw, 1.52rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px), (max-width: 899px) and (max-height: 760px) {
+  .about-modal__title,
+  .about-modal h2.about-modal__title {
+    max-width: calc(100% - 68px);
+    margin-bottom: 8px;
+    font-size: clamp(1.08rem, 4.45vw, 1.34rem);
+    line-height: 1;
+  }
+}
+/* ABOUT_MODAL_MOBILE_TITLE_FLATTEN_END */
 
