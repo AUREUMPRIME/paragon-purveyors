@@ -2871,5 +2871,86 @@ body.selected-cut-modal-open {
 }
 /* ABOUT_MODAL_MOBILE_TITLE_FLATTEN_END */
 
+/* SECTION_4_REFINEMENT_START */
+.product-list-modal__eyebrow:empty {
+  display: none;
+  margin: 0;
+}
 
+.cut-card--all-cuts {
+  text-align: center;
+}
+
+.cut-card--all-cuts h3,
+.cut-card--all-cuts .cut-card-description {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+@media (min-width: 901px) {
+  .panel-cuts {
+    width: min(80vw, 980px);
+    padding: clamp(20px, 2.35vw, 28px);
+  }
+
+  .panel-cuts .cuts-head {
+    margin-bottom: 22px;
+  }
+
+  .panel-cuts .cuts-title {
+    font-size: clamp(3.05rem, 4.25vw, 5.05rem);
+  }
+
+  .panel-cuts .cuts-intro {
+    margin-top: 1.05rem;
+    margin-bottom: 1.55rem;
+  }
+
+  .panel-cuts .cuts-grid {
+    gap: 14px;
+  }
+
+  .panel-cuts .cut-card {
+    padding: 18px 18px;
+  }
+
+  .panel-cuts .cut-card h3 {
+    font-size: clamp(1.55rem, 1.82vw, 2.02rem);
+  }
+
+  .panel-cuts .cut-kicker {
+    margin-bottom: 10px;
+    font-size: 11px;
+  }
+
+  .panel-cuts .cut-card--all-cuts {
+    min-height: clamp(112px, 14vh, 144px);
+    padding: clamp(20px, 2.4vw, 28px);
+  }
+
+  .panel-cuts .cut-card--all-cuts h3 {
+    font-size: clamp(1.95rem, 2.75vw, 2.85rem);
+  }
+
+  .panel-cuts .cut-card-description {
+    margin-top: 9px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cut-card--all-cuts {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cut-card--all-cuts h3,
+  .cut-card--all-cuts .cut-card-description {
+    max-width: 100%;
+    text-align: center;
+  }
+}
+/* SECTION_4_REFINEMENT_END */
 

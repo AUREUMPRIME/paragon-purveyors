@@ -279,7 +279,6 @@ app.innerHTML = `
           </article>
           <article class="cut-card cut-card--all-cuts" data-product-list-trigger="All Cuts">
             <span class="cut-card-shade" aria-hidden="true"></span>
-            <span class="cut-kicker">Wagyu Cut Guide</span>
             <h3>All Cuts</h3>
             <p class="cut-card-description">View the complete visual cut reference.</p>
           </article>
@@ -319,7 +318,7 @@ app.innerHTML = `
         </div>
       </div>
     </section>
-  
+
                               <footer class="site-footer" role="contentinfo" aria-label="Paragon Purveyors footer">
         <img
           class="site-footer-logo"
@@ -676,9 +675,9 @@ requestAnimationFrame(() => {
     },
     // ALL_CUTS_PRODUCT_LIST_START
     "All Cuts": {
-      eyebrow: "Wagyu Cut Guide",
+      eyebrow: "",
       title: "All Cuts",
-      description: "A complete visual reference for selected Wagyu cuts, preserving the original page layout, photography, diagrams, packing specifications, and preparation notes.",
+      description: "A refined visual guide of cuts, with clear references, specifications, and preparation notes for each selection.",
       pdf: assetPath("assets/product-lists/PP_all_cuts_guide.pdf"),
       layout: "page-gallery",
       pages: [
@@ -985,9 +984,3 @@ requestAnimationFrame(() => {
   });
 })();
 // PRODUCT_LIST_MODAL_END
-
-
-
-
-
-
