@@ -796,7 +796,20 @@ requestAnimationFrame(() => {
     Wanderer: {
       eyebrow: "Free Range Barley Fed Beef",
       title: "Wanderer",
-      description: "Free range barley-fed beef selections with reserve offerings.",
+      // PROVIDER_INTRO_WANDERER_START
+      providerIntro: {
+        logo: assetPath("assets/provider-logos/modal/wanderer_modal_logo.png"),
+        logoAlt: "Wanderer logo",
+        bannerImage: assetPath("assets/provider-banners/wanderer-banner.png"),
+        bannerLabel: "Free-Range · Barley-Fed · Dependable",
+        copy: "Wanderer is selected for a distinctive balance of free-range husbandry and barley-fed consistency. Its cattle roam open paddocks while accessing barley through an innovative mobile feeding system, giving chefs the richness, tenderness, and dependable quality of barley-fed beef without the use of intensive feedlots.",
+        tags: ["Free-Range Beef", "Barley-Fed Quality", "No Intensive Feedlots"],
+        websiteCopy: "For additional information on Wanderer Beef, visit the producer's official brand page.",
+        websiteLabel: "Visit Wanderer",
+        websiteUrl: "https://www.wandererbeef.com.au/",
+      },
+      // PROVIDER_INTRO_WANDERER_END
+      description: "",
       pdf: assetPath("assets/product-lists/PP_free_range_barley_beef.pdf"),
       sections: [
         {
