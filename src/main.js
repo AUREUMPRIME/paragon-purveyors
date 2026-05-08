@@ -770,6 +770,78 @@ requestAnimationFrame(() => {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  // ALL_CUTS_GUIDE_TABS_HELPERS_START
+  const getActiveProductListGuide = (productList, guideKey = null) => {
+    if (!Array.isArray(productList.guides) || productList.guides.length === 0) {
+      return productList;
+    }
+
+    const fallbackKey = productList.defaultGuideKey || productList.guides[0].key;
+    const activeKey = guideKey || productList.activeGuideKey || fallbackKey;
+    return productList.guides.find((guide) => guide.key === activeKey) || productList.guides[0];
+  };
+
+  const createProductListGuideTabs = (productList, activeGuideKey) => {
+    if (!Array.isArray(productList.guides) || productList.guides.length < 2) {
+      return "";
+    }
+
+    return productList.guides
+      .map((guide) => {
+        const isActive = guide.key === activeGuideKey;
+
+        return `
+          <button
+            class="product-list-guide-tab${isActive ? " is-active" : ""}"
+            type="button"
+            data-product-list-guide-key="${escapeHtml(guide.key)}"
+            aria-pressed="${isActive ? "true" : "false"}"
+          >
+            ${escapeHtml(guide.label)}
+          </button>
+        `;
+      })
+      .join("");
+  };
+
+  const renderProductListGuideTabs = (productList, activeGuideKey) => {
+    const headerNode = modal.querySelector(".product-list-modal__header") || titleNode?.parentElement || modal;
+    headerNode.classList.add("product-list-modal__header--with-tabs");
+
+    let tabsNode = modal.querySelector("[data-product-list-guide-tabs]");
+    if (!tabsNode) {
+      tabsNode = document.createElement("div");
+      tabsNode.className = "product-list-guide-tabs";
+      tabsNode.setAttribute("data-product-list-guide-tabs", "");
+      tabsNode.setAttribute("role", "group");
+      tabsNode.setAttribute("aria-label", "Cut guide type");
+      headerNode.appendChild(tabsNode);
+    }
+
+    const tabs = createProductListGuideTabs(productList, activeGuideKey);
+    tabsNode.innerHTML = tabs;
+    tabsNode.hidden = tabs.length === 0;
+  };
+
+  const renderActiveProductListGuide = (productList, guideKey = null) => {
+    const activeGuide = getActiveProductListGuide(productList, guideKey);
+
+    if (Array.isArray(productList.guides) && productList.guides.length > 0) {
+      productList.activeGuideKey = activeGuide.key;
+    }
+
+    modal.classList.toggle("product-list-modal--page-gallery", activeGuide.layout === "page-gallery");
+    renderProductListGuideTabs(productList, activeGuide.key);
+
+    if (bodyNode) {
+      bodyNode.innerHTML = createSections(activeGuide);
+    }
+
+    if (externalNode) {
+      externalNode.href = activeGuide.pdf || productList.pdf || "#";
+    }
+  };
+  // ALL_CUTS_GUIDE_TABS_HELPERS_END
   // ALL_CUTS_PAGE_GALLERY_HELPERS_START
   const createPageGallery = (pages) => `
     <div class="product-list-page-gallery">
@@ -883,6 +955,7 @@ requestAnimationFrame(() => {
     }
 
     lastTrigger = trigger || null;
+    modal.dataset.activeProductListTitle = productList.title;
 
     if (eyebrowNode) {
       eyebrowNode.textContent = productList.eyebrow;
@@ -897,12 +970,12 @@ requestAnimationFrame(() => {
     }
 
     if (bodyNode) {
-      bodyNode.innerHTML = createSections(productList);
+      renderActiveProductListGuide(productList, productList.activeGuideKey);
       bodyNode.scrollTop = 0;
     }
 
     if (externalNode) {
-      externalNode.href = productList.pdf;
+      externalNode.href = getActiveProductListGuide(productList, productList.activeGuideKey).pdf || productList.pdf;
       externalNode.textContent = "Open in new tab";
       externalNode.setAttribute("aria-label", `Open ${productList.title} product list in a new tab`);
     }
@@ -920,6 +993,7 @@ requestAnimationFrame(() => {
   const closeProductList = () => {
     document.body.classList.remove("product-list-modal-open");
     modal.classList.remove("product-list-modal--page-gallery");
+    modal.removeAttribute("data-active-product-list-title");
 
     if (typeof modal.close === "function" && modal.open) {
       modal.close();
@@ -936,6 +1010,22 @@ requestAnimationFrame(() => {
     }
   };
 
+  // ALL_CUTS_GUIDE_TABS_EVENTS_START
+  modal.addEventListener("click", (event) => {
+    const guideButton = event.target.closest("[data-product-list-guide-key]");
+    if (!guideButton) {
+      return;
+    }
+
+    const activeProductListTitle = modal.dataset.activeProductListTitle;
+    const productList = productLists[activeProductListTitle];
+    if (!productList) {
+      return;
+    }
+
+    renderActiveProductListGuide(productList, guideButton.dataset.productListGuideKey);
+  });
+  // ALL_CUTS_GUIDE_TABS_EVENTS_END
   document.querySelectorAll(".brand-card, [data-product-list-trigger]").forEach((card) => {
     const title = card.dataset.productListTrigger || card.querySelector("h3")?.textContent?.trim();
 
@@ -971,6 +1061,7 @@ requestAnimationFrame(() => {
   modal.addEventListener("close", () => {
     document.body.classList.remove("product-list-modal-open");
     modal.classList.remove("product-list-modal--page-gallery");
+    modal.removeAttribute("data-active-product-list-title");
 
     if (bodyNode) {
       bodyNode.innerHTML = "";
