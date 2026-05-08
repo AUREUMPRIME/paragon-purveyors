@@ -572,7 +572,20 @@ requestAnimationFrame(() => {
     "Mayura Station": {
       eyebrow: "Full-Blood Wagyu",
       title: "Mayura Station",
-      description: "Full-blood Wagyu selections organized by marbling score.",
+      // PROVIDER_INTRO_MAYURA_STATION_START
+      providerIntro: {
+        logo: assetPath("assets/provider-logos/modal/mayura-station_modal_logo.png"),
+        logoAlt: "Mayura Station logo",
+        bannerImage: assetPath("assets/provider-banners/mayura-station-banner.png"),
+        bannerLabel: "Depth · Control · Character",
+        copy: "Mayura Station is selected for depth, control, and unmistakable full-blood Wagyu character. Raised on a family-owned station in South Australia's Limestone Coast, its cattle are managed through a highly controlled program designed for richness, consistency, and a distinctive luxury eating profile.",
+        tags: ["Full-Blood Wagyu", "Limestone Coast", "Signature Feeding Program"],
+        websiteCopy: "For additional information on Mayura Station Wagyu, visit the producer's official brand page.",
+        websiteLabel: "Visit Mayura Station",
+        websiteUrl: "https://www.mayurastation.com",
+      },
+      // PROVIDER_INTRO_MAYURA_STATION_END
+      description: "",
       pdf: assetPath("assets/product-lists/PP_full_blood_wagyu.pdf"),
       sections: [
         {
