@@ -1230,8 +1230,8 @@ body:not(.v32-step-commit-enabled) main {
   height: 100%;
   object-fit: cover;
   object-position: center 58%;
-  opacity: 0.58;
-  filter: saturate(0.86) contrast(1.02) brightness(0.62);
+  opacity: 0.98;
+  filter: saturate(1.08) contrast(1.06) brightness(0.92);
   transform: scale(1.02);
 }
 
@@ -1241,8 +1241,8 @@ body:not(.v32-step-commit-enabled) main {
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.82)),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.72));
+    linear-gradient(90deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.46)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.24));
 }
 
 .provider-modal-brand-lip::after {
@@ -1261,12 +1261,16 @@ body:not(.v32-step-commit-enabled) main {
   right: clamp(18px, 2.6vw, 30px);
   bottom: clamp(14px, 1.6vw, 18px);
   z-index: 3;
-  color: rgba(243, 240, 234, 0.72);
+  padding: 7px 10px;
+  border: 1px solid rgba(243, 240, 234, 0.18);
+  background: rgba(0, 0, 0, 0.46);
+  color: rgba(243, 240, 234, 0.86);
   font-size: 0.62rem;
   font-weight: 760;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   text-shadow: 0 8px 22px rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
 }
 
 .provider-modal-intro {
