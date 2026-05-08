@@ -673,7 +673,20 @@ requestAnimationFrame(() => {
     "Robbins Island": {
       eyebrow: "Tasmanian Wagyu",
       title: "Robbins Island",
-      description: "Tasmanian Wagyu selections organized by marble score.",
+      // PROVIDER_INTRO_ROBBINS_ISLAND_START
+      providerIntro: {
+        logo: assetPath("assets/provider-logos/modal/robbins-island_modal_logo.png"),
+        logoAlt: "Robbins Island logo",
+        bannerImage: assetPath("assets/provider-banners/robbins-island-banner.png"),
+        bannerLabel: "Island · Terroir · Rarity",
+        copy: "Robbins Island is selected for rarity, terroir, and unmistakable Tasmanian Wagyu character. Set off Tasmania's northwest coast, its cattle graze through saltwater channels in a pristine island environment before a long grain finish, creating a distinctive balance of clean origin, elite genetics, and high-marbling depth.",
+        tags: ["Tasmanian Fullblood Wagyu", "18 Months on Pasture", "450+ Day Grain Finish"],
+        websiteCopy: "For additional information on Robbins Island Wagyu, visit the producer's official brand page.",
+        websiteLabel: "Visit Robbins Island",
+        websiteUrl: "https://www.robbinsislandwagyu.com.au/",
+      },
+      // PROVIDER_INTRO_ROBBINS_ISLAND_END
+      description: "",
       pdf: assetPath("assets/product-lists/PP_tasmanian_wagyu.pdf"),
       sections: [
         {
