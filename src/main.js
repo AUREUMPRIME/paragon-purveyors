@@ -489,6 +489,14 @@ requestAnimationFrame(() => {
     "Black Opal": {
       eyebrow: "Australian Wagyu",
       title: "Black Opal",
+      // PROVIDER_INTRO_BLACK_OPAL_START
+      providerIntro: {
+        logo: assetPath("assets/provider-logos/modal/black-opal_modal_logo.png"),
+        logoAlt: "Black Opal logo",
+        copy: "Black Opal represents the dependable side of Australian Wagyu: consistent marbling, refined texture, and a generous eating experience. Raised through a disciplined long-term program in Victoria and Tasmania, it gives Paragon a reliable foundation for premium Wagyu with depth, balance, and year-round consistency.",
+        tags: ["Australian Wagyu", "380+ Days Grain Fed", "Consistent Supply"],
+      },
+      // PROVIDER_INTRO_BLACK_OPAL_END
       description: "Australian Wagyu selections organized by marbling score.",
       pdf: assetPath("assets/product-lists/PP_australian_wagyu.pdf"),
       sections: [
@@ -801,6 +809,61 @@ requestAnimationFrame(() => {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  // PROVIDER_MODAL_INTRO_HELPERS_START
+  const createProviderIntro = (providerIntro) => {
+    if (!providerIntro) {
+      return "";
+    }
+
+    const tags = Array.isArray(providerIntro.tags) ? providerIntro.tags : [];
+
+    return `
+      <section class="provider-modal-intro" aria-label="Provider introduction">
+        <p>${escapeHtml(providerIntro.copy)}</p>
+        ${
+          tags.length
+            ? `
+              <ul class="provider-modal-intro__tags" aria-label="Provider distinctions">
+                ${tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}
+              </ul>
+            `
+            : ""
+        }
+      </section>
+    `;
+  };
+
+  const renderProviderModalLogo = (productList) => {
+    const headerNode = modal.querySelector(".product-list-modal__header") || titleNode?.parentElement || modal;
+    const providerIntro = productList.providerIntro;
+    const hasLogo = Boolean(providerIntro?.logo);
+
+    modal.classList.toggle("product-list-modal--provider-intro", hasLogo);
+
+    let logoNode = modal.querySelector("[data-provider-modal-logo]");
+
+    if (!hasLogo) {
+      logoNode?.remove();
+      return;
+    }
+
+    if (!logoNode) {
+      logoNode = document.createElement("div");
+      logoNode.className = "provider-modal-logo";
+      logoNode.setAttribute("data-provider-modal-logo", "");
+      headerNode.appendChild(logoNode);
+    }
+
+    logoNode.innerHTML = `
+      <img
+        src="${escapeHtml(providerIntro.logo)}"
+        alt="${escapeHtml(providerIntro.logoAlt || `${productList.title} logo`)}"
+        loading="eager"
+        decoding="async"
+      />
+    `;
+  };
+  // PROVIDER_MODAL_INTRO_HELPERS_END
   // ALL_CUTS_GUIDE_TABS_HELPERS_START
   const getActiveProductListGuide = (productList, guideKey = null) => {
     if (!Array.isArray(productList.guides) || productList.guides.length === 0) {
@@ -914,7 +977,8 @@ requestAnimationFrame(() => {
       return createPageGallery(productList.pages);
     }
 
-    return productList.sections
+    const intro = createProviderIntro(productList.providerIntro);
+    const sections = (productList.sections || [])
       .map(
         (section) => `
           <section class="product-list-section">
@@ -937,6 +1001,8 @@ requestAnimationFrame(() => {
         `,
       )
       .join("");
+
+    return `${intro}${sections}`;
   };
 
   const modalContent = `
@@ -1003,7 +1069,8 @@ requestAnimationFrame(() => {
     }
 
     if (bodyNode) {
-      renderActiveProductListGuide(productList, productList.activeGuideKey);
+      renderProviderModalLogo(productList);
+    renderActiveProductListGuide(productList, productList.activeGuideKey);
       bodyNode.scrollTop = 0;
     }
 
@@ -1026,6 +1093,8 @@ requestAnimationFrame(() => {
   const closeProductList = () => {
     document.body.classList.remove("product-list-modal-open");
     modal.classList.remove("product-list-modal--page-gallery");
+    modal.classList.remove("product-list-modal--provider-intro");
+    modal.querySelector("[data-provider-modal-logo]")?.remove();
     modal.removeAttribute("data-active-product-list-title");
 
     if (typeof modal.close === "function" && modal.open) {
@@ -1101,6 +1170,8 @@ requestAnimationFrame(() => {
   modal.addEventListener("close", () => {
     document.body.classList.remove("product-list-modal-open");
     modal.classList.remove("product-list-modal--page-gallery");
+    modal.classList.remove("product-list-modal--provider-intro");
+    modal.querySelector("[data-provider-modal-logo]")?.remove();
     modal.removeAttribute("data-active-product-list-title");
 
     if (bodyNode) {
