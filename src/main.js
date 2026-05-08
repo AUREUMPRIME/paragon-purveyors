@@ -618,7 +618,20 @@ requestAnimationFrame(() => {
     "Campo Grande": {
       eyebrow: "Ibérico Pork",
       title: "Campo Grande",
-      description: "Ibérico pork selections covering fresh cuts and cured retail items.",
+      // PROVIDER_INTRO_CAMPO_GRANDE_START
+      providerIntro: {
+        logo: assetPath("assets/provider-logos/modal/campo-grande_modal_logo.png"),
+        logoAlt: "Campo Grande logo",
+        bannerImage: assetPath("assets/provider-banners/campo-grande-banner.png"),
+        bannerLabel: "Heritage · Marbling · Flavor",
+        copy: "Campo Grande is selected for its expressive Spanish Ibérico character: heirloom pigs, deep marbling, and a rich, savory eating profile that gives chefs a pork program with the presence of a luxury steak. Raised through family-owned farms in southern and western Spain, it brings heritage, flavor, and distinction to the Paragon portfolio.",
+        tags: ["Spanish Ibérico", "Family-Owned Farms", "Heirloom Breed"],
+        websiteCopy: "For additional information on Campo Grande Ibérico pork, visit the producer's official brand page.",
+        websiteLabel: "Visit Campo Grande",
+        websiteUrl: "https://eatcampogrande.com/",
+      },
+      // PROVIDER_INTRO_CAMPO_GRANDE_END
+      description: "",
       pdf: assetPath("assets/product-lists/PP_iberico_pork.pdf"),
       sections: [
         {
