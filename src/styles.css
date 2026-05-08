@@ -3364,7 +3364,7 @@ body.selected-cut-modal-open {
   width: clamp(82px, 7vw, 108px);
   height: auto;
   max-height: 26px;
-  transform: translate(18px, 6px);
+  transform: translate(clamp(76px, 8vw, 96px), 6px);
 }
 
 @media (max-width: 760px) {
