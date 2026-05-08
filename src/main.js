@@ -866,6 +866,8 @@ requestAnimationFrame(() => {
 
     if (bodyNode) {
       bodyNode.innerHTML = createSections(activeGuide);
+      bodyNode.scrollTop = 0;
+      bodyNode.parentElement?.scrollTo?.({ top: 0, behavior: "auto" });
     }
 
     if (externalNode) {
@@ -1042,20 +1044,27 @@ requestAnimationFrame(() => {
   };
 
   // ALL_CUTS_GUIDE_TABS_EVENTS_START
-  modal.addEventListener("click", (event) => {
-    const guideButton = event.target.closest("[data-product-list-guide-key]");
-    if (!guideButton) {
-      return;
-    }
+  modal.addEventListener(
+    "click",
+    (event) => {
+      const guideButton = event.target.closest("[data-product-list-guide-key]");
+      if (!guideButton) {
+        return;
+      }
 
-    const activeProductListTitle = modal.dataset.activeProductListTitle;
-    const productList = productLists[activeProductListTitle];
-    if (!productList) {
-      return;
-    }
+      event.preventDefault();
+      event.stopPropagation();
 
-    renderActiveProductListGuide(productList, guideButton.dataset.productListGuideKey);
-  });
+      const activeProductListTitle = modal.dataset.activeProductListTitle;
+      const productList = productLists[activeProductListTitle];
+      if (!productList) {
+        return;
+      }
+
+      renderActiveProductListGuide(productList, guideButton.dataset.productListGuideKey);
+    },
+    true,
+  );
   // ALL_CUTS_GUIDE_TABS_EVENTS_END
   document.querySelectorAll(".brand-card, [data-product-list-trigger]").forEach((card) => {
     const title = card.dataset.productListTrigger || card.querySelector("h3")?.textContent?.trim();

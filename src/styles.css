@@ -1514,19 +1514,23 @@ body.product-list-modal-open {
 /* CUT_CARD_ALL_CUTS_END */
 
 /* ALL_CUTS_GUIDE_TABS_START */
-.product-list-modal__header--with-tabs {
+.product-list-modal.product-list-modal--page-gallery {
   position: relative;
+}
+
+.product-list-modal__header--with-tabs {
+  position: static;
 }
 
 .product-list-guide-tabs {
   position: absolute;
-  top: clamp(24px, 3vw, 36px);
-  right: clamp(88px, 9vw, 128px);
+  top: clamp(38px, 4.2vw, 54px);
+  right: clamp(150px, 14vw, 220px);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  z-index: 2;
+  z-index: 8;
 }
 
 .product-list-guide-tabs[hidden] {
@@ -1571,7 +1575,7 @@ body.product-list-modal-open {
   .product-list-guide-tabs {
     position: static;
     justify-content: center;
-    margin: 18px 0 0;
+    margin: 18px auto 0;
   }
 
   .product-list-guide-tab {
