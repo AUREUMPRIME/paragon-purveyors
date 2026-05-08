@@ -3321,3 +3321,39 @@ body.selected-cut-modal-open {
   }
 }
 /* SECTION_4_REFINEMENT_END */
+
+/* BEGIN MODAL LOGO SIZE REFINEMENT */
+.product-list-modal.product-list-modal--provider-intro .product-list-modal__header {
+  padding-right: clamp(170px, 18vw, 236px);
+}
+
+.provider-modal-logo {
+  top: clamp(32px, 4vw, 48px);
+  right: clamp(72px, 7vw, 108px);
+  width: clamp(104px, 10vw, 156px);
+  max-height: 56px;
+}
+
+.provider-modal-logo img {
+  max-height: 56px;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.36));
+}
+
+@media (max-width: 760px) {
+  .product-list-modal.product-list-modal--provider-intro .product-list-modal__header {
+    padding-right: 0;
+  }
+
+  .provider-modal-logo {
+    width: min(132px, 42vw);
+    max-height: 50px;
+    margin: 14px 0 0;
+  }
+
+  .provider-modal-logo img {
+    max-height: 50px;
+  }
+}
+/* END MODAL LOGO SIZE REFINEMENT */
