@@ -94,7 +94,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--black-opal">
             <img
               class="brand-card-icon"
-              src="${assetPath("assets/provider-icons/black-opal.svg")}"
+              src="${assetPath("assets/provider-icons/black-opal_card_logo_512x192.png")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -107,7 +107,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--mayura-station">
             <img
               class="brand-card-icon"
-              src="${assetPath("assets/provider-icons/mayura-station.svg")}"
+              src="${assetPath("assets/provider-icons/mayura-station_card_logo_512x192.png")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -120,7 +120,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--campo-grande">
             <img
               class="brand-card-icon"
-              src="${assetPath("assets/provider-icons/campo-grande.svg")}"
+              src="${assetPath("assets/provider-icons/campo-grande_card_logo_512x192.png")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -133,7 +133,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--robbins-island">
             <img
               class="brand-card-icon"
-              src="${assetPath("assets/provider-icons/robbins-island.svg")}"
+              src="${assetPath("assets/provider-icons/robbins-island_card_logo_512x192.png")}"
               alt=""
               aria-hidden="true"
               loading="lazy"
@@ -146,7 +146,7 @@ app.innerHTML = `
                     <article class="brand-card brand-card--wanderer">
             <img
               class="brand-card-icon"
-              src="${assetPath("assets/provider-icons/wanderer.svg")}"
+              src="${assetPath("assets/provider-icons/wanderer_card_logo_512x192.png")}"
               alt=""
               aria-hidden="true"
               loading="lazy"

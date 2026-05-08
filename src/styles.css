@@ -1081,7 +1081,7 @@ body:not(.v32-step-commit-enabled) main {
   position: relative;
   min-height: 154px;
   overflow: hidden;
-  padding-right: clamp(104px, 8vw, 128px);
+  padding-right: clamp(128px, 11vw, 162px);
 }
 
 .brand-card > :not(.brand-card-icon) {
@@ -1091,17 +1091,44 @@ body:not(.v32-step-commit-enabled) main {
 
 .brand-card-icon {
   position: absolute;
-  top: clamp(18px, 1.8vw, 24px);
-  right: clamp(20px, 2.1vw, 28px);
+  top: clamp(20px, 2vw, 28px);
+  right: clamp(20px, 2.2vw, 30px);
   z-index: 0;
-  width: clamp(64px, 5.4vw, 82px);
+  width: clamp(96px, 8vw, 126px);
   height: auto;
-  max-height: 86px;
+  max-height: 52px;
   object-fit: contain;
-  opacity: 0.94;
+  object-position: center;
+  opacity: 0.92;
   pointer-events: none;
   user-select: none;
   transform: translateZ(0);
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.32));
+}
+
+.brand-card--black-opal .brand-card-icon {
+  width: clamp(104px, 8.6vw, 134px);
+  max-height: 50px;
+}
+
+.brand-card--mayura-station .brand-card-icon {
+  width: clamp(104px, 8.6vw, 132px);
+  max-height: 54px;
+}
+
+.brand-card--campo-grande .brand-card-icon {
+  width: clamp(104px, 8.3vw, 130px);
+  max-height: 48px;
+}
+
+.brand-card--robbins-island .brand-card-icon {
+  width: clamp(112px, 9vw, 140px);
+  max-height: 44px;
+}
+
+.brand-card--wanderer .brand-card-icon {
+  width: clamp(108px, 8.8vw, 138px);
+  max-height: 48px;
 }
 
 .brand-card--robbins-island,
@@ -1112,14 +1139,19 @@ body:not(.v32-step-commit-enabled) main {
 @media (max-width: 900px) {
   .brand-card {
     min-height: 148px;
-    padding-right: 92px;
+    padding-right: 116px;
   }
 
-  .brand-card-icon {
+  .brand-card-icon,
+  .brand-card--black-opal .brand-card-icon,
+  .brand-card--mayura-station .brand-card-icon,
+  .brand-card--campo-grande .brand-card-icon,
+  .brand-card--robbins-island .brand-card-icon,
+  .brand-card--wanderer .brand-card-icon {
     top: 18px;
     right: 18px;
-    width: 62px;
-    max-height: 70px;
+    width: 104px;
+    max-height: 46px;
   }
 }
 
@@ -1129,16 +1161,20 @@ body:not(.v32-step-commit-enabled) main {
     padding-right: 18px;
   }
 
-  .brand-card-icon {
+  .brand-card-icon,
+  .brand-card--black-opal .brand-card-icon,
+  .brand-card--mayura-station .brand-card-icon,
+  .brand-card--campo-grande .brand-card-icon,
+  .brand-card--robbins-island .brand-card-icon,
+  .brand-card--wanderer .brand-card-icon {
     position: static;
     display: block;
-    width: 56px;
-    max-height: 64px;
-    margin: 0 0 14px auto;
+    width: 112px;
+    max-height: 48px;
+    margin: 0 0 16px auto;
   }
 }
 /* PROVIDER ICONS END */
-
 
 /* PRODUCT_LIST_MODAL_START */
 .product-list-modal {
