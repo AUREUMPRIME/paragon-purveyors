@@ -334,7 +334,8 @@ h3 {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) {
+
 .frame {
     inset: 14px;
   }
@@ -3357,3 +3358,20 @@ body.selected-cut-modal-open {
   }
 }
 /* END MODAL LOGO SIZE REFINEMENT */
+
+/* BEGIN ROBBINS ISLAND MODAL LOGO ALIGNMENT */
+.provider-modal-logo img[src*="robbins-island_modal_logo.png"] {
+  width: clamp(82px, 7vw, 108px);
+  height: auto;
+  max-height: 26px;
+  transform: translate(18px, 6px);
+}
+
+@media (max-width: 760px) {
+  .provider-modal-logo img[src*="robbins-island_modal_logo.png"] {
+    width: min(112px, 38vw);
+    max-height: 28px;
+    transform: none;
+  }
+}
+/* END ROBBINS ISLAND MODAL LOGO ALIGNMENT */
