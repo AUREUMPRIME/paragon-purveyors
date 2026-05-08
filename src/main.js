@@ -493,11 +493,15 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/black-opal_modal_logo.png"),
         logoAlt: "Black Opal logo",
-        copy: "Black Opal represents the dependable side of Australian Wagyu: consistent marbling, refined texture, and a generous eating experience. Raised through a disciplined long-term program in Victoria and Tasmania, it gives Paragon a reliable foundation for premium Wagyu with depth, balance, and year-round consistency.",
+        bannerLabel: "Consistency · Quality · Supply",
+        copy: "Black Opal is selected for consistency: refined Australian Wagyu with generous marbling, a balanced eating profile, and dependable year-round supply. Raised through a disciplined long-term program in Victoria and Tasmania, it gives Paragon a reliable foundation for premium Wagyu across a range of marble scores.",
         tags: ["Australian Wagyu", "380+ Days Grain Fed", "Consistent Supply"],
+        websiteCopy: "For additional information on Black Opal Wagyu, visit the producer's official brand page.",
+        websiteLabel: "Visit Black Opal",
+        websiteUrl: "https://www.haafco.com/black-opal-wagyu",
       },
       // PROVIDER_INTRO_BLACK_OPAL_END
-      description: "Australian Wagyu selections organized by marbling score.",
+      description: "",
       pdf: assetPath("assets/product-lists/PP_australian_wagyu.pdf"),
       sections: [
         {
@@ -810,6 +814,18 @@ requestAnimationFrame(() => {
       .replaceAll("'", "&#039;");
 
   // PROVIDER_MODAL_INTRO_HELPERS_START
+  const createProviderBrandLip = (providerIntro) => {
+    if (!providerIntro?.bannerLabel) {
+      return "";
+    }
+
+    return `
+      <div class="provider-modal-brand-lip provider-modal-brand-lip--black-opal" aria-hidden="true">
+        <span>${escapeHtml(providerIntro.bannerLabel)}</span>
+      </div>
+    `;
+  };
+
   const createProviderIntro = (providerIntro) => {
     if (!providerIntro) {
       return "";
@@ -818,6 +834,7 @@ requestAnimationFrame(() => {
     const tags = Array.isArray(providerIntro.tags) ? providerIntro.tags : [];
 
     return `
+      ${createProviderBrandLip(providerIntro)}
       <section class="provider-modal-intro" aria-label="Provider introduction">
         <p>${escapeHtml(providerIntro.copy)}</p>
         ${
@@ -829,6 +846,21 @@ requestAnimationFrame(() => {
             `
             : ""
         }
+      </section>
+    `;
+  };
+
+  const createProviderFooter = (providerIntro) => {
+    if (!providerIntro?.websiteUrl) {
+      return "";
+    }
+
+    return `
+      <section class="provider-modal-linkout" aria-label="Provider website">
+        <p>${escapeHtml(providerIntro.websiteCopy || "For more information, visit the producer's official website.")}</p>
+        <a href="${escapeHtml(providerIntro.websiteUrl)}" target="_blank" rel="noopener noreferrer">
+          ${escapeHtml(providerIntro.websiteLabel || "Visit Website")}
+        </a>
       </section>
     `;
   };
@@ -1001,8 +1033,9 @@ requestAnimationFrame(() => {
         `,
       )
       .join("");
+    const footer = createProviderFooter(productList.providerIntro);
 
-    return `${intro}${sections}`;
+    return `${intro}${sections}${footer}`;
   };
 
   const modalContent = `
