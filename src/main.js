@@ -493,6 +493,7 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/black-opal_modal_logo.png"),
         logoAlt: "Black Opal logo",
+        bannerImage: assetPath("assets/provider-banners/black-opal_banner.webp"),
         bannerLabel: "Consistency · Quality · Supply",
         copy: "Black Opal is selected for consistency: refined Australian Wagyu with generous marbling, a balanced eating profile, and dependable year-round supply. Raised through a disciplined long-term program in Victoria and Tasmania, it gives Paragon a reliable foundation for premium Wagyu across a range of marble scores.",
         tags: ["Australian Wagyu", "380+ Days Grain Fed", "Consistent Supply"],
@@ -815,13 +816,18 @@ requestAnimationFrame(() => {
 
   // PROVIDER_MODAL_INTRO_HELPERS_START
   const createProviderBrandLip = (providerIntro) => {
-    if (!providerIntro?.bannerLabel) {
+    if (!providerIntro?.bannerLabel && !providerIntro?.bannerImage) {
       return "";
     }
 
     return `
       <div class="provider-modal-brand-lip provider-modal-brand-lip--black-opal" aria-hidden="true">
-        <span>${escapeHtml(providerIntro.bannerLabel)}</span>
+        ${
+          providerIntro.bannerImage
+            ? `<img class="provider-modal-brand-lip__image" src="${escapeHtml(providerIntro.bannerImage)}" alt="" loading="eager" decoding="async" />`
+            : ""
+        }
+        <span>${escapeHtml(providerIntro.bannerLabel || "")}</span>
       </div>
     `;
   };
