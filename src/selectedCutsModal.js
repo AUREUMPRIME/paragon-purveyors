@@ -111,7 +111,7 @@ const selectedCuts = {
   },
   "Rump Cap": {
     eyebrow: "Selected Cut",
-    title: "Rump Cap",
+    title: "Picanha",
     category: "Beef / Wagyu",
     image: assetPath("assets/cuts/rump-cap.jpg"),
     description:
@@ -283,7 +283,7 @@ export function initSelectedCutsModal() {
   };
 
   document.querySelectorAll(".cut-card").forEach((card) => {
-    const title = card.querySelector("h3")?.textContent?.trim();
+    const title = card.dataset.selectedCutTrigger || card.querySelector("h3")?.textContent?.trim();
 
     if (!title || !selectedCuts[title]) {
       return;
@@ -292,7 +292,8 @@ export function initSelectedCutsModal() {
     card.dataset.selectedCutTrigger = title;
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", `Open ${title} details`);
+    const cutLabel = selectedCuts[title].title || title;
+    card.setAttribute("aria-label", `Open ${cutLabel} details`);
 
     card.addEventListener("click", () => {
       openSelectedCut(title, card);

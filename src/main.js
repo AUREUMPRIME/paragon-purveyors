@@ -252,7 +252,7 @@ app.innerHTML = `
             <h3>Secreto</h3>
           </article>
 
-          <article class="cut-card cut-card--rump-cap">
+          <article class="cut-card cut-card--rump-cap" data-selected-cut-trigger="Rump Cap">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/rump-cap.jpg")}"
@@ -262,7 +262,7 @@ app.innerHTML = `
             />
             <span class="cut-card-shade" aria-hidden="true"></span>
             <span class="cut-kicker">Beef</span>
-            <h3>Rump Cap</h3>
+            <h3>Picanha</h3>
           </article>
 
           <article class="cut-card cut-card--short-rib">
