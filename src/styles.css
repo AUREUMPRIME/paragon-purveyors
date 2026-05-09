@@ -3473,3 +3473,39 @@ body.selected-cut-modal-open {
   }
 }
 /* END ROBBINS ISLAND MODAL LOGO ALIGNMENT */
+
+/* TEMP_2D_FLOATING_BACKGROUND_START */
+.floating-meat-layer[data-renderer="2d"] {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout style paint;
+}
+
+.floating-meat-layer[data-renderer="2d"] .floating-meat-2d-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(180px, 18vw, 360px);
+  height: auto;
+  opacity: 0;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity, filter;
+  user-select: none;
+}
+
+@media (max-width: 899px) {
+  .floating-meat-layer[data-renderer="2d"] .floating-meat-2d-item {
+    width: clamp(150px, 34vw, 280px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-meat-layer[data-renderer="2d"] {
+    display: none;
+  }
+}
+/* TEMP_2D_FLOATING_BACKGROUND_END */
