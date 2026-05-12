@@ -1063,6 +1063,21 @@ requestAnimationFrame(() => {
     `;
   };
 
+  const createProviderOfficialLink = (providerIntro) => {
+    if (!providerIntro?.websiteUrl) {
+      return "";
+    }
+
+    return `
+      <aside class="provider-modal-official" aria-label="Provider official website">
+        <p>${escapeHtml(providerIntro.websiteCopy || "For additional information, visit the producer's official brand page.")}</p>
+        <a href="${escapeHtml(providerIntro.websiteUrl)}" target="_blank" rel="noopener noreferrer">
+          Open Brand Page
+        </a>
+      </aside>
+    `;
+  };
+
   const createProviderIntro = (providerIntro) => {
     if (!providerIntro) {
       return "";
@@ -1071,6 +1086,7 @@ requestAnimationFrame(() => {
     const tags = Array.isArray(providerIntro.tags) ? providerIntro.tags : [];
 
     return `
+      ${createProviderOfficialLink(providerIntro)}
       ${createProviderBrandLip(providerIntro)}
       <section class="provider-modal-intro" aria-label="Provider introduction">
         <p>${escapeHtml(providerIntro.copy)}</p>
@@ -1087,20 +1103,7 @@ requestAnimationFrame(() => {
     `;
   };
 
-  const createProviderFooter = (providerIntro) => {
-    if (!providerIntro?.websiteUrl) {
-      return "";
-    }
-
-    return `
-      <section class="provider-modal-linkout" aria-label="Provider website">
-        <p>${escapeHtml(providerIntro.websiteCopy || "For more information, visit the producer's official website.")}</p>
-        <a href="${escapeHtml(providerIntro.websiteUrl)}" target="_blank" rel="noopener noreferrer">
-          ${escapeHtml(providerIntro.websiteLabel || "Visit Website")}
-        </a>
-      </section>
-    `;
-  };
+  const createProviderFooter = () => "";
 
   const renderProviderModalLogo = (productList) => {
     const headerNode = modal.querySelector(".product-list-modal__header") || titleNode?.parentElement || modal;
