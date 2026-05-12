@@ -71,7 +71,7 @@ function getTargetSceneIndex(scenes, target) {
 }
 
 function updateSectionNavigation(scenes, activeIndex) {
-  document.querySelectorAll("[data-section-target]").forEach((control) => {
+  document.querySelectorAll(".section-index [data-section-target], .global-contact-cta[data-section-target]").forEach((control) => {
     const targetIndex = getTargetSceneIndex(scenes, control.dataset.sectionTarget);
     const isActive = targetIndex === activeIndex;
 

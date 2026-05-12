@@ -3,6 +3,7 @@ import { initFloatingBackground } from "./floatingBackground.js";
 import { initForwardDepth } from "./forwardDepth.js";
 import "./styles.css";
 import { initSelectedCutsModal } from "./selectedCutsModal.js";
+import { initGlobalContactCta } from "./globalContactCta.js";
 
 const app = document.getElementById("app");
 
@@ -49,6 +50,23 @@ app.innerHTML = `
         </button>
       </div>
     </nav>
+
+    <button class="global-contact-cta" type="button" data-section-target="inquiry" aria-label="Request availability from Paragon Purveyors">
+      <span class="global-contact-cta__inner">
+        <span class="global-contact-cta__mark" aria-hidden="true">
+          <img
+            src="${assetPath("assets/brand/paragon-cow-mark.svg")}"
+            alt=""
+            loading="lazy"
+          />
+        </span>
+        <span class="global-contact-cta__copy">
+          <span class="global-contact-cta__eyebrow">Questions or orders</span>
+          <span class="global-contact-cta__label">Request Availability</span>
+          <span class="global-contact-cta__line" aria-hidden="true"></span>
+        </span>
+      </span>
+    </button>
 
     <section id="hero" class="scene scene-hero" aria-labelledby="hero-title" data-section-name="Home">
       <div class="scene-glow"></div>
@@ -512,6 +530,7 @@ function initHeroButtonFeedback() {
 // ABOUT_MODAL_END
 initSelectedCutsModal();
 initHeroButtonFeedback();
+initGlobalContactCta();
 requestAnimationFrame(() => {
   initForwardDepth();
 });
