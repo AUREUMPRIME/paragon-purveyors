@@ -5,6 +5,7 @@ import "./styles.css";
 import { initSelectedCutsModal } from "./selectedCutsModal.js";
 import { initGlobalContactCta } from "./globalContactCta.js";
 import { cuts, producerCutLinks, producers } from "./catalogData.js";
+import { initCutScrollIsolation } from "./cutScrollIsolation.js";
 
 const app = document.getElementById("app");
 
@@ -246,6 +247,17 @@ app.innerHTML = `
         </div>
 
         <div class="cuts-grid">
+          
+          <!-- SECTION_4_CUT_SCROLL_START -->
+
+                    <div class="cut-scroll" aria-label="Selected cuts catalog">
+
+          <article class="cut-card cut-card--all-cuts" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
+            <span class="cut-card-shade" aria-hidden="true"></span>
+            <h3>All Cuts</h3>
+            <p class="cut-card-description">View the complete visual cut reference.</p>
+          </article>
+
           <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
             <img
               class="cut-card-image"
@@ -349,11 +361,114 @@ app.innerHTML = `
             <span class="cut-kicker">Wagyu</span>
             <h3>Short Rib</h3>
           </article>
-          <article class="cut-card cut-card--all-cuts" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
-            <span class="cut-card-shade" aria-hidden="true"></span>
-            <h3>All Cuts</h3>
-            <p class="cut-card-description">View the complete visual cut reference.</p>
+
+          <article class="cut-card cut-card--placeholder cut-card--chuck-roll" data-cut-id="chuck-roll" data-selected-cut-trigger="Chuck Roll">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Wagyu</p>
+            <h3>Chuck Roll</h3>
           </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--shortloin" data-cut-id="shortloin" data-selected-cut-trigger="Shortloin">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Wagyu</p>
+            <h3>Shortloin</h3>
+          </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--flap-meat" data-cut-id="flap-meat" data-selected-cut-trigger="Flap Meat">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Beef / Wagyu</p>
+            <h3>Flap Meat</h3>
+          </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--flank-steak" data-cut-id="flank-steak" data-selected-cut-trigger="Flank Steak">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Beef / Ibérico Pork</p>
+            <h3>Flank Steak</h3>
+          </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--tri-tip" data-cut-id="tri-tip" data-selected-cut-trigger="Tri Tip">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Beef / Wagyu</p>
+            <h3>Tri Tip</h3>
+          </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--top-sirloin" data-cut-id="top-sirloin" data-selected-cut-trigger="Top Sirloin">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Beef / Wagyu</p>
+            <h3>Top Sirloin</h3>
+          </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--oyster-blade" data-cut-id="oyster-blade" data-selected-cut-trigger="Oyster Blade">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Wagyu</p>
+            <h3>Oyster Blade</h3>
+          </article>
+
+          <article class="cut-card cut-card--placeholder cut-card--chuck-tail-flap" data-cut-id="chuck-tail-flap" data-selected-cut-trigger="Chuck Tail Flap">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/placeholder-cut.svg")}"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="cut-card-shade"></div>
+            <p class="cut-card-description">Beef / Wagyu</p>
+            <h3>Chuck Tail Flap</h3>
+          </article>
+
+                    </div>
+
+                    <!-- SECTION_4_CUT_SCROLL_END -->
         </div>
       </div>
     </section>
@@ -656,7 +771,8 @@ initSelectedCutsModal();
 initHeroButtonFeedback();
 initGlobalContactCta();
 requestAnimationFrame(() => {
-  initForwardDepth();
+  initCutScrollIsolation();
+initForwardDepth();
 });
 requestAnimationFrame(() => {
   initFloatingBackground();

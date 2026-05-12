@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Selected cut placeholder">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="42%" r="64%">
+      <stop offset="0%" stop-color="#3b302b"/>
+      <stop offset="52%" stop-color="#171414"/>
+      <stop offset="100%" stop-color="#080808"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3f0ea" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#f3f0ea" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <path d="M210 710 C420 520, 660 765, 900 560 S1260 410, 1410 570" fill="none" stroke="url(#line)" stroke-width="34" stroke-linecap="round"/>
+  <path d="M260 360 C520 250, 790 395, 1010 300 S1290 250, 1395 345" fill="none" stroke="#f3f0ea" stroke-opacity="0.08" stroke-width="18" stroke-linecap="round"/>
+  <rect x="96" y="96" width="1408" height="808" fill="none" stroke="#f3f0ea" stroke-opacity="0.16"/>
+  <text x="800" y="505" text-anchor="middle" fill="#f3f0ea" fill-opacity="0.54" font-family="Georgia, serif" font-size="54" letter-spacing="12">PARAGON</text>
+  <text x="800" y="570" text-anchor="middle" fill="#f3f0ea" fill-opacity="0.34" font-family="Arial, sans-serif" font-size="20" letter-spacing="8">SELECTED CUT</text>
+</svg>

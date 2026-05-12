@@ -141,6 +141,130 @@ const selectedCuts = {
       ["1688XB", "Short Rib 3-Rib", "8/3# AVG. ~ 48# CS"],
     ],
   },
+  "Chuck Roll": {
+    eyebrow: "Selected Cut",
+    title: "Chuck Roll",
+    category: "Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A versatile forequarter cut selected for depth, structure, and a generous flavor profile.",
+    service:
+      "Best for roasting, braising, slicing, and refined slow-cooked preparations.",
+    rows: [
+      ["34129", "Chuck Roll", "2/20# AVG. ~ 40# CS"],
+    ],
+  },
+  "Shortloin": {
+    eyebrow: "Selected Cut",
+    title: "Shortloin",
+    category: "Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A premium loin section selected for steakhouse utility, balance, and elegant portioning.",
+    service:
+      "Best for portioning into high-value steaks, roasting, and composed center-plate service.",
+    rows: [
+      ["24105", "Shortloin", "1/28# AVG. ~ 28# CS"],
+      ["37975", "Shortloin", "1/22# AVG. ~ 22# CS"],
+    ],
+  },
+  "Flap Meat": {
+    eyebrow: "Selected Cut",
+    title: "Flap Meat",
+    category: "Beef / Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A flavorful, loose-grained cut selected for marbling, quick cooking, and strong menu versatility.",
+    service:
+      "Best for grilling, searing, slicing across the grain, and bold steak preparations.",
+    rows: [
+      ["14117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
+      ["24117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
+      ["34117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
+      ["37917", "Flap Meat", "8/4# AVG. ~ 35# CS"],
+      ["22061W", "Flap Meat", "6/5# AVG. ~ 30# CS"],
+      ["2206XA", "Flap Meat", "6/2.5# AVG. ~ 30# CS"],
+    ],
+  },
+  "Flank Steak": {
+    eyebrow: "Selected Cut",
+    title: "Flank Steak",
+    category: "Beef / Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A lean, expressive cut selected for clean slicing, defined texture, and focused flavor.",
+    service:
+      "Best for high-heat grilling, marinades, slicing, and shareable plates.",
+    rows: [
+      ["FP10", "Flank Steak", "18/1.2# AVG. ~ 21# CS"],
+      ["2210XA", "Flank Steak", "12/1.5# AVG. ~ 36# CS"],
+    ],
+  },
+  "Tri Tip": {
+    eyebrow: "Selected Cut",
+    title: "Tri Tip",
+    category: "Beef / Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A compact sirloin cut selected for roastability, flavor concentration, and broad service flexibility.",
+    service:
+      "Best for roasting, grilling, carving, and premium sliced presentations.",
+    rows: [
+      ["14116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
+      ["24116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
+      ["34116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
+      ["37916", "Tri Tip", "12/3# AVG. ~ 33# CS"],
+      ["21311W", "Tri Tip", "12/3# AVG. ~ 36# CS"],
+      ["2131XA", "Tri Tip", "4/2# AVG. ~ 32# CS"],
+    ],
+  },
+  "Top Sirloin": {
+    eyebrow: "Selected Cut",
+    title: "Top Sirloin",
+    category: "Beef / Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A reliable premium cut selected for lean structure, clean flavor, and adaptable service.",
+    service:
+      "Best for steaks, grilling, roasting, and consistent portion control.",
+    rows: [
+      ["24123", "Top Sirloin", "4/8# AVG. ~ 32# CS"],
+      ["34123", "Top Sirloin", "4/8# AVG. ~ 32# CS"],
+      ["21102W", "Top Sirloin", "3/16# AVG. ~ 48# CS"],
+      ["2110XA", "Top Sirloin", "6/6# AVG. ~ 36# CS"],
+      ["2110XB", "Top Sirloin", "6/6# AVG. ~ 36# CS"],
+    ],
+  },
+  "Oyster Blade": {
+    eyebrow: "Selected Cut",
+    title: "Oyster Blade",
+    category: "Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A shoulder cut selected for tenderness potential, rich flavor, and refined preparation range.",
+    service:
+      "Best for slow cooking, roasting, slicing, and carefully trimmed steak applications.",
+    rows: [
+      ["37932", "Oyster Blade", "8/6# AVG. ~ 49# CS"],
+    ],
+  },
+  "Chuck Tail Flap": {
+    eyebrow: "Selected Cut",
+    title: "Chuck Tail Flap",
+    category: "Beef / Wagyu",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A deeply flavored cut selected for marbling, texture, and strong culinary flexibility.",
+    service:
+      "Best for grilling, searing, slicing, and rich center-plate features.",
+    rows: [
+      ["14142", "Chuck Tail Flap", "3/13# AVG. ~ 40# CS"],
+      ["24142", "Chuck Tail Flap", "12/2.5# AVG. ~ 30# CS"],
+      ["34142", "Chuck Tail Flap", "12/2.5# AVG. ~ 30# CS"],
+      ["37942", "Chuck Tail Flap", "12/3# AVG. ~ 35# CS"],
+      ["2266GS", "Chuck Tail Flap", "5/7# AVG. ~ 35# CS"],
+    ],
+  },
 };
 
 const escapeHtml = (value) =>
@@ -175,6 +299,14 @@ const selectedCutTitleToId = {
   "Rump Cap": "rump-cap",
   Picanha: "rump-cap",
   "Short Rib": "short-rib",
+  "Chuck Roll": "chuck-roll",
+  "Shortloin": "shortloin",
+  "Flap Meat": "flap-meat",
+  "Flank Steak": "flank-steak",
+  "Tri Tip": "tri-tip",
+  "Top Sirloin": "top-sirloin",
+  "Oyster Blade": "oyster-blade",
+  "Chuck Tail Flap": "chuck-tail-flap",
 };
 
 const getConnectedProducersForCut = (cutName) => {
