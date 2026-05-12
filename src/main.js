@@ -14,7 +14,43 @@ app.innerHTML = `
   <main class="page-shell">
     <div class="frame"></div>
 
-    <section class="scene scene-hero" aria-labelledby="hero-title">
+    <nav class="section-index" aria-label="Section navigation">
+      <button class="section-index__brand" type="button" data-section-target="hero" aria-label="Go to home section">
+        <img
+          src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+        />
+      </button>
+
+      <span class="section-index__rule" aria-hidden="true"></span>
+
+      <div class="section-index__items">
+        <button class="section-index__item is-active" type="button" data-section-target="hero" aria-current="true">
+          <span class="section-index__number">1</span>
+          <span class="section-index__label">Home</span>
+        </button>
+        <button class="section-index__item" type="button" data-section-target="about">
+          <span class="section-index__number">2</span>
+          <span class="section-index__label">About</span>
+        </button>
+        <button class="section-index__item" type="button" data-section-target="producers">
+          <span class="section-index__number">3</span>
+          <span class="section-index__label">Producers</span>
+        </button>
+        <button class="section-index__item" type="button" data-section-target="cuts">
+          <span class="section-index__number">4</span>
+          <span class="section-index__label">Cuts</span>
+        </button>
+        <button class="section-index__item" type="button" data-section-target="inquiry">
+          <span class="section-index__number">5</span>
+          <span class="section-index__label">Inquiry</span>
+        </button>
+      </div>
+    </nav>
+
+    <section id="hero" class="scene scene-hero" aria-labelledby="hero-title" data-section-name="Home">
       <div class="scene-glow"></div>
       <div class="scene-grain"></div>
 
@@ -30,15 +66,16 @@ app.innerHTML = `
           An introduction to Paragon Purveyors and its curated portfolio of distinguished meat producers and selected cuts.
         </p>
 
-        <div class="hero-actions">
-          <button class="button button-primary" type="button" data-hero-target="portfolio">View Portfolio</button>
+        <div class="hero-actions" aria-label="Main page index">
+          <button class="button button-primary" type="button" data-hero-target="about">About Us</button>
+          <button class="button button-secondary" type="button" data-hero-target="producers">Producers</button>
           <button class="button button-secondary button-selected-cuts" type="button" data-hero-target="cuts">Selected Cuts</button>
-          <button class="button button-secondary" type="button" data-hero-target="inquiry">Request Information</button>
+          <button class="button button-secondary" type="button" data-hero-target="inquiry">Contact</button>
         </div>
       </div>
     </section>
 
-    <section class="scene scene-story" aria-labelledby="story-title">
+    <section id="about" class="scene scene-story" aria-labelledby="story-title" data-section-name="About">
       <div class="scene-glow scene-glow-soft"></div>
 
       <div class="panel panel-story">
@@ -75,7 +112,7 @@ app.innerHTML = `
       </div>
     </section>
 
-    <section class="scene scene-portfolio" aria-labelledby="portfolio-title">
+    <section id="producers" class="scene scene-portfolio" aria-labelledby="portfolio-title" data-section-name="Producers">
       <div class="scene-glow scene-glow-soft"></div>
 
       <div class="panel panel-portfolio">
@@ -158,7 +195,7 @@ app.innerHTML = `
         </div>
       </div>
     </section>
-      <section class="scene scene-cuts" aria-labelledby="cuts-title">
+      <section id="cuts" class="scene scene-cuts" aria-labelledby="cuts-title" data-section-name="Selected Cuts">
       <div class="scene-glow scene-glow-soft"></div>
 
       <div class="panel panel-cuts">
@@ -285,7 +322,7 @@ app.innerHTML = `
         </div>
       </div>
     </section>
-          <section class="scene scene-inquiry" aria-labelledby="inquiry-title">
+          <section id="inquiry" class="scene scene-inquiry" aria-labelledby="inquiry-title" data-section-name="Inquiry">
       <div class="scene-glow scene-glow-soft"></div>
 
       <div class="panel panel-inquiry">

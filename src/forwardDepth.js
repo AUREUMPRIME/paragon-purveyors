@@ -45,6 +45,46 @@ function getForegroundElements(scene) {
   );
 }
 
+function getTargetSceneIndex(scenes, target) {
+  const normalizedTarget = String(target || "").trim().toLowerCase();
+
+  const targetSelectors = {
+    hero: "#hero, .scene-hero",
+    home: "#hero, .scene-hero",
+    about: "#about, .scene-story",
+    story: "#about, .scene-story",
+    producers: "#producers, .scene-portfolio",
+    portfolio: "#producers, .scene-portfolio",
+    cuts: "#cuts, .scene-cuts",
+    selectedcuts: "#cuts, .scene-cuts",
+    inquiry: "#inquiry, .scene-inquiry",
+    contact: "#inquiry, .scene-inquiry",
+  };
+
+  const selector = targetSelectors[normalizedTarget.replace(/[^a-z]/g, "")];
+
+  if (!selector) {
+    return -1;
+  }
+
+  return scenes.findIndex((scene) => scene.matches(selector));
+}
+
+function updateSectionNavigation(scenes, activeIndex) {
+  document.querySelectorAll("[data-section-target]").forEach((control) => {
+    const targetIndex = getTargetSceneIndex(scenes, control.dataset.sectionTarget);
+    const isActive = targetIndex === activeIndex;
+
+    control.classList.toggle("is-active", isActive);
+
+    if (isActive) {
+      control.setAttribute("aria-current", "true");
+    } else {
+      control.removeAttribute("aria-current");
+    }
+  });
+}
+
 function setSceneInteractivity(scenes, activeIndex, isAnimating) {
   scenes.forEach((scene, index) => {
     const isActive = index === activeIndex && !isAnimating;
@@ -147,24 +187,25 @@ function prepareSceneBase(scenes) {
 
 function wireHeroButtons(scenes, goToSpot, cleanupCallbacks) {
   const heroTargets = {
-    portfolio: ".scene-portfolio",
-    cuts: ".scene-cuts",
-    inquiry: ".scene-inquiry",
-    "View Portfolio": ".scene-portfolio",
-    "Selected Cuts": ".scene-cuts",
-    "Request Information": ".scene-inquiry",
+    about: "about",
+    producers: "producers",
+    portfolio: "producers",
+    cuts: "cuts",
+    inquiry: "inquiry",
+    contact: "inquiry",
+    "About Us": "about",
+    Producers: "producers",
+    "View Portfolio": "producers",
+    "Selected Cuts": "cuts",
+    Contact: "inquiry",
+    "Request Information": "inquiry",
   };
 
   document.querySelectorAll(".hero-actions .button").forEach((button) => {
     const explicitTarget = button.dataset.heroTarget;
     const labelTarget = button.textContent?.trim();
-    const sceneSelector = heroTargets[explicitTarget] || heroTargets[labelTarget];
-
-    if (!sceneSelector) {
-      return;
-    }
-
-    const targetIndex = scenes.findIndex((scene) => scene.matches(sceneSelector));
+    const sectionTarget = heroTargets[explicitTarget] || heroTargets[labelTarget];
+    const targetIndex = getTargetSceneIndex(scenes, sectionTarget);
 
     if (targetIndex < 0) {
       return;
@@ -187,6 +228,29 @@ function wireHeroButtons(scenes, goToSpot, cleanupCallbacks) {
     button.addEventListener("click", handler);
     cleanupCallbacks.push(() => button.removeEventListener("click", handler));
   });
+}
+
+function wireSectionNavigation(scenes, goToSpot, cleanupCallbacks) {
+  document.querySelectorAll(".section-index [data-section-target]").forEach((control) => {
+    const targetIndex = getTargetSceneIndex(scenes, control.dataset.sectionTarget);
+
+    if (targetIndex < 0) {
+      return;
+    }
+
+    control.style.pointerEvents = "auto";
+    control.style.cursor = "pointer";
+
+    const handler = (event) => {
+      event.preventDefault();
+      goToSpot(targetIndex, "section-index");
+    };
+
+    control.addEventListener("click", handler);
+    cleanupCallbacks.push(() => control.removeEventListener("click", handler));
+  });
+
+  updateSectionNavigation(scenes, 0);
 }
 
 export function initForwardDepth() {
@@ -246,6 +310,7 @@ export function initForwardDepth() {
 
     isAnimating = true;
     document.body.classList.add("is-depth-animating");
+    updateSectionNavigation(scenes, nextIndex);
 
     dispatchDepthEvent(PARAGON_DEPTH_TRANSITION_START, {
       fromIndex: previousIndex,
@@ -312,6 +377,7 @@ export function initForwardDepth() {
         });
 
         setSceneInteractivity(scenes, activeIndex, false);
+        updateSectionNavigation(scenes, activeIndex);
 
         dispatchDepthEvent(PARAGON_DEPTH_TRANSITION_COMPLETE, {
           fromIndex: previousIndex,
@@ -483,8 +549,10 @@ export function initForwardDepth() {
   cleanupCallbacks.push(() => window.removeEventListener("keydown", handleKeyDown));
 
   wireHeroButtons(scenes, goToSpot, cleanupCallbacks);
+  wireSectionNavigation(scenes, goToSpot, cleanupCallbacks);
 
   setSceneInteractivity(scenes, activeIndex, false);
+  updateSectionNavigation(scenes, activeIndex);
 
   window.__paragonForwardDepthTimeline = null;
   window.__paragonForwardDepthCleanup = () => {
