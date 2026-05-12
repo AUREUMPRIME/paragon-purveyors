@@ -162,7 +162,7 @@ app.innerHTML = `
         </div>
 
         <div class="brand-grid">
-                    <article class="brand-card brand-card--black-opal brand-card--logo-led" aria-label="Open Black Opal producer details">
+                    <article class="brand-card brand-card--black-opal brand-card--logo-led" data-producer-id="black-opal" data-product-list-trigger="Black Opal" aria-label="Open Black Opal producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/black-opal_card_logo_512x192.png")}"
@@ -175,7 +175,7 @@ app.innerHTML = `
             <p>Australian Wagyu chosen for rich marbling and a refined eating profile.</p>
           </article>
 
-                    <article class="brand-card brand-card--mayura-station brand-card--logo-led" aria-label="Open Mayura Station producer details">
+                    <article class="brand-card brand-card--mayura-station brand-card--logo-led" data-producer-id="mayura-station" data-product-list-trigger="Mayura Station" aria-label="Open Mayura Station producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/mayura-station_card_logo_512x192.png")}"
@@ -188,7 +188,7 @@ app.innerHTML = `
             <p>Distinctive Wagyu selected for depth, consistency, and character.</p>
           </article>
 
-                    <article class="brand-card brand-card--campo-grande brand-card--logo-led" aria-label="Open Campo Grande producer details">
+                    <article class="brand-card brand-card--campo-grande brand-card--logo-led" data-producer-id="campo-grande" data-product-list-trigger="Campo Grande" aria-label="Open Campo Grande producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/campo-grande_card_logo_512x192.png")}"
@@ -201,7 +201,7 @@ app.innerHTML = `
             <p>Premium Ibérico pork known for depth of flavor and remarkable texture.</p>
           </article>
 
-                    <article class="brand-card brand-card--robbins-island brand-card--logo-led" aria-label="Open Robbins Island producer details">
+                    <article class="brand-card brand-card--robbins-island brand-card--logo-led" data-producer-id="robbins-island" data-product-list-trigger="Robbins Island" aria-label="Open Robbins Island producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/robbins-island_card_logo_512x192.png")}"
@@ -214,7 +214,7 @@ app.innerHTML = `
             <p>Tasmanian Wagyu selected for provenance, marbling, and balance.</p>
           </article>
 
-                    <article class="brand-card brand-card--wanderer brand-card--logo-led" aria-label="Open Wanderer producer details">
+                    <article class="brand-card brand-card--wanderer brand-card--logo-led" data-producer-id="wanderer" data-product-list-trigger="Wanderer" aria-label="Open Wanderer producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/wanderer_card_logo_512x192.png")}"
@@ -245,7 +245,7 @@ app.innerHTML = `
         </div>
 
         <div class="cuts-grid">
-          <article class="cut-card cut-card--ribeye">
+          <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/ribeye.jpg")}"
@@ -258,7 +258,7 @@ app.innerHTML = `
             <h3>Ribeye</h3>
           </article>
 
-          <article class="cut-card cut-card--tenderloin">
+          <article class="cut-card cut-card--tenderloin" data-cut-id="tenderloin" data-selected-cut-trigger="Tenderloin">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/tenderloin.jpg")}"
@@ -271,7 +271,7 @@ app.innerHTML = `
             <h3>Tenderloin</h3>
           </article>
 
-          <article class="cut-card cut-card--striploin">
+          <article class="cut-card cut-card--striploin" data-cut-id="striploin" data-selected-cut-trigger="Striploin">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/striploin.jpg")}"
@@ -284,7 +284,7 @@ app.innerHTML = `
             <h3>Striploin</h3>
           </article>
 
-          <article class="cut-card cut-card--tomahawk">
+          <article class="cut-card cut-card--tomahawk" data-cut-id="tomahawk" data-selected-cut-trigger="Tomahawk">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/tomahawk.jpg")}"
@@ -297,7 +297,7 @@ app.innerHTML = `
             <h3>Tomahawk</h3>
           </article>
 
-          <article class="cut-card cut-card--presa">
+          <article class="cut-card cut-card--presa" data-cut-id="presa" data-selected-cut-trigger="Presa">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/presa.jpg")}"
@@ -310,7 +310,7 @@ app.innerHTML = `
             <h3>Presa</h3>
           </article>
 
-          <article class="cut-card cut-card--secreto">
+          <article class="cut-card cut-card--secreto" data-cut-id="secreto" data-selected-cut-trigger="Secreto">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/secreto.jpg")}"
@@ -323,7 +323,7 @@ app.innerHTML = `
             <h3>Secreto</h3>
           </article>
 
-          <article class="cut-card cut-card--rump-cap" data-selected-cut-trigger="Rump Cap">
+          <article class="cut-card cut-card--rump-cap" data-cut-id="rump-cap" data-selected-cut-trigger="Rump Cap">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/rump-cap.jpg")}"
@@ -336,7 +336,7 @@ app.innerHTML = `
             <h3>Picanha</h3>
           </article>
 
-          <article class="cut-card cut-card--short-rib">
+          <article class="cut-card cut-card--short-rib" data-cut-id="short-rib" data-selected-cut-trigger="Short Rib">
             <img
               class="cut-card-image"
               src="${assetPath("assets/cuts/short-rib.jpg")}"
@@ -348,7 +348,7 @@ app.innerHTML = `
             <span class="cut-kicker">Wagyu</span>
             <h3>Short Rib</h3>
           </article>
-          <article class="cut-card cut-card--all-cuts" data-product-list-trigger="All Cuts">
+          <article class="cut-card cut-card--all-cuts" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
             <span class="cut-card-shade" aria-hidden="true"></span>
             <h3>All Cuts</h3>
             <p class="cut-card-description">View the complete visual cut reference.</p>
