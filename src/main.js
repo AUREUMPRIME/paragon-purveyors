@@ -162,7 +162,7 @@ app.innerHTML = `
         </div>
 
         <div class="brand-grid">
-                    <article class="brand-card brand-card--black-opal">
+                    <article class="brand-card brand-card--black-opal brand-card--logo-led" aria-label="Open Black Opal producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/black-opal_card_logo_512x192.png")}"
@@ -170,12 +170,12 @@ app.innerHTML = `
               aria-hidden="true"
               loading="lazy"
             />
-            <span class="brand-kicker">Australian Wagyu</span>
-            <h3>Black Opal</h3>
+            <span class="brand-kicker">F1 Australian Wagyu</span>
+            <h3 class="brand-card__sr-name">Black Opal</h3>
             <p>Australian Wagyu chosen for rich marbling and a refined eating profile.</p>
           </article>
 
-                    <article class="brand-card brand-card--mayura-station">
+                    <article class="brand-card brand-card--mayura-station brand-card--logo-led" aria-label="Open Mayura Station producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/mayura-station_card_logo_512x192.png")}"
@@ -183,12 +183,12 @@ app.innerHTML = `
               aria-hidden="true"
               loading="lazy"
             />
-            <span class="brand-kicker">Full-Blood Wagyu</span>
-            <h3>Mayura Station</h3>
+            <span class="brand-kicker">Full-Blood Australian Wagyu</span>
+            <h3 class="brand-card__sr-name">Mayura Station</h3>
             <p>Distinctive Wagyu selected for depth, consistency, and character.</p>
           </article>
 
-                    <article class="brand-card brand-card--campo-grande">
+                    <article class="brand-card brand-card--campo-grande brand-card--logo-led" aria-label="Open Campo Grande producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/campo-grande_card_logo_512x192.png")}"
@@ -196,12 +196,12 @@ app.innerHTML = `
               aria-hidden="true"
               loading="lazy"
             />
-            <span class="brand-kicker">Ibérico Pork</span>
-            <h3>Campo Grande</h3>
+            <span class="brand-kicker">Spanish Ibérico Pork</span>
+            <h3 class="brand-card__sr-name">Campo Grande</h3>
             <p>Premium Ibérico pork known for depth of flavor and remarkable texture.</p>
           </article>
 
-                    <article class="brand-card brand-card--robbins-island">
+                    <article class="brand-card brand-card--robbins-island brand-card--logo-led" aria-label="Open Robbins Island producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/robbins-island_card_logo_512x192.png")}"
@@ -209,12 +209,12 @@ app.innerHTML = `
               aria-hidden="true"
               loading="lazy"
             />
-            <span class="brand-kicker">Tasmanian Wagyu</span>
-            <h3>Robbins Island</h3>
+            <span class="brand-kicker">Pure Blood Tasmanian Wagyu</span>
+            <h3 class="brand-card__sr-name">Robbins Island</h3>
             <p>Tasmanian Wagyu selected for provenance, marbling, and balance.</p>
           </article>
 
-                    <article class="brand-card brand-card--wanderer">
+                    <article class="brand-card brand-card--wanderer brand-card--logo-led" aria-label="Open Wanderer producer details">
             <img
               class="brand-card-icon"
               src="${assetPath("assets/provider-icons/wanderer_card_logo_512x192.png")}"
@@ -222,8 +222,8 @@ app.innerHTML = `
               aria-hidden="true"
               loading="lazy"
             />
-            <span class="brand-kicker">Barley-Fed Beef</span>
-            <h3>Wanderer</h3>
+            <span class="brand-kicker">Free-Range Barley-Fed Beef</span>
+            <h3 class="brand-card__sr-name">Wanderer</h3>
             <p>Barley-fed beef chosen for versatility, consistency, and dependable quality.</p>
           </article>
         </div>
