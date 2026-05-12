@@ -5098,3 +5098,86 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* PRODUCER_MODAL_HEADER_BALANCE_FIX_END */
+
+/* CONNECTED_CATALOG_PRODUCER_CUT_LINKS_START */
+.provider-modal-related-cuts {
+  margin: clamp(16px, 2vw, 24px) 0 clamp(18px, 2.3vw, 28px);
+  padding: clamp(14px, 1.7vw, 18px) 0 0;
+  border-top: 1px solid rgba(243, 240, 234, 0.12);
+}
+
+.provider-modal-related-cuts__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.provider-modal-related-cuts__head span {
+  color: rgba(243, 240, 234, 0.88);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.provider-modal-related-cuts__head p {
+  max-width: 48ch;
+  margin: 0;
+  color: rgba(243, 240, 234, 0.52);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.provider-modal-related-cuts__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.provider-modal-related-cuts__button {
+  padding: 8px 11px;
+  color: rgba(243, 240, 234, 0.78);
+  border: 1px solid rgba(243, 240, 234, 0.14);
+  border-radius: 999px;
+  background: rgba(243, 240, 234, 0.035);
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.provider-modal-related-cuts__button:hover,
+.provider-modal-related-cuts__button:focus-visible {
+  color: rgba(243, 240, 234, 0.96);
+  border-color: rgba(243, 240, 234, 0.32);
+  background: rgba(243, 240, 234, 0.075);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.provider-modal-related-cuts__button:active {
+  transform: translateY(0) scale(0.99);
+}
+
+@media (max-width: 760px) {
+  .provider-modal-related-cuts__head {
+    display: grid;
+    gap: 8px;
+  }
+
+  .provider-modal-related-cuts__head p {
+    text-align: left;
+  }
+}
+/* CONNECTED_CATALOG_PRODUCER_CUT_LINKS_END */

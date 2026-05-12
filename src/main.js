@@ -4,6 +4,7 @@ import { initForwardDepth } from "./forwardDepth.js";
 import "./styles.css";
 import { initSelectedCutsModal } from "./selectedCutsModal.js";
 import { initGlobalContactCta } from "./globalContactCta.js";
+import { cuts, producerCutLinks, producers } from "./catalogData.js";
 
 const app = document.getElementById("app");
 
@@ -1078,7 +1079,54 @@ requestAnimationFrame(() => {
     `;
   };
 
-  const createProviderIntro = (providerIntro) => {
+  const getProducerForProductListTitle = (productListTitle) =>
+    producers.find((producer) => producer.productListTitle === productListTitle) || null;
+
+  const getCutForId = (cutId) => cuts.find((cut) => cut.id === cutId) || null;
+
+  const createProviderAvailableCuts = (productListTitle) => {
+    const producer = getProducerForProductListTitle(productListTitle);
+
+    if (!producer) {
+      return "";
+    }
+
+    const relatedCuts = (producerCutLinks[producer.id] || [])
+      .map((cutId) => getCutForId(cutId))
+      .filter(Boolean);
+
+    if (relatedCuts.length === 0) {
+      return "";
+    }
+
+    const cutButtons = relatedCuts
+      .map(
+        (cut) => `
+          <button
+            class="provider-modal-related-cuts__button"
+            type="button"
+            data-connected-cut-trigger="${escapeHtml(cut.selectedCutTitle)}"
+          >
+            ${escapeHtml(cut.publicLabel)}
+          </button>
+        `,
+      )
+      .join("");
+
+    return `
+      <section class="provider-modal-related-cuts" aria-label="Available selected cuts">
+        <div class="provider-modal-related-cuts__head">
+          <span>Available Cuts</span>
+          <p>Open a selected cut view for the cuts currently represented in this producer program.</p>
+        </div>
+        <div class="provider-modal-related-cuts__list">
+          ${cutButtons}
+        </div>
+      </section>
+    `;
+  };
+
+  const createProviderIntro = (providerIntro, productListTitle = "") => {
     if (!providerIntro) {
       return "";
     }
@@ -1100,6 +1148,7 @@ requestAnimationFrame(() => {
             : ""
         }
       </section>
+      ${createProviderAvailableCuts(productListTitle)}
     `;
   };
 
@@ -1249,7 +1298,7 @@ requestAnimationFrame(() => {
       return createPageGallery(productList.pages);
     }
 
-    const intro = createProviderIntro(productList.providerIntro);
+    const intro = createProviderIntro(productList.providerIntro, productList.title);
     const sections = (productList.sections || [])
       .map(
         (section) => `
@@ -1385,6 +1434,46 @@ requestAnimationFrame(() => {
     }
   };
 
+  // CONNECTED_CATALOG_PRODUCER_TO_CUT_EVENTS_START
+  modal.addEventListener(
+    "click",
+    (event) => {
+      const cutButton = event.target.closest("[data-connected-cut-trigger]");
+
+      if (!cutButton) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const cutName = cutButton.dataset.connectedCutTrigger;
+
+      if (!cutName) {
+        return;
+      }
+
+      const cutSceneIndex = Array.from(document.querySelectorAll(".scene")).findIndex((scene) =>
+        scene.matches("#cuts, .scene-cuts"),
+      );
+
+      closeProductList();
+
+      if (window.__paragonForwardDepth && cutSceneIndex >= 0) {
+        window.__paragonForwardDepth.goTo(cutSceneIndex);
+      }
+
+      window.setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("paragon:open-selected-cut", {
+            detail: { cutName },
+          }),
+        );
+      }, 520);
+    },
+    true,
+  );
+  // CONNECTED_CATALOG_PRODUCER_TO_CUT_EVENTS_END
   // ALL_CUTS_GUIDE_TABS_EVENTS_START
   modal.addEventListener(
     "click",

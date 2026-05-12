@@ -265,6 +265,18 @@ export function initSelectedCutsModal() {
     modal.setAttribute("open", "");
   };
 
+  window.PARAGON_SELECTED_CUTS = {
+    open: (cutName) => openSelectedCut(cutName, null),
+    has: (cutName) => Boolean(selectedCuts[cutName]),
+  };
+
+  window.addEventListener("paragon:open-selected-cut", (event) => {
+    const cutName = event.detail?.cutName || event.detail?.title;
+
+    if (cutName) {
+      openSelectedCut(cutName, null);
+    }
+  });
   const closeSelectedCut = () => {
     document.body.classList.remove("selected-cut-modal-open");
 

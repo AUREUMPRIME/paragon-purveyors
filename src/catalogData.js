@@ -82,7 +82,21 @@ export const cuts = [
   },
 ];
 
+export const producerCutLinks = {
+  "black-opal": ["ribeye", "tenderloin", "striploin", "tomahawk", "rump-cap"],
+  "mayura-station": ["ribeye", "tenderloin", "striploin", "tomahawk", "rump-cap"],
+  "campo-grande": ["presa", "secreto", "tenderloin"],
+  "robbins-island": ["ribeye", "tenderloin", "striploin", "tomahawk"],
+  wanderer: ["ribeye", "tenderloin", "striploin", "rump-cap", "short-rib"],
+};
+
+export const getProducerByProductListTitle = (title) =>
+  producers.find((producer) => producer.productListTitle === title) || null;
+
+export const getCutById = (id) => cuts.find((cut) => cut.id === id) || null;
+
 export const catalogIds = {
   producers,
   cuts,
+  producerCutLinks,
 };
