@@ -1,4 +1,5 @@
 import { assetPath } from "./assetPath.js";
+import { producerCutLinks, producers } from "./catalogData.js";
 const selectedCuts = {
   Ribeye: {
     eyebrow: "Selected Cut",
@@ -163,6 +164,65 @@ const createRows = (rows) =>
     )
     .join("");
 
+// CONNECTED_CATALOG_CUT_TO_PRODUCER_HELPERS_START
+const selectedCutTitleToId = {
+  Ribeye: "ribeye",
+  Tenderloin: "tenderloin",
+  Striploin: "striploin",
+  Tomahawk: "tomahawk",
+  Presa: "presa",
+  Secreto: "secreto",
+  "Rump Cap": "rump-cap",
+  Picanha: "rump-cap",
+  "Short Rib": "short-rib",
+};
+
+const getConnectedProducersForCut = (cutName) => {
+  const cut = selectedCuts[cutName];
+  const cutId = selectedCutTitleToId[cutName] || selectedCutTitleToId[cut?.title];
+
+  if (!cutId) {
+    return [];
+  }
+
+  return producers.filter((producer) => (producerCutLinks[producer.id] || []).includes(cutId));
+};
+
+const createProducerProgramLinks = (cutName) => {
+  const relatedProducers = getConnectedProducersForCut(cutName);
+
+  if (relatedProducers.length === 0) {
+    return "";
+  }
+
+  const buttons = relatedProducers
+    .map(
+      (producer) => `
+        <button
+          class="selected-cut-modal__producer-button"
+          type="button"
+          data-connected-producer-trigger="${escapeHtml(producer.productListTitle)}"
+        >
+          <span>${escapeHtml(producer.publicLabel)}</span>
+          <small>View Producer</small>
+        </button>
+      `,
+    )
+    .join("");
+
+  return `
+    <section class="selected-cut-modal__producer-links" aria-label="Available producer programs">
+      <div class="selected-cut-modal__producer-links-head">
+        <span>Producer Programs</span>
+        <p>Producer programs for this cut.</p>
+      </div>
+      <div class="selected-cut-modal__producer-links-list">
+        ${buttons}
+      </div>
+    </section>
+  `;
+};
+// CONNECTED_CATALOG_CUT_TO_PRODUCER_HELPERS_END
 export function initSelectedCutsModal() {
   const modalContent = `
     <div class="selected-cut-modal__panel">
@@ -186,6 +246,8 @@ export function initSelectedCutsModal() {
             <span>Service Note</span>
             <p data-selected-cut-service></p>
           </div>
+
+          <div class="selected-cut-modal__producer-links-slot" data-selected-cut-producers></div>
 
           <div class="selected-cut-modal__table-wrap">
             <table class="selected-cut-modal__table">
@@ -224,6 +286,7 @@ export function initSelectedCutsModal() {
   const categoryNode = modal.querySelector("[data-selected-cut-category]");
   const descriptionNode = modal.querySelector("[data-selected-cut-description]");
   const serviceNode = modal.querySelector("[data-selected-cut-service]");
+  const producersNode = modal.querySelector("[data-selected-cut-producers]");
   const rowsNode = modal.querySelector("[data-selected-cut-rows]");
   const imageNode = modal.querySelector("[data-selected-cut-image]");
   const fallbackNode = modal.querySelector("[data-selected-cut-fallback]");
@@ -242,6 +305,10 @@ export function initSelectedCutsModal() {
     categoryNode.textContent = cut.category;
     descriptionNode.textContent = cut.description;
     serviceNode.textContent = cut.service;
+
+    if (producersNode) {
+      producersNode.innerHTML = createProducerProgramLinks(cutName);
+    }
     rowsNode.innerHTML = createRows(cut.rows);
     fallbackNode.textContent = cut.title;
 
@@ -319,6 +386,38 @@ export function initSelectedCutsModal() {
     });
   });
 
+  // CONNECTED_CATALOG_CUT_TO_PRODUCER_EVENTS_START
+  modal.addEventListener(
+    "click",
+    (event) => {
+      const producerButton = event.target.closest("[data-connected-producer-trigger]");
+
+      if (!producerButton) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const productListTitle = producerButton.dataset.connectedProducerTrigger;
+
+      if (!productListTitle) {
+        return;
+      }
+
+      closeSelectedCut();
+
+      window.setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("paragon:open-producer", {
+            detail: { productListTitle },
+          }),
+        );
+      }, 140);
+    },
+    true,
+  );
+  // CONNECTED_CATALOG_CUT_TO_PRODUCER_EVENTS_END
   closeButton?.addEventListener("click", closeSelectedCut);
 
   modal.addEventListener("click", (event) => {

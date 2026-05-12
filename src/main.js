@@ -1117,7 +1117,7 @@ requestAnimationFrame(() => {
       <section class="provider-modal-related-cuts" aria-label="Available selected cuts">
         <div class="provider-modal-related-cuts__head">
           <span>Available Cuts</span>
-          <p>Open a selected cut view for the cuts currently represented in this producer program.</p>
+          <p>Cuts represented in this program.</p>
         </div>
         <div class="provider-modal-related-cuts__list">
           ${cutButtons}
@@ -1453,15 +1453,7 @@ requestAnimationFrame(() => {
         return;
       }
 
-      const cutSceneIndex = Array.from(document.querySelectorAll(".scene")).findIndex((scene) =>
-        scene.matches("#cuts, .scene-cuts"),
-      );
-
       closeProductList();
-
-      if (window.__paragonForwardDepth && cutSceneIndex >= 0) {
-        window.__paragonForwardDepth.goTo(cutSceneIndex);
-      }
 
       window.setTimeout(() => {
         window.dispatchEvent(
@@ -1469,7 +1461,7 @@ requestAnimationFrame(() => {
             detail: { cutName },
           }),
         );
-      }, 520);
+      }, 140);
     },
     true,
   );
@@ -1497,6 +1489,22 @@ requestAnimationFrame(() => {
     true,
   );
   // ALL_CUTS_GUIDE_TABS_EVENTS_END
+  // CONNECTED_CATALOG_CUT_TO_PRODUCER_EVENTS_START
+  window.PARAGON_PRODUCT_LISTS = {
+    open: (productListTitle) => openProductList(productListTitle, null),
+    has: (productListTitle) => Boolean(productLists[productListTitle]),
+  };
+
+  window.addEventListener("paragon:open-producer", (event) => {
+    const productListTitle = event.detail?.productListTitle || event.detail?.title;
+
+    if (!productListTitle || !productLists[productListTitle]) {
+      return;
+    }
+
+    openProductList(productListTitle, null);
+  });
+  // CONNECTED_CATALOG_CUT_TO_PRODUCER_EVENTS_END
   document.querySelectorAll(".brand-card, [data-product-list-trigger]").forEach((card) => {
     const title = card.dataset.productListTrigger || card.querySelector("h3")?.textContent?.trim();
 
