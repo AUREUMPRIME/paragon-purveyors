@@ -96,20 +96,17 @@ app.innerHTML = `
     <section id="about" class="scene scene-story" aria-labelledby="story-title" data-section-name="About">
       <div class="scene-glow scene-glow-soft"></div>
 
-      <div class="panel panel-story">
-        <div class="story-grid story-grid--about-card">
-          <div class="story-left">
+      <div class="panel panel-story panel-story--about-cards">
+        <div class="about-card-pair">
+          <div class="about-card-pair__intro">
             <p class="eyebrow">About</p>
-            <h2 id="story-title" class="story-title story-title--split">
-              <span class="story-title-group">Exceptional<br />producers.</span>
-              <span class="story-title-gap" aria-hidden="true"></span>
-              <span class="story-title-group">Selected with<br />purpose.</span>
-            </h2>
+            <h2 id="story-title" class="about-card-pair__title">Paragon Purveyors.</h2>
+            <p class="body-copy about-card-pair__copy">A concise introduction to the people and purpose behind the house.</p>
           </div>
 
-          <div class="story-right story-right--about-card">
+          <div class="about-card-pair__cards" aria-label="About Paragon Purveyors">
             <button
-              class="section-about-logo-card"
+              class="section-about-logo-card section-about-logo-card--introduction"
               type="button"
               data-about-trigger
               aria-label="Open About Paragon Purveyors"
@@ -124,6 +121,25 @@ app.innerHTML = `
               </span>
               <span class="section-about-logo-card__label">About Paragon Purveyors</span>
               <span class="section-about-logo-card__copy">View the brand introduction.</span>
+            </button>
+
+            <button
+              class="section-about-logo-card section-about-logo-card--owners"
+              type="button"
+              data-owners-trigger
+              aria-label="Open Meet the Owners"
+            >
+              <span class="section-about-logo-card__mark">
+                <img
+                  src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                />
+              </span>
+              <span class="section-about-logo-card__label">Meet the Owners</span>
+              <span class="section-about-logo-card__date">Established 2026</span>
+              <span class="section-about-logo-card__copy">Read the story behind Paragon Purveyors.</span>
             </button>
           </div>
         </div>
@@ -528,6 +544,113 @@ function initHeroButtonFeedback() {
   });
 })();
 // ABOUT_MODAL_END
+// OWNERS_MODAL_START
+(() => {
+  const modalContent = `
+    <div class="about-modal__panel owners-modal__panel">
+      <button class="about-modal__close" type="button" aria-label="Close owners panel" data-owners-close>
+        <span aria-hidden="true">×</span>
+      </button>
+
+      <div class="about-modal__layout owners-modal__layout">
+        <section class="about-modal__copy owners-modal__copy">
+          <p class="about-modal__eyebrow">About Paragon Purveyors</p>
+          <h2 id="owners-modal-title">Meet the Owners</h2>
+
+          <p class="owners-modal__established">Established in 2026</p>
+
+          <p>This panel is reserved for the approved Paragon Purveyors owner story.</p>
+
+          <p>Final owner names, portraits, and company history will be added after the client provides approved copy and imagery.</p>
+
+          <p>The final version should remain personal, refined, and concise while preserving the premium tone of the page.</p>
+        </section>
+
+        <aside class="about-modal__brand owners-modal__brand" aria-label="Paragon Purveyors logo">
+          <img
+            class="about-modal__logo"
+            src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
+            alt="Paragon Purveyors"
+          />
+        </aside>
+      </div>
+    </div>
+  `;
+
+  let modal = document.getElementById("owners-modal");
+
+  if (!modal) {
+    modal = document.createElement("dialog");
+    modal.id = "owners-modal";
+    document.body.appendChild(modal);
+  }
+
+  modal.className = "about-modal owners-modal";
+  modal.setAttribute("aria-labelledby", "owners-modal-title");
+  modal.innerHTML = modalContent;
+
+  const closeButton = modal.querySelector("[data-owners-close]");
+  const panel = modal.querySelector(".about-modal__panel");
+
+  const openModal = () => {
+    document.body.classList.add("about-modal-open");
+
+    if (typeof modal.showModal === "function" && !modal.open) {
+      modal.showModal();
+      return;
+    }
+
+    modal.setAttribute("open", "");
+  };
+
+  const closeModal = () => {
+    document.body.classList.remove("about-modal-open");
+
+    if (typeof modal.close === "function" && modal.open) {
+      modal.close();
+      return;
+    }
+
+    modal.removeAttribute("open");
+  };
+
+  document.querySelectorAll("[data-owners-trigger]").forEach((trigger) => {
+    trigger.style.pointerEvents = "auto";
+    trigger.style.cursor = "pointer";
+
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      openModal();
+    });
+
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openModal();
+      }
+    });
+  });
+
+  closeButton?.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", (event) => {
+    if (panel && !panel.contains(event.target)) {
+      closeModal();
+    }
+  });
+
+  modal.addEventListener("close", () => {
+    document.body.classList.remove("about-modal-open");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.open) {
+      closeModal();
+    }
+  });
+})();
+// OWNERS_MODAL_END
+
 initSelectedCutsModal();
 initHeroButtonFeedback();
 initGlobalContactCta();
