@@ -128,12 +128,60 @@ export const cuts = [
     publicLabel: "Chuck Tail Flap",
     sectionTarget: "cuts",
   },
+  {
+    id: "iberico-abanico",
+    selectedCutTitle: "Iberico Abanico",
+    publicLabel: "Iberico Abanico",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-pluma",
+    selectedCutTitle: "Iberico Pluma",
+    publicLabel: "Iberico Pluma",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-coppa",
+    selectedCutTitle: "Iberico Coppa",
+    publicLabel: "Iberico Coppa",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-loin-roast",
+    selectedCutTitle: "Iberico Loin Roast",
+    publicLabel: "Iberico Loin Roast",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-4-rib-rack",
+    selectedCutTitle: "Iberico 4 Rib-Rack",
+    publicLabel: "Iberico 4 Rib-Rack",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-st-louis-ribs",
+    selectedCutTitle: "Iberico St. Louis Ribs",
+    publicLabel: "Iberico St. Louis Ribs",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-pork-belly",
+    selectedCutTitle: "Iberico Pork Belly",
+    publicLabel: "Iberico Pork Belly",
+    sectionTarget: "cuts",
+  },
+  {
+    id: "iberico-shoulder-picnic",
+    selectedCutTitle: "Iberico Shoulder Picnic",
+    publicLabel: "Iberico Shoulder Picnic",
+    sectionTarget: "cuts",
+  },
 ];
 
 export const producerCutLinks = {
   "black-opal": ["ribeye", "tenderloin", "striploin", "tomahawk", "rump-cap", "flap-meat", "tri-tip", "chuck-tail-flap"],
   "mayura-station": ["ribeye", "tenderloin", "striploin", "tomahawk", "rump-cap", "shortloin", "flap-meat", "tri-tip", "top-sirloin", "chuck-tail-flap"],
-  "campo-grande": ["presa", "secreto", "tenderloin", "flank-steak"],
+  "campo-grande": ["presa", "secreto", "tenderloin", "flank-steak", "iberico-abanico", "iberico-pluma", "iberico-coppa", "iberico-loin-roast", "iberico-4-rib-rack", "iberico-st-louis-ribs", "iberico-pork-belly", "iberico-shoulder-picnic"],
   "robbins-island": ["ribeye", "tenderloin", "striploin", "tomahawk", "chuck-roll", "shortloin", "flap-meat", "tri-tip", "top-sirloin", "oyster-blade", "chuck-tail-flap"],
   wanderer: ["ribeye", "tenderloin", "striploin", "rump-cap", "short-rib", "flap-meat", "flank-steak", "tri-tip", "top-sirloin", "chuck-tail-flap"],
 };

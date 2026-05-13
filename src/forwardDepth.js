@@ -455,6 +455,9 @@ export function initForwardDepth() {
   }
 
   function handleWheel(event) {
+    if (window.__paragonCutScrollActive === true) {
+      return;
+    }
     if (isModalInteractionOpen()) {
       return;
     }

@@ -265,6 +265,110 @@ const selectedCuts = {
       ["2266GS", "Chuck Tail Flap", "5/7# AVG. ~ 35# CS"],
     ],
   },
+  "Iberico Abanico": {
+    eyebrow: "Selected Cut",
+    title: "Iberico Abanico",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A prized Ibérico cut selected for expressive marbling, rich flavor, and refined Spanish character.",
+    service:
+      "Best for high-heat searing, charcoal grilling, slicing, and premium shared plates.",
+    rows: [
+      ["FP03", "Albanico", "18/1.1# AVG. ~ 19.8# CS"],
+    ],
+  },
+  "Iberico Pluma": {
+    eyebrow: "Selected Cut",
+    title: "Iberico Pluma",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A delicate Ibérico cut selected for tenderness, elegant fat distribution, and a clean finishing profile.",
+    service:
+      "Best for grilling, searing, slicing thinly, and refined small-plate service.",
+    rows: [
+      ["FP04", "Pluma", "12/1.5# AVG. ~ 18.5# CS"],
+    ],
+  },
+  "Iberico Coppa": {
+    eyebrow: "Selected Cut",
+    title: "Iberico Coppa",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A deeply flavored shoulder cut selected for marbling, structure, and generous culinary versatility.",
+    service:
+      "Best for roasting, slow cooking, slicing, and rich center-plate preparations.",
+    rows: [
+      ["FP08", "Coppa", "8/2.3# AVG. ~ 18# CS"],
+    ],
+  },
+  "Iberico Loin Roast": {
+    eyebrow: "Selected Cut",
+    title: "Iberico Loin Roast",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A refined Ibérico roast selected for balanced texture, clean presentation, and understated richness.",
+    service:
+      "Best for roasting, carving, composed plates, and elegant banquet-style service.",
+    rows: [
+      ["FP07", "Loin Roast", "12/1.25# AVG. ~ 15# CS"],
+    ],
+  },
+  "Iberico 4 Rib-Rack": {
+    eyebrow: "Selected Cut",
+    title: "Iberico 4 Rib-Rack",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A presentation-focused Ibérico rack selected for visual impact, marbling, and heritage pork flavor.",
+    service:
+      "Best for roasting, grilling, carving tableside, and premium menu features.",
+    rows: [
+      ["FP05", "4-Rib Rack", "6/2.1# AVG. ~ 13# CS"],
+    ],
+  },
+  "Iberico St. Louis Ribs": {
+    eyebrow: "Selected Cut",
+    title: "Iberico St. Louis Ribs",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A flavorful rib cut selected for richness, structure, and a distinctive Ibérico eating profile.",
+    service:
+      "Best for smoking, roasting, glazing, grilling, and elevated rib service.",
+    rows: [
+      ["FP09", "St. Louis Rib", "6/1.8# AVG. ~ 11# CS"],
+    ],
+  },
+  "Iberico Pork Belly": {
+    eyebrow: "Selected Cut",
+    title: "Iberico Pork Belly",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A richly marbled belly cut selected for depth, texture, and luxurious rendered flavor.",
+    service:
+      "Best for roasting, slow cooking, crisping, slicing, and composed pork plates.",
+    rows: [
+      ["FP06", "Belly", "12/1.25# AVG. ~ 15# CS"],
+    ],
+  },
+  "Iberico Shoulder Picnic": {
+    eyebrow: "Selected Cut",
+    title: "Iberico Shoulder Picnic",
+    category: "Ibérico Pork",
+    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    description:
+      "A hearty Ibérico shoulder cut selected for depth, slow-cooked tenderness, and bold savory character.",
+    service:
+      "Best for braising, roasting, smoking, pulling, and generous shared preparations.",
+    rows: [
+      ["FP21", "Picnic Shoulder", "2/16# AVG. ~ 32# CS"],
+    ],
+  },
 };
 
 const escapeHtml = (value) =>
@@ -307,6 +411,14 @@ const selectedCutTitleToId = {
   "Top Sirloin": "top-sirloin",
   "Oyster Blade": "oyster-blade",
   "Chuck Tail Flap": "chuck-tail-flap",
+  "Iberico Abanico": "iberico-abanico",
+  "Iberico Pluma": "iberico-pluma",
+  "Iberico Coppa": "iberico-coppa",
+  "Iberico Loin Roast": "iberico-loin-roast",
+  "Iberico 4 Rib-Rack": "iberico-4-rib-rack",
+  "Iberico St. Louis Ribs": "iberico-st-louis-ribs",
+  "Iberico Pork Belly": "iberico-pork-belly",
+  "Iberico Shoulder Picnic": "iberico-shoulder-picnic",
 };
 
 const getConnectedProducersForCut = (cutName) => {
