@@ -6,6 +6,7 @@ import { initSelectedCutsModal } from "./selectedCutsModal.js";
 import { initGlobalContactCta } from "./globalContactCta.js";
 import { cuts, producerCutLinks, producers } from "./catalogData.js";
 import { initCutScrollIsolation } from "./cutScrollIsolation.js";
+import { initInquiryForm } from "./inquiryForm.js";
 
 const app = document.getElementById("app");
 
@@ -587,41 +588,101 @@ app.innerHTML = `
 </div>
       </div>
     </section>
-          <section id="inquiry" class="scene scene-inquiry" aria-labelledby="inquiry-title" data-section-name="Inquiry">
+              <section id="inquiry" class="scene scene-inquiry" aria-labelledby="inquiry-title" data-section-name="Inquiry">
       <div class="scene-glow scene-glow-soft"></div>
 
-      <div class="panel panel-inquiry">
-        <div class="inquiry-head">
-          <p class="eyebrow">Inquiry</p>
-          <h2 id="inquiry-title" class="inquiry-title">
-            <span class="inquiry-title-line">Contact</span>
-            <span class="inquiry-title-line">Paragon Purveyors.</span>
-          </h2>
-          <p class="body-copy inquiry-intro">
-            For additional information regarding producers, selected cuts, and availability, please get in touch directly.
-          </p>
+      <div class="panel panel-inquiry panel-inquiry--form">
+        <div class="inquiry-layout">
+          <div class="inquiry-head">
+            <p class="eyebrow">Inquiry</p>
+            <h2 id="inquiry-title" class="inquiry-title">
+              <span class="inquiry-title-line">Contact</span>
+              <span class="inquiry-title-line">Paragon Purveyors.</span>
+            </h2>
+            <p class="body-copy inquiry-intro">
+              For availability, producer details, and selected cuts, send a focused inquiry or contact the team directly.
+            </p>
 
-          <div class="inquiry-details" aria-label="Contact details mockup">
-            <div class="inquiry-detail-card">
-              <span class="inquiry-detail-label">Email</span>
-              <strong class="inquiry-detail-value">Email address to be added</strong>
-            </div>
+            <div class="inquiry-details inquiry-details--live" aria-label="Paragon Purveyors contact details">
+              <article class="inquiry-detail-card inquiry-detail-card--copy">
+                <span class="inquiry-detail-label">Email</span>
+                <strong class="inquiry-detail-value">info@paragonpurveyors.com</strong>
+                <button
+                  class="inquiry-copy-button"
+                  type="button"
+                  data-copy-value="info@paragonpurveyors.com"
+                  aria-label="Copy Paragon Purveyors email"
+                >
+                  Copy
+                </button>
+              </article>
 
-            <div class="inquiry-detail-card">
-              <span class="inquiry-detail-label">Direct Line</span>
-              <strong class="inquiry-detail-value">Clayton U. — +1 (949) 514-3127</strong>
-            </div>
+              <article class="inquiry-detail-card inquiry-detail-card--copy">
+                <span class="inquiry-detail-label">Direct Line</span>
+                <strong class="inquiry-detail-value">Clayton U. — +1 (949) 514-3127</strong>
+                <button
+                  class="inquiry-copy-button"
+                  type="button"
+                  data-copy-value="+1 (949) 514-3127"
+                  aria-label="Copy Clayton U. phone number"
+                >
+                  Copy
+                </button>
+              </article>
 
-            <div class="inquiry-detail-card">
-              <span class="inquiry-detail-label">Second Contact</span>
-              <strong class="inquiry-detail-value">Name and phone number to be added</strong>
+              <article class="inquiry-detail-card inquiry-detail-card--pending">
+                <span class="inquiry-detail-label">Second Contact</span>
+                <strong class="inquiry-detail-value">John D. — Number pending</strong>
+                <span class="inquiry-pending-note">To be updated</span>
+              </article>
             </div>
           </div>
+
+          <form class="inquiry-form" data-inquiry-form novalidate>
+            <div class="inquiry-form-head">
+              <p class="inquiry-form-kicker">Private Inquiry</p>
+              <h3>Start a conversation.</h3>
+              <p>
+                Share what you are sourcing and the team will review availability. Email sending will be connected in the final hosting step.
+              </p>
+            </div>
+
+            <label class="inquiry-field">
+              <span>Your Email</span>
+              <input
+                class="inquiry-input"
+                type="email"
+                name="email"
+                autocomplete="email"
+                placeholder="name@restaurant.com"
+                data-inquiry-email
+                required
+              />
+            </label>
+
+            <label class="inquiry-field">
+              <span>Message</span>
+              <textarea
+                class="inquiry-textarea"
+                name="message"
+                rows="5"
+                placeholder="Tell us which producers, cuts, or availability details you are interested in."
+                data-inquiry-message
+                required
+              ></textarea>
+            </label>
+
+            <button class="inquiry-submit" type="submit">
+              Prepare Inquiry
+            </button>
+
+            <p class="inquiry-form-status" data-inquiry-status role="status" aria-live="polite"></p>
+          </form>
         </div>
       </div>
     </section>
 
-                              <footer class="site-footer" role="contentinfo" aria-label="Paragon Purveyors footer">
+<footer class="site-footer" role="contentinfo" aria-label="Paragon Purveyors footer">
         <img
           class="site-footer-logo"
           src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
@@ -886,7 +947,8 @@ initSelectedCutsModal();
 initHeroButtonFeedback();
 initGlobalContactCta();
 requestAnimationFrame(() => {
-  initCutScrollIsolation();
+  initInquiryForm();
+initCutScrollIsolation();
 initForwardDepth();
 });
 requestAnimationFrame(() => {
