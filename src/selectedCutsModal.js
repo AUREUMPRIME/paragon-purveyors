@@ -5,7 +5,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Ribeye",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/ribeye.jpg"),
+    image: assetPath("assets/cuts/ribeye.png"),
     description:
       "A richly marbled center-plate cut selected for depth, tenderness, and a refined eating profile.",
     service:
@@ -25,7 +25,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Tenderloin",
     category: "Beef / Wagyu / Pork",
-    image: assetPath("assets/cuts/tenderloin.jpg"),
+    image: assetPath("assets/cuts/tenderloin.png"),
     description:
       "A refined, tender cut selected for clean presentation, delicate texture, and elegant service.",
     service:
@@ -46,7 +46,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Striploin",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/striploin.jpg"),
+    image: assetPath("assets/cuts/striploin.png"),
     description:
       "A classic premium steak cut selected for balance, marbling, and a confident center-plate profile.",
     service:
@@ -69,7 +69,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Tomahawk",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/tomahawk.jpg"),
+    image: assetPath("assets/cuts/tomahawk.png"),
     description:
       "A dramatic bone-in cut selected for visual impact, rich flavor, and celebratory presentation.",
     service:
@@ -88,7 +88,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Presa",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/presa.jpg"),
+    image: assetPath("assets/cuts/presa.png"),
     description:
       "A highly regarded Ibérico cut selected for deep flavor, tenderness, and generous marbling.",
     service:
@@ -99,7 +99,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Secreto",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/secreto.jpg"),
+    image: assetPath("assets/cuts/secreto.png"),
     description:
       "A richly marbled Ibérico cut selected for expressive flavor, quick cooking, and delicate texture.",
     service:
@@ -114,7 +114,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Picanha",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/rump-cap.jpg"),
+    image: assetPath("assets/cuts/rump-cap.png"),
     description:
       "A flavorful cap cut selected for its fat cover, rich character, and versatile presentation.",
     service:
@@ -131,7 +131,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Short Rib",
     category: "Beef",
-    image: assetPath("assets/cuts/short-rib.jpg"),
+    image: assetPath("assets/cuts/short-rib.png"),
     description:
       "A richly flavored cut selected for depth, structure, and satisfying slow-cooked or grilled preparations.",
     service:
@@ -145,7 +145,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Chuck Roll",
     category: "Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/chuck-roll.png"),
     description:
       "A versatile forequarter cut selected for depth, structure, and a generous flavor profile.",
     service:
@@ -158,7 +158,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Shortloin",
     category: "Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/shortloin.png"),
     description:
       "A premium loin section selected for steakhouse utility, balance, and elegant portioning.",
     service:
@@ -172,7 +172,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Flap Meat",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/flap-meat.png"),
     description:
       "A flavorful, loose-grained cut selected for marbling, quick cooking, and strong menu versatility.",
     service:
@@ -190,7 +190,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Flank Steak",
     category: "Beef / Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/flank-steak.png"),
     description:
       "A lean, expressive cut selected for clean slicing, defined texture, and focused flavor.",
     service:
@@ -204,7 +204,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Tri Tip",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/tri-tip.png"),
     description:
       "A compact sirloin cut selected for roastability, flavor concentration, and broad service flexibility.",
     service:
@@ -222,7 +222,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Top Sirloin",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/top-sirloin.png"),
     description:
       "A reliable premium cut selected for lean structure, clean flavor, and adaptable service.",
     service:
@@ -239,7 +239,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Oyster Blade",
     category: "Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/oyster-blade.png"),
     description:
       "A shoulder cut selected for tenderness potential, rich flavor, and refined preparation range.",
     service:
@@ -252,7 +252,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Chuck Tail Flap",
     category: "Beef / Wagyu",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/chuck-tail-flap.png"),
     description:
       "A deeply flavored cut selected for marbling, texture, and strong culinary flexibility.",
     service:
@@ -269,7 +269,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico Abanico",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-abanico.png"),
     description:
       "A prized Ibérico cut selected for expressive marbling, rich flavor, and refined Spanish character.",
     service:
@@ -282,7 +282,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico Pluma",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-pluma.png"),
     description:
       "A delicate Ibérico cut selected for tenderness, elegant fat distribution, and a clean finishing profile.",
     service:
@@ -295,7 +295,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico Coppa",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-coppa.png"),
     description:
       "A deeply flavored shoulder cut selected for marbling, structure, and generous culinary versatility.",
     service:
@@ -308,7 +308,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico Loin Roast",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-loin-roast.png"),
     description:
       "A refined Ibérico roast selected for balanced texture, clean presentation, and understated richness.",
     service:
@@ -321,7 +321,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico 4 Rib-Rack",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-4-rib-rack.png"),
     description:
       "A presentation-focused Ibérico rack selected for visual impact, marbling, and heritage pork flavor.",
     service:
@@ -334,7 +334,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico St. Louis Ribs",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-st-louis-ribs.png"),
     description:
       "A flavorful rib cut selected for richness, structure, and a distinctive Ibérico eating profile.",
     service:
@@ -347,7 +347,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico Pork Belly",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-pork-belly.png"),
     description:
       "A richly marbled belly cut selected for depth, texture, and luxurious rendered flavor.",
     service:
@@ -360,7 +360,7 @@ const selectedCuts = {
     eyebrow: "Selected Cut",
     title: "Iberico Shoulder Picnic",
     category: "Ibérico Pork",
-    image: assetPath("assets/cuts/placeholder-cut.svg"),
+    image: assetPath("assets/cuts/iberico-shoulder-picnic.png"),
     description:
       "A hearty Ibérico shoulder cut selected for depth, slow-cooked tenderness, and bold savory character.",
     service:
