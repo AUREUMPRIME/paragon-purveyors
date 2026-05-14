@@ -11,14 +11,14 @@ const selectedCuts = {
     service:
       "Best for high-heat searing, grilling, and premium steak service.",
     rows: [
-      ["14107", "Ribeye", "3/12.5# AVG. ~ 38# CS"],
-      ["24107", "Ribeye", "3/12.5# AVG. ~ 38# CS"],
-      ["34107", "Ribeye", "3/12.5# AVG. ~ 38# CS"],
-      ["37907", "Ribeye", "4/9# AVG. ~ 38# CS"],
-      ["22402W", "Ribeye Lip Off", "2/14# AVG. ~ 28# CS"],
-      ["22409T", "Ribeye Lip Off", "2/14# AVG. ~ 28# CS"],
-      ["2240XA", "Rib Eye Roll Lip Off 7LB+", "3/10# AVG. ~ 30# CS"],
-      ["2240XB", "Rib Eye Roll Lip Off 7LB+", "3/10# AVG. ~ 30# CS"],
+      ["Black Opal", "14107", "Ribeye", "3/12.5# AVG. ~ 38# CS"],
+      ["Black Opal", "24107", "Ribeye", "3/12.5# AVG. ~ 38# CS"],
+      ["Black Opal", "34107", "Ribeye", "3/12.5# AVG. ~ 38# CS"],
+      ["Mayura Station", "37907", "Ribeye", "4/9# AVG. ~ 38# CS"],
+      ["Robbins Island", "22402W", "Ribeye Lip Off", "2/14# AVG. ~ 28# CS"],
+      ["Robbins Island", "22409T", "Ribeye Lip Off", "2/14# AVG. ~ 28# CS"],
+      ["Wanderer", "2240XA", "Rib Eye Roll Lip Off 7LB+", "3/10# AVG. ~ 30# CS"],
+      ["Wanderer", "2240XB", "Rib Eye Roll Lip Off 7LB+", "3/10# AVG. ~ 30# CS"],
     ],
   },
   Tenderloin: {
@@ -31,15 +31,15 @@ const selectedCuts = {
     service:
       "Best for fine-dining portions, pan searing, roasting, and composed plates.",
     rows: [
-      ["14135", "Tenderloin", "4/5.5# AVG. ~ 22# CS"],
-      ["24135", "Tenderloin", "4/5.5# AVG. ~ 22# CS"],
-      ["34135", "Tenderloin", "4/5.5# AVG. ~ 22# CS"],
-      ["37905", "Tenderloin", "4/7# AVG. ~ 30# CS"],
-      ["FP18", "Tenderloin", "24/0.8# AVG. ~ 19.2# CS"],
-      ["21602W", "Tenderloin SS Off", "6/5# AVG. ~ 30# CS"],
-      ["21609T", "Tenderloin SS Off", "6/5# AVG. ~ 30# CS"],
-      ["2160XA", "Tenderloin SS Off 4LB+", "6/4# AVG. ~ 24# CS"],
-      ["2160XB", "Tenderloin SS Off 4LB+", "6/4# AVG. ~ 24# CS"],
+      ["Black Opal", "14135", "Tenderloin", "4/5.5# AVG. ~ 22# CS"],
+      ["Black Opal", "24135", "Tenderloin", "4/5.5# AVG. ~ 22# CS"],
+      ["Black Opal", "34135", "Tenderloin", "4/5.5# AVG. ~ 22# CS"],
+      ["Mayura Station", "37905", "Tenderloin", "4/7# AVG. ~ 30# CS"],
+      ["Campo Grande", "FP18", "Tenderloin", "24/0.8# AVG. ~ 19.2# CS"],
+      ["Robbins Island", "21602W", "Tenderloin SS Off", "6/5# AVG. ~ 30# CS"],
+      ["Robbins Island", "21609T", "Tenderloin SS Off", "6/5# AVG. ~ 30# CS"],
+      ["Wanderer", "2160XA", "Tenderloin SS Off 4LB+", "6/4# AVG. ~ 24# CS"],
+      ["Wanderer", "2160XB", "Tenderloin SS Off 4LB+", "6/4# AVG. ~ 24# CS"],
     ],
   },
   Striploin: {
@@ -52,17 +52,17 @@ const selectedCuts = {
     service:
       "Best for steaks, portioning, grilling, and refined steakhouse service.",
     rows: [
-      ["14104", "Striploin", "3/13# AVG. ~ 40# CS"],
-      ["24104", "Striploin", "3/13# AVG. ~ 40# CS"],
-      ["34104", "Striploin", "3/13# AVG. ~ 40# CS"],
-      ["37904", "Striploin", "2/19# AVG. ~ 37# CS"],
-      ["37974", "Bone-In Striploin", "1/40# AVG. ~ 40# CS"],
-      ["21402W", "Striploin", "2/15# AVG. ~ 30# CS"],
-      ["21409T", "Striploin", "2/15# AVG. ~ 30# CS"],
-      ["2140XA", "Striploin 11LB+", "3/12# AVG. ~ 36# CS"],
-      ["1562XA", "B/In Striploin Vac", "3/12# AVG. ~ 36# CS"],
-      ["2140XB", "Striploin 11LB+", "3/12# AVG. ~ 36# CS"],
-      ["1562XB", "Striploin B/I", "2/16# AVG. ~ 32# CS"],
+      ["Black Opal", "14104", "Striploin", "3/13# AVG. ~ 40# CS"],
+      ["Black Opal", "24104", "Striploin", "3/13# AVG. ~ 40# CS"],
+      ["Black Opal", "34104", "Striploin", "3/13# AVG. ~ 40# CS"],
+      ["Mayura Station", "37904", "Striploin", "2/19# AVG. ~ 37# CS"],
+      ["Mayura Station", "37974", "Bone-In Striploin", "1/40# AVG. ~ 40# CS"],
+      ["Robbins Island", "21402W", "Striploin", "2/15# AVG. ~ 30# CS"],
+      ["Robbins Island", "21409T", "Striploin", "2/15# AVG. ~ 30# CS"],
+      ["Wanderer", "2140XA", "Striploin 11LB+", "3/12# AVG. ~ 36# CS"],
+      ["Wanderer", "1562XA", "B/In Striploin Vac", "3/12# AVG. ~ 36# CS"],
+      ["Wanderer", "2140XB", "Striploin 11LB+", "3/12# AVG. ~ 36# CS"],
+      ["Wanderer", "1562XB", "Striploin B/I", "2/16# AVG. ~ 32# CS"],
     ],
   },
   Tomahawk: {
@@ -75,13 +75,13 @@ const selectedCuts = {
     service:
       "Best for sharing portions, grilling, roasting, and high-impact menu features.",
     rows: [
-      ["14101", "Tomahawk", "2/11# AVG. ~ 22# CS"],
-      ["24101", "Tomahawk", "2/11# AVG. ~ 22# CS"],
-      ["34101", "Tomahawk", "2/11# AVG. ~ 22# CS"],
-      ["27972", "Tomahawk", "1/22# AVG. ~ 22# CS"],
-      ["37972", "Tomahawk", "1/22# AVG. ~ 22# CS"],
-      ["1602TW", "Tomahawk", "2/12# AVG. ~ 24# CS"],
-      ["1602RW", "Tomahawk", "2/12# AVG. ~ 24# CS"],
+      ["Black Opal", "14101", "Tomahawk", "2/11# AVG. ~ 22# CS"],
+      ["Black Opal", "24101", "Tomahawk", "2/11# AVG. ~ 22# CS"],
+      ["Black Opal", "34101", "Tomahawk", "2/11# AVG. ~ 22# CS"],
+      ["Mayura Station", "27972", "Tomahawk", "1/22# AVG. ~ 22# CS"],
+      ["Mayura Station", "37972", "Tomahawk", "1/22# AVG. ~ 22# CS"],
+      ["Robbins Island", "1602TW", "Tomahawk", "2/12# AVG. ~ 24# CS"],
+      ["Robbins Island", "1602RW", "Tomahawk", "2/12# AVG. ~ 24# CS"],
     ],
   },
   Presa: {
@@ -93,7 +93,7 @@ const selectedCuts = {
       "A highly regarded Ibérico cut selected for deep flavor, tenderness, and generous marbling.",
     service:
       "Best for grilling, searing, slicing, and Spanish-inspired center-plate service.",
-    rows: [["FP02", "Presa", "12/1.54# AVG. ~ 18.5# CS"]],
+    rows: [["Campo Grande", "FP02", "Presa", "12/1.54# AVG. ~ 18.5# CS"]],
   },
   Secreto: {
     eyebrow: "Selected Cut",
@@ -105,9 +105,9 @@ const selectedCuts = {
     service:
       "Best for hot searing, charcoal grilling, slicing, and small-plate service.",
     rows: [
-      ["FP01", "Secreto", "16/1.1# AVG. ~ 17.5# CS"],
-      ["FP15", "Jowl Secreto", "16/0.5# AVG. ~ 8# CS"],
-      ["FP16", "Belly Secreto", "14/1.3# AVG. ~ 18# CS"],
+      ["Campo Grande", "FP01", "Secreto", "16/1.1# AVG. ~ 17.5# CS"],
+      ["Campo Grande", "FP15", "Jowl Secreto", "16/0.5# AVG. ~ 8# CS"],
+      ["Campo Grande", "FP16", "Belly Secreto", "14/1.3# AVG. ~ 18# CS"],
     ],
   },
   "Rump Cap": {
@@ -120,11 +120,11 @@ const selectedCuts = {
     service:
       "Best for roasting, grilling, slicing, and picanha-style service.",
     rows: [
-      ["24124", "Rump Cap", "8/3.5# AVG. ~ 28# CS"],
-      ["34124", "Rump Cap", "8/3.5# AVG. ~ 28# CS"],
-      ["37924", "Rump Cap (Culotte)", "8/4# AVG. ~ 34# CS"],
-      ["2091XA", "Rump Cap", "6/5# AVG. ~ 30# CS"],
-      ["2091XB", "Rump Cap", "6/5# AVG. ~ 30# CS"],
+      ["Black Opal", "24124", "Rump Cap", "8/3.5# AVG. ~ 28# CS"],
+      ["Black Opal", "34124", "Rump Cap", "8/3.5# AVG. ~ 28# CS"],
+      ["Mayura Station", "37924", "Rump Cap (Culotte)", "8/4# AVG. ~ 34# CS"],
+      ["Wanderer", "2091XA", "Rump Cap", "6/5# AVG. ~ 30# CS"],
+      ["Wanderer", "2091XB", "Rump Cap", "6/5# AVG. ~ 30# CS"],
     ],
   },
   "Short Rib": {
@@ -137,8 +137,8 @@ const selectedCuts = {
     service:
       "Best for braising, smoking, grilling, and Korean-style short rib service.",
     rows: [
-      ["1688XA", "Short Rib 3-Rib", "12/4# AVG. ~ 48# CS"],
-      ["1688XB", "Short Rib 3-Rib", "8/3# AVG. ~ 48# CS"],
+      ["Wanderer", "1688XA", "Short Rib 3-Rib", "12/4# AVG. ~ 48# CS"],
+      ["Wanderer", "1688XB", "Short Rib 3-Rib", "8/3# AVG. ~ 48# CS"],
     ],
   },
   "Chuck Roll": {
@@ -151,7 +151,7 @@ const selectedCuts = {
     service:
       "Best for roasting, braising, slicing, and refined slow-cooked preparations.",
     rows: [
-      ["34129", "Chuck Roll", "2/20# AVG. ~ 40# CS"],
+      ["Black Opal", "34129", "Chuck Roll", "2/20# AVG. ~ 40# CS"],
     ],
   },
   "Shortloin": {
@@ -164,8 +164,8 @@ const selectedCuts = {
     service:
       "Best for portioning into high-value steaks, roasting, and composed center-plate service.",
     rows: [
-      ["24105", "Shortloin", "1/28# AVG. ~ 28# CS"],
-      ["37975", "Shortloin", "1/22# AVG. ~ 22# CS"],
+      ["Black Opal", "24105", "Shortloin", "1/28# AVG. ~ 28# CS"],
+      ["Mayura Station", "37975", "Shortloin", "1/22# AVG. ~ 22# CS"],
     ],
   },
   "Flap Meat": {
@@ -178,12 +178,12 @@ const selectedCuts = {
     service:
       "Best for grilling, searing, slicing across the grain, and bold steak preparations.",
     rows: [
-      ["14117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
-      ["24117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
-      ["34117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
-      ["37917", "Flap Meat", "8/4# AVG. ~ 35# CS"],
-      ["22061W", "Flap Meat", "6/5# AVG. ~ 30# CS"],
-      ["2206XA", "Flap Meat", "6/2.5# AVG. ~ 30# CS"],
+      ["Black Opal", "14117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
+      ["Black Opal", "24117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
+      ["Black Opal", "34117", "Flap Meat", "8/4.5# AVG. ~ 36# CS"],
+      ["Mayura Station", "37917", "Flap Meat", "8/4# AVG. ~ 35# CS"],
+      ["Robbins Island", "22061W", "Flap Meat", "6/5# AVG. ~ 30# CS"],
+      ["Wanderer", "2206XA", "Flap Meat", "6/2.5# AVG. ~ 30# CS"],
     ],
   },
   "Flank Steak": {
@@ -196,8 +196,8 @@ const selectedCuts = {
     service:
       "Best for high-heat grilling, marinades, slicing, and shareable plates.",
     rows: [
-      ["FP10", "Flank Steak", "18/1.2# AVG. ~ 21# CS"],
-      ["2210XA", "Flank Steak", "12/1.5# AVG. ~ 36# CS"],
+      ["Campo Grande", "FP10", "Flank Steak", "18/1.2# AVG. ~ 21# CS"],
+      ["Wanderer", "2210XA", "Flank Steak", "12/1.5# AVG. ~ 36# CS"],
     ],
   },
   "Tri Tip": {
@@ -210,12 +210,12 @@ const selectedCuts = {
     service:
       "Best for roasting, grilling, carving, and premium sliced presentations.",
     rows: [
-      ["14116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
-      ["24116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
-      ["34116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
-      ["37916", "Tri Tip", "12/3# AVG. ~ 33# CS"],
-      ["21311W", "Tri Tip", "12/3# AVG. ~ 36# CS"],
-      ["2131XA", "Tri Tip", "4/2# AVG. ~ 32# CS"],
+      ["Black Opal", "14116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
+      ["Black Opal", "24116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
+      ["Black Opal", "34116", "Tri Tip", "16/2.25# AVG. ~ 36# CS"],
+      ["Mayura Station", "37916", "Tri Tip", "12/3# AVG. ~ 33# CS"],
+      ["Robbins Island", "21311W", "Tri Tip", "12/3# AVG. ~ 36# CS"],
+      ["Wanderer", "2131XA", "Tri Tip", "4/2# AVG. ~ 32# CS"],
     ],
   },
   "Top Sirloin": {
@@ -228,11 +228,11 @@ const selectedCuts = {
     service:
       "Best for steaks, grilling, roasting, and consistent portion control.",
     rows: [
-      ["24123", "Top Sirloin", "4/8# AVG. ~ 32# CS"],
-      ["34123", "Top Sirloin", "4/8# AVG. ~ 32# CS"],
-      ["21102W", "Top Sirloin", "3/16# AVG. ~ 48# CS"],
-      ["2110XA", "Top Sirloin", "6/6# AVG. ~ 36# CS"],
-      ["2110XB", "Top Sirloin", "6/6# AVG. ~ 36# CS"],
+      ["Black Opal", "24123", "Top Sirloin", "4/8# AVG. ~ 32# CS"],
+      ["Black Opal", "34123", "Top Sirloin", "4/8# AVG. ~ 32# CS"],
+      ["Robbins Island", "21102W", "Top Sirloin", "3/16# AVG. ~ 48# CS"],
+      ["Wanderer", "2110XA", "Top Sirloin", "6/6# AVG. ~ 36# CS"],
+      ["Wanderer", "2110XB", "Top Sirloin", "6/6# AVG. ~ 36# CS"],
     ],
   },
   "Oyster Blade": {
@@ -245,7 +245,7 @@ const selectedCuts = {
     service:
       "Best for slow cooking, roasting, slicing, and carefully trimmed steak applications.",
     rows: [
-      ["37932", "Oyster Blade", "8/6# AVG. ~ 49# CS"],
+      ["Mayura Station", "37932", "Oyster Blade", "8/6# AVG. ~ 49# CS"],
     ],
   },
   "Chuck Tail Flap": {
@@ -258,11 +258,11 @@ const selectedCuts = {
     service:
       "Best for grilling, searing, slicing, and rich center-plate features.",
     rows: [
-      ["14142", "Chuck Tail Flap", "3/13# AVG. ~ 40# CS"],
-      ["24142", "Chuck Tail Flap", "12/2.5# AVG. ~ 30# CS"],
-      ["34142", "Chuck Tail Flap", "12/2.5# AVG. ~ 30# CS"],
-      ["37942", "Chuck Tail Flap", "12/3# AVG. ~ 35# CS"],
-      ["2266GS", "Chuck Tail Flap", "5/7# AVG. ~ 35# CS"],
+      ["Black Opal", "14142", "Chuck Tail Flap", "3/13# AVG. ~ 40# CS"],
+      ["Black Opal", "24142", "Chuck Tail Flap", "12/2.5# AVG. ~ 30# CS"],
+      ["Black Opal", "34142", "Chuck Tail Flap", "12/2.5# AVG. ~ 30# CS"],
+      ["Mayura Station", "37942", "Chuck Tail Flap", "12/3# AVG. ~ 35# CS"],
+      ["Robbins Island", "2266GS", "Chuck Tail Flap", "5/7# AVG. ~ 35# CS"],
     ],
   },
   "Iberico Abanico": {
@@ -275,7 +275,7 @@ const selectedCuts = {
     service:
       "Best for high-heat searing, charcoal grilling, slicing, and premium shared plates.",
     rows: [
-      ["FP03", "Albanico", "18/1.1# AVG. ~ 19.8# CS"],
+      ["Campo Grande", "FP03", "Albanico", "18/1.1# AVG. ~ 19.8# CS"],
     ],
   },
   "Iberico Pluma": {
@@ -288,7 +288,7 @@ const selectedCuts = {
     service:
       "Best for grilling, searing, slicing thinly, and refined small-plate service.",
     rows: [
-      ["FP04", "Pluma", "12/1.5# AVG. ~ 18.5# CS"],
+      ["Campo Grande", "FP04", "Pluma", "12/1.5# AVG. ~ 18.5# CS"],
     ],
   },
   "Iberico Coppa": {
@@ -301,7 +301,7 @@ const selectedCuts = {
     service:
       "Best for roasting, slow cooking, slicing, and rich center-plate preparations.",
     rows: [
-      ["FP08", "Coppa", "8/2.3# AVG. ~ 18# CS"],
+      ["Campo Grande", "FP08", "Coppa", "8/2.3# AVG. ~ 18# CS"],
     ],
   },
   "Iberico Loin Roast": {
@@ -314,7 +314,7 @@ const selectedCuts = {
     service:
       "Best for roasting, carving, composed plates, and elegant banquet-style service.",
     rows: [
-      ["FP07", "Loin Roast", "12/1.25# AVG. ~ 15# CS"],
+      ["Campo Grande", "FP07", "Loin Roast", "12/1.25# AVG. ~ 15# CS"],
     ],
   },
   "Iberico 4 Rib-Rack": {
@@ -327,7 +327,7 @@ const selectedCuts = {
     service:
       "Best for roasting, grilling, carving tableside, and premium menu features.",
     rows: [
-      ["FP05", "4-Rib Rack", "6/2.1# AVG. ~ 13# CS"],
+      ["Campo Grande", "FP05", "4-Rib Rack", "6/2.1# AVG. ~ 13# CS"],
     ],
   },
   "Iberico St. Louis Ribs": {
@@ -340,7 +340,7 @@ const selectedCuts = {
     service:
       "Best for smoking, roasting, glazing, grilling, and elevated rib service.",
     rows: [
-      ["FP09", "St. Louis Rib", "6/1.8# AVG. ~ 11# CS"],
+      ["Campo Grande", "FP09", "St. Louis Rib", "6/1.8# AVG. ~ 11# CS"],
     ],
   },
   "Iberico Pork Belly": {
@@ -353,7 +353,7 @@ const selectedCuts = {
     service:
       "Best for roasting, slow cooking, crisping, slicing, and composed pork plates.",
     rows: [
-      ["FP06", "Belly", "12/1.25# AVG. ~ 15# CS"],
+      ["Campo Grande", "FP06", "Belly", "12/1.25# AVG. ~ 15# CS"],
     ],
   },
   "Iberico Shoulder Picnic": {
@@ -366,7 +366,7 @@ const selectedCuts = {
     service:
       "Best for braising, roasting, smoking, pulling, and generous shared preparations.",
     rows: [
-      ["FP21", "Picnic Shoulder", "2/16# AVG. ~ 32# CS"],
+      ["Campo Grande", "FP21", "Picnic Shoulder", "2/16# AVG. ~ 32# CS"],
     ],
   },
 };
@@ -382,8 +382,9 @@ const escapeHtml = (value) =>
 const createRows = (rows) =>
   rows
     .map(
-      ([code, product, specification]) => `
+      ([brand, code, product, specification]) => `
         <tr>
+          <td>${escapeHtml(brand)}</td>
           <td>${escapeHtml(code)}</td>
           <td>${escapeHtml(product)}</td>
           <td>${escapeHtml(specification)}</td>
@@ -497,6 +498,7 @@ export function initSelectedCutsModal() {
             <table class="selected-cut-modal__table">
               <thead>
                 <tr>
+                  <th scope="col">Brand</th>
                   <th scope="col">Code</th>
                   <th scope="col">Cut / Product</th>
                   <th scope="col">Specification</th>
@@ -546,6 +548,7 @@ export function initSelectedCutsModal() {
 
     eyebrowNode.textContent = cut.eyebrow;
     titleNode.textContent = cut.title;
+    modal.classList.toggle("selected-cut-modal--long-title", cut.title === "Chuck Tail Flap");
     categoryNode.textContent = cut.category;
     descriptionNode.textContent = cut.description;
     serviceNode.textContent = cut.service;
@@ -682,3 +685,4 @@ export function initSelectedCutsModal() {
     }
   });
 }
+
