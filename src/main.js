@@ -1556,6 +1556,7 @@ requestAnimationFrame(() => {
       productList.activeGuideKey = activeGuide.key;
     }
 
+    modal.dataset.activeProductListGuideKey = activeGuide.key || "";
     modal.classList.toggle("product-list-modal--page-gallery", activeGuide.layout === "page-gallery");
     renderProductListGuideTabs(productList, activeGuide.key);
 
@@ -1571,6 +1572,12 @@ requestAnimationFrame(() => {
   };
   // ALL_CUTS_GUIDE_TABS_HELPERS_END
   // ALL_CUTS_PAGE_GALLERY_HELPERS_START
+  const getPageIndexTitle = (title = "") =>
+    String(title)
+      .replace(/^ib[eé]rico\s+/i, "")
+      .replace(/^iberico\s+/i, "")
+      .trim();
+
   const createPageGallery = (pages) => {
     const pageIndex = pages
       .map(
@@ -1579,10 +1586,10 @@ requestAnimationFrame(() => {
             class="product-list-page-index__button${index === 0 ? " is-active" : ""}"
             type="button"
             data-product-list-page-jump="${index}"
-            aria-label="Go to ${escapeHtml(page.title)}"
+            aria-label="Go to ${escapeHtml(getPageIndexTitle(page.title))}"
           >
             <span class="product-list-page-index__number">${String(index + 1).padStart(2, "0")}</span>
-            <span class="product-list-page-index__title">${escapeHtml(page.title)}</span>
+            <span class="product-list-page-index__title">${escapeHtml(getPageIndexTitle(page.title))}</span>
           </button>
         `,
       )
@@ -1828,9 +1835,27 @@ requestAnimationFrame(() => {
         button.classList.toggle("is-active", button === pageButton);
       });
 
+      const guideKey = modal.dataset.activeProductListGuideKey || "";
+      const pageImage = targetPage.querySelector("img");
+      const imageHeight = pageImage?.clientHeight || Math.round(targetPage.clientHeight * 0.96) || 0;
+      const guideOffset =
+        guideKey === "wagyu"
+          ? Math.round(imageHeight * 0.40)
+          : guideKey === "pork"
+            ? Math.round(imageHeight * 0)
+            : 0;
+      const guideLift =
+        guideKey === "wagyu"
+          ? 18
+          : guideKey === "pork"
+            ? 108
+            : 8;
+      const maxTop = Math.max(0, bodyNode.scrollHeight - bodyNode.clientHeight);
+      const targetTop = Math.min(Math.max(0, targetPage.offsetTop + guideOffset - guideLift), maxTop);
+
       bodyNode.scrollTo({
-        top: Math.max(0, targetPage.offsetTop - 12),
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        top: targetTop,
+        behavior: "auto",
       });
     },
     true,
@@ -1927,4 +1952,7 @@ requestAnimationFrame(() => {
   });
 })();
 // PRODUCT_LIST_MODAL_END
+
+
+
 
