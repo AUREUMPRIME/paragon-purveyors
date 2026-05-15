@@ -1209,6 +1209,8 @@ requestAnimationFrame(() => {
         {
           key: "wagyu",
           label: "Wagyu",
+          icon: assetPath("assets/icons/cow-icon.svg"),
+          ariaLabel: "Show Wagyu cuts",
           pdf: assetPath("assets/product-lists/PP_all_cuts_guide.pdf"),
           layout: "page-gallery",
           pages: [
@@ -1243,6 +1245,8 @@ requestAnimationFrame(() => {
         {
           key: "pork",
           label: "Pork",
+          icon: assetPath("assets/icons/pork-icon.svg"),
+          ariaLabel: "Show pork cuts",
           pdf: assetPath("assets/product-lists/PP_pork_cuts_guide.pdf"),
           layout: "page-gallery",
           pages: [
@@ -1497,6 +1501,10 @@ requestAnimationFrame(() => {
     return productList.guides
       .map((guide) => {
         const isActive = guide.key === activeGuideKey;
+        const ariaLabel = guide.ariaLabel || `Show ${guide.label} cuts`;
+        const iconMarkup = guide.icon
+          ? `<img class="product-list-guide-tab__icon" src="${escapeHtml(guide.icon)}" alt="" aria-hidden="true" loading="eager" decoding="async" />`
+          : `<span class="product-list-guide-tab__label" aria-hidden="true">${escapeHtml(guide.label)}</span>`;
 
         return `
           <button
@@ -1504,8 +1512,10 @@ requestAnimationFrame(() => {
             type="button"
             data-product-list-guide-key="${escapeHtml(guide.key)}"
             aria-pressed="${isActive ? "true" : "false"}"
+            aria-label="${escapeHtml(ariaLabel)}"
+            title="${escapeHtml(guide.label)}"
           >
-            ${escapeHtml(guide.label)}
+            ${iconMarkup}
           </button>
         `;
       })
@@ -1553,27 +1563,57 @@ requestAnimationFrame(() => {
   };
   // ALL_CUTS_GUIDE_TABS_HELPERS_END
   // ALL_CUTS_PAGE_GALLERY_HELPERS_START
-  const createPageGallery = (pages) => `
-    <div class="product-list-page-gallery">
-      ${pages
-        .map(
-          (page, index) => `
-            <figure class="product-list-page-card">
-              <img
-                src="${escapeHtml(page.src)}"
-                alt="${escapeHtml(page.title)} cut guide page"
-                loading="${index < 2 ? "eager" : "lazy"}"
-                decoding="async"
-              />
-              <figcaption>${String(index + 1).padStart(2, "0")} / ${String(pages.length).padStart(2, "0")} — ${escapeHtml(page.title)}</figcaption>
-            </figure>
-          `,
-        )
-        .join("")}
-    </div>
-  `;
-  // ALL_CUTS_PAGE_GALLERY_HELPERS_END
-  const createRows = (rows) =>
+  const createPageGallery = (pages) => {
+    const pageIndex = pages
+      .map(
+        (page, index) => `
+          <button
+            class="product-list-page-index__button${index === 0 ? " is-active" : ""}"
+            type="button"
+            data-product-list-page-jump="${index}"
+            aria-label="Go to ${escapeHtml(page.title)}"
+          >
+            <span class="product-list-page-index__number">${String(index + 1).padStart(2, "0")}</span>
+            <span class="product-list-page-index__title">${escapeHtml(page.title)}</span>
+          </button>
+        `,
+      )
+      .join("");
+
+    const pageCards = pages
+      .map(
+        (page, index) => `
+          <figure class="product-list-page-card" data-product-list-page-card="${index}">
+            <img
+              src="${escapeHtml(page.src)}"
+              alt="${escapeHtml(page.title)} cut reference page"
+              loading="${index === 0 ? "eager" : "lazy"}"
+              decoding="async"
+            />
+            <figcaption>${escapeHtml(page.title)}</figcaption>
+          </figure>
+        `,
+      )
+      .join("");
+
+    return `
+      <div class="product-list-page-gallery-shell">
+        <aside class="product-list-page-index" aria-label="All cuts index">
+          <p class="product-list-page-index__eyebrow">Index</p>
+          <div class="product-list-page-index__list">
+            ${pageIndex}
+          </div>
+        </aside>
+
+        <div class="product-list-page-gallery">
+          ${pageCards}
+        </div>
+      </div>
+    `;
+  };
+
+
+  const createRows = (rows = []) =>
     rows
       .map(
         ([code, product, specification]) => `
@@ -1585,7 +1625,6 @@ requestAnimationFrame(() => {
         `,
       )
       .join("");
-
   const createSections = (productList) => {
     if (Array.isArray(productList.pages) && productList.pages.length > 0) {
       return createPageGallery(productList.pages);
@@ -1759,6 +1798,37 @@ requestAnimationFrame(() => {
     true,
   );
   // CONNECTED_CATALOG_PRODUCER_TO_CUT_EVENTS_END
+  // ALL_CUTS_PAGE_INDEX_EVENTS_START
+  modal.addEventListener(
+    "click",
+    (event) => {
+      const pageButton = event.target.closest("[data-product-list-page-jump]");
+      if (!pageButton || !bodyNode) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const pageIndex = Number(pageButton.dataset.productListPageJump);
+      const targetPage = bodyNode.querySelector(`[data-product-list-page-card="${pageIndex}"]`);
+
+      if (!targetPage) {
+        return;
+      }
+
+      bodyNode.querySelectorAll("[data-product-list-page-jump]").forEach((button) => {
+        button.classList.toggle("is-active", button === pageButton);
+      });
+
+      bodyNode.scrollTo({
+        top: Math.max(0, targetPage.offsetTop - 12),
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+    },
+    true,
+  );
+  // ALL_CUTS_PAGE_INDEX_EVENTS_END
+
   // ALL_CUTS_GUIDE_TABS_EVENTS_START
   modal.addEventListener(
     "click",
@@ -1849,3 +1919,4 @@ requestAnimationFrame(() => {
   });
 })();
 // PRODUCT_LIST_MODAL_END
+
