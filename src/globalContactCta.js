@@ -84,8 +84,8 @@ export function initGlobalContactCta() {
 
     gsap.to(mark, {
       opacity: 1,
-      x: 2,
-      scale: 1.045,
+      x: 0,
+      scale: 1.035,
       duration: 0.28,
       ease: "power2.out",
       overwrite: true,
@@ -125,3 +125,4 @@ export function initGlobalContactCta() {
   cta.addEventListener("mouseleave", leave);
   cta.addEventListener("blur", leave);
 }
+

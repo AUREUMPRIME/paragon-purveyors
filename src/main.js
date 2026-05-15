@@ -251,337 +251,345 @@ app.innerHTML = `
 
           <!-- SECTION_4_CUT_SCROLL_START -->
 
-                    <div class="cut-scroll" aria-label="Selected cuts catalog">
+          <div class="cut-scroll cut-scroll--grouped" aria-label="Selected cuts catalog">
+            <div class="cut-card-feature">
+              <article class="cut-card cut-card--all-cuts" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
+                          <span class="cut-card-shade" aria-hidden="true"></span>
+                          <h3>All Cuts</h3>
+                          <p class="cut-card-description">View the complete visual cut reference.</p>
+                        </article>
+            </div>
 
-          <article class="cut-card cut-card--all-cuts" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
-            <span class="cut-card-shade" aria-hidden="true"></span>
-            <h3>All Cuts</h3>
-            <p class="cut-card-description">View the complete visual cut reference.</p>
-          </article>
+            <section class="cut-group cut-group--wagyu-beef" aria-labelledby="cuts-wagyu-beef-title">
+              <div class="cut-group__head">
+                <p class="cut-group__eyebrow">Selected cuts</p>
+                <h3 id="cuts-wagyu-beef-title">Wagyu / Beef</h3>
+              </div>
+              <div class="cut-group__grid">
+                <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/ribeye.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Ribeye</h3>
+                          </article>
 
-          <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/ribeye.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Ribeye</h3>
-          </article>
+                <article class="cut-card cut-card--tenderloin" data-cut-id="tenderloin" data-selected-cut-trigger="Tenderloin">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/tenderloin.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu / Pork</p>
+                            <h3>Tenderloin</h3>
+                          </article>
 
-          <article class="cut-card cut-card--tenderloin" data-cut-id="tenderloin" data-selected-cut-trigger="Tenderloin">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/tenderloin.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu / Pork</p>
-            <h3>Tenderloin</h3>
-          </article>
+                <article class="cut-card cut-card--striploin" data-cut-id="striploin" data-selected-cut-trigger="Striploin">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/striploin.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Striploin</h3>
+                          </article>
 
-          <article class="cut-card cut-card--striploin" data-cut-id="striploin" data-selected-cut-trigger="Striploin">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/striploin.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Striploin</h3>
-          </article>
+                <article class="cut-card cut-card--tomahawk" data-cut-id="tomahawk" data-selected-cut-trigger="Tomahawk">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/tomahawk.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Tomahawk</h3>
+                          </article>
 
-          <article class="cut-card cut-card--tomahawk" data-cut-id="tomahawk" data-selected-cut-trigger="Tomahawk">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/tomahawk.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Tomahawk</h3>
-          </article>
+                <article class="cut-card cut-card--rump-cap" data-cut-id="rump-cap" data-selected-cut-trigger="Rump Cap">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/rump-cap.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Picanha</h3>
+                          </article>
 
-          <article class="cut-card cut-card--presa" data-cut-id="presa" data-selected-cut-trigger="Presa">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/presa.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Presa</h3>
-          </article>
+                <article class="cut-card cut-card--short-rib" data-cut-id="short-rib" data-selected-cut-trigger="Short Rib">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/short-rib.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Short Rib</h3>
+                          </article>
 
-          <article class="cut-card cut-card--secreto" data-cut-id="secreto" data-selected-cut-trigger="Secreto">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/secreto.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Secreto</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--chuck-roll" data-cut-id="chuck-roll" data-selected-cut-trigger="Chuck Roll">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/chuck-roll.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Wagyu</p>
+                            <h3>Chuck Roll</h3>
+                          </article>
 
-          <article class="cut-card cut-card--rump-cap" data-cut-id="rump-cap" data-selected-cut-trigger="Rump Cap">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/rump-cap.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Picanha</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--shortloin" data-cut-id="shortloin" data-selected-cut-trigger="Shortloin">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/shortloin.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Wagyu</p>
+                            <h3>Shortloin</h3>
+                          </article>
 
-          <article class="cut-card cut-card--short-rib" data-cut-id="short-rib" data-selected-cut-trigger="Short Rib">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/short-rib.png")}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Short Rib</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--flap-meat" data-cut-id="flap-meat" data-selected-cut-trigger="Flap Meat">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/flap-meat.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Flap Meat</h3>
+                          </article>
 
-          <!-- SELECTED_CUTS_BATCH_1_START -->
+                <article class="cut-card cut-card--placeholder cut-card--flank-steak" data-cut-id="flank-steak" data-selected-cut-trigger="Flank Steak">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/flank-steak.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Pork</p>
+                            <h3>Flank Steak</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--chuck-roll" data-cut-id="chuck-roll" data-selected-cut-trigger="Chuck Roll">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/chuck-roll.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Wagyu</p>
-            <h3>Chuck Roll</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--tri-tip" data-cut-id="tri-tip" data-selected-cut-trigger="Tri Tip">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/tri-tip.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Tri Tip</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--shortloin" data-cut-id="shortloin" data-selected-cut-trigger="Shortloin">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/shortloin.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Wagyu</p>
-            <h3>Shortloin</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--top-sirloin" data-cut-id="top-sirloin" data-selected-cut-trigger="Top Sirloin">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/top-sirloin.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Top Sirloin</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--flap-meat" data-cut-id="flap-meat" data-selected-cut-trigger="Flap Meat">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/flap-meat.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Flap Meat</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--oyster-blade" data-cut-id="oyster-blade" data-selected-cut-trigger="Oyster Blade">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/oyster-blade.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Wagyu</p>
+                            <h3>Oyster Blade</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--flank-steak" data-cut-id="flank-steak" data-selected-cut-trigger="Flank Steak">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/flank-steak.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Pork</p>
-            <h3>Flank Steak</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--chuck-tail-flap cut-card--long-title" data-cut-id="chuck-tail-flap" data-selected-cut-trigger="Chuck Tail Flap">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/chuck-tail-flap.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Beef / Wagyu</p>
+                            <h3>Chuck Tail Flap</h3>
+                          </article>
+              </div>
+            </section>
 
-          <article class="cut-card cut-card--placeholder cut-card--tri-tip" data-cut-id="tri-tip" data-selected-cut-trigger="Tri Tip">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/tri-tip.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Tri Tip</h3>
-          </article>
+            <section class="cut-group cut-group--pork" aria-labelledby="cuts-pork-title">
+              <div class="cut-group__head">
+                <p class="cut-group__eyebrow">Selected cuts</p>
+                <h3 id="cuts-pork-title">Pork</h3>
+              </div>
+              <div class="cut-group__grid">
+                <article class="cut-card cut-card--presa" data-cut-id="presa" data-selected-cut-trigger="Presa">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/presa.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Presa</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--top-sirloin" data-cut-id="top-sirloin" data-selected-cut-trigger="Top Sirloin">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/top-sirloin.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Top Sirloin</h3>
-          </article>
+                <article class="cut-card cut-card--secreto" data-cut-id="secreto" data-selected-cut-trigger="Secreto">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/secreto.png")}"
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Secreto</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--oyster-blade" data-cut-id="oyster-blade" data-selected-cut-trigger="Oyster Blade">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/oyster-blade.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Wagyu</p>
-            <h3>Oyster Blade</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--iberico-abanico" data-cut-id="iberico-abanico" data-selected-cut-trigger="Iberico Abanico">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-abanico.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Abanico</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--chuck-tail-flap cut-card--long-title" data-cut-id="chuck-tail-flap" data-selected-cut-trigger="Chuck Tail Flap">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/chuck-tail-flap.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Beef / Wagyu</p>
-            <h3>Chuck Tail Flap</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--iberico-pluma" data-cut-id="iberico-pluma" data-selected-cut-trigger="Iberico Pluma">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-pluma.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Pluma</h3>
+                          </article>
 
-          <!-- SELECTED_CUTS_BATCH_1_END -->
+                <article class="cut-card cut-card--placeholder cut-card--iberico-coppa" data-cut-id="iberico-coppa" data-selected-cut-trigger="Iberico Coppa">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-coppa.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Coppa</h3>
+                          </article>
 
-          <!-- SELECTED_CUTS_BATCH_2_START -->
+                <article class="cut-card cut-card--placeholder cut-card--iberico-loin-roast" data-cut-id="iberico-loin-roast" data-selected-cut-trigger="Iberico Loin Roast">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-loin-roast.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Loin Roast</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--iberico-abanico" data-cut-id="iberico-abanico" data-selected-cut-trigger="Iberico Abanico">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-abanico.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Abanico</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--iberico-4-rib-rack" data-cut-id="iberico-4-rib-rack" data-selected-cut-trigger="Iberico 4 Rib-Rack">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-4-rib-rack.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>4 Rib-Rack</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--iberico-pluma" data-cut-id="iberico-pluma" data-selected-cut-trigger="Iberico Pluma">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-pluma.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Pluma</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--iberico-st-louis-ribs cut-card--long-title" data-cut-id="iberico-st-louis-ribs" data-selected-cut-trigger="Iberico St. Louis Ribs">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-st-louis-ribs.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>St. Louis Ribs</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--iberico-coppa" data-cut-id="iberico-coppa" data-selected-cut-trigger="Iberico Coppa">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-coppa.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Coppa</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--iberico-pork-belly" data-cut-id="iberico-pork-belly" data-selected-cut-trigger="Iberico Pork Belly">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-pork-belly.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Pork Belly</h3>
+                          </article>
 
-          <article class="cut-card cut-card--placeholder cut-card--iberico-loin-roast" data-cut-id="iberico-loin-roast" data-selected-cut-trigger="Iberico Loin Roast">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-loin-roast.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Loin Roast</h3>
-          </article>
+                <article class="cut-card cut-card--placeholder cut-card--iberico-shoulder-picnic cut-card--long-title" data-cut-id="iberico-shoulder-picnic" data-selected-cut-trigger="Iberico Shoulder Picnic">
+                            <img
+                              class="cut-card-image"
+                              src="${assetPath("assets/cuts/iberico-shoulder-picnic.png")}"
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <div class="cut-card-shade"></div>
+                            <p class="cut-card-description">Pork</p>
+                            <h3>Shoulder Picnic</h3>
+                          </article>
+              </div>
+            </section>
+          </div>
 
-          <article class="cut-card cut-card--placeholder cut-card--iberico-4-rib-rack" data-cut-id="iberico-4-rib-rack" data-selected-cut-trigger="Iberico 4 Rib-Rack">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-4-rib-rack.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>4 Rib-Rack</h3>
-          </article>
-
-          <article class="cut-card cut-card--placeholder cut-card--iberico-st-louis-ribs cut-card--long-title" data-cut-id="iberico-st-louis-ribs" data-selected-cut-trigger="Iberico St. Louis Ribs">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-st-louis-ribs.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>St. Louis Ribs</h3>
-          </article>
-
-          <article class="cut-card cut-card--placeholder cut-card--iberico-pork-belly" data-cut-id="iberico-pork-belly" data-selected-cut-trigger="Iberico Pork Belly">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-pork-belly.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Pork Belly</h3>
-          </article>
-
-          <article class="cut-card cut-card--placeholder cut-card--iberico-shoulder-picnic cut-card--long-title" data-cut-id="iberico-shoulder-picnic" data-selected-cut-trigger="Iberico Shoulder Picnic">
-            <img
-              class="cut-card-image"
-              src="${assetPath("assets/cuts/iberico-shoulder-picnic.png")}"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="cut-card-shade"></div>
-            <p class="cut-card-description">Pork</p>
-            <h3>Shoulder Picnic</h3>
-          </article>
-
-          <!-- SELECTED_CUTS_BATCH_2_END -->
-
-                    </div>
-
-                    <!-- SECTION_4_CUT_SCROLL_END -->
+          <!-- SECTION_4_CUT_SCROLL_END -->
 
 <!-- SELECTED_CUTS_BATCH_2_END -->
 

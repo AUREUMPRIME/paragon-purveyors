@@ -231,7 +231,7 @@ function wireHeroButtons(scenes, goToSpot, cleanupCallbacks) {
 }
 
 function wireSectionNavigation(scenes, goToSpot, cleanupCallbacks) {
-  document.querySelectorAll(".section-index [data-section-target]").forEach((control) => {
+  document.querySelectorAll(".section-index [data-section-target], .global-contact-cta[data-section-target]").forEach((control) => {
     const targetIndex = getTargetSceneIndex(scenes, control.dataset.sectionTarget);
 
     if (targetIndex < 0) {
@@ -583,5 +583,6 @@ window.addEventListener("resize", () => {
     initForwardDepth();
   }, 220);
 });
+
 
 
