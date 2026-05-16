@@ -1953,6 +1953,101 @@ requestAnimationFrame(() => {
 })();
 // PRODUCT_LIST_MODAL_END
 
+// MODAL_SCROLL_RESET_ON_OPEN_START
+const resetDialogScroll = (dialog) => {
+  if (!(dialog instanceof HTMLDialogElement)) {
+    return;
+  }
 
+  const resetNode = (node) => {
+    if (!node || typeof node.scrollTo !== "function") {
+      return;
+    }
 
+    node.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    node.scrollTop = 0;
+    node.scrollLeft = 0;
+  };
+
+  const resetAll = () => {
+    resetNode(dialog);
+
+    dialog
+      .querySelectorAll(
+        [
+          "[data-product-list-body]",
+          ".product-list-modal__body",
+          ".selected-cut-modal__body",
+          ".selected-cut-modal__content",
+          ".about-modal__body",
+          ".owners-modal__body",
+          "[class*='modal__body']",
+          "[class*='modal__content']",
+        ].join(", "),
+      )
+      .forEach(resetNode);
+
+    dialog.querySelectorAll("*").forEach((node) => {
+      if (node.scrollTop > 0 || node.scrollLeft > 0) {
+        resetNode(node);
+      }
+    });
+  };
+
+  resetAll();
+
+  requestAnimationFrame(() => {
+    resetAll();
+    requestAnimationFrame(resetAll);
+  });
+
+  window.setTimeout(resetAll, 80);
+};
+
+const setupDialogScrollResetOnOpen = () => {
+  const resetIfOpen = (node) => {
+    if (node instanceof HTMLDialogElement && node.open) {
+      resetDialogScroll(node);
+    }
+  };
+
+  document.querySelectorAll("dialog[open]").forEach(resetIfOpen);
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "attributes" && mutation.attributeName === "open") {
+        resetIfOpen(mutation.target);
+        return;
+      }
+
+      mutation.addedNodes.forEach((node) => {
+        if (!(node instanceof Element)) {
+          return;
+        }
+
+        if (node.matches("dialog[open]")) {
+          resetIfOpen(node);
+        }
+
+        node.querySelectorAll?.("dialog[open]").forEach(resetIfOpen);
+      });
+    });
+  });
+
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["open"],
+    childList: true,
+    subtree: true,
+  });
+
+  window.PARAGON_RESET_DIALOG_SCROLL = resetDialogScroll;
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupDialogScrollResetOnOpen, { once: true });
+} else {
+  setupDialogScrollResetOnOpen();
+}
+// MODAL_SCROLL_RESET_ON_OPEN_END
 
