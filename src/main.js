@@ -132,15 +132,27 @@ app.innerHTML = `
               data-owners-trigger
               aria-label="Open Meet the Owners"
             >
-              <span class="section-about-logo-card__mark">
-                <img
-                  src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                />
-              </span>
-              <span class="section-about-logo-card__label">Meet the Owners</span>
+              <span class="section-about-logo-card__owner-cover" aria-hidden="true">
+                  <span class="section-about-logo-card__owner-stage">
+                    <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--clayton">
+                      <img
+                        class="section-about-logo-card__owner-cover-image"
+                        src="${assetPath("assets/owners/clayton-u-placeholder.png")}"
+                        alt=""
+                        loading="lazy"
+                      />
+                    </span>
+                    <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--blake">
+                      <img
+                        class="section-about-logo-card__owner-cover-image"
+                        src="${assetPath("assets/owners/blake-b-placeholder.png")}"
+                        alt=""
+                        loading="lazy"
+                      />
+                    </span>
+                  </span>
+                </span>
+                <span class="section-about-logo-card__label">Meet the Owners</span>
               <span class="section-about-logo-card__date">Established 2026</span>
               <span class="section-about-logo-card__copy">Read the story behind Paragon Purveyors.</span>
             </button>
@@ -859,19 +871,49 @@ function initHeroButtonFeedback() {
 
           <p class="owners-modal__established">Established in 2026</p>
 
-          <p>This panel is reserved for the approved Paragon Purveyors owner story.</p>
+          <div class="owners-story" aria-label="Paragon Purveyors founder story">
+            <div class="owners-story__founders">
+              <p class="owners-story__label">Founded by</p>
+              <p class="owners-story__names">Clayton U. and Blake B.</p>
+            </div>
 
-          <p>Final owner names, portraits, and company history will be added after the client provides approved copy and imagery.</p>
-
-          <p>The final version should remain personal, refined, and concise while preserving the premium tone of the page.</p>
+            <div class="owners-story__body">
+              <p>Paragon Purveyors was created from a shared passion for exceptional meat and the people who seek it. Based in California, the company was built to make exceptional cuts easier to access, understand, and enjoy.</p>
+              <p>For new and experienced buyers, Paragon serves as a trusted sourcing partner focused on quality, clarity, and convenience.</p>
+            </div>
+          </div>
         </section>
 
-        <aside class="about-modal__brand owners-modal__brand" aria-label="Paragon Purveyors logo">
-          <img
-            class="about-modal__logo"
-            src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
-            alt="Paragon Purveyors"
-          />
+        <aside class="owners-portraits" aria-label="Paragon Purveyors founder portraits">
+          <article class="owners-portrait-card owners-portrait-card--clayton">
+            <div class="owners-portrait-card__image-frame">
+              <img
+                class="owners-portrait-card__image"
+                src="${assetPath("assets/owners/clayton-u-placeholder.png")}"
+                alt="Clayton U. placeholder portrait"
+                loading="lazy"
+              />
+            </div>
+            <div class="owners-portrait-card__caption">
+              <p class="owners-portrait-card__name">Clayton U.</p>
+              <p class="owners-portrait-card__role">Founder</p>
+            </div>
+          </article>
+
+          <article class="owners-portrait-card owners-portrait-card--blake">
+            <div class="owners-portrait-card__image-frame">
+              <img
+                class="owners-portrait-card__image"
+                src="${assetPath("assets/owners/blake-b-placeholder.png")}"
+                alt="Blake B. placeholder portrait"
+                loading="lazy"
+              />
+            </div>
+            <div class="owners-portrait-card__caption">
+              <p class="owners-portrait-card__name">Blake B.</p>
+              <p class="owners-portrait-card__role">Founder</p>
+            </div>
+          </article>
         </aside>
       </div>
     </div>

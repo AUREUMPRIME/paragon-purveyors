@@ -7702,3 +7702,369 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* CLIENT_GLOBAL_CTA_SPACING_ACTION_END */
+
+/* CLIENT_MEET_OWNERS_FINAL_FIT_FIX_START */
+.owners-modal__panel {
+  overflow: auto;
+}
+
+.owners-modal__layout {
+  align-items: center;
+  gap: clamp(68px, 8vw, 132px);
+}
+
+.owners-modal__copy {
+  align-content: center;
+  max-width: 48ch;
+}
+
+.owners-modal__established {
+  margin: clamp(18px, 1.8vw, 22px) 0 clamp(18px, 1.8vw, 22px) !important;
+}
+
+.owners-story {
+  display: grid;
+  max-width: 45ch;
+  row-gap: clamp(12px, 1.1vw, 15px);
+  color: rgba(243, 240, 234, 0.74);
+  text-wrap: pretty;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+.owners-story__founders {
+  display: grid;
+  row-gap: 4px;
+  padding-bottom: clamp(9px, 0.9vw, 12px);
+  border-bottom: 1px solid rgba(243, 240, 234, 0.13);
+}
+
+.owners-story__label {
+  margin: 0;
+  color: rgba(243, 240, 234, 0.54);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.owners-story__names {
+  margin: 0;
+  color: rgba(243, 240, 234, 0.94);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.25vw, 1.36rem);
+  font-weight: 520;
+  letter-spacing: 0.012em;
+  line-height: 1.15;
+}
+
+.owners-story__body {
+  display: grid;
+  row-gap: clamp(8px, 0.75vw, 10px);
+}
+
+.owners-story__body p {
+  max-width: 45ch;
+  margin: 0;
+  color: rgba(243, 240, 234, 0.72);
+  font-size: clamp(0.84rem, 0.8vw, 0.92rem);
+  font-weight: 520;
+  letter-spacing: 0.003em;
+  line-height: 1.46;
+}
+
+.owners-modal__brand {
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .owners-modal__layout {
+    gap: 30px;
+  }
+
+  .owners-modal__copy,
+  .owners-story,
+  .owners-story__body p {
+    max-width: none;
+  }
+
+  .owners-modal__established {
+    margin-bottom: 18px !important;
+  }
+}
+/* CLIENT_MEET_OWNERS_FINAL_FIT_FIX_END */
+
+/* CLIENT_MEET_OWNERS_PORTRAITS_START */
+.owners-portraits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(190px, 230px));
+  gap: clamp(22px, 2.3vw, 34px);
+  align-items: stretch;
+  justify-content: center;
+  width: min(100%, 540px);
+  min-height: clamp(440px, 62vh, 560px);
+}
+
+.owners-portrait-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(370px, 1fr) auto;
+  min-height: clamp(430px, 60vh, 540px);
+  overflow: hidden;
+  border: 1px solid rgba(243, 240, 234, 0.16);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(243, 240, 234, 0.1), rgba(243, 240, 234, 0.03) 44%, transparent 72%),
+    rgba(9, 9, 9, 0.52);
+  box-shadow:
+    inset 0 0 0 1px rgba(243, 240, 234, 0.04),
+    0 28px 84px rgba(0, 0, 0, 0.4);
+}
+
+.owners-portrait-card__image-frame {
+  position: relative;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  min-height: 0;
+  padding: clamp(10px, 1vw, 14px) clamp(6px, 0.8vw, 10px) 0;
+}
+
+.owners-portrait-card__image {
+  display: block;
+  width: auto;
+  height: 108%;
+  max-width: 138%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateY(3%);
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.46));
+}
+
+.owners-portrait-card__caption {
+  display: grid;
+  gap: 4px;
+  padding: 15px 14px 17px;
+  border-top: 1px solid rgba(243, 240, 234, 0.12);
+  background: linear-gradient(180deg, rgba(12, 12, 12, 0.22), rgba(12, 12, 12, 0.72));
+  text-align: center;
+}
+
+.owners-portrait-card__name,
+.owners-portrait-card__role {
+  margin: 0;
+}
+
+.owners-portrait-card__name {
+  color: rgba(243, 240, 234, 0.92);
+  font-family: var(--font-display);
+  font-size: clamp(1.08rem, 1.12vw, 1.28rem);
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+}
+
+.owners-portrait-card__role {
+  color: rgba(243, 240, 234, 0.5);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1100px) {
+  .owners-portraits {
+    grid-template-columns: repeat(2, minmax(160px, 200px));
+    width: min(100%, 460px);
+    min-height: clamp(390px, 54vh, 500px);
+  }
+
+  .owners-portrait-card {
+    grid-template-rows: minmax(320px, 1fr) auto;
+    min-height: clamp(380px, 52vh, 490px);
+  }
+}
+
+@media (max-width: 900px) {
+  .owners-portraits {
+    grid-template-columns: repeat(2, minmax(138px, 1fr));
+    width: 100%;
+    min-height: auto;
+  }
+
+  .owners-portrait-card {
+    grid-template-rows: minmax(270px, 40vh) auto;
+    min-height: auto;
+  }
+
+  .owners-portrait-card__image {
+    height: 104%;
+    max-width: 126%;
+  }
+}
+
+@media (max-width: 560px) {
+  .owners-portraits {
+    grid-template-columns: 1fr;
+  }
+
+  .owners-portrait-card {
+    grid-template-rows: minmax(320px, 46vh) auto;
+  }
+}
+/* CLIENT_MEET_OWNERS_PORTRAITS_END */
+/* CLIENT_MEET_OWNERS_PORTRAITS_CENTER_START */
+.owners-modal__layout {
+  grid-template-columns: minmax(360px, 0.9fr) minmax(500px, 1.1fr);
+  gap: clamp(32px, 4vw, 58px);
+}
+
+.owners-portraits {
+  justify-self: center;
+  transform: translateX(clamp(24px, 2.4vw, 42px));
+}
+
+@media (max-width: 1100px) {
+  .owners-modal__layout {
+    grid-template-columns: minmax(340px, 0.92fr) minmax(430px, 1.08fr);
+    gap: clamp(28px, 3.4vw, 44px);
+  }
+
+  .owners-portraits {
+    transform: translateX(clamp(10px, 1.4vw, 22px));
+  }
+}
+
+@media (max-width: 900px) {
+  .owners-modal__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .owners-portraits {
+    transform: none;
+  }
+}
+/* CLIENT_MEET_OWNERS_PORTRAITS_CENTER_END */
+
+/* CLIENT_SECTION_2_MEET_OWNERS_CARD_IMAGES_START */
+.section-about-logo-card--owners {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(90deg, rgba(8, 8, 8, 0.5) 0%, rgba(8, 8, 8, 0.18) 22%, rgba(8, 8, 8, 0.72) 45%, rgba(8, 8, 8, 0.72) 56%, rgba(8, 8, 8, 0.18) 78%, rgba(8, 8, 8, 0.5) 100%),
+    linear-gradient(180deg, rgba(8, 8, 8, 0.1) 0%, rgba(8, 8, 8, 0.42) 58%, rgba(8, 8, 8, 0.78) 100%),
+    radial-gradient(circle at 50% 48%, rgba(243, 240, 234, 0.1), transparent 58%);
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.66;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-slot {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 38%;
+  overflow: hidden;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-slot--clayton {
+  left: 0;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-slot--blake {
+  right: 0;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-cover-image {
+  position: absolute;
+  left: 50%;
+  top: 9%;
+  display: block;
+  width: auto;
+  height: 166%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center top;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.58));
+  transition:
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-slot--clayton .section-about-logo-card__owner-cover-image {
+  left: 58%;
+  top: 10%;
+  height: 164%;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-slot--blake .section-about-logo-card__owner-cover-image {
+  left: 42%;
+  top: 9%;
+  height: 162%;
+}
+
+.section-about-logo-card--owners .section-about-logo-card__label,
+.section-about-logo-card--owners .section-about-logo-card__copy,
+.section-about-logo-card--owners .section-about-logo-card__date {
+  position: relative;
+  z-index: 4;
+}
+
+.section-about-logo-card--owners:where(:hover, :focus-visible) .section-about-logo-card__owner-stage {
+  opacity: 0.74;
+}
+
+.section-about-logo-card--owners:where(:hover, :focus-visible) .section-about-logo-card__owner-cover-image {
+  transform: translateX(-50%) scale(1.015);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-about-logo-card--owners .section-about-logo-card__owner-cover-image {
+    transition: none;
+  }
+
+  .section-about-logo-card--owners:where(:hover, :focus-visible) .section-about-logo-card__owner-cover-image {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 760px) {
+  .section-about-logo-card--owners .section-about-logo-card__owner-slot {
+    width: 36%;
+  }
+
+  .section-about-logo-card--owners .section-about-logo-card__owner-slot--clayton .section-about-logo-card__owner-cover-image {
+    left: 58%;
+    top: 12%;
+    height: 150%;
+  }
+
+  .section-about-logo-card--owners .section-about-logo-card__owner-slot--blake .section-about-logo-card__owner-cover-image {
+    left: 42%;
+    top: 12%;
+    height: 148%;
+  }
+}
+/* CLIENT_SECTION_2_MEET_OWNERS_CARD_IMAGES_END */
+
