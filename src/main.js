@@ -394,7 +394,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Pork</p>
                             <h3>Flank Steak</h3>
                           </article>
 
@@ -1581,6 +1580,10 @@ requestAnimationFrame(() => {
       bodyNode.innerHTML = createSections(activeGuide);
       bodyNode.scrollTop = 0;
       bodyNode.parentElement?.scrollTo?.({ top: 0, behavior: "auto" });
+
+      if (activeGuide.layout === "page-gallery" && Array.isArray(activeGuide.pages) && activeGuide.pages.length > 0) {
+        queueProductListInitialPageSnap(0);
+      }
     }
 
     if (externalNode) {
@@ -1645,6 +1648,54 @@ requestAnimationFrame(() => {
   };
 
 
+  // ALL_CUTS_PAGE_SNAP_HELPERS_START
+  const getProductListGuideLift = (guideKey = "") => {
+    if (guideKey === "wagyu") {
+      return 5;
+    }
+
+    if (guideKey === "pork") {
+      return 108;
+    }
+
+    return 8;
+  };
+
+  const snapProductListPage = (pageIndex = 0) => {
+    if (!bodyNode) {
+      return;
+    }
+
+    const safePageIndex = Number.isFinite(pageIndex) ? pageIndex : 0;
+    const targetPage = bodyNode.querySelector('[data-product-list-page-card="' + safePageIndex + '"]');
+
+    if (!targetPage) {
+      return;
+    }
+
+    const guideKey = modal.dataset.activeProductListGuideKey || "";
+    const guideLift = getProductListGuideLift(guideKey);
+    const maxTop = Math.max(0, bodyNode.scrollHeight - bodyNode.clientHeight);
+    const targetTop = Math.min(Math.max(0, targetPage.offsetTop - guideLift), maxTop);
+
+    bodyNode.scrollTo({
+      top: targetTop,
+      behavior: "auto",
+    });
+  };
+
+  const queueProductListInitialPageSnap = (pageIndex = 0) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        snapProductListPage(pageIndex);
+      });
+    });
+
+    window.setTimeout(() => {
+      snapProductListPage(pageIndex);
+    }, 120);
+  };
+  // ALL_CUTS_PAGE_SNAP_HELPERS_END
   const createRows = (rows = []) =>
     rows
       .map(
@@ -1852,28 +1903,7 @@ requestAnimationFrame(() => {
         button.classList.toggle("is-active", button === pageButton);
       });
 
-      const guideKey = modal.dataset.activeProductListGuideKey || "";
-      const pageImage = targetPage.querySelector("img");
-      const imageHeight = pageImage?.clientHeight || Math.round(targetPage.clientHeight * 0.96) || 0;
-      const guideOffset =
-        guideKey === "wagyu"
-          ? Math.round(imageHeight * 0.40)
-          : guideKey === "pork"
-            ? Math.round(imageHeight * 0)
-            : 0;
-      const guideLift =
-        guideKey === "wagyu"
-          ? 18
-          : guideKey === "pork"
-            ? 108
-            : 8;
-      const maxTop = Math.max(0, bodyNode.scrollHeight - bodyNode.clientHeight);
-      const targetTop = Math.min(Math.max(0, targetPage.offsetTop + guideOffset - guideLift), maxTop);
-
-      bodyNode.scrollTo({
-        top: targetTop,
-        behavior: "auto",
-      });
+      snapProductListPage(Number.isFinite(pageIndex) ? pageIndex : 0);
     },
     true,
   );
