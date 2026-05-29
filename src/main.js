@@ -1830,11 +1830,13 @@ requestAnimationFrame(() => {
     renderProductListGuideTabs(productList, activeGuide.key);
 
     if (bodyNode) {
+      hideProductListIndexTooltip();
       bodyNode.innerHTML = createSections(activeGuide);
       bodyNode.scrollTop = 0;
       bodyNode.parentElement?.scrollTo?.({ top: 0, behavior: "auto" });
 
       if (activeGuide.layout === "page-gallery" && Array.isArray(activeGuide.pages) && activeGuide.pages.length > 0) {
+        setupProductListIndexOverflow(bodyNode);
         queueProductListInitialPageSnap(0);
       }
     }
@@ -1853,19 +1855,26 @@ requestAnimationFrame(() => {
 
   const createPageGallery = (pages) => {
     const pageIndex = pages
-      .map(
-        (page, index) => `
+      .map((page, index) => {
+        const displayTitle = getPageIndexTitle(page.title);
+        const pageNumber = String(index + 1).padStart(2, "0");
+
+        return `
           <button
             class="product-list-page-index__button${index === 0 ? " is-active" : ""}"
             type="button"
             data-product-list-page-jump="${index}"
-            aria-label="Go to ${escapeHtml(getPageIndexTitle(page.title))}"
+            data-product-list-index-button
+            data-product-list-index-title="${escapeHtml(displayTitle)}"
+            aria-label="Go to page ${pageNumber}, ${escapeHtml(displayTitle)}"
           >
-            <span class="product-list-page-index__number">${String(index + 1).padStart(2, "0")}</span>
-            <span class="product-list-page-index__title">${escapeHtml(getPageIndexTitle(page.title))}</span>
+            <span class="product-list-page-index__number">${pageNumber}</span>
+            <span class="product-list-page-index__title" data-product-list-index-title aria-hidden="true">
+              <span class="product-list-page-index__title-track" data-product-list-index-title-track>${escapeHtml(displayTitle)}</span>
+            </span>
           </button>
-        `,
-      )
+        `;
+      })
       .join("");
 
     const pageCards = pages
@@ -1887,6 +1896,7 @@ requestAnimationFrame(() => {
     return `
       <div class="product-list-page-gallery-shell">
         <aside class="product-list-page-index" aria-label="All cuts index">
+          <div class="product-list-page-index__tooltip-slot" data-product-list-tooltip-anchor aria-hidden="true"></div>
           <p class="product-list-page-index__eyebrow">Index</p>
           <div class="product-list-page-index__list">
             ${pageIndex}
@@ -1900,6 +1910,120 @@ requestAnimationFrame(() => {
     `;
   };
 
+
+  // ALL_CUTS_INDEX_OVERFLOW_HELPERS_START
+  const getProductListIndexTooltip = () => {
+    const slotNode = modal.querySelector("[data-product-list-tooltip-anchor]");
+    let tooltip = modal.querySelector("[data-product-list-index-floating-tooltip]");
+
+    if (!tooltip) {
+      tooltip = document.createElement("div");
+      tooltip.className = "product-list-page-index-tooltip";
+      tooltip.setAttribute("data-product-list-index-floating-tooltip", "");
+      tooltip.setAttribute("role", "tooltip");
+      tooltip.hidden = true;
+    }
+
+    if (slotNode && tooltip.parentElement !== slotNode) {
+      slotNode.appendChild(tooltip);
+    } else if (!slotNode && tooltip.parentElement !== modal) {
+      modal.appendChild(tooltip);
+    }
+
+    return tooltip;
+  };
+
+  const hideProductListIndexTooltip = () => {
+    const tooltip = modal.querySelector("[data-product-list-index-floating-tooltip]");
+
+    if (!tooltip) {
+      return;
+    }
+
+    tooltip.classList.remove("is-visible");
+    tooltip.hidden = true;
+    tooltip.textContent = "";
+    tooltip.style.removeProperty("left");
+    tooltip.style.removeProperty("top");
+  };
+
+  const showProductListIndexTooltip = (button) => {
+    if (!button) {
+      return;
+    }
+
+    const tooltip = getProductListIndexTooltip();
+    const label = button.dataset.productListIndexTitle || button.textContent.trim();
+
+    tooltip.textContent = label;
+    tooltip.hidden = false;
+    tooltip.classList.add("is-visible");
+  };
+
+  const setupProductListIndexOverflow = (rootNode = modal) => {
+    const buttons = Array.from(rootNode.querySelectorAll("[data-product-list-index-button]"));
+
+    if (buttons.length === 0) {
+      hideProductListIndexTooltip();
+      return;
+    }
+
+    const measureButtons = () => {
+      buttons.forEach((button) => {
+        const titleNode = button.querySelector("[data-product-list-index-title]");
+        const trackNode = button.querySelector("[data-product-list-index-title-track]");
+
+        if (!titleNode || !trackNode) {
+          return;
+        }
+
+        const overflowDistance = Math.max(0, trackNode.scrollWidth - titleNode.clientWidth);
+        const isOverflowing = overflowDistance > 2;
+
+        button.classList.toggle("is-overflowing", isOverflowing);
+        button.style.setProperty("--product-list-index-scroll-x", `-${Math.ceil(overflowDistance)}px`);
+
+        if (!isOverflowing) {
+          button.classList.remove("is-index-text-scrolling");
+        }
+
+        if (button.dataset.indexOverflowReady === "true") {
+          return;
+        }
+
+        let tooltipTimer = 0;
+
+        const beginHover = () => {
+          window.clearTimeout(tooltipTimer);
+          hideProductListIndexTooltip();
+          if (button.classList.contains("is-overflowing")) {
+            button.classList.add("is-index-text-scrolling");
+          }
+
+          tooltipTimer = window.setTimeout(() => {
+            showProductListIndexTooltip(button);
+          }, 500);
+        };
+
+        const endHover = () => {
+          window.clearTimeout(tooltipTimer);
+          button.classList.remove("is-index-text-scrolling");
+          hideProductListIndexTooltip();
+        };
+
+        button.addEventListener("mouseenter", beginHover);
+        button.addEventListener("mouseleave", endHover);
+        button.addEventListener("focusin", beginHover);
+        button.addEventListener("focusout", endHover);
+
+        button.dataset.indexOverflowReady = "true";
+      });
+    };
+
+    requestAnimationFrame(measureButtons);
+    window.setTimeout(measureButtons, 180);
+  };
+  // ALL_CUTS_INDEX_OVERFLOW_HELPERS_END
 
   // ALL_CUTS_PAGE_SNAP_HELPERS_START
   const getProductListGuideLift = (guideKey = "") => {
