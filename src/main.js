@@ -266,6 +266,47 @@ app.innerHTML = `
           </article>
         </div>
 
+        <!-- SECTION_4_CUT_SEARCH_UI_START -->
+        <div class="cuts-search" data-cuts-search>
+          <button
+            class="cuts-search__toggle"
+            type="button"
+            data-cuts-search-toggle
+            aria-expanded="false"
+            aria-controls="cuts-search-panel"
+            aria-label="Open cut search"
+          >
+            <svg class="cuts-search__toggle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M10.75 5.5a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5Zm0 1.65a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm4.15 7.1 4.1 4.1-1.17 1.17-4.1-4.1 1.17-1.17Z" />
+            </svg>
+            <span class="cuts-search__toggle-text">Search</span>
+          </button>
+
+          <div id="cuts-search-panel" class="cuts-search__panel" hidden>
+            <label class="cuts-search__label" for="cuts-search-input">Search cuts</label>
+            <div class="cuts-search__field">
+              <input
+                id="cuts-search-input"
+                class="cuts-search__input"
+                type="text"
+                inputmode="search"
+                placeholder="Ribeye, Picanha, Secreto..."
+                autocomplete="off"
+                spellcheck="false"
+                data-cuts-search-input
+                aria-describedby="cuts-search-status"
+              />
+              <button class="cuts-search__clear" type="button" data-cuts-search-clear aria-label="Clear search" hidden>
+                ×
+              </button>
+            </div>
+            <p id="cuts-search-status" class="cuts-search__status" data-cuts-search-status aria-live="polite">
+              Showing all selected cuts.
+            </p>
+          </div>
+        </div>
+        <!-- SECTION_4_CUT_SEARCH_UI_END -->
+
         <div class="cuts-grid">
 
           <!-- SECTION_4_CUT_SCROLL_START -->
@@ -971,6 +1012,218 @@ initSelectedCutsModal();
 initHeroButtonFeedback();
 initGlobalContactCta();
 requestAnimationFrame(() => {
+  // SECTION_4_CUT_SEARCH_LOGIC_START
+  const initCutsSearch = () => {
+    const root = document.querySelector("[data-cuts-search]");
+    const toggleButton = document.querySelector("[data-cuts-search-toggle]");
+    const panel = document.querySelector("#cuts-search-panel");
+    const input = document.querySelector("[data-cuts-search-input]");
+    const clearButton = document.querySelector("[data-cuts-search-clear]");
+    const status = document.querySelector("[data-cuts-search-status]");
+    const cutScroll = document.querySelector(".panel-cuts .cut-scroll");
+
+    if (!root || !toggleButton || !panel || !input || !cutScroll) {
+      return;
+    }
+
+    const cards = Array.from(cutScroll.querySelectorAll(".cut-card[data-cut-id]")).filter(
+      (card) => !card.matches("[data-product-list-trigger]"),
+    );
+    const groups = Array.from(cutScroll.querySelectorAll(".cut-group"));
+
+    const getGroupSearchKeywords = (groupTitle = "") => {
+      const normalizedGroupTitle = groupTitle.toLowerCase();
+
+      if (normalizedGroupTitle.includes("pork")) {
+        return "pork iberico ibérico campo grande";
+      }
+
+      if (normalizedGroupTitle.includes("wagyu") || normalizedGroupTitle.includes("beef")) {
+        return "wagyu beef black opal mayura robbins island wanderer";
+      }
+
+      return "";
+    };
+
+    const getCardSearchText = (card) => {
+      const groupTitle = card.closest(".cut-group")?.querySelector(".cut-group__head h3")?.textContent || "";
+
+      return [
+        card.dataset.cutId,
+        card.dataset.selectedCutTrigger,
+        card.querySelector("h3")?.textContent,
+        groupTitle,
+        getGroupSearchKeywords(groupTitle),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+    };
+
+    cards.forEach((card) => {
+      card.dataset.cutSearchText = getCardSearchText(card);
+    });
+
+    const forceElementVisibility = (element, isVisible, hiddenClass) => {
+      element.classList.toggle(hiddenClass, !isVisible);
+      element.hidden = !isVisible;
+
+      if (isVisible) {
+        element.style.removeProperty("display");
+        element.style.removeProperty("visibility");
+        element.style.removeProperty("pointer-events");
+        element.removeAttribute("aria-hidden");
+      } else {
+        element.style.setProperty("display", "none", "important");
+        element.style.setProperty("visibility", "hidden", "important");
+        element.style.setProperty("pointer-events", "none", "important");
+        element.setAttribute("aria-hidden", "true");
+      }
+    };
+
+    const setCardVisibility = (card, isVisible) => {
+      forceElementVisibility(card, isVisible, "is-cut-search-hidden");
+    };
+
+    const setGroupVisibility = (group, isVisible) => {
+      forceElementVisibility(group, isVisible, "is-cut-search-empty");
+    };
+
+    const setFilter = (rawQuery = "") => {
+      const query = rawQuery.trim().toLowerCase();
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const searchText = card.dataset.cutSearchText || "";
+        const isVisible = query.length === 0 || searchText.includes(query);
+
+        setCardVisibility(card, isVisible);
+
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      groups.forEach((group) => {
+        const visibleCards = Array.from(group.querySelectorAll(".cut-card[data-cut-id]")).filter(
+          (card) => !card.matches("[data-product-list-trigger]") && !card.hidden,
+        ).length;
+
+        setGroupVisibility(group, query.length === 0 || visibleCards > 0);
+      });
+
+      root.classList.toggle("has-cuts-search-results", query.length > 0);
+
+      if (status) {
+        status.hidden = false;
+
+        if (query.length === 0) {
+          status.textContent = "Showing all selected cuts.";
+        } else if (visibleCount === 1) {
+          status.textContent = "Showing 1 matching cut.";
+        } else if (visibleCount > 0) {
+          status.textContent = `Showing ${visibleCount} matching cuts.`;
+        } else {
+          status.textContent = "No matching cuts found.";
+        }
+      }
+
+      cutScroll.scrollTo({
+        top: 0,
+        behavior: "auto",
+      });
+    };
+
+    const syncClearButton = () => {
+      if (clearButton) {
+        clearButton.hidden = input.value.trim().length === 0;
+      }
+    };
+
+    const applyLiveSearch = () => {
+      setFilter(input.value);
+      syncClearButton();
+    };
+
+    const resetSearch = () => {
+      input.value = "";
+      setFilter("");
+      syncClearButton();
+    };
+
+    const openSearch = () => {
+      root.classList.add("is-cuts-search-open");
+      panel.hidden = false;
+      toggleButton.setAttribute("aria-expanded", "true");
+      toggleButton.setAttribute("aria-label", "Close cut search");
+
+      requestAnimationFrame(() => {
+        input.focus();
+      });
+    };
+
+    const closeSearch = () => {
+      resetSearch();
+      root.classList.remove("is-cuts-search-open");
+      panel.hidden = true;
+      toggleButton.setAttribute("aria-expanded", "false");
+      toggleButton.setAttribute("aria-label", "Open cut search");
+      toggleButton.focus();
+    };
+
+    toggleButton.addEventListener("click", () => {
+      if (root.classList.contains("is-cuts-search-open")) {
+        closeSearch();
+        return;
+      }
+
+      openSearch();
+    });
+
+    input.addEventListener("input", applyLiveSearch);
+
+    clearButton?.addEventListener("click", () => {
+      resetSearch();
+      input.focus();
+    });
+
+    root.addEventListener(
+      "keydown",
+      (event) => {
+        if (!root.contains(event.target)) {
+          return;
+        }
+
+        if (event.key === "Enter") {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+
+        if (event.key === "Escape") {
+          event.preventDefault();
+          event.stopPropagation();
+          closeSearch();
+          return;
+        }
+
+        if (event.key === "Backspace") {
+          event.stopPropagation();
+
+          if (event.target !== input) {
+            event.preventDefault();
+          }
+        }
+      },
+      true,
+    );
+
+    resetSearch();
+  };
+
+  initCutsSearch();
+  // SECTION_4_CUT_SEARCH_LOGIC_END
+
   initInquiryForm();
 initCutScrollIsolation();
 initForwardDepth();
