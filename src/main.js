@@ -49,7 +49,7 @@ app.innerHTML = `
         </button>
         <button class="section-index__item" type="button" data-section-target="inquiry">
           <span class="section-index__number">5</span>
-          <span class="section-index__label">Inquiry</span>
+          <span class="section-index__label">Contact</span>
         </button>
       </div>
     </nav>
@@ -104,7 +104,7 @@ app.innerHTML = `
           <div class="about-card-pair__intro">
             <p class="eyebrow">About</p>
             <h2 id="story-title" class="about-card-pair__title">Paragon Purveyors.</h2>
-            <p class="body-copy about-card-pair__copy">A concise introduction to the people and purpose behind the house.</p>
+            <p class="body-copy about-card-pair__copy">Paragon Purveyors was built around a simple belief: exceptional meat should feel easier to access, understand, and enjoy.</p>
           </div>
 
           <div class="about-card-pair__cards" aria-label="About Paragon Purveyors">
@@ -168,11 +168,11 @@ app.innerHTML = `
         <div class="portfolio-head">
           <p class="eyebrow">Producer Portfolio</p>
           <h2 id="portfolio-title" class="portfolio-title">
-            <span class="portfolio-title-line">Selected producers,</span>
+            <span class="portfolio-title-line">Specialty producers</span>
             <span class="portfolio-title-line">in one portfolio.</span>
           </h2>
           <p class="body-copy portfolio-intro">
-            A concise introduction to the producers behind the Paragon Purveyors offering.
+            Introducing the producers behind the Paragon Purveyors offering.
           </p>
         </div>
 
@@ -254,9 +254,16 @@ app.innerHTML = `
             <span class="cuts-title-line">Exceptional cuts,</span>
             <span class="cuts-title-line">selected with purpose.</span>
           </h2>
-          <p class="body-copy cuts-intro">
-            A focused overview of selected cuts across beef, Wagyu, and Ibérico pork.
-          </p>
+          <article class="cut-card cut-card--all-cuts cut-card--all-cuts-compact" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
+            <img
+              class="cut-card-image"
+              src="${assetPath("assets/cuts/all_cuts.png")}"
+              alt=""
+              aria-hidden="true"
+            />
+            <div class="cut-card-shade" aria-hidden="true"></div>
+            <h3>All Cuts</h3>
+          </article>
         </div>
 
         <div class="cuts-grid">
@@ -264,18 +271,10 @@ app.innerHTML = `
           <!-- SECTION_4_CUT_SCROLL_START -->
 
           <div class="cut-scroll cut-scroll--grouped" aria-label="Selected cuts catalog">
-            <div class="cut-card-feature">
-              <article class="cut-card cut-card--all-cuts" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
-                          <span class="cut-card-shade" aria-hidden="true"></span>
-                          <h3>All Cuts</h3>
-                          <p class="cut-card-description">View the complete visual cut reference.</p>
-                        </article>
-            </div>
 
             <section class="cut-group cut-group--wagyu-beef" aria-labelledby="cuts-wagyu-beef-title">
               <div class="cut-group__head">
-                <p class="cut-group__eyebrow">Selected cuts</p>
-                <h3 id="cuts-wagyu-beef-title">Wagyu / Beef</h3>
+            <h3 id="cuts-wagyu-beef-title">WAGYU / BEEF</h3>
               </div>
               <div class="cut-group__grid">
                 <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
@@ -287,7 +286,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Ribeye</h3>
                           </article>
 
@@ -300,7 +298,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu / Pork</p>
                             <h3>Tenderloin</h3>
                           </article>
 
@@ -313,7 +310,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Striploin</h3>
                           </article>
 
@@ -326,7 +322,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Tomahawk</h3>
                           </article>
 
@@ -339,7 +334,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Picanha</h3>
                           </article>
 
@@ -352,7 +346,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Short Rib</h3>
                           </article>
 
@@ -365,7 +358,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Wagyu</p>
                             <h3>Chuck Roll</h3>
                           </article>
 
@@ -378,7 +370,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Wagyu</p>
                             <h3>Shortloin</h3>
                           </article>
 
@@ -391,7 +382,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Flap Meat</h3>
                           </article>
 
@@ -417,7 +407,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Tri Tip</h3>
                           </article>
 
@@ -430,7 +419,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Top Sirloin</h3>
                           </article>
 
@@ -443,7 +431,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Wagyu</p>
                             <h3>Oyster Blade</h3>
                           </article>
 
@@ -456,7 +443,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Beef / Wagyu</p>
                             <h3>Chuck Tail Flap</h3>
                           </article>
               </div>
@@ -464,8 +450,7 @@ app.innerHTML = `
 
             <section class="cut-group cut-group--pork" aria-labelledby="cuts-pork-title">
               <div class="cut-group__head">
-                <p class="cut-group__eyebrow">Selected cuts</p>
-                <h3 id="cuts-pork-title">Pork</h3>
+            <h3 id="cuts-pork-title">PORK</h3>
               </div>
               <div class="cut-group__grid">
                 <article class="cut-card cut-card--presa" data-cut-id="presa" data-selected-cut-trigger="Presa">
@@ -477,7 +462,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Presa</h3>
                           </article>
 
@@ -490,7 +474,6 @@ app.innerHTML = `
                               loading="lazy"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Secreto</h3>
                           </article>
 
@@ -503,7 +486,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Abanico</h3>
                           </article>
 
@@ -516,7 +498,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Pluma</h3>
                           </article>
 
@@ -529,7 +510,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Coppa</h3>
                           </article>
 
@@ -542,7 +522,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Loin Roast</h3>
                           </article>
 
@@ -555,7 +534,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>4 Rib-Rack</h3>
                           </article>
 
@@ -568,7 +546,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>St. Louis Ribs</h3>
                           </article>
 
@@ -581,7 +558,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Pork Belly</h3>
                           </article>
 
@@ -594,7 +570,6 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <p class="cut-card-description">Pork</p>
                             <h3>Shoulder Picnic</h3>
                           </article>
               </div>

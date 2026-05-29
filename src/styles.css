@@ -8068,3 +8068,163 @@ body.selected-cut-modal-open .global-contact-cta {
 }
 /* CLIENT_SECTION_2_MEET_OWNERS_CARD_IMAGES_END */
 
+/* CLIENT_CHANGE_PHASE_2A_SECTION_4_LAYOUT_START */
+.panel-cuts .cuts-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(10rem, 14vw, 12.25rem);
+  align-items: start;
+  column-gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+.panel-cuts .cuts-head > .eyebrow,
+.panel-cuts .cuts-head > .cuts-title {
+  grid-column: 1;
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  justify-self: end;
+  align-self: start;
+  width: 100%;
+  min-height: clamp(8.75rem, 12vw, 10.5rem);
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: clamp(0.9rem, 1.2vw, 1.15rem);
+  border-radius: clamp(1rem, 1.4vw, 1.4rem);
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts h3 {
+  max-width: 8ch;
+  font-size: clamp(1.1rem, 1.45vw, 1.55rem);
+  line-height: 0.95;
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-description {
+  max-width: 12ch;
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+  letter-spacing: 0.18em;
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-count {
+  font-size: clamp(0.56rem, 0.68vw, 0.64rem);
+  letter-spacing: 0.16em;
+}
+
+.panel-cuts .cuts-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.panel-cuts .cut-scroll {
+  grid-column: 1 / -1;
+}
+
+.panel-cuts .cut-group__head {
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.panel-cuts .cut-group__head h3 {
+  font-size: clamp(0.9rem, 1vw, 1.08rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.panel-cuts .cut-group__eyebrow {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .panel-cuts .cuts-head {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .panel-cuts .cuts-head > .cut-card--all-cuts {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+    width: min(100%, 13rem);
+    min-height: 8.25rem;
+  }
+}
+/* CLIENT_CHANGE_PHASE_2A_SECTION_4_LAYOUT_END */
+
+/* CLIENT_CHANGE_PHASE_2A_ALL_CUTS_IMAGE_START */
+.panel-cuts .cuts-head > .cut-card--all-cuts {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-image {
+  inset: auto auto -7% 50%;
+  width: 132%;
+  height: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: center bottom;
+  opacity: 0.38;
+  filter: saturate(0.92) contrast(1.08) brightness(0.72);
+  transform: translateX(-50%) scale(1.01);
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts:hover .cut-card-image,
+.panel-cuts .cuts-head > .cut-card--all-cuts:focus-visible .cut-card-image {
+  opacity: 0.5;
+  transform: translateX(-50%) scale(1.05);
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-shade {
+  background:
+    radial-gradient(circle at 50% 72%, rgba(58, 15, 18, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(13, 13, 13, 0.7), rgba(13, 13, 13, 0.48));
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts h3 {
+  margin-top: auto;
+  margin-bottom: auto;
+  text-shadow: 0 16px 40px rgba(0, 0, 0, 0.72);
+}
+/* CLIENT_CHANGE_PHASE_2A_ALL_CUTS_IMAGE_END */
+
+/* CLIENT_CHANGE_PHASE_2A_ALL_CUTS_CARD_TUNE_START */
+.panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-image {
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  width: 116%;
+  height: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: center center;
+  opacity: 0.42;
+  transform: translate(-50%, -50%) scale(1.02);
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts:hover .cut-card-image,
+.panel-cuts .cuts-head > .cut-card--all-cuts:focus-visible .cut-card-image {
+  opacity: 0.54;
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts h3 {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  max-width: none;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  font-size: clamp(1.55rem, 2vw, 2.15rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+}
+
+.panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-shade {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(58, 15, 18, 0.14), transparent 46%),
+    linear-gradient(180deg, rgba(13, 13, 13, 0.58), rgba(13, 13, 13, 0.6));
+}
+/* CLIENT_CHANGE_PHASE_2A_ALL_CUTS_CARD_TUNE_END */

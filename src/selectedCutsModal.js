@@ -24,7 +24,7 @@ const selectedCuts = {
   Tenderloin: {
     eyebrow: "Selected Cut",
     title: "Tenderloin",
-    category: "Beef / Wagyu / Pork",
+    category: "Beef / Wagyu",
     image: assetPath("assets/cuts/tenderloin.png"),
     description:
       "A refined, tender cut selected for clean presentation, delicate texture, and elegant service.",
