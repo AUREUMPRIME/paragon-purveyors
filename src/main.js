@@ -1491,32 +1491,32 @@ requestAnimationFrame(() => {
           pdf: assetPath("assets/product-lists/PP_all_cuts_guide.pdf"),
           layout: "page-gallery",
           pages: [
-            { title: "Bolar Blade", src: assetPath("assets/all-cuts/pages/all-cuts-01.webp") },
-            { title: "Chuck Eye Roll", src: assetPath("assets/all-cuts/pages/all-cuts-02.webp") },
-            { title: "Chuck Tail Flap", src: assetPath("assets/all-cuts/pages/all-cuts-03.webp") },
-            { title: "D-Rump", src: assetPath("assets/all-cuts/pages/all-cuts-04.webp") },
-            { title: "Eye Round", src: assetPath("assets/all-cuts/pages/all-cuts-05.webp") },
-            { title: "Flank Steak", src: assetPath("assets/all-cuts/pages/all-cuts-06.webp") },
-            { title: "Flap Meat", src: assetPath("assets/all-cuts/pages/all-cuts-07.webp") },
-            { title: "Inside Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-08.webp") },
-            { title: "Intercostals Long", src: assetPath("assets/all-cuts/pages/all-cuts-09.webp") },
-            { title: "Navel End Brisket", src: assetPath("assets/all-cuts/pages/all-cuts-10.webp") },
-            { title: "OP Ribs", src: assetPath("assets/all-cuts/pages/all-cuts-11.webp") },
-            { title: "Oyster Blade", src: assetPath("assets/all-cuts/pages/all-cuts-12.webp") },
-            { title: "Rib Eye Cap", src: assetPath("assets/all-cuts/pages/all-cuts-13.webp") },
-            { title: "Rostbiff", src: assetPath("assets/all-cuts/pages/all-cuts-14.webp") },
-            { title: "Rump Cap", src: assetPath("assets/all-cuts/pages/all-cuts-15.webp") },
-            { title: "Short Loin", src: assetPath("assets/all-cuts/pages/all-cuts-16.webp") },
-            { title: "Striploin", src: assetPath("assets/all-cuts/pages/all-cuts-17.webp") },
-            { title: "Tenderloin Side Strap Off", src: assetPath("assets/all-cuts/pages/all-cuts-18.webp") },
-            { title: "Tomahawk", src: assetPath("assets/all-cuts/pages/all-cuts-19.webp") },
-            { title: "Topside Cap Off", src: assetPath("assets/all-cuts/pages/all-cuts-20.webp") },
-            { title: "Tri Tip", src: assetPath("assets/all-cuts/pages/all-cuts-21.webp") },
-            { title: "Thick Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-22.webp") },
-            { title: "Thin Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-23.webp") },
-            { title: "Cheek", src: assetPath("assets/all-cuts/pages/all-cuts-24.webp") },
-            { title: "Tail", src: assetPath("assets/all-cuts/pages/all-cuts-25.webp") },
-            { title: "Tongue", src: assetPath("assets/all-cuts/pages/all-cuts-26.webp") },
+            { title: "Bolar Blade", src: assetPath("assets/all-cuts/pages/all-cuts-01.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/01-bolar-blade.webp") },
+            { title: "Chuck Eye Roll", src: assetPath("assets/all-cuts/pages/all-cuts-02.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/02-chuck-eye-roll.webp") },
+            { title: "Chuck Tail Flap", src: assetPath("assets/all-cuts/pages/all-cuts-03.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/03-chuck-tail-flap.webp") },
+            { title: "D-Rump", src: assetPath("assets/all-cuts/pages/all-cuts-04.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/04-d-rump.webp") },
+            { title: "Eye Round", src: assetPath("assets/all-cuts/pages/all-cuts-05.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/05-eye-round.webp") },
+            { title: "Flank Steak", src: assetPath("assets/all-cuts/pages/all-cuts-06.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/06-flank-steak.webp") },
+            { title: "Flap Meat", src: assetPath("assets/all-cuts/pages/all-cuts-07.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/07-flap-meat.webp") },
+            { title: "Inside Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-08.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/08-inside-skirt.webp") },
+            { title: "Intercostals Long", src: assetPath("assets/all-cuts/pages/all-cuts-09.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/09-intercostals-long.webp") },
+            { title: "Navel End Brisket", src: assetPath("assets/all-cuts/pages/all-cuts-10.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/10-navel-end-brisket.webp") },
+            { title: "OP Ribs", src: assetPath("assets/all-cuts/pages/all-cuts-11.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/11-op-ribs.webp") },
+            { title: "Oyster Blade", src: assetPath("assets/all-cuts/pages/all-cuts-12.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/12-oyster-blade.webp") },
+            { title: "Rib Eye Cap", src: assetPath("assets/all-cuts/pages/all-cuts-13.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/13-rib-eye-cap.webp") },
+            { title: "Rostbiff", src: assetPath("assets/all-cuts/pages/all-cuts-14.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/14-rostbiff.webp") },
+            { title: "Rump Cap", src: assetPath("assets/all-cuts/pages/all-cuts-15.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/15-rump-cap.webp") },
+            { title: "Short Loin", src: assetPath("assets/all-cuts/pages/all-cuts-16.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/16-short-loin.webp") },
+            { title: "Striploin", src: assetPath("assets/all-cuts/pages/all-cuts-17.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/17-striploin.webp") },
+            { title: "Tenderloin Side Strap Off", src: assetPath("assets/all-cuts/pages/all-cuts-18.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/18-tenderloin-side-strap-off.webp") },
+            { title: "Tomahawk", src: assetPath("assets/all-cuts/pages/all-cuts-19.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/19-tomahawk.webp") },
+            { title: "Topside Cap Off", src: assetPath("assets/all-cuts/pages/all-cuts-20.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/20-topside-cap-off.webp") },
+            { title: "Tri Tip", src: assetPath("assets/all-cuts/pages/all-cuts-21.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/21-tri-tip.webp") },
+            { title: "Thick Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-22.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/22-thick-skirt.webp") },
+            { title: "Thin Skirt", src: assetPath("assets/all-cuts/pages/all-cuts-23.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/23-thin-skirt.webp") },
+            { title: "Cheek", src: assetPath("assets/all-cuts/pages/all-cuts-24.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/24-cheek.webp") },
+            { title: "Tail", src: assetPath("assets/all-cuts/pages/all-cuts-25.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/25-tail.webp") },
+            { title: "Tongue", src: assetPath("assets/all-cuts/pages/all-cuts-26.webp"), enlargeSrc: assetPath("assets/all-cuts/enlarge/26-tongue.webp") },
           ],
         },
         {
@@ -1527,21 +1527,21 @@ requestAnimationFrame(() => {
           pdf: assetPath("assets/product-lists/PP_pork_cuts_guide.pdf"),
           layout: "page-gallery",
           pages: [
-            { title: "Iberico Secreto", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-01.webp") },
-            { title: "Iberico Presa", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-02.webp") },
-            { title: "Iberico Abanico", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-03.webp") },
-            { title: "Iberico Pluma", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-04.webp") },
-            { title: "Iberico 4 Rib-Rack", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-05.webp") },
-            { title: "Iberico Loin Roast", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-06.webp") },
-            { title: "Iberico Coppa", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-07.webp") },
-            { title: "Iberico St. Louis Ribs", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-08.webp") },
-            { title: "Iberico Flank Steak", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-09.webp") },
-            { title: "Iberico Skirt Steak", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-10.webp") },
-            { title: "Iberico Jowl Secreto", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-11.webp") },
-            { title: "Iberico Pork Belly Secreto", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-12.webp") },
-            { title: "Iberico Pork Belly", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-13.webp") },
-            { title: "Iberico Solomillo Tenderloin", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-14.webp") },
-            { title: "Iberico Shoulder Picnic", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-15.webp") },
+            { title: "Iberico Secreto", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-01.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/01-iberico-secreto.webp") },
+            { title: "Iberico Presa", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-02.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/02-iberico-presa.webp") },
+            { title: "Iberico Abanico", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-03.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/03-iberico-abanico.webp") },
+            { title: "Iberico Pluma", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-04.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/04-iberico-pluma.webp") },
+            { title: "Iberico 4 Rib-Rack", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-05.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/05-iberico-4-rib-rack.webp") },
+            { title: "Iberico Loin Roast", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-06.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/06-iberico-loin-roast.webp") },
+            { title: "Iberico Coppa", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-07.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/07-iberico-coppa.webp") },
+            { title: "Iberico St. Louis Ribs", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-08.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/08-iberico-st-louis-ribs.webp") },
+            { title: "Iberico Flank Steak", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-09.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/09-iberico-flank-steak.webp") },
+            { title: "Iberico Skirt Steak", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-10.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/10-iberico-skirt-steak.webp") },
+            { title: "Iberico Jowl Secreto", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-11.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/11-iberico-jowl-secreto.webp") },
+            { title: "Iberico Pork Belly Secreto", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-12.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/12-iberico-pork-belly-secreto.webp") },
+            { title: "Iberico Pork Belly", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-13.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/13-iberico-pork-belly.webp") },
+            { title: "Iberico Solomillo Tenderloin", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-14.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/14-iberico-solomillo-tenderloin.webp") },
+            { title: "Iberico Shoulder Picnic", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-15.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/15-iberico-shoulder-picnic.webp") },
           ],
         },
       ],
@@ -1881,12 +1881,21 @@ requestAnimationFrame(() => {
       .map(
         (page, index) => `
           <figure class="product-list-page-card" data-product-list-page-card="${index}">
+            <button
+              class="product-list-page-card__image-button"
+              type="button"
+              data-product-list-image-zoom
+              data-product-list-image-src="${escapeHtml(page.enlargeSrc || page.src)}"
+              data-product-list-image-title="${escapeHtml(page.title)}"
+              aria-label="Enlarge ${escapeHtml(page.title)} cut reference page"
+            >
             <img
               src="${escapeHtml(page.src)}"
               alt="${escapeHtml(page.title)} cut reference page"
               loading="${index === 0 ? "eager" : "lazy"}"
               decoding="async"
             />
+            </button>
             <figcaption>${escapeHtml(page.title)}</figcaption>
           </figure>
         `,
@@ -2025,10 +2034,96 @@ requestAnimationFrame(() => {
   };
   // ALL_CUTS_INDEX_OVERFLOW_HELPERS_END
 
+  // ALL_CUTS_IMAGE_LIGHTBOX_HELPERS_START
+  const getProductListImageLightbox = () => {
+    const panelNode = modal.querySelector(".product-list-modal__panel") || modal;
+    let lightbox = modal.querySelector("[data-product-list-image-lightbox]");
+
+    if (!lightbox) {
+      lightbox = document.createElement("div");
+      lightbox.className = "product-list-image-lightbox";
+      lightbox.setAttribute("data-product-list-image-lightbox", "");
+      lightbox.setAttribute("role", "dialog");
+      lightbox.setAttribute("aria-modal", "true");
+      lightbox.setAttribute("aria-label", "Enlarged cut reference image");
+      lightbox.hidden = true;
+      lightbox.innerHTML = `
+        <div class="product-list-image-lightbox__backdrop" data-product-list-image-lightbox-backdrop aria-hidden="true"></div>
+        <div class="product-list-image-lightbox__panel">
+          <button class="product-list-image-lightbox__close" type="button" data-product-list-image-lightbox-close aria-label="Close enlarged cut image">
+            <span aria-hidden="true">×</span>
+          </button>
+          <img class="product-list-image-lightbox__image" alt="" data-product-list-image-lightbox-image />
+          <p class="product-list-image-lightbox__caption" data-product-list-image-lightbox-caption></p>
+        </div>
+      `;
+    }
+
+    if (lightbox.parentElement !== panelNode) {
+      panelNode.appendChild(lightbox);
+    }
+
+    return lightbox;
+  };
+
+  const closeProductListImageLightbox = () => {
+    const lightbox = modal.querySelector("[data-product-list-image-lightbox]");
+
+    if (!lightbox || lightbox.hidden) {
+      return;
+    }
+
+    const imageNode = lightbox.querySelector("[data-product-list-image-lightbox-image]");
+    const captionNode = lightbox.querySelector("[data-product-list-image-lightbox-caption]");
+
+    lightbox.classList.remove("is-visible");
+    lightbox.hidden = true;
+
+    if (imageNode) {
+      imageNode.removeAttribute("src");
+      imageNode.alt = "";
+    }
+
+    if (captionNode) {
+      captionNode.textContent = "";
+    }
+  };
+
+  const openProductListImageLightbox = (trigger) => {
+    const src = trigger?.dataset.productListImageSrc || "";
+    const title = trigger?.dataset.productListImageTitle || "Cut reference";
+
+    if (!src) {
+      return;
+    }
+
+    const lightbox = getProductListImageLightbox();
+    const imageNode = lightbox.querySelector("[data-product-list-image-lightbox-image]");
+    const captionNode = lightbox.querySelector("[data-product-list-image-lightbox-caption]");
+    const closeButton = lightbox.querySelector("[data-product-list-image-lightbox-close]");
+
+    if (imageNode) {
+      imageNode.src = src;
+      imageNode.alt = `${title} cut reference page enlarged`;
+    }
+
+    if (captionNode) {
+      captionNode.textContent = title;
+    }
+
+    lightbox.hidden = false;
+
+    requestAnimationFrame(() => {
+      lightbox.classList.add("is-visible");
+      closeButton?.focus?.({ preventScroll: true });
+    });
+  };
+  // ALL_CUTS_IMAGE_LIGHTBOX_HELPERS_END
+
   // ALL_CUTS_PAGE_SNAP_HELPERS_START
   const getProductListGuideLift = (guideKey = "") => {
     if (guideKey === "wagyu") {
-      return 5;
+      return 108;
     }
 
     if (guideKey === "pork") {
@@ -2258,6 +2353,73 @@ requestAnimationFrame(() => {
     true,
   );
   // CONNECTED_CATALOG_PRODUCER_TO_CUT_EVENTS_END
+  // ALL_CUTS_IMAGE_LIGHTBOX_EVENTS_START
+  modal.addEventListener(
+    "click",
+    (event) => {
+      const eventTarget = event.target;
+
+      if (!(eventTarget instanceof Element)) {
+        return;
+      }
+
+      const activeLightbox = modal.querySelector("[data-product-list-image-lightbox]");
+      const isLightboxOpen = Boolean(activeLightbox && !activeLightbox.hidden);
+      const lightboxTarget = eventTarget.closest("[data-product-list-image-lightbox]");
+
+      if (isLightboxOpen && lightboxTarget) {
+        const closeTrigger = eventTarget.closest("[data-product-list-image-lightbox-close]");
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation();
+        }
+
+        if (closeTrigger) {
+          closeProductListImageLightbox();
+        }
+
+        return;
+      }
+
+      const imageTrigger = eventTarget.closest("[data-product-list-image-zoom]");
+
+      if (!imageTrigger) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (typeof event.stopImmediatePropagation === "function") {
+        event.stopImmediatePropagation();
+      }
+
+      openProductListImageLightbox(imageTrigger);
+    },
+    true,
+  );
+
+  modal.addEventListener("cancel", (event) => {
+    const activeLightbox = modal.querySelector("[data-product-list-image-lightbox]");
+
+    if (!activeLightbox || activeLightbox.hidden) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
+
+    closeProductListImageLightbox();
+  });
+  // ALL_CUTS_IMAGE_LIGHTBOX_EVENTS_END
+
   // ALL_CUTS_PAGE_INDEX_EVENTS_START
   modal.addEventListener(
     "click",
@@ -2353,6 +2515,20 @@ requestAnimationFrame(() => {
 
   modal.addEventListener("click", (event) => {
     if (panel && !panel.contains(event.target)) {
+      const activeLightbox = modal.querySelector("[data-product-list-image-lightbox]");
+
+      if (activeLightbox && !activeLightbox.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation();
+        }
+
+        closeProductListImageLightbox();
+        return;
+      }
+
       closeProductList();
     }
   });
@@ -2370,6 +2546,21 @@ requestAnimationFrame(() => {
   });
 
   document.addEventListener("keydown", (event) => {
+    const activeLightbox = modal.querySelector("[data-product-list-image-lightbox]");
+    const isLightboxOpen = Boolean(activeLightbox && !activeLightbox.hidden);
+
+    if (isLightboxOpen && (event.key === "Escape" || event.key === "Delete" || event.key === "Backspace")) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (typeof event.stopImmediatePropagation === "function") {
+        event.stopImmediatePropagation();
+      }
+
+      closeProductListImageLightbox();
+      return;
+    }
+
     if (event.key === "Escape" && modal.open) {
       closeProductList();
     }
