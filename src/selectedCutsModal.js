@@ -507,6 +507,18 @@ export function initSelectedCutsModal() {
               <tbody data-selected-cut-rows></tbody>
             </table>
           </div>
+
+          <div class="selected-cut-modal__cta-wrap">
+            <button
+              class="selected-cut-modal__cta"
+              type="button"
+              data-selected-cut-inquiry
+              aria-label="Request availability for this selected cut"
+            >
+              <span class="selected-cut-modal__cta-kicker">Ask about this cut</span>
+              <span class="selected-cut-modal__cta-label">Request Availability</span>
+            </button>
+          </div>
         </section>
       </div>
     </div>
@@ -536,6 +548,7 @@ export function initSelectedCutsModal() {
   const rowsNode = modal.querySelector("[data-selected-cut-rows]");
   const imageNode = modal.querySelector("[data-selected-cut-image]");
   const fallbackNode = modal.querySelector("[data-selected-cut-fallback]");
+  const inquiryButton = modal.querySelector("[data-selected-cut-inquiry]");
 
   const openSelectedCut = (cutName, trigger) => {
     const cut = selectedCuts[cutName];
@@ -665,6 +678,26 @@ export function initSelectedCutsModal() {
     true,
   );
   // CONNECTED_CATALOG_CUT_TO_PRODUCER_EVENTS_END
+  const goToInquiryFromSelectedCut = () => {
+    lastTrigger = null;
+    closeSelectedCut();
+
+    window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent("paragon:navigate-to-section", {
+          detail: {
+            sectionId: "inquiry",
+            focusId: "inquiry-title",
+            source: "selected-cut-modal",
+            delay: 80,
+          },
+        }),
+      );
+    }, 180);
+  };
+
+  inquiryButton?.addEventListener("click", goToInquiryFromSelectedCut);
+
   closeButton?.addEventListener("click", closeSelectedCut);
 
   modal.addEventListener("click", (event) => {

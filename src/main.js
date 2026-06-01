@@ -104,7 +104,7 @@ app.innerHTML = `
           <div class="about-card-pair__intro">
             <p class="eyebrow">About</p>
             <h2 id="story-title" class="about-card-pair__title">Paragon Purveyors.</h2>
-            <p class="body-copy about-card-pair__copy">Paragon Purveyors was built around a simple belief: exceptional meat should feel easier to access, understand, and enjoy.</p>
+            <p class="body-copy about-card-pair__copy">Paragon Purveyors is driven by a genuine respect for exceptional meat — where it comes from, how it is cut, and how it is served. The work is personal: helping chefs, buyers, and clients choose with confidence, understand the product in front of them, and bring something memorable to the table.</p>
           </div>
 
           <div class="about-card-pair__cards" aria-label="About Paragon Purveyors">
@@ -2665,4 +2665,67 @@ if (document.readyState === "loading") {
   setupDialogScrollResetOnOpen();
 }
 // MODAL_SCROLL_RESET_ON_OPEN_END
+/* ROUND2_SECTION_NAV_EVENT_BRIDGE_START */
+window.addEventListener("paragon:navigate-to-section", (event) => {
+  const detail = event.detail || {};
+  const rawSectionId = String(detail.sectionId || detail.target || "").trim();
 
+  if (!rawSectionId) {
+    return;
+  }
+
+  const sectionId = rawSectionId.replace(/[^a-zA-Z0-9_-]/g, "");
+  const focusId = String(detail.focusId || "").replace(/[^a-zA-Z0-9_-]/g, "");
+  const delay = Number.isFinite(detail.delay) ? detail.delay : 220;
+
+  window.setTimeout(() => {
+    const sectionButton =
+      document.querySelector(`.section-index__item[data-section-target="${sectionId}"]`) ||
+      document.querySelector(`[data-section-target="${sectionId}"]`) ||
+      document.querySelector(`[data-hero-target="${sectionId}"]`);
+
+    if (sectionButton instanceof HTMLElement) {
+      sectionButton.click();
+    } else {
+      const fallbackSection = document.getElementById(sectionId);
+
+      if (fallbackSection) {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        fallbackSection.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      }
+    }
+
+    if (focusId) {
+      window.setTimeout(() => {
+        const focusTarget = document.getElementById(focusId);
+
+        if (!focusTarget) {
+          return;
+        }
+
+        const hadTabIndex = focusTarget.hasAttribute("tabindex");
+
+        if (!hadTabIndex) {
+          focusTarget.setAttribute("tabindex", "-1");
+        }
+
+        focusTarget.focus({ preventScroll: true });
+
+        if (!hadTabIndex) {
+          focusTarget.addEventListener(
+            "blur",
+            () => {
+              focusTarget.removeAttribute("tabindex");
+            },
+            { once: true },
+          );
+        }
+      }, 360);
+    }
+  }, delay);
+});
+/* ROUND2_SECTION_NAV_EVENT_BRIDGE_END */
