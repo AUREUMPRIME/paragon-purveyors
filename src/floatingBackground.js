@@ -6,14 +6,14 @@ import { assetPath } from "./assetPath.js";
  */
 
 const ASSETS = [
-  { src: "assets/floating-meat-2d/temp-01-ribeye.png", seed: 0.11, size: 0.96 },
-  { src: "assets/floating-meat-2d/temp-02-striploin.png", seed: 0.22, size: 0.88 },
-  { src: "assets/floating-meat-2d/temp-03-tenderloin.png", seed: 0.33, size: 0.78 },
-  { src: "assets/floating-meat-2d/temp-04-short-rib.png", seed: 0.44, size: 1.04 },
-  { src: "assets/floating-meat-2d/temp-05-tomahawk.png", seed: 0.55, size: 1.14 },
-  { src: "assets/floating-meat-2d/temp-06-picanha.png", seed: 0.66, size: 0.9 },
-  { src: "assets/floating-meat-2d/temp-07-presa.png", seed: 0.77, size: 0.82 },
-  { src: "assets/floating-meat-2d/temp-08-secreto.png", seed: 0.88, size: 0.86 },
+  { src: "assets/floating-meat-2d/temp-01-ribeye.webp", seed: 0.11, size: 0.96 },
+  { src: "assets/floating-meat-2d/temp-02-striploin.webp", seed: 0.22, size: 0.88 },
+  { src: "assets/floating-meat-2d/temp-03-tenderloin.webp", seed: 0.33, size: 0.78 },
+  { src: "assets/floating-meat-2d/temp-04-short-rib.webp", seed: 0.44, size: 1.04 },
+  { src: "assets/floating-meat-2d/temp-05-tomahawk.webp", seed: 0.55, size: 1.14 },
+  { src: "assets/floating-meat-2d/temp-06-picanha.webp", seed: 0.66, size: 0.9 },
+  { src: "assets/floating-meat-2d/temp-07-presa.webp", seed: 0.77, size: 0.82 },
+  { src: "assets/floating-meat-2d/temp-08-secreto.webp", seed: 0.88, size: 0.86 },
 ];
 
 const DEPTH_ROLE_MAP = [
