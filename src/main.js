@@ -257,7 +257,7 @@ app.innerHTML = `
           <article class="cut-card cut-card--all-cuts cut-card--all-cuts-compact" data-cut-id="all-cuts" data-product-list-trigger="All Cuts">
             <img
               class="cut-card-image"
-              src="${assetPath("assets/cuts/all_cuts.png")}"
+              src="${assetPath("assets/cuts/all_cuts.webp")}"
               alt=""
               aria-hidden="true"
             />
@@ -321,7 +321,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/ribeye.png")}"
+                              src="${assetPath("assets/cuts/ribeye.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -333,7 +333,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--tenderloin" data-cut-id="tenderloin" data-selected-cut-trigger="Tenderloin">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/tenderloin.png")}"
+                              src="${assetPath("assets/cuts/tenderloin.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -345,7 +345,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--striploin" data-cut-id="striploin" data-selected-cut-trigger="Striploin">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/striploin.png")}"
+                              src="${assetPath("assets/cuts/striploin.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -357,7 +357,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--tomahawk" data-cut-id="tomahawk" data-selected-cut-trigger="Tomahawk">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/tomahawk.png")}"
+                              src="${assetPath("assets/cuts/tomahawk.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -369,7 +369,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--rump-cap" data-cut-id="rump-cap" data-selected-cut-trigger="Rump Cap">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/rump-cap.png")}"
+                              src="${assetPath("assets/cuts/rump-cap.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -381,7 +381,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--short-rib" data-cut-id="short-rib" data-selected-cut-trigger="Short Rib">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/short-rib.png")}"
+                              src="${assetPath("assets/cuts/short-rib.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -393,7 +393,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--chuck-roll" data-cut-id="chuck-roll" data-selected-cut-trigger="Chuck Roll">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/chuck-roll.png")}"
+                              src="${assetPath("assets/cuts/chuck-roll.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -405,7 +405,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--shortloin" data-cut-id="shortloin" data-selected-cut-trigger="Shortloin">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/shortloin.png")}"
+                              src="${assetPath("assets/cuts/shortloin.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -417,7 +417,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--flap-meat" data-cut-id="flap-meat" data-selected-cut-trigger="Flap Meat">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/flap-meat.png")}"
+                              src="${assetPath("assets/cuts/flap-meat.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -429,7 +429,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--flank-steak" data-cut-id="flank-steak" data-selected-cut-trigger="Flank Steak">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/flank-steak.png")}"
+                              src="${assetPath("assets/cuts/flank-steak.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -441,7 +441,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--tri-tip" data-cut-id="tri-tip" data-selected-cut-trigger="Tri Tip">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/tri-tip.png")}"
+                              src="${assetPath("assets/cuts/tri-tip.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -453,7 +453,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--top-sirloin" data-cut-id="top-sirloin" data-selected-cut-trigger="Top Sirloin">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/top-sirloin.png")}"
+                              src="${assetPath("assets/cuts/top-sirloin.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -465,7 +465,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--oyster-blade" data-cut-id="oyster-blade" data-selected-cut-trigger="Oyster Blade">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/oyster-blade.png")}"
+                              src="${assetPath("assets/cuts/oyster-blade.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -477,7 +477,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--chuck-tail-flap cut-card--long-title" data-cut-id="chuck-tail-flap" data-selected-cut-trigger="Chuck Tail Flap">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/chuck-tail-flap.png")}"
+                              src="${assetPath("assets/cuts/chuck-tail-flap.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -496,7 +496,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--presa" data-cut-id="presa" data-selected-cut-trigger="Presa">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/presa.png")}"
+                              src="${assetPath("assets/cuts/presa.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -508,7 +508,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--secreto" data-cut-id="secreto" data-selected-cut-trigger="Secreto">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/secreto.png")}"
+                              src="${assetPath("assets/cuts/secreto.webp")}"
                               alt=""
                               aria-hidden="true"
                               loading="lazy"
@@ -520,7 +520,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-abanico" data-cut-id="iberico-abanico" data-selected-cut-trigger="Iberico Abanico">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-abanico.png")}"
+                              src="${assetPath("assets/cuts/iberico-abanico.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -532,7 +532,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-pluma" data-cut-id="iberico-pluma" data-selected-cut-trigger="Iberico Pluma">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-pluma.png")}"
+                              src="${assetPath("assets/cuts/iberico-pluma.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -544,7 +544,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-coppa" data-cut-id="iberico-coppa" data-selected-cut-trigger="Iberico Coppa">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-coppa.png")}"
+                              src="${assetPath("assets/cuts/iberico-coppa.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -556,7 +556,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-loin-roast" data-cut-id="iberico-loin-roast" data-selected-cut-trigger="Iberico Loin Roast">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-loin-roast.png")}"
+                              src="${assetPath("assets/cuts/iberico-loin-roast.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -568,7 +568,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-4-rib-rack" data-cut-id="iberico-4-rib-rack" data-selected-cut-trigger="Iberico 4 Rib-Rack">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-4-rib-rack.png")}"
+                              src="${assetPath("assets/cuts/iberico-4-rib-rack.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -580,7 +580,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-st-louis-ribs cut-card--long-title" data-cut-id="iberico-st-louis-ribs" data-selected-cut-trigger="Iberico St. Louis Ribs">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-st-louis-ribs.png")}"
+                              src="${assetPath("assets/cuts/iberico-st-louis-ribs.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -592,7 +592,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-pork-belly" data-cut-id="iberico-pork-belly" data-selected-cut-trigger="Iberico Pork Belly">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-pork-belly.png")}"
+                              src="${assetPath("assets/cuts/iberico-pork-belly.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
@@ -604,7 +604,7 @@ app.innerHTML = `
                 <article class="cut-card cut-card--placeholder cut-card--iberico-shoulder-picnic cut-card--long-title" data-cut-id="iberico-shoulder-picnic" data-selected-cut-trigger="Iberico Shoulder Picnic">
                             <img
                               class="cut-card-image"
-                              src="${assetPath("assets/cuts/iberico-shoulder-picnic.png")}"
+                              src="${assetPath("assets/cuts/iberico-shoulder-picnic.webp")}"
                               alt=""
                               loading="lazy"
                               decoding="async"
