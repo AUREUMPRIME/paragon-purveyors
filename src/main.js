@@ -137,7 +137,7 @@ app.innerHTML = `
                     <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--clayton">
                       <img
                         class="section-about-logo-card__owner-cover-image"
-                        src="${assetPath("assets/owners/clayton-u-placeholder.png")}"
+                        src="${assetPath("assets/owners/clayton-u-placeholder.webp")}"
                         alt=""
                         loading="lazy"
                       />
@@ -145,7 +145,7 @@ app.innerHTML = `
                     <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--blake">
                       <img
                         class="section-about-logo-card__owner-cover-image"
-                        src="${assetPath("assets/owners/blake-b-placeholder.png")}"
+                        src="${assetPath("assets/owners/blake-b-placeholder.webp")}"
                         alt=""
                         loading="lazy"
                       />
@@ -904,7 +904,7 @@ function initHeroButtonFeedback() {
             <div class="owners-portrait-card__image-frame">
               <img
                 class="owners-portrait-card__image"
-                src="${assetPath("assets/owners/clayton-u-placeholder.png")}"
+                src="${assetPath("assets/owners/clayton-u-placeholder.webp")}"
                 alt="Clayton U. placeholder portrait"
                 loading="lazy"
               />
@@ -919,7 +919,7 @@ function initHeroButtonFeedback() {
             <div class="owners-portrait-card__image-frame">
               <img
                 class="owners-portrait-card__image"
-                src="${assetPath("assets/owners/blake-b-placeholder.png")}"
+                src="${assetPath("assets/owners/blake-b-placeholder.webp")}"
                 alt="Blake B. placeholder portrait"
                 loading="lazy"
               />
@@ -1243,7 +1243,7 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/black-opal_modal_logo.png"),
         logoAlt: "Black Opal logo",
-        bannerImage: assetPath("assets/provider-banners/black-opal-banner.png"),
+        bannerImage: assetPath("assets/provider-banners/black-opal-banner.webp"),
         bannerLabel: "Consistency · Quality · Supply",
         copy: "Black Opal is selected for consistency: refined Australian Wagyu with generous marbling, a balanced eating profile, and dependable year-round supply. Raised through a disciplined long-term program in Victoria and Tasmania, it gives Paragon a reliable foundation for premium Wagyu across a range of marble scores.",
         tags: ["Australian Wagyu", "380+ Days Grain Fed", "Consistent Supply"],
@@ -1326,7 +1326,7 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/mayura-station_modal_logo.png"),
         logoAlt: "Mayura Station logo",
-        bannerImage: assetPath("assets/provider-banners/mayura-station-banner.png"),
+        bannerImage: assetPath("assets/provider-banners/mayura-station-banner.webp"),
         bannerLabel: "Depth · Control · Character",
         copy: "Mayura Station is selected for depth, control, and unmistakable full-blood Wagyu character. Raised on a family-owned station in South Australia's Limestone Coast, its cattle are managed through a highly controlled program designed for richness, consistency, and a distinctive luxury eating profile.",
         tags: ["Full-Blood Wagyu", "Limestone Coast", "Signature Feeding Program"],
@@ -1372,7 +1372,7 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/campo-grande_modal_logo.png"),
         logoAlt: "Campo Grande logo",
-        bannerImage: assetPath("assets/provider-banners/campo-grande-banner.png"),
+        bannerImage: assetPath("assets/provider-banners/campo-grande-banner.webp"),
         bannerLabel: "Heritage · Marbling · Flavor",
         copy: "Campo Grande is selected for its expressive Spanish Ibérico character: heirloom pigs, deep marbling, and a rich, savory eating profile that gives chefs a pork program with the presence of a luxury steak. Raised through family-owned farms in southern and western Spain, it brings heritage, flavor, and distinction to the Paragon portfolio.",
         tags: ["Spanish Ibérico", "Family-Owned Farms", "Heirloom Breed"],
@@ -1427,7 +1427,7 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/robbins-island_modal_logo.png"),
         logoAlt: "Robbins Island logo",
-        bannerImage: assetPath("assets/provider-banners/robbins-island-banner.png"),
+        bannerImage: assetPath("assets/provider-banners/robbins-island-banner.webp"),
         bannerLabel: "Island · Terroir · Rarity",
         copy: "Robbins Island is selected for rarity, terroir, and unmistakable Tasmanian Wagyu character. Set off Tasmania's northwest coast, its cattle graze through saltwater channels in a pristine island environment before a long grain finish, creating a distinctive balance of clean origin, elite genetics, and high-marbling depth.",
         tags: ["Tasmanian Fullblood Wagyu", "18 Months on Pasture", "450+ Day Grain Finish"],
@@ -1554,7 +1554,7 @@ requestAnimationFrame(() => {
       providerIntro: {
         logo: assetPath("assets/provider-logos/modal/wanderer_modal_logo.png"),
         logoAlt: "Wanderer logo",
-        bannerImage: assetPath("assets/provider-banners/wanderer-banner.png"),
+        bannerImage: assetPath("assets/provider-banners/wanderer-banner.webp"),
         bannerLabel: "Free-Range · Barley-Fed · Dependable",
         copy: "Wanderer is selected for a distinctive balance of free-range husbandry and barley-fed consistency. Its cattle roam open paddocks while accessing barley through an innovative mobile feeding system, giving chefs the richness, tenderness, and dependable quality of barley-fed beef without the use of intensive feedlots.",
         tags: ["Free-Range Beef", "Barley-Fed Quality", "No Intensive Feedlots"],
