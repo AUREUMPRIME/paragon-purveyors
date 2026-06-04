@@ -379,18 +379,69 @@ const escapeHtml = (value) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 
+const getSelectedCutMarblingLabel = (brand, code) => {
+  const normalizedBrand = String(brand || "").toLowerCase();
+  const normalizedCode = String(code || "").toUpperCase();
+
+  if (normalizedBrand === "black opal") {
+    if (normalizedCode.startsWith("141")) return "Marbling Score 4-5";
+    if (normalizedCode.startsWith("241")) return "Marbling Score 6-7";
+    if (normalizedCode.startsWith("341")) return "Marbling Score 8-9";
+  }
+
+  if (normalizedBrand === "mayura station") {
+    if (normalizedCode.startsWith("279")) return "Marbling Score 8-9";
+    if (normalizedCode.startsWith("379")) return "Marbling Score 9+";
+  }
+
+  if (normalizedBrand === "robbins island") {
+    const scoreNinePlusCodes = new Set([
+      "1602RW",
+      "16025W",
+      "20009T",
+      "20409T",
+      "20919T",
+      "21109T",
+      "21409T",
+      "21609T",
+      "22409T",
+      "23029T",
+      "23509T",
+    ]);
+
+    if (scoreNinePlusCodes.has(normalizedCode)) return "Marbling Score 9+";
+    return "Marbling Score 7-8+";
+  }
+
+  if (normalizedBrand === "wanderer") {
+    if (normalizedCode.endsWith("XB")) return "Marbling Score MB3-4+";
+    if (normalizedCode.endsWith("XA")) return "Marbling Score MB2-3";
+  }
+
+  return "";
+};
+
 const createRows = (rows) =>
   rows
-    .map(
-      ([brand, code, product, specification]) => `
+    .map(([brand, code, product, specification]) => {
+      const marblingLabel = getSelectedCutMarblingLabel(brand, code);
+
+      return `
         <tr>
           <td>${escapeHtml(brand)}</td>
           <td>${escapeHtml(code)}</td>
-          <td>${escapeHtml(product)}</td>
+          <td>
+            <span class="selected-cut-modal__product-name">${escapeHtml(product)}</span>
+            ${
+              marblingLabel
+                ? `<span class="selected-cut-modal__product-marbling">${escapeHtml(marblingLabel)}</span>`
+                : ""
+            }
+          </td>
           <td>${escapeHtml(specification)}</td>
         </tr>
-      `,
-    )
+      `;
+    })
     .join("");
 
 // CONNECTED_CATALOG_CUT_TO_PRODUCER_HELPERS_START
@@ -448,7 +499,7 @@ const createProducerProgramLinks = (cutName) => {
           type="button"
           data-connected-producer-trigger="${escapeHtml(producer.productListTitle)}"
         >
-          <span>${escapeHtml(producer.publicLabel)}</span>
+          <span>${escapeHtml(producer.productListTitle || producer.publicLabel)}</span>
           <small>View Producer</small>
         </button>
       `,

@@ -8929,3 +8929,24 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* ROUND2_SELECTED_CUT_MODAL_CTA_END */
+
+/* ROUND3_SELECTED_CUT_MARBLING_START */
+.selected-cut-modal__product-name,
+.selected-cut-modal__product-marbling {
+  display: block;
+}
+
+.selected-cut-modal__product-name {
+  color: rgba(252, 247, 238, 0.88);
+}
+
+.selected-cut-modal__product-marbling {
+  margin-top: 0.28rem;
+  color: rgba(246, 239, 226, 0.52);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+/* ROUND3_SELECTED_CUT_MARBLING_END */
