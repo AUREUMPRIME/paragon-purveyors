@@ -1668,7 +1668,25 @@ requestAnimationFrame(() => {
     `;
   };
 
-  const createProviderFooter = () => "";
+  const createProviderFooter = (providerIntro) => {
+    if (!providerIntro) {
+      return "";
+    }
+
+    return `
+      <div class="provider-modal-inquiry-cta-wrap">
+        <button
+          class="provider-modal-inquiry-cta"
+          type="button"
+          data-product-list-inquiry
+          aria-label="Request pricing and availability from Paragon Purveyors"
+        >
+          <span class="provider-modal-inquiry-cta__kicker">Ask about this program</span>
+          <span class="provider-modal-inquiry-cta__label">Request Pricing and Availability</span>
+        </button>
+      </div>
+    `;
+  };
 
   const renderProviderModalLogo = (productList) => {
     const headerNode = modal.querySelector(".product-list-modal__header") || titleNode?.parentElement || modal;
@@ -2263,6 +2281,39 @@ requestAnimationFrame(() => {
     }
   };
 
+  // ROUND3_PROVIDER_MODAL_INQUIRY_CTA_EVENTS_START
+  modal.addEventListener(
+    "click",
+    (event) => {
+      const eventTarget = event.target;
+
+      if (!(eventTarget instanceof Element)) {
+        return;
+      }
+
+      const inquiryButton = eventTarget.closest("[data-product-list-inquiry]");
+
+      if (!inquiryButton) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      closeProductList();
+
+      window.dispatchEvent(
+        new CustomEvent("paragon:navigate-to-section", {
+          detail: {
+            sectionId: "inquiry",
+            delay: 160,
+          },
+        }),
+      );
+    },
+    true,
+  );
+  // ROUND3_PROVIDER_MODAL_INQUIRY_CTA_EVENTS_END
   // CONNECTED_CATALOG_PRODUCER_TO_CUT_EVENTS_START
   modal.addEventListener(
     "click",
