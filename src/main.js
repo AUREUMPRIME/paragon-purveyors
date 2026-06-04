@@ -1099,7 +1099,7 @@ requestAnimationFrame(() => {
         } else if (visibleCount > 0) {
           status.textContent = `Showing ${visibleCount} matching cuts.`;
         } else {
-          status.textContent = "No matching cuts found.";
+          status.textContent = "No Match";
         }
       }
 
@@ -2722,3 +2722,94 @@ window.addEventListener("paragon:navigate-to-section", (event) => {
   }, delay);
 });
 /* ROUND2_SECTION_NAV_EVENT_BRIDGE_END */
+/* ROUND3_SECTION4_SEARCH_POLISH_JS_START */
+const initRound3Section4SearchPolish = () => {
+  const root = document.querySelector("[data-cuts-search]");
+  const input = document.querySelector("[data-cuts-search-input]");
+  const clearButton = document.querySelector("[data-cuts-search-clear]");
+  const status = document.querySelector("[data-cuts-search-status]");
+
+  if (!root || !input) {
+    return;
+  }
+
+  const normalizeSearchText = (value) => String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
+
+  const getSearchCards = () =>
+    Array.from(document.querySelectorAll(".panel-cuts .cut-card[data-cut-id]")).filter(
+      (card) => !card.matches("[data-product-list-trigger]"),
+    );
+
+  const getCardSearchText = (card) =>
+    normalizeSearchText(
+      card.dataset.cutSearchText ||
+        card.getAttribute("data-selected-cut-trigger") ||
+        card.getAttribute("data-cut-id") ||
+        card.textContent ||
+        "",
+    );
+
+  const showSearchElement = (element, hiddenClass) => {
+    if (!element) {
+      return;
+    }
+
+    if (hiddenClass) {
+      element.classList.remove(hiddenClass);
+    }
+
+    element.hidden = false;
+    element.removeAttribute("aria-hidden");
+    element.style.removeProperty("visibility");
+    element.style.removeProperty("display");
+  };
+
+  const syncNoMatchState = () => {
+    window.requestAnimationFrame(() => {
+      const query = normalizeSearchText(input.value);
+
+      if (!query) {
+        root.classList.remove("is-cuts-search-no-match");
+        input.removeAttribute("aria-invalid");
+        return;
+      }
+
+      const cards = getSearchCards();
+      const hasMatch = cards.some((card) => getCardSearchText(card).includes(query));
+
+      if (hasMatch) {
+        root.classList.remove("is-cuts-search-no-match");
+        input.removeAttribute("aria-invalid");
+        return;
+      }
+
+      root.classList.add("is-cuts-search-no-match");
+      input.setAttribute("aria-invalid", "true");
+
+      if (status) {
+        status.textContent = "No Match";
+      }
+
+      cards.forEach((card) => {
+        showSearchElement(card, "is-cut-search-hidden");
+      });
+
+      document.querySelectorAll(".panel-cuts .cut-group").forEach((group) => {
+        showSearchElement(group, "is-cut-search-empty");
+      });
+    });
+  };
+
+  input.addEventListener("input", syncNoMatchState);
+  input.addEventListener("search", syncNoMatchState);
+  clearButton?.addEventListener("click", syncNoMatchState);
+
+  syncNoMatchState();
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initRound3Section4SearchPolish, { once: true });
+} else {
+  initRound3Section4SearchPolish();
+}
+/* ROUND3_SECTION4_SEARCH_POLISH_JS_END */
