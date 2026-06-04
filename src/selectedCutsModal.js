@@ -513,10 +513,10 @@ export function initSelectedCutsModal() {
               class="selected-cut-modal__cta"
               type="button"
               data-selected-cut-inquiry
-              aria-label="Request availability for this selected cut"
+              aria-label="Request pricing and availability for this selected cut"
             >
               <span class="selected-cut-modal__cta-kicker">Ask about this cut</span>
-              <span class="selected-cut-modal__cta-label">Request Availability</span>
+              <span class="selected-cut-modal__cta-label">Request Pricing and Availability</span>
             </button>
           </div>
         </section>

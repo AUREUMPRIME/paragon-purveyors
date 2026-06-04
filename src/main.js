@@ -54,7 +54,7 @@ app.innerHTML = `
       </div>
     </nav>
 
-    <button class="global-contact-cta" type="button" data-section-target="inquiry" aria-label="Request availability from Paragon Purveyors">
+    <button class="global-contact-cta" type="button" data-section-target="inquiry" aria-label="Request pricing and availability from Paragon Purveyors">
       <span class="global-contact-cta__inner">
         <span class="global-contact-cta__mark" aria-hidden="true">
           <img
@@ -65,7 +65,7 @@ app.innerHTML = `
         </span>
         <span class="global-contact-cta__copy">
           <span class="global-contact-cta__eyebrow">Questions or orders</span>
-          <span class="global-contact-cta__label">Request Availability</span>
+          <span class="global-contact-cta__label">Request Pricing and Availability</span>
           <span class="global-contact-cta__line" aria-hidden="true"></span>
         </span>
       </span>
@@ -249,7 +249,31 @@ app.innerHTML = `
 
       <div class="panel panel-cuts">
         <div class="cuts-head">
-          <p class="eyebrow">Selected Cuts</p>
+          <!-- SECTION_4_CUT_SEARCH_UI_START -->
+          <div class="eyebrow cuts-search cuts-search--eyebrow" data-cuts-search>
+            <label class="cuts-search__label" for="cuts-search-input">Search cuts</label>
+            <div class="cuts-search__field">
+              <span class="cuts-search__icon" aria-hidden="true">⌕</span>
+              <input
+                id="cuts-search-input"
+                class="cuts-search__input"
+                type="text"
+                inputmode="search"
+                placeholder="Search cuts"
+                autocomplete="off"
+                spellcheck="false"
+                data-cuts-search-input
+                aria-describedby="cuts-search-status"
+              />
+              <button class="cuts-search__clear" type="button" data-cuts-search-clear aria-label="Clear search" hidden>
+                ×
+              </button>
+            </div>
+            <p id="cuts-search-status" class="cuts-search__status" data-cuts-search-status aria-live="polite">
+              Showing all selected cuts.
+            </p>
+          </div>
+          <!-- SECTION_4_CUT_SEARCH_UI_END -->
           <h2 id="cuts-title" class="cuts-title">
             <span class="cuts-title-line">Exceptional cuts,</span>
             <span class="cuts-title-line">selected with purpose.</span>
@@ -266,47 +290,6 @@ app.innerHTML = `
           </article>
         </div>
 
-        <!-- SECTION_4_CUT_SEARCH_UI_START -->
-        <div class="cuts-search" data-cuts-search>
-          <button
-            class="cuts-search__toggle"
-            type="button"
-            data-cuts-search-toggle
-            aria-expanded="false"
-            aria-controls="cuts-search-panel"
-            aria-label="Open cut search"
-          >
-            <svg class="cuts-search__toggle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M10.75 5.5a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5Zm0 1.65a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm4.15 7.1 4.1 4.1-1.17 1.17-4.1-4.1 1.17-1.17Z" />
-            </svg>
-            <span class="cuts-search__toggle-text">Search</span>
-          </button>
-
-          <div id="cuts-search-panel" class="cuts-search__panel" hidden>
-            <label class="cuts-search__label" for="cuts-search-input">Search cuts</label>
-            <div class="cuts-search__field">
-              <input
-                id="cuts-search-input"
-                class="cuts-search__input"
-                type="text"
-                inputmode="search"
-                placeholder="Ribeye, Picanha, Secreto..."
-                autocomplete="off"
-                spellcheck="false"
-                data-cuts-search-input
-                aria-describedby="cuts-search-status"
-              />
-              <button class="cuts-search__clear" type="button" data-cuts-search-clear aria-label="Clear search" hidden>
-                ×
-              </button>
-            </div>
-            <p id="cuts-search-status" class="cuts-search__status" data-cuts-search-status aria-live="polite">
-              Showing all selected cuts.
-            </p>
-          </div>
-        </div>
-        <!-- SECTION_4_CUT_SEARCH_UI_END -->
-
         <div class="cuts-grid">
 
           <!-- SECTION_4_CUT_SCROLL_START -->
@@ -315,7 +298,7 @@ app.innerHTML = `
 
             <section class="cut-group cut-group--wagyu-beef" aria-labelledby="cuts-wagyu-beef-title">
               <div class="cut-group__head">
-            <h3 id="cuts-wagyu-beef-title">WAGYU / BEEF</h3>
+            <h3 id="cuts-wagyu-beef-title">WAGYU</h3>
               </div>
               <div class="cut-group__grid">
                 <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
@@ -1015,14 +998,12 @@ requestAnimationFrame(() => {
   // SECTION_4_CUT_SEARCH_LOGIC_START
   const initCutsSearch = () => {
     const root = document.querySelector("[data-cuts-search]");
-    const toggleButton = document.querySelector("[data-cuts-search-toggle]");
-    const panel = document.querySelector("#cuts-search-panel");
     const input = document.querySelector("[data-cuts-search-input]");
     const clearButton = document.querySelector("[data-cuts-search-clear]");
     const status = document.querySelector("[data-cuts-search-status]");
     const cutScroll = document.querySelector(".panel-cuts .cut-scroll");
 
-    if (!root || !toggleButton || !panel || !input || !cutScroll) {
+    if (!root || !input || !cutScroll) {
       return;
     }
 
@@ -1039,7 +1020,7 @@ requestAnimationFrame(() => {
       }
 
       if (normalizedGroupTitle.includes("wagyu") || normalizedGroupTitle.includes("beef")) {
-        return "wagyu beef black opal mayura robbins island wanderer";
+        return "wagyu black opal mayura robbins island wanderer";
       }
 
       return "";
@@ -1081,14 +1062,6 @@ requestAnimationFrame(() => {
       }
     };
 
-    const setCardVisibility = (card, isVisible) => {
-      forceElementVisibility(card, isVisible, "is-cut-search-hidden");
-    };
-
-    const setGroupVisibility = (group, isVisible) => {
-      forceElementVisibility(group, isVisible, "is-cut-search-empty");
-    };
-
     const setFilter = (rawQuery = "") => {
       const query = rawQuery.trim().toLowerCase();
       let visibleCount = 0;
@@ -1097,7 +1070,7 @@ requestAnimationFrame(() => {
         const searchText = card.dataset.cutSearchText || "";
         const isVisible = query.length === 0 || searchText.includes(query);
 
-        setCardVisibility(card, isVisible);
+        forceElementVisibility(card, isVisible, "is-cut-search-hidden");
 
         if (isVisible) {
           visibleCount += 1;
@@ -1109,14 +1082,10 @@ requestAnimationFrame(() => {
           (card) => !card.matches("[data-product-list-trigger]") && !card.hidden,
         ).length;
 
-        setGroupVisibility(group, query.length === 0 || visibleCards > 0);
+        forceElementVisibility(group, query.length === 0 || visibleCards > 0, "is-cut-search-empty");
       });
 
-      root.classList.toggle("has-cuts-search-results", query.length > 0);
-
       if (status) {
-        status.hidden = false;
-
         if (query.length === 0) {
           status.textContent = "Showing all selected cuts.";
         } else if (visibleCount === 1) {
@@ -1128,10 +1097,9 @@ requestAnimationFrame(() => {
         }
       }
 
-      cutScroll.scrollTo({
-        top: 0,
-        behavior: "auto",
-      });
+      if (query.length > 0) {
+        cutScroll.scrollTo({ top: 0, behavior: "auto" });
+      }
     };
 
     const syncClearButton = () => {
@@ -1151,46 +1119,12 @@ requestAnimationFrame(() => {
       syncClearButton();
     };
 
-    const openSearch = () => {
-      root.classList.add("is-cuts-search-open");
-      panel.hidden = false;
-      toggleButton.setAttribute("aria-expanded", "true");
-      toggleButton.setAttribute("aria-label", "Close cut search");
-
-      requestAnimationFrame(() => {
-        input.focus();
-      });
-    };
-
-    const closeSearch = () => {
-      resetSearch();
-      root.classList.remove("is-cuts-search-open");
-      panel.hidden = true;
-      toggleButton.setAttribute("aria-expanded", "false");
-      toggleButton.setAttribute("aria-label", "Open cut search");
-      toggleButton.focus();
-    };
-
-    toggleButton.addEventListener("click", () => {
-      if (root.classList.contains("is-cuts-search-open")) {
-        closeSearch();
-        return;
-      }
-
-      openSearch();
-    });
-
     input.addEventListener("input", applyLiveSearch);
 
-    clearButton?.addEventListener("click", () => {
-      resetSearch();
-      input.focus();
-    });
-
-    root.addEventListener(
+    input.addEventListener(
       "keydown",
       (event) => {
-        if (!root.contains(event.target)) {
+        if (event.target !== input) {
           return;
         }
 
@@ -1203,20 +1137,22 @@ requestAnimationFrame(() => {
         if (event.key === "Escape") {
           event.preventDefault();
           event.stopPropagation();
-          closeSearch();
+          resetSearch();
+          input.blur();
           return;
         }
 
-        if (event.key === "Backspace") {
+        if (event.key === "Backspace" || event.key === "Delete") {
           event.stopPropagation();
-
-          if (event.target !== input) {
-            event.preventDefault();
-          }
         }
       },
       true,
     );
+
+    clearButton?.addEventListener("click", () => {
+      resetSearch();
+      input.focus();
+    });
 
     resetSearch();
   };
