@@ -8950,3 +8950,39 @@ body.selected-cut-modal-open .global-contact-cta {
   text-transform: uppercase;
 }
 /* ROUND3_SELECTED_CUT_MARBLING_END */
+/* ROUND3_HERO_LOGO_TITLE_POLISH_START */
+.scene-hero .hero-brand-mark {
+  width: clamp(2.9rem, 4.2vw, 4.25rem);
+  margin: 0 auto clamp(1.05rem, 1.45vw, 1.5rem);
+  opacity: 0.92;
+}
+
+.scene-hero .hero-brand-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+.scene-hero .hero-title {
+  font-size: clamp(2.72rem, 5.8vw, 5.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.scene-hero .hero-title-line + .hero-title-line {
+  margin-top: 0.1em;
+}
+
+@media (max-width: 899px) {
+  .scene-hero .hero-brand-mark {
+    width: clamp(2.45rem, 11vw, 3.3rem);
+    margin-bottom: 0.92rem;
+  }
+
+  .scene-hero .hero-title {
+    font-size: clamp(2.08rem, 8.1vw, 2.82rem);
+    line-height: 0.98;
+  }
+}
+/* ROUND3_HERO_LOGO_TITLE_POLISH_END */

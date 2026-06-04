@@ -76,7 +76,13 @@ app.innerHTML = `
       <div class="scene-grain"></div>
 
       <div class="panel panel-hero">
-        <p class="eyebrow">Paragon Purveyors</p>
+        <div class="hero-brand-mark" aria-label="Paragon Purveyors">
+            <img
+              src="${assetPath("assets/brand/paragon-cow-mark.svg")}"
+              alt="Paragon Purveyors"
+              loading="eager"
+            />
+          </div>
 
         <h1 id="hero-title" class="hero-title">
           <span class="hero-title-line">Premium Provisions</span>
