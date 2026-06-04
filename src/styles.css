@@ -9081,3 +9081,47 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* ROUND3_PROVIDER_MODAL_INQUIRY_CTA_END */
+
+
+
+/* ROUND3_TRI_TIP_CARD_IMAGE_FIT_START */
+.cut-card--tri-tip .cut-card-image {
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: 56%;
+  width: clamp(190px, 16vw, 250px);
+  height: 140%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center center;
+  transform: translate(-50%, -50%) scale(1.12);
+  transform-origin: center center;
+}
+
+.cut-card--tri-tip:hover .cut-card-image,
+.cut-card--tri-tip:focus-visible .cut-card-image {
+  transform: translate(-50%, -50%) scale(1.16);
+}
+
+@media (max-width: 900px) {
+  .cut-card--tri-tip .cut-card-image {
+    left: 58%;
+    width: 170px;
+    height: 132%;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  .cut-card--tri-tip:hover .cut-card-image,
+  .cut-card--tri-tip:focus-visible .cut-card-image {
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cut-card--tri-tip:hover .cut-card-image,
+  .cut-card--tri-tip:focus-visible .cut-card-image {
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+/* ROUND3_TRI_TIP_CARD_IMAGE_FIT_END */
