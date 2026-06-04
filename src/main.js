@@ -2813,3 +2813,445 @@ if (document.readyState === "loading") {
   initRound3Section4SearchPolish();
 }
 /* ROUND3_SECTION4_SEARCH_POLISH_JS_END */
+/* ROUND4_CONTACT_MESSAGE_SCROLL_CONTAINMENT_START */
+const initContactMessageScrollContainment = () => {
+  const messageNode = document.querySelector("[data-inquiry-message]");
+
+  if (!messageNode) {
+    return;
+  }
+
+  const normalizeWheelDelta = (event) => {
+    if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+      return event.deltaY * 18;
+    }
+
+    if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+      return event.deltaY * messageNode.clientHeight;
+    }
+
+    return event.deltaY;
+  };
+
+  messageNode.addEventListener(
+    "wheel",
+    (event) => {
+      const maxScrollTop = Math.max(0, messageNode.scrollHeight - messageNode.clientHeight);
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (maxScrollTop <= 0) {
+        return;
+      }
+
+      const nextScrollTop = Math.min(
+        maxScrollTop,
+        Math.max(0, messageNode.scrollTop + normalizeWheelDelta(event)),
+      );
+
+      messageNode.scrollTop = nextScrollTop;
+    },
+    { passive: false },
+  );
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initContactMessageScrollContainment, { once: true });
+} else {
+  initContactMessageScrollContainment();
+}
+/* ROUND4_CONTACT_MESSAGE_SCROLL_CONTAINMENT_END */
+/* ROUND4_PROVIDER_MODAL_INQUIRY_SELECTION_START */
+const initProviderModalInquirySelection = () => {
+  const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
+
+  const getProviderModal = (target) => target?.closest?.(".product-list-modal") || document.getElementById("product-list-modal");
+
+  const getProviderRows = (modal) =>
+    Array.from(modal?.querySelectorAll?.(".product-list-table tbody tr[data-provider-inquiry-row]") || []);
+
+  const getSelectedProviderRows = (modal) =>
+    getProviderRows(modal).filter((row) => row.dataset.providerInquirySelected === "true");
+
+  const getProviderTitle = (modal) =>
+    normalizeText(modal?.querySelector?.("[data-product-list-title]")?.textContent) || "Selected Producer";
+
+  const getProviderSectionTitle = (row) =>
+    normalizeText(row.closest(".product-list-section")?.querySelector("h3")?.textContent);
+
+  const getProviderRowText = (row) => {
+    const cells = Array.from(row.cells)
+      .map((cell) => normalizeText(cell.innerText))
+      .filter(Boolean);
+
+    const sectionTitle = getProviderSectionTitle(row);
+    return [sectionTitle, ...cells].filter(Boolean).join(" · ");
+  };
+
+  const createProviderInquiryText = (modal) => {
+    const selectedRows = getSelectedProviderRows(modal);
+
+    if (!selectedRows.length) {
+      return "";
+    }
+
+    return [
+      "Hello Paragon Purveyors,",
+      "",
+      "I would like pricing and availability for the following selected products:",
+      "",
+      `Producer: ${getProviderTitle(modal)}`,
+      "",
+      "Products:",
+      selectedRows.map((row) => `- ${getProviderRowText(row)}`).join("\n"),
+      "",
+      "Thank you.",
+    ].join("\n");
+  };
+
+  const writeTextToClipboard = async (value) => {
+    if (navigator.clipboard?.writeText && window.isSecureContext) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const fallback = document.createElement("textarea");
+    fallback.value = value;
+    fallback.setAttribute("readonly", "");
+    fallback.style.position = "fixed";
+    fallback.style.left = "-9999px";
+    fallback.style.top = "0";
+    document.body.appendChild(fallback);
+    fallback.select();
+
+    const copied = document.execCommand("copy");
+    fallback.remove();
+
+    if (!copied) {
+      throw new Error("Clipboard copy failed.");
+    }
+  };
+
+  const fillContactInquiryMessage = (message) => {
+    const messageNode = document.querySelector("[data-inquiry-message]");
+
+    if (!messageNode) {
+      return false;
+    }
+
+    messageNode.value = message;
+    messageNode.dispatchEvent(new Event("input", { bubbles: true }));
+    messageNode.dispatchEvent(new Event("change", { bubbles: true }));
+    messageNode.focus({ preventScroll: true });
+
+    return true;
+  };
+
+  const getOrCreateProviderInquirySheet = (modal) => {
+    let sheet = modal.querySelector("[data-provider-inquiry-sheet]");
+
+    if (sheet) {
+      return sheet;
+    }
+
+    sheet = document.createElement("aside");
+    sheet.className = "provider-modal-inquiry-sheet";
+    sheet.setAttribute("data-provider-inquiry-sheet", "");
+    sheet.setAttribute("aria-label", "Producer inquiry selection");
+    sheet.hidden = true;
+
+    sheet.innerHTML = `
+      <div class="provider-modal-inquiry-sheet__copy">
+        <p class="provider-modal-inquiry-sheet__kicker">Inquiry for</p>
+        <h3 class="provider-modal-inquiry-sheet__title" data-provider-inquiry-title>Selected Producer</h3>
+        <p class="provider-modal-inquiry-sheet__context" data-provider-inquiry-context>Select one or more product options to include.</p>
+      </div>
+
+      <div class="provider-modal-inquiry-sheet__actions">
+        <button class="provider-modal-inquiry-sheet__action provider-modal-inquiry-sheet__action--copy" type="button" data-provider-inquiry-copy>
+          Copy Product Details
+        </button>
+        <button class="provider-modal-inquiry-sheet__action provider-modal-inquiry-sheet__action--primary" type="button" data-provider-inquiry-contact>
+          Continue to Contact
+        </button>
+        <button class="provider-modal-inquiry-sheet__action provider-modal-inquiry-sheet__action--quiet" type="button" data-provider-inquiry-dismiss>
+          Keep Browsing
+        </button>
+      </div>
+
+      <p class="provider-modal-inquiry-sheet__feedback" data-provider-inquiry-feedback hidden></p>
+    `;
+
+    const ctaWrap = modal.querySelector(".provider-modal-inquiry-cta-wrap");
+    if (ctaWrap) {
+      ctaWrap.insertAdjacentElement("afterend", sheet);
+    } else {
+      modal.querySelector("[data-product-list-body]")?.append(sheet);
+    }
+
+    return sheet;
+  };
+
+  const setProviderFeedback = (modal, message) => {
+    const feedback = modal.querySelector("[data-provider-inquiry-feedback]");
+
+    if (!feedback) {
+      return;
+    }
+
+    feedback.textContent = message || "";
+    feedback.hidden = !message;
+  };
+
+  const syncProviderInquiryState = (modal) => {
+    const selectedCount = getSelectedProviderRows(modal).length;
+    const totalCount = getProviderRows(modal).length;
+
+    const titleNode = modal.querySelector("[data-provider-inquiry-title]");
+    const contextNode = modal.querySelector("[data-provider-inquiry-context]");
+    const copyButton = modal.querySelector("[data-provider-inquiry-copy]");
+    const contactButton = modal.querySelector("[data-provider-inquiry-contact]");
+
+    if (titleNode) {
+      titleNode.textContent = getProviderTitle(modal);
+    }
+
+    if (contextNode) {
+      contextNode.textContent =
+        selectedCount > 0
+          ? `${selectedCount} selected ${selectedCount === 1 ? "item" : "items"}`
+          : `Select one or more product options to include. ${totalCount} available ${totalCount === 1 ? "item" : "items"}.`;
+    }
+
+    [copyButton, contactButton].forEach((button) => {
+      if (!button) {
+        return;
+      }
+
+      button.disabled = selectedCount === 0;
+      button.setAttribute("aria-disabled", String(selectedCount === 0));
+    });
+  };
+
+  const setupProviderInquiryRows = (modal) => {
+    Array.from(modal.querySelectorAll(".product-list-table tbody tr")).forEach((row, index) => {
+      const cells = Array.from(row.cells);
+      const lastCell = cells[cells.length - 1];
+
+      if (!cells.length || !lastCell) {
+        return;
+      }
+
+      row.dataset.providerInquiryRow = String(index);
+      row.dataset.providerInquirySelected = "false";
+      row.classList.add("provider-modal-table-row--selectable");
+      row.setAttribute("aria-selected", "false");
+      row.setAttribute("aria-label", `Select product option: ${getProviderRowText(row)}`);
+
+      let marker = row.querySelector(".provider-modal-row-select");
+      if (!marker) {
+        marker = document.createElement("span");
+        marker.className = "provider-modal-row-select";
+        marker.setAttribute("aria-hidden", "true");
+        lastCell.append(marker);
+      }
+    });
+  };
+
+  const enterProviderSelectionMode = (modal) => {
+    setupProviderInquiryRows(modal);
+    modal.classList.add("product-list-modal--selecting-products");
+
+    getProviderRows(modal).forEach((row) => {
+      row.setAttribute("tabindex", "0");
+    });
+
+    syncProviderInquiryState(modal);
+  };
+
+  const exitProviderSelectionMode = (modal) => {
+    modal.classList.remove("product-list-modal--selecting-products");
+
+    getProviderRows(modal).forEach((row) => {
+      row.classList.remove("is-provider-inquiry-selected");
+      row.dataset.providerInquirySelected = "false";
+      row.removeAttribute("tabindex");
+      row.setAttribute("aria-selected", "false");
+    });
+
+    setProviderFeedback(modal, "");
+    syncProviderInquiryState(modal);
+  };
+
+  const openProviderInquirySheet = (modal) => {
+    const sheet = getOrCreateProviderInquirySheet(modal);
+
+    enterProviderSelectionMode(modal);
+
+    sheet.hidden = false;
+
+    window.requestAnimationFrame(() => {
+      sheet.classList.add("is-visible");
+      const focusTarget = getProviderRows(modal)[0] || sheet.querySelector("[data-provider-inquiry-dismiss]");
+      focusTarget?.focus({ preventScroll: true });
+    });
+  };
+
+  const closeProviderInquirySheet = (modal) => {
+    const sheet = modal.querySelector("[data-provider-inquiry-sheet]");
+
+    if (!sheet) {
+      return;
+    }
+
+    sheet.classList.remove("is-visible");
+    sheet.hidden = true;
+    exitProviderSelectionMode(modal);
+  };
+
+  const toggleProviderInquiryRow = (row) => {
+    const modal = getProviderModal(row);
+
+    if (!modal?.classList.contains("product-list-modal--selecting-products")) {
+      return;
+    }
+
+    const nextState = row.dataset.providerInquirySelected !== "true";
+    row.dataset.providerInquirySelected = String(nextState);
+    row.classList.toggle("is-provider-inquiry-selected", nextState);
+    row.setAttribute("aria-selected", String(nextState));
+
+    syncProviderInquiryState(modal);
+    setProviderFeedback(modal, nextState ? "Product option selected." : "Product option removed.");
+  };
+
+  const getPreparedProviderInquiryText = (modal) => {
+    const inquiryText = createProviderInquiryText(modal);
+
+    if (!inquiryText) {
+      setProviderFeedback(modal, "Select one or more product options first.");
+      return "";
+    }
+
+    return inquiryText;
+  };
+
+  const copyProviderInquiryDetails = async (modal) => {
+    const inquiryText = getPreparedProviderInquiryText(modal);
+
+    if (!inquiryText) {
+      return;
+    }
+
+    try {
+      await writeTextToClipboard(inquiryText);
+      setProviderFeedback(modal, "Selected product details copied.");
+    } catch {
+      setProviderFeedback(modal, "Copy unavailable. Continue to Contact will still fill the message.");
+    }
+  };
+
+  const continueProviderInquiryToContact = (modal) => {
+    const inquiryText = getPreparedProviderInquiryText(modal);
+
+    if (!inquiryText) {
+      return;
+    }
+
+    const closeButton = modal.querySelector("[data-product-list-close]");
+    closeButton?.click();
+
+    window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent("paragon:navigate-to-section", {
+          detail: {
+            sectionId: "inquiry",
+            focusId: "inquiry-title",
+            source: "provider-modal-inquiry-sheet",
+            delay: 80,
+          },
+        }),
+      );
+
+      window.setTimeout(() => {
+        fillContactInquiryMessage(inquiryText);
+      }, 340);
+    }, 180);
+  };
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const cta = event.target.closest(".provider-modal-inquiry-cta");
+      const modal = getProviderModal(event.target);
+
+      if (cta && modal) {
+        event.preventDefault();
+        event.stopPropagation();
+        openProviderInquirySheet(modal);
+        return;
+      }
+
+      const copyButton = event.target.closest("[data-provider-inquiry-copy]");
+      if (copyButton && modal) {
+        event.preventDefault();
+        copyProviderInquiryDetails(modal);
+        return;
+      }
+
+      const contactButton = event.target.closest("[data-provider-inquiry-contact]");
+      if (contactButton && modal) {
+        event.preventDefault();
+        continueProviderInquiryToContact(modal);
+        return;
+      }
+
+      const dismissButton = event.target.closest("[data-provider-inquiry-dismiss]");
+      if (dismissButton && modal) {
+        event.preventDefault();
+        closeProviderInquirySheet(modal);
+        return;
+      }
+
+      const row = event.target.closest("[data-provider-inquiry-row]");
+      if (row && modal?.classList.contains("product-list-modal--selecting-products")) {
+        event.preventDefault();
+        toggleProviderInquiryRow(row);
+      }
+    },
+    true,
+  );
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      const row = event.target.closest?.("[data-provider-inquiry-row]");
+      const modal = getProviderModal(event.target);
+
+      if (!row || !modal?.classList.contains("product-list-modal--selecting-products")) {
+        return;
+      }
+
+      event.preventDefault();
+      toggleProviderInquiryRow(row);
+    },
+    true,
+  );
+
+  const productListModal = document.getElementById("product-list-modal");
+  productListModal?.addEventListener("close", () => {
+    closeProviderInquirySheet(productListModal);
+  });
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initProviderModalInquirySelection, { once: true });
+} else {
+  initProviderModalInquirySelection();
+}
+/* ROUND4_PROVIDER_MODAL_INQUIRY_SELECTION_END */

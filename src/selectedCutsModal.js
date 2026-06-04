@@ -570,6 +570,35 @@ export function initSelectedCutsModal() {
               <span class="selected-cut-modal__cta-label">Request Pricing and Availability</span>
             </button>
           </div>
+
+          <!-- ROUND4_SELECTED_CUT_INQUIRY_SHEET_MARKUP_START -->
+          <aside
+            class="selected-cut-modal__inquiry-sheet"
+            data-selected-cut-inquiry-sheet
+            aria-label="Selected cut inquiry context"
+            hidden
+          >
+            <div class="selected-cut-modal__inquiry-copy">
+              <p class="selected-cut-modal__inquiry-kicker">Inquiry for</p>
+              <h3 class="selected-cut-modal__inquiry-title" data-selected-cut-inquiry-title>Selected Cut</h3>
+              <p class="selected-cut-modal__inquiry-context" data-selected-cut-inquiry-context></p>
+            </div>
+
+            <div class="selected-cut-modal__inquiry-actions">
+              <button class="selected-cut-modal__inquiry-action selected-cut-modal__inquiry-action--copy" type="button" data-selected-cut-inquiry-copy>
+                Copy Product Details
+              </button>
+              <button class="selected-cut-modal__inquiry-action selected-cut-modal__inquiry-action--primary" type="button" data-selected-cut-inquiry-contact>
+                Continue to Contact
+              </button>
+              <button class="selected-cut-modal__inquiry-action selected-cut-modal__inquiry-action--quiet" type="button" data-selected-cut-inquiry-dismiss>
+                Keep Browsing
+              </button>
+            </div>
+
+            <p class="selected-cut-modal__inquiry-feedback" data-selected-cut-inquiry-feedback hidden></p>
+          </aside>
+          <!-- ROUND4_SELECTED_CUT_INQUIRY_SHEET_MARKUP_END -->
         </section>
       </div>
     </div>
@@ -600,6 +629,275 @@ export function initSelectedCutsModal() {
   const imageNode = modal.querySelector("[data-selected-cut-image]");
   const fallbackNode = modal.querySelector("[data-selected-cut-fallback]");
   const inquiryButton = modal.querySelector("[data-selected-cut-inquiry]");
+  const inquirySheet = modal.querySelector("[data-selected-cut-inquiry-sheet]");
+  const inquiryTitleNode = modal.querySelector("[data-selected-cut-inquiry-title]");
+  const inquiryContextNode = modal.querySelector("[data-selected-cut-inquiry-context]");
+  const inquiryCopyButton = modal.querySelector("[data-selected-cut-inquiry-copy]");
+  const inquiryContactButton = modal.querySelector("[data-selected-cut-inquiry-contact]");
+  const inquiryDismissButton = modal.querySelector("[data-selected-cut-inquiry-dismiss]");
+  const inquiryFeedbackNode = modal.querySelector("[data-selected-cut-inquiry-feedback]");
+  // ROUND4_SELECTED_CUT_INQUIRY_SHEET_HELPERS_START
+  let activeCut = null;
+  let activeInquiryText = "";
+
+  const getInquiryRows = (cut) => (Array.isArray(cut?.rows) ? cut.rows : []);
+
+  const getSelectableInquiryRows = () =>
+    Array.from(rowsNode.querySelectorAll("[data-selected-cut-inquiry-row]"));
+
+  const getSelectedInquiryRows = () =>
+    getSelectableInquiryRows().filter((row) => row.dataset.inquirySelected === "true");
+
+  const hasSelectedInquiryRows = () => getSelectedInquiryRows().length > 0;
+
+  const isProductSelectionMode = () => modal.classList.contains("selected-cut-modal--selecting-products");
+
+  const formatInquiryRow = (row) =>
+    Array.from(row.cells)
+      .map((cell) => cell.innerText.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .join(" · ");
+
+  const createSelectedCutInquiryContext = (cut) => {
+    const selectedCount = getSelectedInquiryRows().length;
+    const totalCount = getSelectableInquiryRows().length || getInquiryRows(cut).length;
+
+    if (selectedCount > 0) {
+      return `${cut?.category || "Selected Cut"} · ${selectedCount} selected ${selectedCount === 1 ? "item" : "items"}`;
+    }
+
+    return `Select one or more product options to include. ${totalCount} available ${totalCount === 1 ? "item" : "items"}.`;
+  };
+
+  const createSelectedCutInquiryText = (cut) => {
+    const selectedRows = getSelectedInquiryRows();
+
+    if (!selectedRows.length) {
+      return "";
+    }
+
+    const tableRows = selectedRows.map(formatInquiryRow).filter(Boolean);
+
+    return [
+      "Hello Paragon Purveyors,",
+      "",
+      "I would like pricing and availability for the following selected products:",
+      "",
+      `Selected cut: ${cut?.title || "Selected Cut"}`,
+      cut?.category ? `Category: ${cut.category}` : "",
+      "",
+      "Products:",
+      tableRows.map((row) => `- ${row}`).join("\n"),
+      "",
+      "Thank you.",
+    ]
+      .filter((line) => line !== "")
+      .join("\n");
+  };
+
+  const setInquiryFeedback = (message) => {
+    if (!inquiryFeedbackNode) {
+      return;
+    }
+
+    inquiryFeedbackNode.textContent = message || "";
+    inquiryFeedbackNode.hidden = !message;
+  };
+
+  const syncInquiryActionState = () => {
+    const hasSelection = hasSelectedInquiryRows();
+
+    if (inquiryCopyButton) {
+      inquiryCopyButton.disabled = !hasSelection;
+      inquiryCopyButton.setAttribute("aria-disabled", String(!hasSelection));
+    }
+
+    if (inquiryContactButton) {
+      inquiryContactButton.disabled = !hasSelection;
+      inquiryContactButton.setAttribute("aria-disabled", String(!hasSelection));
+    }
+  };
+
+  const updateInquirySheetContent = () => {
+    if (!activeCut) {
+      return;
+    }
+
+    activeInquiryText = createSelectedCutInquiryText(activeCut);
+
+    if (inquiryTitleNode) {
+      inquiryTitleNode.textContent = activeCut.title || "Selected Cut";
+    }
+
+    if (inquiryContextNode) {
+      inquiryContextNode.textContent = createSelectedCutInquiryContext(activeCut);
+    }
+
+    syncInquiryActionState();
+  };
+
+  const enterProductSelectionMode = () => {
+    modal.classList.add("selected-cut-modal--selecting-products");
+
+    getSelectableInquiryRows().forEach((row) => {
+      row.setAttribute("tabindex", "0");
+      row.setAttribute("aria-selected", String(row.dataset.inquirySelected === "true"));
+    });
+  };
+
+  const exitProductSelectionMode = () => {
+    modal.classList.remove("selected-cut-modal--selecting-products");
+
+    getSelectableInquiryRows().forEach((row) => {
+      row.removeAttribute("tabindex");
+    });
+  };
+
+  const toggleInquiryRowSelection = (row, forceState = null) => {
+    if (!isProductSelectionMode() || !row || !row.matches("[data-selected-cut-inquiry-row]")) {
+      return;
+    }
+
+    const currentState = row.dataset.inquirySelected === "true";
+    const nextState = typeof forceState === "boolean" ? forceState : !currentState;
+
+    row.dataset.inquirySelected = String(nextState);
+    row.classList.toggle("is-inquiry-selected", nextState);
+    row.setAttribute("aria-selected", String(nextState));
+
+    updateInquirySheetContent();
+    setInquiryFeedback(nextState ? "Product option selected." : "Product option removed.");
+  };
+
+  const prepareInquiryRowSelection = (cut) => {
+    getSelectableInquiryRows().forEach((row) => {
+      row.classList.remove("is-inquiry-selected", "selected-cut-modal__table-row--selectable");
+      row.removeAttribute("data-selected-cut-inquiry-row");
+      row.removeAttribute("data-inquiry-selected");
+      row.removeAttribute("aria-selected");
+      row.removeAttribute("aria-label");
+      row.removeAttribute("tabindex");
+      row.querySelector(".selected-cut-modal__row-select")?.remove();
+    });
+
+    Array.from(rowsNode.querySelectorAll("tr")).forEach((row, index) => {
+      const cells = Array.from(row.cells);
+      const lastCell = cells[cells.length - 1];
+
+      if (!cells.length || !lastCell) {
+        return;
+      }
+
+      const rowLabel = cells.map((cell) => cell.innerText.replace(/\s+/g, " ").trim()).filter(Boolean).join(" · ");
+
+      row.dataset.selectedCutInquiryRow = String(index);
+      row.dataset.inquirySelected = "false";
+      row.classList.add("selected-cut-modal__table-row--selectable");
+      row.setAttribute("aria-label", `Select product option: ${rowLabel}`);
+
+      const marker = document.createElement("span");
+      marker.className = "selected-cut-modal__row-select";
+      marker.setAttribute("aria-hidden", "true");
+      lastCell.append(marker);
+    });
+
+    activeInquiryText = "";
+    exitProductSelectionMode();
+    updateInquirySheetContent();
+    setInquiryFeedback("");
+  };
+
+  const openSelectedCutInquirySheet = () => {
+    if (!inquirySheet || !activeCut) {
+      return;
+    }
+
+    enterProductSelectionMode();
+    updateInquirySheetContent();
+    inquirySheet.hidden = false;
+
+    window.requestAnimationFrame(() => {
+      inquirySheet.classList.add("is-visible");
+      const focusTarget = getSelectedInquiryRows()[0] || getSelectableInquiryRows()[0] || inquiryDismissButton;
+      focusTarget?.focus({ preventScroll: true });
+    });
+  };
+
+  const closeSelectedCutInquirySheet = () => {
+    if (!inquirySheet) {
+      return;
+    }
+
+    inquirySheet.classList.remove("is-visible");
+    inquirySheet.hidden = true;
+    exitProductSelectionMode();
+    setInquiryFeedback("");
+  };
+
+  const writeTextToClipboard = async (value) => {
+    if (navigator.clipboard?.writeText && window.isSecureContext) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const fallback = document.createElement("textarea");
+    fallback.value = value;
+    fallback.setAttribute("readonly", "");
+    fallback.style.position = "fixed";
+    fallback.style.left = "-9999px";
+    fallback.style.top = "0";
+    document.body.appendChild(fallback);
+    fallback.select();
+
+    const copied = document.execCommand("copy");
+    fallback.remove();
+
+    if (!copied) {
+      throw new Error("Clipboard copy failed.");
+    }
+  };
+
+  const getPreparedInquiryText = () => {
+    updateInquirySheetContent();
+
+    if (!activeInquiryText) {
+      setInquiryFeedback("Select one or more product options first.");
+      return "";
+    }
+
+    return activeInquiryText;
+  };
+
+  const copySelectedCutInquiryDetails = async () => {
+    const inquiryText = getPreparedInquiryText();
+
+    if (!inquiryText) {
+      return;
+    }
+
+    try {
+      await writeTextToClipboard(inquiryText);
+      setInquiryFeedback("Selected product details copied.");
+    } catch {
+      setInquiryFeedback("Copy unavailable. Continue to Contact will still fill the message.");
+    }
+  };
+
+  const fillContactInquiryMessage = (message) => {
+    const messageNode = document.querySelector("[data-inquiry-message]");
+
+    if (!messageNode) {
+      return false;
+    }
+
+    messageNode.value = message;
+    messageNode.dispatchEvent(new Event("input", { bubbles: true }));
+    messageNode.dispatchEvent(new Event("change", { bubbles: true }));
+    messageNode.focus({ preventScroll: true });
+
+    return true;
+  };
+  // ROUND4_SELECTED_CUT_INQUIRY_SHEET_HELPERS_END
 
   const openSelectedCut = (cutName, trigger) => {
     const cut = selectedCuts[cutName];
@@ -609,6 +907,12 @@ export function initSelectedCutsModal() {
     }
 
     lastTrigger = trigger || null;
+
+    // ROUND4_SELECTED_CUT_INQUIRY_ACTIVE_CUT_START
+    activeCut = cut;
+    activeInquiryText = "";
+    closeSelectedCutInquirySheet();
+    // ROUND4_SELECTED_CUT_INQUIRY_ACTIVE_CUT_END
 
     eyebrowNode.textContent = cut.eyebrow;
     titleNode.textContent = cut.title;
@@ -621,6 +925,10 @@ export function initSelectedCutsModal() {
       producersNode.innerHTML = createProducerProgramLinks(cutName);
     }
     rowsNode.innerHTML = createRows(cut.rows);
+
+    // ROUND4_SELECTED_CUT_ROW_SELECTION_SETUP_START
+    prepareInquiryRowSelection(cut);
+    // ROUND4_SELECTED_CUT_ROW_SELECTION_SETUP_END
     fallbackNode.textContent = cut.title;
 
     imageNode.hidden = false;
@@ -657,6 +965,12 @@ export function initSelectedCutsModal() {
   });
   const closeSelectedCut = () => {
     document.body.classList.remove("selected-cut-modal-open");
+
+    // ROUND4_SELECTED_CUT_INQUIRY_CLOSE_CLEANUP_START
+    closeSelectedCutInquirySheet();
+    activeCut = null;
+    activeInquiryText = "";
+    // ROUND4_SELECTED_CUT_INQUIRY_CLOSE_CLEANUP_END
 
     if (typeof modal.close === "function" && modal.open) {
       modal.close();
@@ -729,7 +1043,14 @@ export function initSelectedCutsModal() {
     true,
   );
   // CONNECTED_CATALOG_CUT_TO_PRODUCER_EVENTS_END
-  const goToInquiryFromSelectedCut = () => {
+  // ROUND4_SELECTED_CUT_INQUIRY_SHEET_NAV_START
+  const continueToInquiryFromSelectedCut = () => {
+    const inquiryText = getPreparedInquiryText();
+
+    if (!inquiryText) {
+      return;
+    }
+
     lastTrigger = null;
     closeSelectedCut();
 
@@ -744,10 +1065,52 @@ export function initSelectedCutsModal() {
           },
         }),
       );
+
+      window.setTimeout(() => {
+        fillContactInquiryMessage(inquiryText);
+      }, 340);
     }, 180);
   };
 
+  const goToInquiryFromSelectedCut = () => {
+    openSelectedCutInquirySheet();
+  };
+  // ROUND4_SELECTED_CUT_INQUIRY_SHEET_NAV_END
+  // ROUND4_SELECTED_CUT_INQUIRY_SHEET_EVENTS_START
   inquiryButton?.addEventListener("click", goToInquiryFromSelectedCut);
+  inquiryCopyButton?.addEventListener("click", copySelectedCutInquiryDetails);
+  inquiryContactButton?.addEventListener("click", continueToInquiryFromSelectedCut);
+  inquiryDismissButton?.addEventListener("click", closeSelectedCutInquirySheet);
+
+  rowsNode.addEventListener("click", (event) => {
+    if (!isProductSelectionMode()) {
+      return;
+    }
+
+    const row = event.target.closest("[data-selected-cut-inquiry-row]");
+
+    if (!row || !rowsNode.contains(row)) {
+      return;
+    }
+
+    toggleInquiryRowSelection(row);
+  });
+
+  rowsNode.addEventListener("keydown", (event) => {
+    if (!isProductSelectionMode() || (event.key !== "Enter" && event.key !== " ")) {
+      return;
+    }
+
+    const row = event.target.closest("[data-selected-cut-inquiry-row]");
+
+    if (!row || !rowsNode.contains(row)) {
+      return;
+    }
+
+    event.preventDefault();
+    toggleInquiryRowSelection(row);
+  });
+  // ROUND4_SELECTED_CUT_INQUIRY_SHEET_EVENTS_END
 
   closeButton?.addEventListener("click", closeSelectedCut);
 
