@@ -10379,3 +10379,31 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* ROUND4_ALL_CUTS_INQUIRY_CTA_SAFE_END */
+
+/* SECTION_4_ALL_CUTS_TITLE_SCALE_ONLY_START */
+/*
+  Keeps the original Section 4 header composition.
+  Only scales the headline down on wide/short displays so the All Cuts card
+  has enough visual room without changing the title shape into narrow columns.
+*/
+@media (min-width: 901px) and (max-height: 900px) {
+  .panel-cuts .cuts-title {
+    font-size: clamp(2.82rem, min(4.05vw, 8.15vh), 4.48rem) !important;
+    line-height: 0.9 !important;
+  }
+}
+
+@media (min-width: 1200px) and (max-height: 820px) {
+  .panel-cuts .cuts-title {
+    font-size: clamp(2.68rem, min(3.55vw, 7.75vh), 4rem) !important;
+    line-height: 0.9 !important;
+  }
+}
+
+@media (min-width: 1500px) and (max-height: 790px) {
+  .panel-cuts .cuts-title {
+    font-size: clamp(2.54rem, min(3.05vw, 7.35vh), 3.58rem) !important;
+    line-height: 0.9 !important;
+  }
+}
+/* SECTION_4_ALL_CUTS_TITLE_SCALE_ONLY_END */
