@@ -2862,8 +2862,46 @@ if (document.readyState === "loading") {
   initContactMessageScrollContainment();
 }
 /* ROUND4_CONTACT_MESSAGE_SCROLL_CONTAINMENT_END */
+
 /* ROUND4_PROVIDER_MODAL_INQUIRY_SELECTION_START */
 const initProviderModalInquirySelection = () => {
+  // ROUND4_PROVIDER_MODAL_TOP_INQUIRY_CTA_START
+  const createProviderTopInquiryCtaMarkup = () => `
+    <div class="provider-modal-top-inquiry-cta-wrap provider-modal-inquiry-cta-wrap--top" data-provider-inquiry-top>
+      <button
+        class="provider-modal-inquiry-cta provider-modal-inquiry-cta--top"
+        type="button"
+        aria-label="Request pricing and availability for this producer"
+      >
+        <span class="provider-modal-inquiry-cta__kicker">Ask about this program</span>
+        <span class="provider-modal-inquiry-cta__label">Request Pricing and Availability</span>
+      </button>
+    </div>
+  `;
+
+  const syncProviderTopInquiryCta = (modal) => {
+    if (!modal) {
+      return;
+    }
+
+    const modalBody = modal.querySelector("[data-product-list-body]") || modal.querySelector(".product-list-modal__body");
+
+    if (!modalBody) {
+      return;
+    }
+
+    let topCta = modal.querySelector("[data-provider-inquiry-top]");
+
+    if (!topCta) {
+      modalBody.insertAdjacentHTML("afterbegin", createProviderTopInquiryCtaMarkup());
+      topCta = modal.querySelector("[data-provider-inquiry-top]");
+    }
+
+    if (topCta && topCta.parentElement !== modalBody) {
+      modalBody.insertAdjacentElement("afterbegin", topCta);
+    }
+  };
+  // ROUND4_PROVIDER_MODAL_TOP_INQUIRY_CTA_END
   const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
 
   const getProviderModal = (target) => target?.closest?.(".product-list-modal") || document.getElementById("product-list-modal");
@@ -2873,6 +2911,16 @@ const initProviderModalInquirySelection = () => {
 
   const getSelectedProviderRows = (modal) =>
     getProviderRows(modal).filter((row) => row.dataset.providerInquirySelected === "true");
+
+  const isProviderInquiryConfirmed = (modal) => modal?.dataset.providerInquiryConfirmed === "true";
+
+  const setProviderInquiryConfirmed = (modal, value) => {
+    if (!modal) {
+      return;
+    }
+
+    modal.dataset.providerInquiryConfirmed = String(Boolean(value));
+  };
 
   const getProviderTitle = (modal) =>
     normalizeText(modal?.querySelector?.("[data-product-list-title]")?.textContent) || "Selected Producer";
@@ -2910,29 +2958,6 @@ const initProviderModalInquirySelection = () => {
     ].join("\n");
   };
 
-  const writeTextToClipboard = async (value) => {
-    if (navigator.clipboard?.writeText && window.isSecureContext) {
-      await navigator.clipboard.writeText(value);
-      return;
-    }
-
-    const fallback = document.createElement("textarea");
-    fallback.value = value;
-    fallback.setAttribute("readonly", "");
-    fallback.style.position = "fixed";
-    fallback.style.left = "-9999px";
-    fallback.style.top = "0";
-    document.body.appendChild(fallback);
-    fallback.select();
-
-    const copied = document.execCommand("copy");
-    fallback.remove();
-
-    if (!copied) {
-      throw new Error("Clipboard copy failed.");
-    }
-  };
-
   const fillContactInquiryMessage = (message) => {
     const messageNode = document.querySelector("[data-inquiry-message]");
 
@@ -2947,11 +2972,27 @@ const initProviderModalInquirySelection = () => {
 
     return true;
   };
-
   const getOrCreateProviderInquirySheet = (modal) => {
+    const getBottomCtaWrap = () =>
+      modal.querySelector(".provider-modal-inquiry-cta-wrap:not([data-provider-inquiry-top])") ||
+      modal.querySelector(".provider-modal-inquiry-cta-wrap:not(.provider-modal-inquiry-cta-wrap--top)");
+
+    const insertSheetInCorrectLocation = (sheetNode) => {
+      const bottomCtaWrap = getBottomCtaWrap();
+      const modalBody = modal.querySelector("[data-product-list-body]") || modal.querySelector(".product-list-modal__body");
+
+      if (bottomCtaWrap) {
+        bottomCtaWrap.insertAdjacentElement("afterend", sheetNode);
+        return;
+      }
+
+      modalBody?.append(sheetNode);
+    };
+
     let sheet = modal.querySelector("[data-provider-inquiry-sheet]");
 
     if (sheet) {
+      insertSheetInCorrectLocation(sheet);
       return sheet;
     }
 
@@ -2965,15 +3006,15 @@ const initProviderModalInquirySelection = () => {
       <div class="provider-modal-inquiry-sheet__copy">
         <p class="provider-modal-inquiry-sheet__kicker">Inquiry for</p>
         <h3 class="provider-modal-inquiry-sheet__title" data-provider-inquiry-title>Selected Producer</h3>
-        <p class="provider-modal-inquiry-sheet__context" data-provider-inquiry-context>Select one or more product options to include.</p>
+        <p class="provider-modal-inquiry-sheet__context" data-provider-inquiry-context>Select the product rows you want included in your inquiry.</p>
       </div>
 
       <div class="provider-modal-inquiry-sheet__actions">
         <button class="provider-modal-inquiry-sheet__action provider-modal-inquiry-sheet__action--copy" type="button" data-provider-inquiry-copy>
-          Copy Product Details
+          Confirm Selected Items
         </button>
         <button class="provider-modal-inquiry-sheet__action provider-modal-inquiry-sheet__action--primary" type="button" data-provider-inquiry-contact>
-          Continue to Contact
+          Create Inquiry Message
         </button>
         <button class="provider-modal-inquiry-sheet__action provider-modal-inquiry-sheet__action--quiet" type="button" data-provider-inquiry-dismiss>
           Keep Browsing
@@ -2983,12 +3024,7 @@ const initProviderModalInquirySelection = () => {
       <p class="provider-modal-inquiry-sheet__feedback" data-provider-inquiry-feedback hidden></p>
     `;
 
-    const ctaWrap = modal.querySelector(".provider-modal-inquiry-cta-wrap");
-    if (ctaWrap) {
-      ctaWrap.insertAdjacentElement("afterend", sheet);
-    } else {
-      modal.querySelector("[data-product-list-body]")?.append(sheet);
-    }
+    insertSheetInCorrectLocation(sheet);
 
     return sheet;
   };
@@ -3007,11 +3043,12 @@ const initProviderModalInquirySelection = () => {
   const syncProviderInquiryState = (modal) => {
     const selectedCount = getSelectedProviderRows(modal).length;
     const totalCount = getProviderRows(modal).length;
+    const confirmed = isProviderInquiryConfirmed(modal);
 
     const titleNode = modal.querySelector("[data-provider-inquiry-title]");
     const contextNode = modal.querySelector("[data-provider-inquiry-context]");
-    const copyButton = modal.querySelector("[data-provider-inquiry-copy]");
-    const contactButton = modal.querySelector("[data-provider-inquiry-contact]");
+    const confirmButton = modal.querySelector("[data-provider-inquiry-copy]");
+    const messageButton = modal.querySelector("[data-provider-inquiry-contact]");
 
     if (titleNode) {
       titleNode.textContent = getProviderTitle(modal);
@@ -3019,19 +3056,22 @@ const initProviderModalInquirySelection = () => {
 
     if (contextNode) {
       contextNode.textContent =
-        selectedCount > 0
-          ? `${selectedCount} selected ${selectedCount === 1 ? "item" : "items"}`
-          : `Select one or more product options to include. ${totalCount} available ${totalCount === 1 ? "item" : "items"}.`;
+        selectedCount > 0 && confirmed
+          ? `${selectedCount} selected ${selectedCount === 1 ? "item" : "items"} confirmed. Create the inquiry message when ready.`
+          : selectedCount > 0
+            ? `${selectedCount} selected ${selectedCount === 1 ? "item" : "items"}. Confirm selected items to continue.`
+            : `Select the product rows you want included in your inquiry. ${totalCount} available ${totalCount === 1 ? "item" : "items"}.`;
     }
 
-    [copyButton, contactButton].forEach((button) => {
-      if (!button) {
-        return;
-      }
+    if (confirmButton) {
+      confirmButton.disabled = selectedCount === 0;
+      confirmButton.setAttribute("aria-disabled", String(selectedCount === 0));
+    }
 
-      button.disabled = selectedCount === 0;
-      button.setAttribute("aria-disabled", String(selectedCount === 0));
-    });
+    if (messageButton) {
+      messageButton.disabled = selectedCount === 0 || !confirmed;
+      messageButton.setAttribute("aria-disabled", String(selectedCount === 0 || !confirmed));
+    }
   };
 
   const setupProviderInquiryRows = (modal) => {
@@ -3061,6 +3101,7 @@ const initProviderModalInquirySelection = () => {
 
   const enterProviderSelectionMode = (modal) => {
     setupProviderInquiryRows(modal);
+    setProviderInquiryConfirmed(modal, false);
     modal.classList.add("product-list-modal--selecting-products");
 
     getProviderRows(modal).forEach((row) => {
@@ -3080,10 +3121,46 @@ const initProviderModalInquirySelection = () => {
       row.setAttribute("aria-selected", "false");
     });
 
+    setProviderInquiryConfirmed(modal, false);
     setProviderFeedback(modal, "");
     syncProviderInquiryState(modal);
   };
 
+  // ROUND4_PROVIDER_MODAL_INQUIRY_AUTOSCROLL_START
+  const scrollProviderInquirySheetIntoView = (modal, sheet) => {
+    if (!modal || !sheet) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const behavior = reduceMotion ? "auto" : "smooth";
+    const scrollNodes = [
+      modal.querySelector("[data-product-list-body]"),
+      modal.querySelector(".product-list-modal__body"),
+      modal.querySelector(".product-list-modal__panel"),
+      modal,
+    ].filter(Boolean);
+
+    const scrollNode =
+      scrollNodes.find((node) => node.scrollHeight > node.clientHeight + 4) || scrollNodes[0];
+
+    window.requestAnimationFrame(() => {
+      if (scrollNode && typeof scrollNode.scrollTo === "function") {
+        scrollNode.scrollTo({
+          top: scrollNode.scrollHeight,
+          left: 0,
+          behavior,
+        });
+      }
+
+      sheet.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+        behavior,
+      });
+    });
+  };
+  // ROUND4_PROVIDER_MODAL_INQUIRY_AUTOSCROLL_END
   const openProviderInquirySheet = (modal) => {
     const sheet = getOrCreateProviderInquirySheet(modal);
 
@@ -3093,6 +3170,7 @@ const initProviderModalInquirySelection = () => {
 
     window.requestAnimationFrame(() => {
       sheet.classList.add("is-visible");
+      scrollProviderInquirySheetIntoView(modal, sheet);
       const focusTarget = getProviderRows(modal)[0] || sheet.querySelector("[data-provider-inquiry-dismiss]");
       focusTarget?.focus({ preventScroll: true });
     });
@@ -3121,9 +3199,10 @@ const initProviderModalInquirySelection = () => {
     row.dataset.providerInquirySelected = String(nextState);
     row.classList.toggle("is-provider-inquiry-selected", nextState);
     row.setAttribute("aria-selected", String(nextState));
+    setProviderInquiryConfirmed(modal, false);
 
     syncProviderInquiryState(modal);
-    setProviderFeedback(modal, nextState ? "Product option selected." : "Product option removed.");
+    setProviderFeedback(modal, nextState ? "Product option selected. Confirm selected items to continue." : "Product option removed.");
   };
 
   const getPreparedProviderInquiryText = (modal) => {
@@ -3137,25 +3216,29 @@ const initProviderModalInquirySelection = () => {
     return inquiryText;
   };
 
-  const copyProviderInquiryDetails = async (modal) => {
+  const confirmProviderInquiryDetails = (modal) => {
     const inquiryText = getPreparedProviderInquiryText(modal);
 
     if (!inquiryText) {
       return;
     }
 
-    try {
-      await writeTextToClipboard(inquiryText);
-      setProviderFeedback(modal, "Selected product details copied.");
-    } catch {
-      setProviderFeedback(modal, "Copy unavailable. Continue to Contact will still fill the message.");
-    }
+    setProviderInquiryConfirmed(modal, true);
+    syncProviderInquiryState(modal);
+    setProviderFeedback(modal, "Selected items confirmed. Create the inquiry message when ready.");
+    modal.querySelector("[data-provider-inquiry-contact]")?.focus({ preventScroll: true });
   };
 
   const continueProviderInquiryToContact = (modal) => {
     const inquiryText = getPreparedProviderInquiryText(modal);
 
     if (!inquiryText) {
+      return;
+    }
+
+    if (!isProviderInquiryConfirmed(modal)) {
+      setProviderFeedback(modal, "Confirm selected items first.");
+      modal.querySelector("[data-provider-inquiry-copy]")?.focus({ preventScroll: true });
       return;
     }
 
@@ -3193,10 +3276,10 @@ const initProviderModalInquirySelection = () => {
         return;
       }
 
-      const copyButton = event.target.closest("[data-provider-inquiry-copy]");
-      if (copyButton && modal) {
+      const confirmButton = event.target.closest("[data-provider-inquiry-copy]");
+      if (confirmButton && modal) {
         event.preventDefault();
-        copyProviderInquiryDetails(modal);
+        confirmProviderInquiryDetails(modal);
         return;
       }
 
@@ -3244,6 +3327,23 @@ const initProviderModalInquirySelection = () => {
   );
 
   const productListModal = document.getElementById("product-list-modal");
+
+  // ROUND4_PROVIDER_MODAL_TOP_INQUIRY_CTA_OBSERVER_START
+  syncProviderTopInquiryCta(productListModal);
+
+  if (productListModal && "MutationObserver" in window) {
+    const providerTopInquiryObserver = new MutationObserver(() => {
+      syncProviderTopInquiryCta(productListModal);
+    });
+
+    providerTopInquiryObserver.observe(productListModal, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "open"],
+    });
+  }
+  // ROUND4_PROVIDER_MODAL_TOP_INQUIRY_CTA_OBSERVER_END
   productListModal?.addEventListener("close", () => {
     closeProviderInquirySheet(productListModal);
   });
