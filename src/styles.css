@@ -10480,3 +10480,65 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* SECTION_3_CTA_SAFE_COMPACT_END */
+
+/* ALL_CUTS_CENTERED_FOOTER_SHEET_START */
+/*
+  Centers the All Cuts inquiry CTA in the modal footer so the inquiry sheet
+  opens over the image area instead of covering the left index list.
+*/
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  justify-content: stretch !important;
+  width: 100% !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry {
+  grid-column: 2 !important;
+  justify-self: center !important;
+  margin-right: 0 !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions .product-list-modal__external {
+  grid-column: 3 !important;
+  justify-self: end !important;
+  margin-left: 0 !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__sheet {
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, 6px) !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__sheet.is-visible {
+  transform: translate(-50%, 0) !important;
+}
+
+@media (max-width: 760px) {
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry,
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__cta,
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions .product-list-modal__external {
+    width: 100% !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__sheet {
+    left: 0 !important;
+    right: auto !important;
+    width: min(100%, calc(100vw - 48px)) !important;
+    transform: translateY(6px) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__sheet.is-visible {
+    transform: translateY(0) !important;
+  }
+}
+/* ALL_CUTS_CENTERED_FOOTER_SHEET_END */
