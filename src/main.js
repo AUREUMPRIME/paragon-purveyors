@@ -3355,3 +3355,823 @@ if (document.readyState === "loading") {
   initProviderModalInquirySelection();
 }
 /* ROUND4_PROVIDER_MODAL_INQUIRY_SELECTION_END */
+
+/* ROUND4_SHARED_INQUIRY_LIST_CORE_START */
+const initSharedInquiryListCore = () => {
+  if (window.PARAGON_INQUIRY_LIST?.version === "1.1.0") {
+    return;
+  }
+
+  const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
+
+  const producerCategoryMap = [
+    ["BLACK OPAL", "Wagyu"],
+    ["MAYURA STATION", "Wagyu"],
+    ["ROBBINS ISLAND", "Wagyu"],
+    ["WANDERER", "Beef"],
+    ["CAMPO GRANDE", "Ibérico Pork"],
+  ];
+
+  const getProducerCategory = (producerName) => {
+    const producer = normalizeText(producerName).toUpperCase();
+    const match = producerCategoryMap.find(([name]) => producer.includes(name));
+
+    return match?.[1] || "";
+  };
+
+  const createItemId = (item) =>
+    [item.source, item.context, item.category, item.text]
+      .map((part) => normalizeText(part).toLowerCase())
+      .join("|");
+
+  const getItems = () => [...(window.PARAGON_INQUIRY_LIST?.items || [])];
+
+  const setItems = (items) => {
+    window.PARAGON_INQUIRY_LIST.items = items;
+    syncSavedInquiryRows();
+  };
+
+  const addItems = (items = []) => {
+    const current = getItems();
+    const map = new Map(current.map((item) => [item.id, item]));
+
+    items
+      .map((item) => ({
+        ...item,
+        source: normalizeText(item.source),
+        context: normalizeText(item.context),
+        category: normalizeText(item.category),
+        text: normalizeText(item.text),
+      }))
+      .filter((item) => item.source && item.text)
+      .forEach((item) => {
+        const id = item.id || createItemId(item);
+        map.set(id, { ...item, id });
+      });
+
+    const next = Array.from(map.values());
+    setItems(next);
+    return next;
+  };
+
+  const groupItems = (items) => {
+    const groups = new Map();
+
+    items.forEach((item) => {
+      const key = [item.source, item.context].map(normalizeText).join("|");
+
+      if (!groups.has(key)) {
+        groups.set(key, {
+          source: item.source,
+          context: item.context,
+          categories: [],
+          items: [],
+        });
+      }
+
+      const group = groups.get(key);
+
+      if (item.category && !group.categories.includes(item.category)) {
+        group.categories.push(item.category);
+      }
+
+      group.items.push(item);
+    });
+
+    return Array.from(groups.values());
+  };
+
+  const createMessage = () => {
+    const items = getItems();
+
+    if (!items.length) {
+      return "";
+    }
+
+    const lines = [
+      "Hello Paragon Purveyors,",
+      "",
+      "I would like pricing and availability for the following selected items:",
+      "",
+    ];
+
+    groupItems(items).forEach((group, groupIndex) => {
+      if (groupIndex > 0) {
+        lines.push("");
+      }
+
+      lines.push(`${group.source}: ${group.context}`);
+
+      if (group.categories.length === 1) {
+        lines.push(`Category: ${group.categories[0]}`);
+      } else if (group.categories.length > 1) {
+        lines.push(`Categories: ${group.categories.join(" / ")}`);
+      }
+
+      lines.push("");
+      lines.push("Items:");
+
+      group.items.forEach((item) => {
+        lines.push(`- ${item.text}`);
+      });
+    });
+
+    lines.push("");
+    lines.push("Thank you.");
+
+    return lines.join("\n");
+  };
+
+  const fillContactMessage = (message) => {
+    const messageNode = document.querySelector("[data-inquiry-message]");
+
+    if (!messageNode) {
+      return false;
+    }
+
+    messageNode.value = message;
+    messageNode.dispatchEvent(new Event("input", { bubbles: true }));
+    messageNode.dispatchEvent(new Event("change", { bubbles: true }));
+    messageNode.focus({ preventScroll: true });
+    return true;
+  };
+
+  const navigateToContact = (message) => {
+    window.dispatchEvent(
+      new CustomEvent("paragon:navigate-to-section", {
+        detail: {
+          sectionId: "inquiry",
+          focusId: "inquiry-title",
+          source: "shared-inquiry-list-core",
+          delay: 80,
+        },
+      }),
+    );
+
+    window.setTimeout(() => {
+      fillContactMessage(message);
+    }, 340);
+  };
+
+  const getRowCells = (row) =>
+    Array.from(row?.cells || [])
+      .map((cell) => normalizeText(cell.innerText))
+      .filter(Boolean);
+
+  const getRowText = (row) => getRowCells(row).join(" · ");
+
+  const getSelectedCutTitle = (modal) =>
+    normalizeText(modal?.querySelector?.(".selected-cut-modal__title, [data-selected-cut-title]")?.textContent) ||
+    "Selected Cut";
+
+  const getProviderTitle = (modal) =>
+    normalizeText(modal?.querySelector?.("[data-product-list-title], .product-list-modal__header h2")?.textContent) ||
+    "Selected Producer";
+
+  const createSelectedCutItemFromRow = (modal, row) => {
+    const cells = getRowCells(row);
+    const producer = cells[0] || "";
+
+    return {
+      source: "Selected Cut",
+      context: getSelectedCutTitle(modal),
+      category: getProducerCategory(producer),
+      text: cells.join(" · "),
+    };
+  };
+
+  const createProviderItemFromRow = (modal, row) => {
+    const sectionTitle = normalizeText(row.closest(".product-list-section")?.querySelector("h3")?.textContent);
+
+    return {
+      source: "Producer",
+      context: getProviderTitle(modal),
+      category: sectionTitle,
+      text: getRowText(row),
+    };
+  };
+
+  const collectSelectedCutItems = (modal) =>
+    Array.from(modal?.querySelectorAll?.("[data-selected-cut-inquiry-row][data-inquiry-selected='true']") || [])
+      .map((row) => createSelectedCutItemFromRow(modal, row));
+
+  const collectProviderItems = (modal) =>
+    Array.from(modal?.querySelectorAll?.("[data-provider-inquiry-row][data-provider-inquiry-selected='true']") || [])
+      .map((row) => createProviderItemFromRow(modal, row));
+
+  const setFeedback = (root, message) => {
+    const feedback = root?.querySelector?.("[data-selected-cut-inquiry-feedback], [data-provider-inquiry-feedback]");
+
+    if (!feedback) {
+      return;
+    }
+
+    feedback.textContent = message || "";
+    feedback.hidden = !message;
+  };
+
+  const markRowSavedState = (row, isSaved) => {
+    row.classList.toggle("is-shared-inquiry-saved", isSaved);
+    row.dataset.sharedInquirySaved = String(isSaved);
+
+    const marker = row.querySelector(".selected-cut-modal__row-select, .provider-modal-row-select");
+    if (marker) {
+      marker.setAttribute("title", isSaved ? "Added to inquiry list" : "Select item");
+    }
+  };
+
+  function syncSavedInquiryRows() {
+    const savedIds = new Set(getItems().map((item) => item.id));
+
+    document.querySelectorAll(".selected-cut-modal").forEach((modal) => {
+      Array.from(modal.querySelectorAll("[data-selected-cut-inquiry-row]")).forEach((row) => {
+        const item = createSelectedCutItemFromRow(modal, row);
+        const itemId = createItemId(item);
+        markRowSavedState(row, savedIds.has(itemId));
+      });
+    });
+
+    document.querySelectorAll(".product-list-modal").forEach((modal) => {
+      Array.from(modal.querySelectorAll("[data-provider-inquiry-row]")).forEach((row) => {
+        const item = createProviderItemFromRow(modal, row);
+        const itemId = createItemId(item);
+        markRowSavedState(row, savedIds.has(itemId));
+      });
+    });
+  }
+
+  const confirmFromModal = (button) => {
+    const selectedCutModal = button.closest(".selected-cut-modal");
+    const providerModal = button.closest(".product-list-modal");
+    const root = selectedCutModal || providerModal;
+
+    const items = selectedCutModal
+      ? collectSelectedCutItems(selectedCutModal)
+      : collectProviderItems(providerModal);
+
+    if (!items.length) {
+      setFeedback(root, "Select one or more items first.");
+      return;
+    }
+
+    const next = addItems(items);
+    syncSavedInquiryRows();
+
+    setFeedback(
+      root,
+      `${items.length} ${items.length === 1 ? "item" : "items"} added to your inquiry list. Keep browsing or create your inquiry message. Inquiry list: ${next.length} ${next.length === 1 ? "item" : "items"}.`,
+    );
+  };
+
+  const createMessageFromList = (button) => {
+    const selectedCutModal = button.closest(".selected-cut-modal");
+    const providerModal = button.closest(".product-list-modal");
+    const root = selectedCutModal || providerModal;
+
+    if (!getItems().length) {
+      confirmFromModal(button);
+    }
+
+    const message = createMessage();
+
+    if (!message) {
+      setFeedback(root, "Confirm selected items first.");
+      return;
+    }
+
+    selectedCutModal?.querySelector?.("[data-selected-cut-close], .selected-cut-modal__close")?.click();
+    providerModal?.querySelector?.("[data-product-list-close], .product-list-modal__close")?.click();
+
+    window.setTimeout(() => {
+      navigateToContact(message);
+    }, 180);
+  };
+
+  window.PARAGON_INQUIRY_LIST = {
+    version: "1.1.0",
+    items: [],
+    addItems,
+    getItems,
+    createMessage,
+    clear: () => setItems([]),
+    syncSavedInquiryRows,
+  };
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const inquiryOpenButton = event.target.closest("[data-selected-cut-inquiry], .provider-modal-inquiry-cta");
+      if (inquiryOpenButton) {
+        window.setTimeout(syncSavedInquiryRows, 120);
+      }
+
+      const keepBrowsingButton = event.target.closest("[data-selected-cut-inquiry-dismiss], [data-provider-inquiry-dismiss]");
+      if (keepBrowsingButton) {
+        window.setTimeout(syncSavedInquiryRows, 120);
+        return;
+      }
+
+      const confirmButton = event.target.closest("[data-selected-cut-inquiry-copy], [data-provider-inquiry-copy]");
+      if (confirmButton) {
+        window.setTimeout(() => {
+          confirmFromModal(confirmButton);
+        }, 0);
+        return;
+      }
+
+      const createButton = event.target.closest("[data-selected-cut-inquiry-contact], [data-provider-inquiry-contact]");
+      if (createButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        createMessageFromList(createButton);
+      }
+    },
+    true,
+  );
+
+  window.setTimeout(syncSavedInquiryRows, 160);
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initSharedInquiryListCore, { once: true });
+} else {
+  initSharedInquiryListCore();
+}
+/* ROUND4_SHARED_INQUIRY_LIST_CORE_END */
+
+
+/* ROUND4_ALL_CUTS_INQUIRY_CTA_SAFE_START */
+const initAllCutsInquiryCtaSafe = () => {
+  const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
+  const selectedPageIds = new Set();
+
+  const getProductListModal = () => document.getElementById("product-list-modal");
+
+  const getModalTitle = (modal) =>
+    normalizeText(modal?.querySelector?.("[data-product-list-title], .product-list-modal__header h2")?.textContent);
+
+  const getAllCutsModal = () => {
+    const modal = getProductListModal();
+
+    if (!modal?.open || getModalTitle(modal) !== "All Cuts") {
+      return null;
+    }
+
+    return modal;
+  };
+
+  const getInquiryList = () => window.PARAGON_INQUIRY_LIST || null;
+
+  const createItemId = (item) =>
+    [item.source, item.context, item.category, item.text]
+      .map((part) => normalizeText(part).toLowerCase())
+      .join("|");
+
+  const getCurrentGuideLabel = (modal) => {
+    const activeGuide =
+      modal?.querySelector?.("[data-guide].is-active, [data-guide][aria-current='true'], [data-guide][aria-pressed='true'], [data-guide][aria-selected='true']") ||
+      modal?.querySelector?.(".is-active[data-guide], .is-selected[data-guide]");
+
+    const label = normalizeText(activeGuide?.textContent || activeGuide?.getAttribute?.("aria-label"));
+
+    if (label) {
+      return label;
+    }
+
+    const activeButton =
+      modal?.querySelector?.(".product-list-guide-toggle[aria-pressed='true'], .product-list-guide-toggle.is-active") ||
+      modal?.querySelector?.("button[aria-pressed='true']");
+
+    return normalizeText(activeButton?.getAttribute?.("aria-label")) || "All Cuts Guide";
+  };
+
+  const getPageTitleFromButton = (button) => {
+    const titleNode = button?.querySelector?.("[data-product-list-index-title], .product-list-page-index__title");
+    const title = normalizeText(titleNode?.textContent).replace(/^\d+\s*/, "");
+
+    if (title) {
+      return title;
+    }
+
+    return normalizeText(button?.textContent).replace(/^\d+\s*/, "") || "Selected guide page";
+  };
+
+  const getActivePageButton = (modal) =>
+    modal?.querySelector?.("[data-product-list-page-jump].is-active, [data-product-list-page-jump][aria-current='true'], [data-product-list-page-jump][aria-selected='true']") ||
+    modal?.querySelector?.("[data-product-list-page-jump]");
+
+  const createAllCutsItemFromButton = (modal, button) => ({
+    source: "All Cuts Guide",
+    context: "All Cuts",
+    category: getCurrentGuideLabel(modal),
+    text: getPageTitleFromButton(button),
+  });
+
+  const getSelectedPageButtons = (modal) =>
+    Array.from(modal?.querySelectorAll?.("[data-product-list-page-jump][data-all-cuts-inquiry-selected='true']") || []);
+
+  const removeBrokenBodyEntry = (modal) => {
+    modal?.querySelector?.("[data-product-list-body], .product-list-modal__body")
+      ?.querySelectorAll?.("[data-all-cuts-inquiry-entry], .all-cuts-inquiry-entry")
+      ?.forEach((node) => node.remove());
+  };
+
+  const cleanupFooterControls = (modal) => {
+    const footer = modal?.querySelector?.("[data-all-cuts-footer-actions]");
+
+    if (!footer) {
+      return;
+    }
+
+    const external = footer.querySelector(".product-list-modal__external");
+
+    if (external && footer.parentElement) {
+      footer.parentElement.insertBefore(external, footer);
+    }
+
+    footer.remove();
+    modal.classList.remove("product-list-modal--all-cuts-selecting");
+  };
+
+  const cleanupIfNotAllCuts = () => {
+    const modal = getProductListModal();
+
+    if (!modal || getModalTitle(modal) === "All Cuts") {
+      return;
+    }
+
+    cleanupFooterControls(modal);
+  };
+
+  const setFooterFeedback = (modal, message) => {
+    const feedback = modal?.querySelector?.("[data-all-cuts-inquiry-feedback]");
+
+    if (!feedback) {
+      return;
+    }
+
+    feedback.textContent = message || "";
+    feedback.hidden = !message;
+  };
+
+  const syncFooterText = (modal) => {
+    const list = getInquiryList();
+    const count = list?.getItems?.().length || 0;
+    const selectedCount = getSelectedPageButtons(modal).length;
+    const footer = modal?.querySelector?.("[data-all-cuts-footer-actions]");
+
+    const contextNode = footer?.querySelector?.("[data-all-cuts-inquiry-context]");
+    const countNode = footer?.querySelector?.("[data-all-cuts-inquiry-count]");
+
+    if (contextNode) {
+      contextNode.textContent =
+        selectedCount > 0
+          ? `${selectedCount} selected ${selectedCount === 1 ? "page" : "pages"}. Confirm selected items to add them to your inquiry list.`
+          : "Select one or more guide pages from the index, then confirm them for your inquiry.";
+    }
+
+    if (countNode) {
+      countNode.textContent = count === 1 ? "Inquiry list: 1 item saved" : `Inquiry list: ${count} items saved`;
+    }
+  };
+
+  const syncIndexSelectionState = (modal) => {
+    const list = getInquiryList();
+    const savedIds = new Set((list?.getItems?.() || []).map((item) => item.id));
+
+    Array.from(modal?.querySelectorAll?.("[data-product-list-page-jump]") || []).forEach((button) => {
+      button.dataset.allCutsInquiryPage = "true";
+
+      let marker = button.querySelector("[data-all-cuts-page-select-marker]");
+
+      if (!marker) {
+        marker = document.createElement("span");
+        marker.className = "product-list-page-index__select-marker";
+        marker.setAttribute("data-all-cuts-page-select-marker", "");
+        marker.setAttribute("aria-hidden", "true");
+
+        const numberNode = button.querySelector(".product-list-page-index__number");
+
+        if (numberNode) {
+          numberNode.insertAdjacentElement("afterend", marker);
+        } else {
+          button.prepend(marker);
+        }
+      }
+
+      const item = createAllCutsItemFromButton(modal, button);
+      const id = createItemId(item);
+      const isSelected = selectedPageIds.has(id) || button.dataset.allCutsInquirySelected === "true";
+      const isSaved = savedIds.has(id);
+
+      button.dataset.allCutsInquiryItemId = id;
+      button.dataset.allCutsInquirySelected = String(isSelected);
+      button.dataset.allCutsInquirySaved = String(isSaved);
+      button.classList.toggle("is-all-cuts-inquiry-selected", isSelected);
+      button.classList.toggle("is-all-cuts-inquiry-saved", isSaved);
+      button.setAttribute("aria-label", `${isSelected || isSaved ? "Selected" : "Select"} ${getPageTitleFromButton(button)} for inquiry`);
+    });
+
+    syncFooterText(modal);
+  };
+
+  const toggleIndexSelection = (button) => {
+    const modal = getAllCutsModal();
+
+    if (!modal || !button || !modal.classList.contains("product-list-modal--all-cuts-selecting")) {
+      return;
+    }
+
+    const item = createAllCutsItemFromButton(modal, button);
+    const id = createItemId(item);
+    const nextState = !selectedPageIds.has(id);
+
+    if (nextState) {
+      selectedPageIds.add(id);
+    } else {
+      selectedPageIds.delete(id);
+    }
+
+    button.dataset.allCutsInquirySelected = String(nextState);
+    syncIndexSelectionState(modal);
+  };
+
+  const getOrCreateFooterControls = (modal) => {
+    if (!modal) {
+      return null;
+    }
+
+    removeBrokenBodyEntry(modal);
+
+    const panel = modal.querySelector(".product-list-modal__panel") || modal;
+    let footer = modal.querySelector("[data-all-cuts-footer-actions]");
+
+    if (!footer) {
+      const external = modal.querySelector(".product-list-modal__external");
+      footer = document.createElement("div");
+      footer.className = "all-cuts-footer-actions";
+      footer.setAttribute("data-all-cuts-footer-actions", "");
+
+      if (external?.parentElement) {
+        external.parentElement.insertBefore(footer, external);
+        footer.append(external);
+      } else {
+        panel.append(footer);
+      }
+    }
+
+    if (!footer.querySelector("[data-all-cuts-inquiry-open]")) {
+      footer.insertAdjacentHTML(
+        "afterbegin",
+        `
+          <div class="all-cuts-footer-inquiry" data-all-cuts-footer-inquiry>
+            <button
+              class="all-cuts-footer-inquiry__cta"
+              type="button"
+              data-all-cuts-inquiry-open
+              aria-label="Request pricing and availability for selected All Cuts guide pages"
+            >
+              <span class="all-cuts-footer-inquiry__kicker">Ask about this guide</span>
+              <span class="all-cuts-footer-inquiry__label">Request Pricing and Availability</span>
+            </button>
+
+            <aside class="all-cuts-footer-inquiry__sheet" data-all-cuts-inquiry-sheet hidden aria-label="All Cuts inquiry selection">
+              <div class="all-cuts-footer-inquiry__copy">
+                <p class="all-cuts-footer-inquiry__kicker">Inquiry list</p>
+                <h3 class="all-cuts-footer-inquiry__title">All Cuts Guide</h3>
+                <p class="all-cuts-footer-inquiry__context" data-all-cuts-inquiry-context>Select one or more guide pages from the index.</p>
+                <p class="all-cuts-footer-inquiry__count" data-all-cuts-inquiry-count>Inquiry list: 0 items saved</p>
+              </div>
+
+              <div class="all-cuts-footer-inquiry__actions">
+                <button class="all-cuts-footer-inquiry__action" type="button" data-all-cuts-inquiry-confirm>
+                  Confirm Selected Items
+                </button>
+                <button class="all-cuts-footer-inquiry__action all-cuts-footer-inquiry__action--primary" type="button" data-all-cuts-inquiry-contact>
+                  Create Inquiry Message
+                </button>
+                <button class="all-cuts-footer-inquiry__action all-cuts-footer-inquiry__action--quiet" type="button" data-all-cuts-inquiry-dismiss>
+                  Keep Browsing
+                </button>
+              </div>
+
+              <p class="all-cuts-footer-inquiry__feedback" data-all-cuts-inquiry-feedback hidden></p>
+            </aside>
+          </div>
+        `,
+      );
+    }
+
+    syncIndexSelectionState(modal);
+    return footer;
+  };
+
+  const ensureAllCutsControlsSoon = () => {
+    cleanupIfNotAllCuts();
+
+    [80, 240, 520].forEach((delay) => {
+      window.setTimeout(() => {
+        const modal = getAllCutsModal();
+
+        if (!modal) {
+          cleanupIfNotAllCuts();
+          return;
+        }
+
+        getOrCreateFooterControls(modal);
+      }, delay);
+    });
+  };
+
+  const openFooterSheet = (modal) => {
+    getOrCreateFooterControls(modal);
+    modal.classList.add("product-list-modal--all-cuts-selecting");
+
+    const sheet = modal?.querySelector?.("[data-all-cuts-inquiry-sheet]");
+
+    if (!sheet) {
+      return;
+    }
+
+    syncIndexSelectionState(modal);
+    sheet.hidden = false;
+
+    window.requestAnimationFrame(() => {
+      sheet.classList.add("is-visible");
+      sheet.querySelector("[data-all-cuts-inquiry-confirm]")?.focus({ preventScroll: true });
+    });
+  };
+
+  const closeFooterSheet = (button) => {
+    const sheet = button?.closest?.("[data-all-cuts-inquiry-sheet]");
+    const modal = getAllCutsModal();
+
+    if (!sheet) {
+      return;
+    }
+
+    sheet.classList.remove("is-visible");
+    sheet.hidden = true;
+    modal?.classList.remove("product-list-modal--all-cuts-selecting");
+
+    if (modal) {
+      syncIndexSelectionState(modal);
+    }
+  };
+
+  const confirmAllCutsSelection = (button) => {
+    const modal = getAllCutsModal();
+    const list = getInquiryList();
+
+    if (!modal || !list?.addItems) {
+      return;
+    }
+
+    syncIndexSelectionState(modal);
+
+    let buttons = getSelectedPageButtons(modal);
+
+    if (!buttons.length) {
+      const active = getActivePageButton(modal);
+      if (active) {
+        const item = createAllCutsItemFromButton(modal, active);
+        selectedPageIds.add(createItemId(item));
+        active.dataset.allCutsInquirySelected = "true";
+        buttons = [active];
+      }
+    }
+
+    if (!buttons.length) {
+      setFooterFeedback(modal, "Select one or more guide pages first.");
+      return;
+    }
+
+    const items = buttons.map((pageButton) => createAllCutsItemFromButton(modal, pageButton));
+    const next = list.addItems(items);
+
+    syncIndexSelectionState(modal);
+    setFooterFeedback(
+      modal,
+      `${items.length} ${items.length === 1 ? "item" : "items"} added to your inquiry list. Keep browsing or create your inquiry message. Inquiry list: ${next.length} ${next.length === 1 ? "item" : "items"}.`,
+    );
+  };
+
+  const fillContactMessage = (message) => {
+    const messageNode = document.querySelector("[data-inquiry-message]");
+
+    if (!messageNode) {
+      return false;
+    }
+
+    messageNode.value = message;
+    messageNode.dispatchEvent(new Event("input", { bubbles: true }));
+    messageNode.dispatchEvent(new Event("change", { bubbles: true }));
+    messageNode.focus({ preventScroll: true });
+    return true;
+  };
+
+  const createMessageFromAllCuts = (button) => {
+    const modal = getAllCutsModal();
+    const list = getInquiryList();
+
+    if (!modal || !list?.createMessage) {
+      return;
+    }
+
+    if (!list.getItems?.().length) {
+      confirmAllCutsSelection(button);
+    }
+
+    const message = list.createMessage();
+
+    if (!message) {
+      setFooterFeedback(modal, "Confirm selected items first.");
+      return;
+    }
+
+    modal.querySelector("[data-product-list-close], .product-list-modal__close")?.click();
+
+    window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent("paragon:navigate-to-section", {
+          detail: {
+            sectionId: "inquiry",
+            focusId: "inquiry-title",
+            source: "all-cuts-inquiry",
+            delay: 80,
+          },
+        }),
+      );
+
+      window.setTimeout(() => {
+        fillContactMessage(message);
+      }, 340);
+    }, 180);
+  };
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const modal = getAllCutsModal();
+
+      const indexButton = event.target.closest("[data-product-list-page-jump]");
+      if (indexButton && modal?.classList.contains("product-list-modal--all-cuts-selecting")) {
+        toggleIndexSelection(indexButton);
+        return;
+      }
+
+      const openButton = event.target.closest("[data-all-cuts-inquiry-open]");
+      if (openButton) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (modal) {
+          openFooterSheet(modal);
+        }
+
+        return;
+      }
+
+      const confirmButton = event.target.closest("[data-all-cuts-inquiry-confirm]");
+      if (confirmButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        confirmAllCutsSelection(confirmButton);
+        return;
+      }
+
+      const createButton = event.target.closest("[data-all-cuts-inquiry-contact]");
+      if (createButton) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation();
+        }
+
+        createMessageFromAllCuts(createButton);
+        return;
+      }
+
+      const dismissButton = event.target.closest("[data-all-cuts-inquiry-dismiss]");
+      if (dismissButton) {
+        event.preventDefault();
+        closeFooterSheet(dismissButton);
+        return;
+      }
+
+      window.setTimeout(ensureAllCutsControlsSoon, 0);
+    },
+    true,
+  );
+
+  window.setTimeout(ensureAllCutsControlsSoon, 160);
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAllCutsInquiryCtaSafe, { once: true });
+} else {
+  initAllCutsInquiryCtaSafe();
+}
+/* ROUND4_ALL_CUTS_INQUIRY_CTA_SAFE_END */
