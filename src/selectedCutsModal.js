@@ -139,7 +139,8 @@ const selectedCuts = {
     rows: [
       ["Wanderer", "1688XA", "Short Rib 3-Rib", "12/4# AVG. ~ 48# CS"],
       ["Wanderer", "1688XB", "Short Rib 3-Rib", "8/3# AVG. ~ 48# CS"],
-    ],
+          ["Mayura Station", "37973", "3 Rib Export", "2/13# AVG. ~ 26# CS"],
+],
   },
   "Chuck Roll": {
     eyebrow: "Selected Cut",
@@ -152,7 +153,8 @@ const selectedCuts = {
       "Best for roasting, braising, slicing, and refined slow-cooked preparations.",
     rows: [
       ["Black Opal", "34129", "Chuck Roll", "2/20# AVG. ~ 40# CS"],
-    ],
+          ["Wanderer", "2275XA", "Chuck Eye Roll", "3/15# AVG. ~ 45# CS"],
+],
   },
   "Shortloin": {
     eyebrow: "Selected Cut",
@@ -166,7 +168,9 @@ const selectedCuts = {
     rows: [
       ["Black Opal", "24105", "Shortloin", "1/28# AVG. ~ 28# CS"],
       ["Mayura Station", "37975", "Shortloin", "1/22# AVG. ~ 22# CS"],
-    ],
+          ["Wanderer", "1551XA", "Shortloin MB2-3", "1/16# AVG. ~ 16# CS"],
+      ["Wanderer", "1551XB", "Shortloin MB4+", "1/16# AVG. ~ 16# CS"],
+],
   },
   "Flap Meat": {
     eyebrow: "Selected Cut",
@@ -198,7 +202,9 @@ const selectedCuts = {
     rows: [
       ["Campo Grande", "FP10", "Flank Steak", "18/1.2# AVG. ~ 21# CS"],
       ["Wanderer", "2210XA", "Flank Steak", "12/1.5# AVG. ~ 36# CS"],
-    ],
+          ["Black Opal", "24115", "Flank", "16/2.25# AVG. ~ 36# CS"],
+      ["Robbins Island", "22101W", "Flank", "9/3# AVG. ~ 36# CS"],
+],
   },
   "Tri Tip": {
     eyebrow: "Selected Cut",
@@ -246,7 +252,8 @@ const selectedCuts = {
       "Best for slow cooking, roasting, slicing, and carefully trimmed steak applications.",
     rows: [
       ["Mayura Station", "37932", "Oyster Blade", "8/6# AVG. ~ 49# CS"],
-    ],
+          ["Robbins Island", "23032W", "Top Blade", "6/5# AVG. ~ 30# CS"],
+],
   },
   "Chuck Tail Flap": {
     eyebrow: "Selected Cut",
