@@ -319,7 +319,7 @@ const selectedCuts = {
   },
   "Iberico 4 Rib-Rack": {
     eyebrow: "Selected Cut",
-    title: "Iberico 4 Rib-Rack",
+    title: "Iberico 4-Rib",
     category: "Ibérico Pork",
     image: assetPath("assets/cuts/iberico-4-rib-rack.webp"),
     description:
@@ -327,7 +327,7 @@ const selectedCuts = {
     service:
       "Best for roasting, grilling, carving tableside, and premium menu features.",
     rows: [
-      ["Campo Grande", "FP05", "4-Rib Rack", "6/2.1# AVG. ~ 13# CS"],
+      ["Campo Grande", "FP05", "4-Rib", "6/2.1# AVG. ~ 13# CS"],
     ],
   },
   "Iberico St. Louis Ribs": {
@@ -509,8 +509,7 @@ const createProducerProgramLinks = (cutName) => {
   return `
     <section class="selected-cut-modal__producer-links" aria-label="Available producer programs">
       <div class="selected-cut-modal__producer-links-head">
-        <span>Producer Programs</span>
-        <p>Producer programs for this cut.</p>
+        <span>Producer programs for this cut</span>
       </div>
       <div class="selected-cut-modal__producer-links-list">
         ${buttons}
@@ -566,7 +565,6 @@ export function initSelectedCutsModal() {
               data-selected-cut-inquiry
               aria-label="Request pricing and availability for this selected cut"
             >
-              <span class="selected-cut-modal__cta-kicker">Ask about this cut</span>
               <span class="selected-cut-modal__cta-label">Request Pricing and Availability</span>
             </button>
           </div>
@@ -642,7 +640,6 @@ export function initSelectedCutsModal() {
             data-selected-cut-inquiry
             aria-label="Request pricing and availability for this selected cut"
           >
-            <span class="selected-cut-modal__inquiry-kicker">Ask about this cut</span>
             <span class="selected-cut-modal__inquiry-label">Request Pricing and Availability</span>
           </button>
         </div>

@@ -563,7 +563,7 @@ app.innerHTML = `
                               decoding="async"
                             />
                             <div class="cut-card-shade"></div>
-                            <h3>4 Rib-Rack</h3>
+                            <h3>4-Rib</h3>
                           </article>
 
                 <article class="cut-card cut-card--placeholder cut-card--iberico-st-louis-ribs cut-card--long-title" data-cut-id="iberico-st-louis-ribs" data-selected-cut-trigger="Iberico St. Louis Ribs">
@@ -1503,7 +1503,7 @@ requestAnimationFrame(() => {
             { title: "Iberico Presa", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-02.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/02-iberico-presa.webp") },
             { title: "Iberico Abanico", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-03.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/03-iberico-abanico.webp") },
             { title: "Iberico Pluma", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-04.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/04-iberico-pluma.webp") },
-            { title: "Iberico 4 Rib-Rack", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-05.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/05-iberico-4-rib-rack.webp") },
+            { title: "Iberico 4-Rib", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-05.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/05-iberico-4-rib-rack.webp") },
             { title: "Iberico Loin Roast", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-06.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/06-iberico-loin-roast.webp") },
             { title: "Iberico Coppa", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-07.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/07-iberico-coppa.webp") },
             { title: "Iberico St. Louis Ribs", src: assetPath("assets/all-cuts/pork/pages/pork-cuts-08.webp"), enlargeSrc: assetPath("assets/all-cuts/pork/enlarge/08-iberico-st-louis-ribs.webp") },
