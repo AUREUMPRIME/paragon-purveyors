@@ -6,13 +6,15 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5173",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 4173"
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "specials:build": "node tools/build-monthly-specials.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",
     "three": "^0.184.0"
   },
   "devDependencies": {
+    "playwright": "^1.60.0",
     "vite": "^7.1.0"
   }
 }

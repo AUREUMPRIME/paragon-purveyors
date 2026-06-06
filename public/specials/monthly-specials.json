@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-06-06T20:04:31.086Z",
+  "source": {
+    "type": "google",
+    "tabs": {
+      "settings": "Settings",
+      "contacts": "Contacts",
+      "specials": "Specials"
+    }
+  },
+  "settings": {
+    "month": "June",
+    "year": "2026",
+    "headline": "June Specials",
+    "subheadline": "Monthly selections for direct ordering.",
+    "footerUrl": "paragonpurveyors.com",
+    "footerButtonLabel": "Visit ParagonPurveyors.com",
+    "footerMessage": "For extended selections, wholesale programs, and custom sourcing requests, continue through the website.",
+    "disclaimer": "Pricing and availability are subject to change.",
+    "contactInstruction": "To place an order, contact the representative closest to your area. For custom requests or larger allocations, use the website link below."
+  },
+  "contacts": [
+    {
+      "sort": 1,
+      "active": true,
+      "name": "Blake",
+      "location": "San Diego",
+      "phone": "+1 (000) 000-0000"
+    },
+    {
+      "sort": 2,
+      "active": true,
+      "name": "Clayton",
+      "location": "Santa Barbara",
+      "phone": "+1 (949) 514-3127"
+    }
+  ],
+  "specials": [
+    {
+      "sort": 1,
+      "active": true,
+      "cutId": "tenderloin",
+      "displayName": "Tenderloin",
+      "quantityAvailable": "24 steaks available",
+      "pricePerSteak": "$11.11",
+      "priceFivePlusSteaks": "$00.00",
+      "pricePerRoll": "$00.00",
+      "pricePerCase": "$00.00",
+      "imagePath": "assets/all-cuts/enlarge/18-tenderloin-side-strap-off.webp",
+      "description": "Lean, tender, and refined. A classic center-plate cut for elegant preparations."
+    },
+    {
+      "sort": 2,
+      "active": true,
+      "cutId": "ribeye",
+      "displayName": "Ribeye",
+      "quantityAvailable": "18 steaks available",
+      "pricePerSteak": "$00.00",
+      "priceFivePlusSteaks": "$00.00",
+      "pricePerRoll": "$00.00",
+      "pricePerCase": "$00.00",
+      "imagePath": "assets/all-cuts/enlarge/13-rib-eye-cap.webp",
+      "description": "Richly marbled with full beef flavor. Built for a bold, memorable steak experience."
+    },
+    {
+      "sort": 3,
+      "active": true,
+      "cutId": "tri-tip",
+      "displayName": "Tri Tip",
+      "quantityAvailable": "12 pieces available",
+      "pricePerSteak": "$00.00",
+      "priceFivePlusSteaks": "$00.00",
+      "pricePerRoll": "$00.00",
+      "pricePerCase": "$00.00",
+      "imagePath": "assets/all-cuts/enlarge/21-tri-tip.webp",
+      "description": "Versatile and deeply savory, with a distinctive shape and satisfying texture."
+    },
+    {
+      "sort": 4,
+      "active": true,
+      "cutId": "chuck-tail-flap",
+      "displayName": "Chuck Tail Flap / Denver Steak",
+      "quantityAvailable": "8 rolls available",
+      "pricePerSteak": "$00.00",
+      "priceFivePlusSteaks": "$00.00",
+      "pricePerRoll": "$00.00",
+      "pricePerCase": "$00.00",
+      "imagePath": "assets/all-cuts/enlarge/03-chuck-tail-flap.webp",
+      "description": "Well-marbled and flavorful, ideal for slicing, grilling, and high-heat cooking."
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+name: Publish Monthly Specials PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      google_sheet_id:
+        description: "Optional Google Sheet ID. Leave empty to use repository variable MONTHLY_SPECIALS_GOOGLE_SHEET_ID."
+        required: false
+        type: string
+      commit_message:
+        description: "Commit message for the generated monthly specials PDF."
+        required: false
+        default: "chore: publish monthly specials pdf"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-monthly-specials-pdf
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build and publish monthly specials PDF
+    runs-on: ubuntu-latest
+
+    env:
+      MONTHLY_SPECIALS_SOURCE: google
+      MONTHLY_SPECIALS_ALLOW_JSON_FALLBACK: "false"
+      GOOGLE_SHEET_SETTINGS_NAME: Settings
+      GOOGLE_SHEET_CONTACTS_NAME: Contacts
+      GOOGLE_SHEET_SPECIALS_NAME: Specials
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Choose Google Sheet ID
+        shell: bash
+        run: |
+          SHEET_ID="${{ inputs.google_sheet_id }}"
+          if [ -z "$SHEET_ID" ]; then
+            SHEET_ID="${{ vars.MONTHLY_SPECIALS_GOOGLE_SHEET_ID }}"
+          fi
+
+          if [ -z "$SHEET_ID" ]; then
+            echo "GOOGLE_SHEET_ID is missing."
+            echo "Set repository variable MONTHLY_SPECIALS_GOOGLE_SHEET_ID or provide workflow input google_sheet_id."
+            exit 1
+          fi
+
+          echo "GOOGLE_SHEET_ID=$SHEET_ID" >> "$GITHUB_ENV"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build monthly specials PDF
+        run: npm run specials:build
+
+      - name: Verify Google Sheets source
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require("node:fs");
+          const data = JSON.parse(fs.readFileSync("public/specials/monthly-specials.json", "utf8"));
+
+          if (!data.source || data.source.type !== "google") {
+            console.error("Expected public/specials/monthly-specials.json source.type to be google.");
+            process.exit(1);
+          }
+
+          if (!Array.isArray(data.specials) || data.specials.length < 1) {
+            console.error("Expected at least one active special.");
+            process.exit(1);
+          }
+
+          console.log(`Verified Google Sheets source with ${data.specials.length} active specials.`);
+          NODE
+
+      - name: Verify PDF page count
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require("node:fs");
+          const pdf = fs.readFileSync("public/specials/monthly-specials.pdf", "latin1");
+          const pages = pdf.match(/\/Type\s*\/Page\b/g) || [];
+
+          console.log(`PDF page count estimate: ${pages.length}`);
+
+          if (pages.length !== 1) {
+            console.error("Expected monthly specials PDF to be exactly 1 page.");
+            process.exit(1);
+          }
+          NODE
+
+      - name: Build website
+        run: npm run build
+
+      - name: Commit updated monthly specials files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add public/specials/monthly-specials.pdf
+          git add public/specials/monthly-specials.html
+          git add public/specials/monthly-specials.json
+          git add public/specials/index.html
+
+          if git diff --cached --quiet; then
+            echo "No monthly specials changes to commit."
+            exit 0
+          fi
+
+          git commit -m "${{ inputs.commit_message }}"
+          git push
