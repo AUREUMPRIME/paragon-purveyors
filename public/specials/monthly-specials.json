@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-06T20:31:17.813Z",
+  "generatedAt": "2026-06-06T20:55:12.554Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -43,9 +43,9 @@
       "displayName": "Tenderloin",
       "quantityAvailable": "24 steaks available",
       "pricePerSteak": "$0.00",
-      "priceFivePlusSteaks": "$00.00",
-      "pricePerRoll": "$00.00",
-      "pricePerCase": "$00.00",
+      "priceFivePlusSteaks": "$0.00",
+      "pricePerRoll": "$0.00",
+      "pricePerCase": "$0.00",
       "imagePath": "assets/all-cuts/enlarge/18-tenderloin-side-strap-off.webp",
       "description": "Lean, tender, and refined. A classic center-plate cut for elegant preparations."
     },
@@ -55,10 +55,10 @@
       "cutId": "ribeye",
       "displayName": "Ribeye",
       "quantityAvailable": "18 steaks available",
-      "pricePerSteak": "$00.00",
-      "priceFivePlusSteaks": "$00.00",
-      "pricePerRoll": "$00.00",
-      "pricePerCase": "$00.00",
+      "pricePerSteak": "$0.00",
+      "priceFivePlusSteaks": "$0.00",
+      "pricePerRoll": "$0.00",
+      "pricePerCase": "$0.00",
       "imagePath": "assets/all-cuts/enlarge/13-rib-eye-cap.webp",
       "description": "Richly marbled with full beef flavor. Built for a bold, memorable steak experience."
     },
@@ -68,10 +68,10 @@
       "cutId": "tri-tip",
       "displayName": "Tri Tip",
       "quantityAvailable": "12 pieces available",
-      "pricePerSteak": "$00.00",
-      "priceFivePlusSteaks": "$00.00",
-      "pricePerRoll": "$00.00",
-      "pricePerCase": "$00.00",
+      "pricePerSteak": "$0.00",
+      "priceFivePlusSteaks": "$0.00",
+      "pricePerRoll": "$0.00",
+      "pricePerCase": "$0.00",
       "imagePath": "assets/all-cuts/enlarge/21-tri-tip.webp",
       "description": "Versatile and deeply savory, with a distinctive shape and satisfying texture."
     },
@@ -81,10 +81,10 @@
       "cutId": "chuck-tail-flap",
       "displayName": "Chuck Tail Flap / Denver Steak",
       "quantityAvailable": "8 rolls available",
-      "pricePerSteak": "$00.00",
-      "priceFivePlusSteaks": "$00.00",
-      "pricePerRoll": "$00.00",
-      "pricePerCase": "$00.00",
+      "pricePerSteak": "$0.00",
+      "priceFivePlusSteaks": "$0.00",
+      "pricePerRoll": "$0.00",
+      "pricePerCase": "$0.00",
       "imagePath": "assets/all-cuts/enlarge/03-chuck-tail-flap.webp",
       "description": "Well-marbled and flavorful, ideal for slicing, grilling, and high-heat cooking."
     }
