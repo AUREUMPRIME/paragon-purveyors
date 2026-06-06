@@ -304,7 +304,7 @@ app.innerHTML = `
 
             <section class="cut-group cut-group--wagyu-beef" aria-labelledby="cuts-wagyu-beef-title">
               <div class="cut-group__head">
-            <h3 id="cuts-wagyu-beef-title">WAGYU</h3>
+            <h3 id="cuts-wagyu-beef-title">WAGYU / POPULAR CUTS</h3>
               </div>
               <div class="cut-group__grid">
                 <article class="cut-card cut-card--ribeye" data-cut-id="ribeye" data-selected-cut-trigger="Ribeye">
@@ -479,7 +479,7 @@ app.innerHTML = `
 
             <section class="cut-group cut-group--pork" aria-labelledby="cuts-pork-title">
               <div class="cut-group__head">
-            <h3 id="cuts-pork-title">PORK</h3>
+            <h3 id="cuts-pork-title">PORK / POPULAR CUTS</h3>
               </div>
               <div class="cut-group__grid">
                 <article class="cut-card cut-card--presa" data-cut-id="presa" data-selected-cut-trigger="Presa">
