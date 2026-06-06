@@ -1363,7 +1363,7 @@ requestAnimationFrame(() => {
             ["FP02", "Presa", "12/1.54# AVG. ~ 18.5# CS"],
             ["FP03", "Albanico", "18/1.1# AVG. ~ 19.8# CS"],
             ["FP04", "Pluma", "12/1.5# AVG. ~ 18.5# CS"],
-            ["FP05", "4-Rib Rack", "6/2.1# AVG. ~ 13# CS"],
+            ["FP05", "4-Rib", "6/2.1# AVG. ~ 13# CS"],
             ["FP06", "Belly", "12/1.25# AVG. ~ 15# CS"],
             ["FP07", "Loin Roast", "12/1.25# AVG. ~ 15# CS"],
             ["FP08", "Coppa", "8/2.3# AVG. ~ 18# CS"],
