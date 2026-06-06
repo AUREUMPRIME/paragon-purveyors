@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-06T20:21:21.405Z",
+  "generatedAt": "2026-06-06T20:31:17.813Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -42,7 +42,7 @@
       "cutId": "tenderloin",
       "displayName": "Tenderloin",
       "quantityAvailable": "24 steaks available",
-      "pricePerSteak": "$11.11",
+      "pricePerSteak": "$0.00",
       "priceFivePlusSteaks": "$00.00",
       "pricePerRoll": "$00.00",
       "pricePerCase": "$00.00",
