@@ -10542,3 +10542,131 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* ALL_CUTS_CENTERED_FOOTER_SHEET_END */
+
+/* ROUND4_TRACK1_ALL_CUTS_INDEX_VISUAL_FIX_START */
+/*
+  Track 1:
+  - keep only the footer inquiry CTA visible in the All Cuts modal
+  - keep index text left-aligned before selection mode
+  - reveal selection circles only during selection mode or for saved rows
+  - force deselected dots to visually empty again
+*/
+.product-list-modal.product-list-modal--page-gallery .product-list-modal__header [data-all-cuts-inquiry-open],
+.product-list-modal.product-list-modal--page-gallery .product-list-modal__body > .all-cuts-inquiry-entry,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-gallery-shell > .all-cuts-inquiry-entry,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-gallery > .all-cuts-inquiry-entry {
+  display: none !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions [data-all-cuts-inquiry-open],
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions .all-cuts-footer-inquiry,
+.product-list-modal.product-list-modal--page-gallery .all-cuts-footer-actions .all-cuts-footer-inquiry__cta {
+  display: inline-flex !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  padding-left: 10px !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__number {
+  display: none !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__title {
+  grid-column: 1 / -1 !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery.product-list-modal--all-cuts-selecting .product-list-page-index__button,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-saved {
+  grid-template-columns: 18px minmax(0, 1fr) !important;
+  gap: 8px !important;
+  padding-left: 14px !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery.product-list-modal--all-cuts-selecting .product-list-page-index__title,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-saved .product-list-page-index__title {
+  grid-column: auto !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery.product-list-modal--all-cuts-selecting .product-list-page-index__select-marker,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-saved .product-list-page-index__select-marker {
+  display: inline-grid !important;
+  opacity: 1 !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button:not(.is-all-cuts-inquiry-selected):not(.is-all-cuts-inquiry-saved) .product-list-page-index__select-marker::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button:not(.is-all-cuts-inquiry-selected):not(.is-all-cuts-inquiry-saved) .product-list-page-index__select-marker::after,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker:not(.is-all-cuts-inquiry-selected):not(.is-all-cuts-inquiry-saved)[data-all-cuts-inquiry-selected="false"]::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker:not(.is-all-cuts-inquiry-selected):not(.is-all-cuts-inquiry-saved)[data-all-cuts-inquiry-selected="false"]::after {
+  opacity: 0 !important;
+  transform: scale(0.42) !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-selected .product-list-page-index__select-marker::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-selected .product-list-page-index__select-marker::after,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-saved .product-list-page-index__select-marker::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__button.is-all-cuts-inquiry-saved .product-list-page-index__select-marker::after,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker.is-all-cuts-inquiry-selected::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker.is-all-cuts-inquiry-selected::after,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker.is-all-cuts-inquiry-saved::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker.is-all-cuts-inquiry-saved::after,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker[data-all-cuts-inquiry-selected="true"]::before,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__select-marker[data-all-cuts-inquiry-selected="true"]::after {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+/* ROUND4_TRACK1_ALL_CUTS_INDEX_VISUAL_FIX_END */
+
+/* ROUND4_TRACK1_SURVIVING_TOP_CTA_SCROLL_FIX_START */
+/*
+  Removes the legacy provider top CTA from the All Cuts modal body.
+  This node was creating extra scroll content above the page gallery.
+*/
+.product-list-modal.product-list-modal--page-gallery .product-list-modal__body > .provider-modal-top-inquiry-cta-wrap,
+.product-list-modal.product-list-modal--page-gallery .product-list-modal__body > .provider-modal-inquiry-cta--top,
+.product-list-modal.product-list-modal--page-gallery .product-list-modal__body .provider-modal-top-inquiry-cta-wrap,
+.product-list-modal.product-list-modal--page-gallery .product-list-modal__body .provider-modal-inquiry-cta--top {
+  display: none !important;
+}
+/* ROUND4_TRACK1_SURVIVING_TOP_CTA_SCROLL_FIX_END */
+
+/* ROUND4_TRACK1_INDEX_SCROLL_CHAIN_CONTAINMENT_START */
+/*
+  Prevents wheel/touch scroll from leaking from the left index list
+  into the body-driven image gallery scroll when the index reaches
+  its top or bottom edge.
+*/
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index,
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+  overscroll-behavior: contain !important;
+  overscroll-behavior-y: contain !important;
+  touch-action: pan-y !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+  scrollbar-gutter: stable !important;
+}
+/* ROUND4_TRACK1_INDEX_SCROLL_CHAIN_CONTAINMENT_END */
+
+/* ROUND4_TRACK1_INDEX_BODY_HEIGHT_LOCK_START */
+/*
+  Locks the sticky All Cuts index to the actual visible modal body height.
+  The value is measured in JS from .product-list-modal__body.clientHeight,
+  so the index no longer inherits the huge natural gallery height.
+*/
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+  height: var(--round4-all-cuts-body-height) !important;
+  max-height: var(--round4-all-cuts-body-height) !important;
+}
+
+.product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+  min-height: 0 !important;
+}
+/* ROUND4_TRACK1_INDEX_BODY_HEIGHT_LOCK_END */

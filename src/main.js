@@ -853,6 +853,21 @@ function initHeroButtonFeedback() {
     document.body.classList.remove("about-modal-open");
   });
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal.open) {
       closeModal();
@@ -989,6 +1004,21 @@ function initHeroButtonFeedback() {
     document.body.classList.remove("about-modal-open");
   });
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal.open) {
       closeModal();
@@ -1778,6 +1808,24 @@ requestAnimationFrame(() => {
     tabsNode.hidden = tabs.length === 0;
   };
 
+  // ROUND4_TRACK1_REMOVE_TOP_ALL_CUTS_CTA_START
+  const removeRound4TopAllCutsInquiryCtas = () => {
+    const selectors = [
+      ".product-list-modal__header [data-all-cuts-inquiry-open]",
+      ".product-list-modal__body > .all-cuts-inquiry-entry",
+      ".product-list-page-gallery-shell > .all-cuts-inquiry-entry",
+      ".product-list-page-gallery > .all-cuts-inquiry-entry",
+    ];
+
+    modal.querySelectorAll(selectors.join(",")).forEach((node) => {
+      if (node.closest("[data-all-cuts-footer-actions], .all-cuts-footer-actions")) {
+        return;
+      }
+
+      node.remove();
+    });
+  };
+  // ROUND4_TRACK1_REMOVE_TOP_ALL_CUTS_CTA_END
   const renderActiveProductListGuide = (productList, guideKey = null) => {
     const activeGuide = getActiveProductListGuide(productList, guideKey);
 
@@ -1792,6 +1840,7 @@ requestAnimationFrame(() => {
     if (bodyNode) {
       hideProductListIndexTooltip();
       bodyNode.innerHTML = createSections(activeGuide);
+      removeRound4TopAllCutsInquiryCtas();
       bodyNode.scrollTop = 0;
       bodyNode.parentElement?.scrollTo?.({ top: 0, behavior: "auto" });
 
@@ -1814,7 +1863,18 @@ requestAnimationFrame(() => {
       .trim();
 
   const createPageGallery = (pages) => {
-    const pageIndex = pages
+    // ROUND4_TRACK1_ALL_CUTS_SORTED_PAGES_START
+    const sortedPages = Array.isArray(pages)
+      ? [...pages].sort((left, right) =>
+          getPageIndexTitle(left?.title || "").localeCompare(getPageIndexTitle(right?.title || ""), undefined, {
+            sensitivity: "base",
+            numeric: true,
+          }),
+        )
+      : [];
+    // ROUND4_TRACK1_ALL_CUTS_SORTED_PAGES_END
+
+    const pageIndex = sortedPages
       .map((page, index) => {
         const displayTitle = getPageIndexTitle(page.title);
         const pageNumber = String(index + 1).padStart(2, "0");
@@ -1837,7 +1897,7 @@ requestAnimationFrame(() => {
       })
       .join("");
 
-    const pageCards = pages
+    const pageCards = sortedPages
       .map(
         (page, index) => `
           <figure class="product-list-page-card" data-product-list-page-card="${index}">
@@ -2538,6 +2598,21 @@ requestAnimationFrame(() => {
     }
   });
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("keydown", (event) => {
     const activeLightbox = modal.querySelector("[data-product-list-image-lightbox]");
     const isLightboxOpen = Boolean(activeLightbox && !activeLightbox.hidden);
@@ -2653,6 +2728,21 @@ const setupDialogScrollResetOnOpen = () => {
 };
 
 if (document.readyState === "loading") {
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", setupDialogScrollResetOnOpen, { once: true });
 } else {
   setupDialogScrollResetOnOpen();
@@ -2808,6 +2898,21 @@ const initRound3Section4SearchPolish = () => {
 };
 
 if (document.readyState === "loading") {
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initRound3Section4SearchPolish, { once: true });
 } else {
   initRound3Section4SearchPolish();
@@ -2857,6 +2962,21 @@ const initContactMessageScrollContainment = () => {
 };
 
 if (document.readyState === "loading") {
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initContactMessageScrollContainment, { once: true });
 } else {
   initContactMessageScrollContainment();
@@ -3263,6 +3383,21 @@ const initProviderModalInquirySelection = () => {
     }, 180);
   };
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "click",
     (event) => {
@@ -3306,6 +3441,21 @@ const initProviderModalInquirySelection = () => {
     true,
   );
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "keydown",
     (event) => {
@@ -3350,6 +3500,21 @@ const initProviderModalInquirySelection = () => {
 };
 
 if (document.readyState === "loading") {
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initProviderModalInquirySelection, { once: true });
 } else {
   initProviderModalInquirySelection();
@@ -3657,6 +3822,21 @@ const initSharedInquiryListCore = () => {
     syncSavedInquiryRows,
   };
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "click",
     (event) => {
@@ -3694,6 +3874,21 @@ const initSharedInquiryListCore = () => {
 };
 
 if (document.readyState === "loading") {
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initSharedInquiryListCore, { once: true });
 } else {
   initSharedInquiryListCore();
@@ -3772,9 +3967,22 @@ const initAllCutsInquiryCtaSafe = () => {
     Array.from(modal?.querySelectorAll?.("[data-product-list-page-jump][data-all-cuts-inquiry-selected='true']") || []);
 
   const removeBrokenBodyEntry = (modal) => {
-    modal?.querySelector?.("[data-product-list-body], .product-list-modal__body")
-      ?.querySelectorAll?.("[data-all-cuts-inquiry-entry], .all-cuts-inquiry-entry")
-      ?.forEach((node) => node.remove());
+    const body = modal?.querySelector?.("[data-product-list-body], .product-list-modal__body");
+
+    if (!body) {
+      return;
+    }
+
+    body
+      .querySelectorAll(
+        [
+          "[data-all-cuts-inquiry-entry]",
+          ".all-cuts-inquiry-entry",
+          ".provider-modal-top-inquiry-cta-wrap",
+          ".provider-modal-inquiry-cta--top",
+        ].join(","),
+      )
+      .forEach((node) => node.remove());
   };
 
   const cleanupFooterControls = (modal) => {
@@ -3815,6 +4023,22 @@ const initAllCutsInquiryCtaSafe = () => {
     feedback.hidden = !message;
   };
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_LOCK_START
+  const syncAllCutsIndexBodyHeight = (modal) => {
+    const body = modal?.querySelector?.("[data-product-list-body], .product-list-modal__body");
+    const index = modal?.querySelector?.(".product-list-page-index");
+
+    if (!body || !index) {
+      return;
+    }
+
+    const bodyHeight = Math.floor(body.clientHeight);
+
+    if (bodyHeight > 0) {
+      modal.style.setProperty("--round4-all-cuts-body-height", `${bodyHeight}px`);
+    }
+  };
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_LOCK_END
   const syncFooterText = (modal) => {
     const list = getInquiryList();
     const count = list?.getItems?.().length || 0;
@@ -3828,7 +4052,7 @@ const initAllCutsInquiryCtaSafe = () => {
       contextNode.textContent =
         selectedCount > 0
           ? `${selectedCount} selected ${selectedCount === 1 ? "page" : "pages"}. Confirm selected items to add them to your inquiry list.`
-          : "Select one or more guide pages from the index, then confirm them for your inquiry.";
+          : "Select one or more cuts of meat from the index to the left.";
     }
 
     if (countNode) {
@@ -3940,7 +4164,7 @@ const initAllCutsInquiryCtaSafe = () => {
               <div class="all-cuts-footer-inquiry__copy">
                 <p class="all-cuts-footer-inquiry__kicker">Inquiry list</p>
                 <h3 class="all-cuts-footer-inquiry__title">All Cuts Guide</h3>
-                <p class="all-cuts-footer-inquiry__context" data-all-cuts-inquiry-context>Select one or more guide pages from the index.</p>
+                <p class="all-cuts-footer-inquiry__context" data-all-cuts-inquiry-context>Select one or more cuts of meat from the index to the left.</p>
                 <p class="all-cuts-footer-inquiry__count" data-all-cuts-inquiry-count>Inquiry list: 0 items saved</p>
               </div>
 
@@ -3964,6 +4188,7 @@ const initAllCutsInquiryCtaSafe = () => {
     }
 
     syncIndexSelectionState(modal);
+    syncAllCutsIndexBodyHeight(modal);
     return footer;
   };
 
@@ -4043,7 +4268,7 @@ const initAllCutsInquiryCtaSafe = () => {
     }
 
     if (!buttons.length) {
-      setFooterFeedback(modal, "Select one or more guide pages first.");
+      setFooterFeedback(modal, "Select one or more cuts of meat from the index to the left.");
       return;
     }
 
@@ -4110,6 +4335,21 @@ const initAllCutsInquiryCtaSafe = () => {
     }, 180);
   };
 
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "click",
     (event) => {
@@ -4170,6 +4410,21 @@ const initAllCutsInquiryCtaSafe = () => {
 };
 
 if (document.readyState === "loading") {
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
+  window.addEventListener(
+    "resize",
+    () => {
+      const modal = getAllCutsModal();
+
+      if (!modal) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
+    },
+    { passive: true },
+  );
+  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initAllCutsInquiryCtaSafe, { once: true });
 } else {
   initAllCutsInquiryCtaSafe();
