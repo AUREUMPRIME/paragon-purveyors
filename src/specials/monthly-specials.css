@@ -352,3 +352,105 @@ body {
   text-transform: uppercase;
   color: rgba(247, 240, 230, 0.42);
 }
+
+/* MONTHLY_SPECIALS_READABILITY_REBALANCE_START */
+.specials-header {
+  column-gap: 28px;
+  padding-bottom: 16px;
+}
+
+.month-block {
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  text-align: right;
+}
+
+.month-label,
+.month-title,
+.month-subline {
+  margin: 0;
+}
+
+.month-label {
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.28em;
+}
+
+.month-title {
+  font-size: 38px;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.month-subline {
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.24em;
+}
+
+.special-card__name {
+  font-size: 27px;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+}
+
+.special-card__qty {
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+}
+
+.price-label {
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.13em;
+}
+
+.price-value {
+  font-size: 17px;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+}
+
+.price-icon {
+  font-size: 7px;
+}
+
+.special-description {
+  font-size: 8.5px;
+  line-height: 1.32;
+}
+
+.contact-instruction {
+  font-size: 9.5px;
+  line-height: 1.35;
+}
+
+.contact-kicker {
+  font-size: 7.5px;
+  letter-spacing: 0.15em;
+}
+
+.contact-name {
+  font-size: 15px;
+  line-height: 1.08;
+}
+
+.contact-meta {
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.footer-message,
+.disclaimer {
+  font-size: 8.5px;
+  line-height: 1.35;
+}
+
+.site-button {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+/* MONTHLY_SPECIALS_READABILITY_REBALANCE_END */

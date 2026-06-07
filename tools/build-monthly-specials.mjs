@@ -487,9 +487,9 @@ const createHtml = async (data, activeSpecials, css) => {
         <img class="brand-text-logo" src="${brandTextLogoData}" alt="Paragon Purveyors">
       </section>
       <section class="month-block" aria-label="Monthly specials">
-        <p class="month-label">${escapeHtml(settings.month)} ${escapeHtml(settings.year)}</p>
-        <h1 class="month-title">${escapeHtml(settings.headline)}</h1>
-        <p class="month-subline">${escapeHtml(settings.subheadline)}</p>
+        <p class="month-label">${escapeHtml(settings.month)}</p>
+        <h1 class="month-title">Monthly Specials</h1>
+        <p class="month-subline">${escapeHtml(settings.year)}</p>
       </section>
     </header>
 
