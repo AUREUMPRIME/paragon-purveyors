@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-07T00:13:29.326Z",
+  "generatedAt": "2026-06-07T00:25:09.087Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -69,7 +69,7 @@
       "displayName": "Tri Tip",
       "quantityAvailable": "12 pieces available",
       "pricePerSteak": "$0.00",
-      "priceFivePlusSteaks": "$0.00",
+      "priceFivePlusSteaks": "$250.00",
       "pricePerRoll": "$0.00",
       "pricePerCase": "$0.00",
       "imagePath": "assets/all-cuts/enlarge/21-tri-tip.webp",
