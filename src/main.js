@@ -141,20 +141,10 @@ app.innerHTML = `
               <span class="section-about-logo-card__owner-cover" aria-hidden="true">
                   <span class="section-about-logo-card__owner-stage">
                     <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--clayton">
-                      <img
-                        class="section-about-logo-card__owner-cover-image"
-                        src="${assetPath("assets/owners/clayton-u-placeholder.webp")}"
-                        alt=""
-                        loading="lazy"
-                      />
+                      <span class="section-about-logo-card__owner-placeholder section-about-logo-card__owner-placeholder--clayton" aria-hidden="true"></span>
                     </span>
                     <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--blake">
-                      <img
-                        class="section-about-logo-card__owner-cover-image"
-                        src="${assetPath("assets/owners/blake-b-placeholder.webp")}"
-                        alt=""
-                        loading="lazy"
-                      />
+                      <span class="section-about-logo-card__owner-placeholder section-about-logo-card__owner-placeholder--blake" aria-hidden="true"></span>
                     </span>
                   </span>
                 </span>
@@ -643,21 +633,28 @@ app.innerHTML = `
 
               <article class="inquiry-detail-card inquiry-detail-card--copy">
                 <span class="inquiry-detail-label">Direct Line</span>
-                <strong class="inquiry-detail-value">Clayton U. — +1 (949) 514-3127</strong>
+                <strong class="inquiry-detail-value">Clayton U. — +1 (000) 000-0000</strong>
                 <button
                   class="inquiry-copy-button"
                   type="button"
-                  data-copy-value="+1 (949) 514-3127"
+                  data-copy-value="+1 (000) 000-0000"
                   aria-label="Copy Clayton U. phone number"
                 >
                   Copy
                 </button>
               </article>
 
-              <article class="inquiry-detail-card inquiry-detail-card--pending">
+              <article class="inquiry-detail-card inquiry-detail-card--copy">
                 <span class="inquiry-detail-label">Second Contact</span>
-                <strong class="inquiry-detail-value">John D. — Number pending</strong>
-                <span class="inquiry-pending-note">To be updated</span>
+                <strong class="inquiry-detail-value">Blake B. — +1 (000) 000-0000</strong>
+                <button
+                  class="inquiry-copy-button"
+                  type="button"
+                  data-copy-value="+1 (000) 000-0000"
+                  aria-label="Copy Blake B. phone number"
+                >
+                  Copy
+                </button>
               </article>
             </div>
           </div>
@@ -906,12 +903,7 @@ function initHeroButtonFeedback() {
         <aside class="owners-portraits" aria-label="Paragon Purveyors founder portraits">
           <article class="owners-portrait-card owners-portrait-card--clayton">
             <div class="owners-portrait-card__image-frame">
-              <img
-                class="owners-portrait-card__image"
-                src="${assetPath("assets/owners/clayton-u-placeholder.webp")}"
-                alt="Clayton U. placeholder portrait"
-                loading="lazy"
-              />
+              <span class="owners-portrait-card__placeholder owners-portrait-card__placeholder--clayton" aria-hidden="true"></span>
             </div>
             <div class="owners-portrait-card__caption">
               <p class="owners-portrait-card__name">Clayton U.</p>
@@ -921,12 +913,7 @@ function initHeroButtonFeedback() {
 
           <article class="owners-portrait-card owners-portrait-card--blake">
             <div class="owners-portrait-card__image-frame">
-              <img
-                class="owners-portrait-card__image"
-                src="${assetPath("assets/owners/blake-b-placeholder.webp")}"
-                alt="Blake B. placeholder portrait"
-                loading="lazy"
-              />
+              <span class="owners-portrait-card__placeholder owners-portrait-card__placeholder--blake" aria-hidden="true"></span>
             </div>
             <div class="owners-portrait-card__caption">
               <p class="owners-portrait-card__name">Blake B.</p>

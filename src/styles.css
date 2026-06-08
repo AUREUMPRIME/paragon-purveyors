@@ -10670,3 +10670,57 @@ body.selected-cut-modal-open .global-contact-cta {
   min-height: 0 !important;
 }
 /* ROUND4_TRACK1_INDEX_BODY_HEIGHT_LOCK_END */
+
+/* CLIENT_SECTION_2_OWNER_BLANK_PLACEHOLDERS_START */
+.section-about-logo-card--owners .section-about-logo-card__owner-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  border-radius: inherit;
+  border: 1px solid rgba(232, 226, 214, 0.14);
+  background:
+    radial-gradient(circle at 50% 24%, rgba(232, 226, 214, 0.16), transparent 18%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.025) 54%, rgba(255, 255, 255, 0.075));
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.34),
+    inset 0 -24px 48px rgba(0, 0, 0, 0.22);
+}
+
+.section-about-logo-card--owners .section-about-logo-card__owner-placeholder::after {
+  content: "";
+  display: block;
+  width: 42%;
+  height: 28%;
+  margin: 54% auto 0;
+  border-radius: 999px 999px 18px 18px;
+  border: 1px solid rgba(232, 226, 214, 0.13);
+  background: rgba(232, 226, 214, 0.045);
+}
+
+.owners-portrait-card__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(168px, 22vw, 260px);
+  border-radius: inherit;
+  border: 1px solid rgba(232, 226, 214, 0.15);
+  background:
+    radial-gradient(circle at 50% 28%, rgba(232, 226, 214, 0.18), transparent 17%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.03) 52%, rgba(255, 255, 255, 0.08));
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.36),
+    inset 0 -32px 60px rgba(0, 0, 0, 0.26);
+}
+
+.owners-portrait-card__placeholder::after {
+  content: "";
+  display: block;
+  width: 38%;
+  height: 28%;
+  margin: 54% auto 0;
+  border-radius: 999px 999px 22px 22px;
+  border: 1px solid rgba(232, 226, 214, 0.14);
+  background: rgba(232, 226, 214, 0.045);
+}
+/* CLIENT_SECTION_2_OWNER_BLANK_PLACEHOLDERS_END */
