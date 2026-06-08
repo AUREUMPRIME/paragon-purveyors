@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-07T00:44:03.656Z",
+  "generatedAt": "2026-06-08T07:14:01.288Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -42,6 +42,7 @@
       "cutId": "tenderloin",
       "displayName": "Tenderloin",
       "quantityAvailable": "24 steaks available",
+      "compareAt": "$80/lb",
       "pricePerSteak": "$0.00",
       "priceFivePlusSteaks": "$0.00",
       "pricePerRoll": "$0.00",
@@ -55,6 +56,7 @@
       "cutId": "ribeye",
       "displayName": "Ribeye",
       "quantityAvailable": "18 steaks available",
+      "compareAt": "$75/lb",
       "pricePerSteak": "$0.00",
       "priceFivePlusSteaks": "$0.00",
       "pricePerRoll": "$0.00",
@@ -68,6 +70,7 @@
       "cutId": "tri-tip",
       "displayName": "Tri Tip",
       "quantityAvailable": "12 pieces available",
+      "compareAt": "$55/lb",
       "pricePerSteak": "$0.00",
       "priceFivePlusSteaks": "$0.00",
       "pricePerRoll": "$0.00",
@@ -78,15 +81,16 @@
     {
       "sort": 4,
       "active": true,
-      "cutId": "chuck-tail-flap",
-      "displayName": "Chuck Tail Flap / Denver Steak",
-      "quantityAvailable": "8 rolls available",
+      "cutId": "striploin",
+      "displayName": "Striploin / NY Strip",
+      "quantityAvailable": "10 steaks available",
+      "compareAt": "$70/lb",
       "pricePerSteak": "$0.00",
       "priceFivePlusSteaks": "$0.00",
       "pricePerRoll": "$0.00",
       "pricePerCase": "$0.00",
-      "imagePath": "assets/all-cuts/enlarge/03-chuck-tail-flap.webp",
-      "description": "Well-marbled and flavorful, ideal for slicing, grilling, and high-heat cooking."
+      "imagePath": "assets/all-cuts/enlarge/17-striploin.webp",
+      "description": "Classic steakhouse cut with a clean bite, rich flavor, and refined texture."
     }
   ]
 }

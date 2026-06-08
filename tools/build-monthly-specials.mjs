@@ -247,6 +247,7 @@ const parseSpecialsRows = (rows) => {
     cutId: ["Cut ID"],
     displayName: ["Display Name"],
     quantityAvailable: ["Quantity Available"],
+      compareAt: ["Compare At", "Compare At Price", "Traditional Retail", "Traditional Retail Price"],
     pricePerSteak: ["Price Per Steak"],
     priceFivePlusSteaks: ["Price 5+ Steaks", "Price Five Plus Steaks"],
     pricePerRoll: ["Price Per Roll"],
@@ -263,6 +264,7 @@ const parseSpecialsRows = (rows) => {
       cutId: valueFrom(row, headerMap, "cutId"),
       displayName: valueFrom(row, headerMap, "displayName"),
       quantityAvailable: valueFrom(row, headerMap, "quantityAvailable"),
+      compareAt: valueFrom(row, headerMap, "compareAt"),
       pricePerSteak: valueFrom(row, headerMap, "pricePerSteak"),
       priceFivePlusSteaks: valueFrom(row, headerMap, "priceFivePlusSteaks"),
       pricePerRoll: valueFrom(row, headerMap, "pricePerRoll"),
@@ -429,9 +431,19 @@ const createSpecialCard = async (item) => {
   return `
     <article class="special-card">
       <div class="special-card__content">
-        <div class="special-card__topline">
+                <div class="special-card__topline">
           <h2 class="special-card__name">${escapeHtml(item.displayName)}</h2>
-          <p class="special-card__qty">${escapeHtml(item.quantityAvailable)}</p>
+          <div class="special-card__meta">
+            <p class="special-card__qty">${escapeHtml(item.quantityAvailable)}</p>
+            ${
+              item.compareAt
+                ? `<div class="compare-at">
+                    <p class="compare-at__label">COMPARE AT</p>
+                    <p class="compare-at__value">${escapeHtml(item.compareAt)}</p>
+                  </div>`
+                : ""
+            }
+          </div>
         </div>
         <div class="price-list">${priceRows}</div>
         ${item.description ? `<p class="special-description">${escapeHtml(item.description)}</p>` : ""}

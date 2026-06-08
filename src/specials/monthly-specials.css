@@ -454,3 +454,63 @@ body {
   letter-spacing: 0.16em;
 }
 /* MONTHLY_SPECIALS_READABILITY_REBALANCE_END */
+
+/* MONTHLY_SPECIALS_COMPARE_AT_START */
+.special-card__content {
+  position: relative;
+}
+
+.special-card__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.special-card__meta {
+  min-width: 148px;
+  display: block;
+  text-align: right;
+}
+
+.compare-at {
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  width: 148px;
+  transform: translateY(-42%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.compare-at__label,
+.compare-at__value {
+  margin: 0;
+}
+
+.compare-at__label {
+  color: rgba(197, 114, 88, 0.78);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.compare-at__value {
+  color: rgba(248, 242, 232, 0.56);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(248, 242, 232, 0.56);
+}
+/* MONTHLY_SPECIALS_COMPARE_AT_END */
