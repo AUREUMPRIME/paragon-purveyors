@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-08T07:14:01.288Z",
+  "generatedAt": "2026-06-08T07:28:53.448Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -23,16 +23,16 @@
     {
       "sort": 1,
       "active": true,
-      "name": "Blake",
-      "location": "San Diego",
+      "name": "Blake B.",
+      "location": "Orange county",
       "phone": "+1 (000) 000-0000"
     },
     {
       "sort": 2,
       "active": true,
-      "name": "Clayton",
-      "location": "Santa Barbara",
-      "phone": "+1 (949) 514-3127"
+      "name": "Clayton U.",
+      "location": "French valley/ Temecula area",
+      "phone": "+1 (000) 000-0001"
     }
   ],
   "specials": [

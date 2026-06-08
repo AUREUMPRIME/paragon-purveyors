@@ -514,3 +514,19 @@ body {
   text-decoration-color: rgba(248, 242, 232, 0.56);
 }
 /* MONTHLY_SPECIALS_COMPARE_AT_END */
+
+/* MONTHLY_FEATURED_CUTS_TITLE_START */
+.month-title {
+  max-width: 190px;
+}
+
+.month-title span {
+  display: block;
+}
+
+.month-title span + span {
+  margin-top: 3px;
+  font-size: 0.72em;
+  letter-spacing: -0.035em;
+}
+/* MONTHLY_FEATURED_CUTS_TITLE_END */

@@ -477,7 +477,7 @@ const createHtml = async (data, activeSpecials, css) => {
   }
 
   const settings = data.settings;
-  const documentTitle = `${settings.headline || `${settings.month} Specials`} | Paragon Purveyors`;
+    const documentTitle = `${settings.month} Monthly Featured Cuts | Paragon Purveyors`;
   const siteUrl = toPublicUrl(settings.footerUrl);
   const contactCards = createContactCards(data.contacts || []);
 
@@ -500,7 +500,7 @@ const createHtml = async (data, activeSpecials, css) => {
       </section>
       <section class="month-block" aria-label="Monthly specials">
         <p class="month-label">${escapeHtml(settings.month)}</p>
-        <h1 class="month-title">Monthly Specials</h1>
+        <h1 class="month-title" aria-label="Monthly Featured Cuts"><span>Monthly</span><span>Featured Cuts</span></h1>
         <p class="month-subline">${escapeHtml(settings.year)}</p>
       </section>
     </header>
@@ -531,12 +531,34 @@ const createHtml = async (data, activeSpecials, css) => {
 const createLandingHtml = (data, activeSpecials, buildId) => {
   const settings = data.settings;
   const siteUrl = toPublicUrl(settings.footerUrl);
+  const pdfUrl = `./monthly-specials.pdf?b=${encodeURIComponent(buildId)}`;
+
+  const contactCards = (data.contacts || [])
+    .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location))
+    .map((contact) => {
+      const phone = normalizeText(contact.phone || "");
+      const name = normalizeText(contact.name || "Paragon Purveyors");
+      const location = normalizeText(contact.location || "Contact");
+
+      return `
+        <article class="contact-card">
+          <p class="contact-kicker">${escapeHtml(location)}</p>
+          <h2>${escapeHtml(name)}</h2>
+          <p class="contact-phone">${escapeHtml(phone || "Phone pending")}</p>
+          ${
+            phone
+              ? `<button class="copy-phone-button" type="button" data-copy-phone="${escapeHtml(phone)}" aria-label="Copy ${escapeHtml(name)} phone number">Copy phone</button>`
+              : ""
+          }
+        </article>`;
+    })
+    .join("");
 
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>${escapeHtml(settings.headline)} | Paragon Purveyors</title>
+  <title>Monthly Featured Cuts | Paragon Purveyors</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -548,49 +570,187 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
       color: #f8f2e8;
       font-family: Arial, Helvetica, sans-serif;
     }
+
     main {
-      width: min(92vw, 720px);
+      width: min(92vw, 820px);
       border: 1px solid rgba(248, 242, 232, 0.18);
-      padding: 48px;
+      padding: clamp(32px, 6vw, 54px);
       background: rgba(248, 242, 232, 0.04);
     }
-    p { color: rgba(248, 242, 232, 0.72); line-height: 1.55; }
+
+    .eyebrow,
+    .contact-kicker {
+      color: rgba(197, 114, 88, 0.78);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
     h1 {
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(44px, 8vw, 72px);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
+      font-size: clamp(44px, 8vw, 76px);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
     }
-    a {
+
+    h2 {
+      margin: 6px 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      color: rgba(248, 242, 232, 0.72);
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    a,
+    button {
       display: inline-flex;
-      margin-top: 22px;
-      margin-right: 10px;
-      padding: 14px 20px;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 12px 18px;
       border: 1px solid rgba(248, 242, 232, 0.32);
       border-radius: 999px;
+      background: transparent;
       color: #f8f2e8;
+      font: inherit;
       text-decoration: none;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      font-size: 12px;
+      font-size: 11px;
+      cursor: pointer;
     }
+
+    a:hover,
+    button:hover {
+      border-color: rgba(248, 242, 232, 0.58);
+    }
+
+    .contact-section {
+      margin-top: 34px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(248, 242, 232, 0.16);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .contact-card {
+      padding: 20px;
+      border: 1px solid rgba(248, 242, 232, 0.15);
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    .contact-phone {
+      margin: 10px 0 14px;
+      color: rgba(248, 242, 232, 0.86);
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .copy-phone-button {
+      min-height: 36px;
+      padding: 10px 14px;
+      font-size: 10px;
+    }
+
     small {
       display: block;
       margin-top: 28px;
       color: rgba(248, 242, 232, 0.48);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 680px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 30px 22px;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <h1>${escapeHtml(settings.headline)}</h1>
-    <p>${escapeHtml(settings.subheadline)}</p>
-    <p>${activeSpecials.length} current specials are available in the latest monthly PDF.</p>
-    <a href="./monthly-specials.pdf?b=${encodeURIComponent(buildId)}">Open latest specials PDF</a>
-    <a href="${escapeHtml(siteUrl)}">${escapeHtml(settings.footerButtonLabel || "Visit ParagonPurveyors.com")}</a>
-    <small>${escapeHtml(settings.disclaimer)}</small>
+    <p class="eyebrow">${escapeHtml(settings.month)} ${escapeHtml(settings.year)}</p>
+    <h1>Monthly<br>Featured Cuts</h1>
+    <p>${escapeHtml(settings.subheadline || "Monthly selections for direct ordering.")}</p>
+    <p>${activeSpecials.length} current featured cuts are available in the latest monthly PDF.</p>
+
+    <div class="actions">
+      <a href="${escapeHtml(pdfUrl)}">Open latest PDF</a>
+      <a href="${escapeHtml(siteUrl)}">${escapeHtml(settings.footerButtonLabel || "Visit ParagonPurveyors.com")}</a>
+    </div>
+
+    <section class="contact-section" aria-label="Direct ordering contacts">
+      <p class="eyebrow">Direct ordering contacts</p>
+      <div class="contact-grid">
+        ${contactCards}
+      </div>
+    </section>
+
+    <small>${escapeHtml(settings.disclaimer || "Availability and pricing are subject to confirmation.")}</small>
   </main>
+
+  <script>
+    (() => {
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      };
+
+      document.querySelectorAll("[data-copy-phone]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const originalLabel = button.textContent;
+          const phone = button.getAttribute("data-copy-phone");
+
+          try {
+            await copyText(phone);
+            button.textContent = "Copied";
+            window.setTimeout(() => {
+              button.textContent = originalLabel;
+            }, 1400);
+          } catch (error) {
+            button.textContent = "Copy failed";
+            window.setTimeout(() => {
+              button.textContent = originalLabel;
+            }, 1800);
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>`;
 };
