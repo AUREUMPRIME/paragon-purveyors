@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/paragon-purveyors/' }}
+      VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/' }}
 
     steps:
       - name: Checkout
