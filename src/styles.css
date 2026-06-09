@@ -10891,3 +10891,199 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* MOBILE_ROUND1_SECTION3_PROVIDER_HEADER_ROWS_END */
+
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_LAYOUT_START */
+/*
+  Mobile-only All Cuts layout fix.
+  Root causes from audit:
+  - All Cuts card was forced toward start at small widths.
+  - All Cuts modal index became sticky/fixed-height above the page gallery.
+  This keeps the index in normal vertical flow above the images on phone.
+*/
+@media (max-width: 760px) {
+  .panel-cuts .cuts-head > .cut-card--all-cuts,
+  .panel-cuts .cut-card--all-cuts {
+    justify-self: center !important;
+    align-self: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(100%, 18rem) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+    text-align: center !important;
+  }
+
+  .panel-cuts .cuts-head > .cut-card--all-cuts h3,
+  .panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-description,
+  .panel-cuts .cut-card--all-cuts h3,
+  .panel-cuts .cut-card--all-cuts .cut-card-description {
+    max-width: 100% !important;
+    text-align: center !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery {
+    width: calc(100vw - 28px) !important;
+    height: min(840px, calc(100dvh - 28px)) !important;
+    max-height: calc(100dvh - 28px) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-modal__panel {
+    overflow: hidden !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-modal__body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-modal__header--with-tabs {
+    justify-items: center !important;
+    text-align: center !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-guide-tabs {
+    justify-content: center !important;
+    justify-self: center !important;
+    width: 100% !important;
+    margin-inline: auto !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-gallery-shell {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 14px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: min(218px, 31dvh) !important;
+    overflow: hidden !important;
+    margin: 0 0 4px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    max-height: min(204px, 29dvh) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    padding-right: 4px !important;
+    padding-bottom: 5px !important;
+    scroll-padding-bottom: 5px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__button {
+    min-height: 40px !important;
+    padding-block: 9px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-gallery {
+    display: grid !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-card {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .panel-cuts .cuts-head > .cut-card--all-cuts,
+  .panel-cuts .cut-card--all-cuts {
+    width: min(100%, 16.5rem) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+    max-height: min(202px, 29dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+    max-height: min(188px, 27dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__button {
+    min-height: 38px !important;
+    padding-block: 8px !important;
+  }
+}
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_LAYOUT_END */
+
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_INDEX_VISIBILITY_START */
+/*
+  Mobile-only All Cuts index visibility refinement.
+  The modal should open with the index visible first and show at least three options.
+*/
+@media (max-width: 760px) {
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+    max-height: min(218px, 31dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+    max-height: min(204px, 29dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__button {
+    min-height: 40px !important;
+    padding-block: 9px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+    max-height: min(202px, 29dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+    max-height: min(188px, 27dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__button {
+    min-height: 38px !important;
+    padding-block: 8px !important;
+  }
+}
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_INDEX_VISIBILITY_END */
+
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_TABS_CENTER_START */
+/*
+  Mobile-only All Cuts guide tab centering.
+  Corrected after phone test: avoid left:50% and translateX because the tab
+  group is in normal layout, not absolutely positioned.
+*/
+@media (max-width: 760px) {
+  .product-list-modal.product-list-modal--page-gallery .product-list-modal__header.product-list-modal__header--with-tabs {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-guide-tabs {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 18px auto 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    justify-self: center !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-list-modal.product-list-modal--page-gallery .product-list-guide-tabs {
+    gap: 18px !important;
+  }
+}
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_TABS_CENTER_END */

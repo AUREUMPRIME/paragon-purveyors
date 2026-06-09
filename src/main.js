@@ -4425,3 +4425,101 @@ if (document.readyState === "loading") {
   initAllCutsInquiryCtaSafe();
 }
 /* ROUND4_ALL_CUTS_INQUIRY_CTA_SAFE_END */
+
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_SCROLL_RESET_START */
+function resetAllCutsPageGalleryScroll(modal) {
+  if (!modal || !modal.matches?.(".product-list-modal--page-gallery")) {
+    return;
+  }
+
+  const scrollTargets = [
+    modal,
+    modal.querySelector(".product-list-modal__body"),
+    modal.querySelector(".product-list-page-gallery-shell"),
+    modal.querySelector(".product-list-page-index"),
+    modal.querySelector(".product-list-page-index__list"),
+    modal.querySelector(".product-list-page-gallery"),
+  ].filter(Boolean);
+
+  const reset = () => {
+    for (const target of scrollTargets) {
+      target.scrollTop = 0;
+      target.scrollLeft = 0;
+    }
+  };
+
+  reset();
+  window.requestAnimationFrame(reset);
+  window.setTimeout(reset, 80);
+  window.setTimeout(reset, 220);
+}
+
+function setupAllCutsPageGalleryScrollReset() {
+  const modalSelector = ".product-list-modal.product-list-modal--page-gallery";
+  const observedModals = new WeakSet();
+
+  const observeModal = (modal) => {
+    if (!modal || observedModals.has(modal)) {
+      return;
+    }
+
+    observedModals.add(modal);
+
+    const openObserver = new MutationObserver(() => {
+      if (modal.hasAttribute("open")) {
+        resetAllCutsPageGalleryScroll(modal);
+      }
+    });
+
+    openObserver.observe(modal, {
+      attributes: true,
+      attributeFilter: ["open"],
+    });
+
+    if (modal.hasAttribute("open")) {
+      resetAllCutsPageGalleryScroll(modal);
+    }
+  };
+
+  const observeExistingModals = () => {
+    document.querySelectorAll(modalSelector).forEach(observeModal);
+  };
+
+  observeExistingModals();
+
+  const documentObserver = new MutationObserver(observeExistingModals);
+  documentObserver.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const trigger = event.target.closest?.(
+        ".cut-card--all-cuts, [data-all-cuts-trigger], [data-product-list-guide-trigger], [data-product-list-open]",
+      );
+
+      if (!trigger) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        document.querySelectorAll(`${modalSelector}[open]`).forEach(resetAllCutsPageGalleryScroll);
+      });
+
+      window.setTimeout(() => {
+        document.querySelectorAll(`${modalSelector}[open]`).forEach(resetAllCutsPageGalleryScroll);
+      }, 160);
+    },
+    true,
+  );
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupAllCutsPageGalleryScrollReset, { once: true });
+} else {
+  setupAllCutsPageGalleryScrollReset();
+}
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_SCROLL_RESET_END */
+
