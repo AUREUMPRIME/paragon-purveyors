@@ -982,7 +982,9 @@ export function initSelectedCutsModal() {
     messageNode.value = message;
     messageNode.dispatchEvent(new Event("input", { bubbles: true }));
     messageNode.dispatchEvent(new Event("change", { bubbles: true }));
-    messageNode.focus({ preventScroll: true });
+    if (!window.matchMedia("(max-width: 767px)").matches) {
+      messageNode.focus({ preventScroll: true });
+    }
 
     return true;
   };

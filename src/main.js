@@ -2347,6 +2347,7 @@ requestAnimationFrame(() => {
       event.preventDefault();
       event.stopPropagation();
 
+      lastTrigger = null;
       closeProductList();
 
       window.dispatchEvent(
@@ -3075,7 +3076,9 @@ const initProviderModalInquirySelection = () => {
     messageNode.value = message;
     messageNode.dispatchEvent(new Event("input", { bubbles: true }));
     messageNode.dispatchEvent(new Event("change", { bubbles: true }));
-    messageNode.focus({ preventScroll: true });
+    if (!window.matchMedia("(max-width: 767px)").matches) {
+      messageNode.focus({ preventScroll: true });
+    }
 
     return true;
   };
@@ -3349,8 +3352,8 @@ const initProviderModalInquirySelection = () => {
       return;
     }
 
-    const closeButton = modal.querySelector("[data-product-list-close]");
-    closeButton?.click();
+    lastTrigger = null;
+    closeProductList();
 
     window.setTimeout(() => {
       window.dispatchEvent(
@@ -3644,7 +3647,9 @@ const initSharedInquiryListCore = () => {
     messageNode.value = message;
     messageNode.dispatchEvent(new Event("input", { bubbles: true }));
     messageNode.dispatchEvent(new Event("change", { bubbles: true }));
-    messageNode.focus({ preventScroll: true });
+    if (!window.matchMedia("(max-width: 767px)").matches) {
+      messageNode.focus({ preventScroll: true });
+    }
     return true;
   };
 
@@ -4279,7 +4284,9 @@ const initAllCutsInquiryCtaSafe = () => {
     messageNode.value = message;
     messageNode.dispatchEvent(new Event("input", { bubbles: true }));
     messageNode.dispatchEvent(new Event("change", { bubbles: true }));
-    messageNode.focus({ preventScroll: true });
+    if (!window.matchMedia("(max-width: 767px)").matches) {
+      messageNode.focus({ preventScroll: true });
+    }
     return true;
   };
 
@@ -4302,7 +4309,8 @@ const initAllCutsInquiryCtaSafe = () => {
       return;
     }
 
-    modal.querySelector("[data-product-list-close], .product-list-modal__close")?.click();
+    lastTrigger = null;
+    closeProductList();
 
     window.setTimeout(() => {
       window.dispatchEvent(
