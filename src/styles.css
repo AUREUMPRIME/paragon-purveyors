@@ -10724,3 +10724,76 @@ body.selected-cut-modal-open .global-contact-cta {
   background: rgba(232, 226, 214, 0.045);
 }
 /* CLIENT_SECTION_2_OWNER_BLANK_PLACEHOLDERS_END */
+
+/* MOBILE_ROUND1_SECTION1_TOP_CTA_CENTER_START */
+/*
+  Mobile-only fix for the fixed top inquiry CTA.
+  Keeps desktop untouched while preventing the CTA pill from drifting right
+  or letting copy overflow outside the pill on narrow phones.
+*/
+@media (max-width: 760px) {
+  .global-contact-cta {
+    top: max(8px, env(safe-area-inset-top)) !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: 50% !important;
+    width: auto !important;
+    max-width: calc(100vw - 24px) !important;
+    transform: translateX(-50%) scale(0.84) !important;
+    transform-origin: center top !important;
+  }
+
+  .global-contact-cta:hover,
+  .global-contact-cta:focus-visible {
+    transform: translateX(-50%) scale(0.86) translateY(1px) !important;
+  }
+
+  .global-contact-cta__inner {
+    max-width: 100% !important;
+    grid-template-columns: 28px minmax(0, 1fr) !important;
+    gap: 9px !important;
+  }
+
+  .global-contact-cta__copy {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .global-contact-cta__eyebrow,
+  .global-contact-cta__label {
+    display: block !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .global-contact-cta {
+    max-width: calc(100vw - 20px) !important;
+    transform: translateX(-50%) scale(0.8) !important;
+  }
+
+  .global-contact-cta:hover,
+  .global-contact-cta:focus-visible {
+    transform: translateX(-50%) scale(0.82) translateY(1px) !important;
+  }
+
+  .global-contact-cta__inner {
+    grid-template-columns: 26px minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .global-contact-cta__eyebrow {
+    font-size: 0.46rem !important;
+    letter-spacing: 0.14em !important;
+  }
+
+  .global-contact-cta__label {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.075em !important;
+  }
+}
+/* MOBILE_ROUND1_SECTION1_TOP_CTA_CENTER_END */
