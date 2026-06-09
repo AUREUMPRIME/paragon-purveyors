@@ -10797,3 +10797,97 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* MOBILE_ROUND1_SECTION1_TOP_CTA_CENTER_END */
+
+/* MOBILE_ROUND1_SECTION3_PROVIDER_HEADER_ROWS_START */
+/*
+  Mobile-only producer modal header fix.
+  Root cause from live phone audit: eyebrow and provider logo were both in grid row 1.
+  This separates them into two rows so the logo cannot overlap the category/eyebrow text.
+*/
+@media (max-width: 760px) {
+  .product-list-modal.product-list-modal--provider-intro .product-list-modal__header {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    justify-items: center !important;
+    align-items: start !important;
+    row-gap: 8px !important;
+    min-height: auto !important;
+    padding: 6px 0 20px !important;
+    overflow: visible !important;
+    text-align: center !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .product-list-modal__eyebrow {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: start !important;
+    justify-self: center !important;
+    max-width: min(18ch, 78vw) !important;
+    margin: 0 !important;
+    text-align: center !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .provider-modal-logo,
+  .product-list-modal.product-list-modal--provider-intro [data-provider-modal-logo] {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    align-self: start !important;
+    justify-self: center !important;
+    position: static !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(118px, 36vw) !important;
+    max-width: min(118px, 36vw) !important;
+    max-height: 44px !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+    transform: none !important;
+    z-index: 1 !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .provider-modal-logo img,
+  .product-list-modal.product-list-modal--provider-intro [data-provider-modal-logo] img {
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 44px !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .provider-modal-logo img[src*="robbins-island_modal_logo.png"],
+  .product-list-modal.product-list-modal--provider-intro [data-provider-modal-logo] img[src*="robbins-island_modal_logo.png"] {
+    max-width: min(104px, 34vw) !important;
+    max-height: 28px !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .provider-modal-logo img[src*="wanderer_modal_logo.png"],
+  .product-list-modal.product-list-modal--provider-intro [data-provider-modal-logo] img[src*="wanderer_modal_logo.png"] {
+    max-width: min(116px, 36vw) !important;
+    max-height: 34px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-list-modal.product-list-modal--provider-intro .product-list-modal__header {
+    row-gap: 7px !important;
+    padding: 6px 0 18px !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .provider-modal-logo,
+  .product-list-modal.product-list-modal--provider-intro [data-provider-modal-logo] {
+    width: min(108px, 34vw) !important;
+    max-width: min(108px, 34vw) !important;
+    max-height: 40px !important;
+  }
+
+  .product-list-modal.product-list-modal--provider-intro .provider-modal-logo img,
+  .product-list-modal.product-list-modal--provider-intro [data-provider-modal-logo] img {
+    max-height: 40px !important;
+  }
+}
+/* MOBILE_ROUND1_SECTION3_PROVIDER_HEADER_ROWS_END */
