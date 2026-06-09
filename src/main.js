@@ -4523,3 +4523,153 @@ if (document.readyState === "loading") {
 }
 /* MOBILE_ROUND1_SECTION4_ALL_CUTS_SCROLL_RESET_END */
 
+/* MOBILE_ROUND1_SECTION5_TEXTAREA_SCROLL_LOCK_START */
+function setupInquiryTextareaScrollLock() {
+  const textareaSelector = ".inquiry-textarea[data-inquiry-message]";
+
+  let activeTextarea = null;
+  let lastTouchY = 0;
+  let suppressSectionGestureUntil = 0;
+
+  const getTextarea = (target) => target?.closest?.(textareaSelector) || null;
+
+  const canScroll = (textarea) => textarea.scrollHeight > textarea.clientHeight + 1;
+
+  const isAtTop = (textarea) => textarea.scrollTop <= 0;
+
+  const isAtBottom = (textarea) =>
+    textarea.scrollTop + textarea.clientHeight >= textarea.scrollHeight - 1;
+
+  const extendGestureSuppression = () => {
+    suppressSectionGestureUntil = Date.now() + 420;
+  };
+
+  const shouldSuppressRelease = (event) =>
+    Boolean(activeTextarea) || Boolean(getTextarea(event.target)) || Date.now() < suppressSectionGestureUntil;
+
+  const stopSectionGesture = (event, prevent = false) => {
+    event.stopPropagation();
+
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
+
+    if (prevent && typeof event.preventDefault === "function" && event.cancelable) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener(
+    "wheel",
+    (event) => {
+      const textarea = getTextarea(event.target);
+
+      if (!textarea) {
+        return;
+      }
+
+      extendGestureSuppression();
+      stopSectionGesture(event);
+
+      if (!canScroll(textarea)) {
+        event.preventDefault();
+        return;
+      }
+
+      const movingDown = event.deltaY > 0;
+      const movingUp = event.deltaY < 0;
+
+      if ((movingUp && isAtTop(textarea)) || (movingDown && isAtBottom(textarea))) {
+        event.preventDefault();
+      }
+    },
+    { capture: true, passive: false },
+  );
+
+  document.addEventListener(
+    "touchstart",
+    (event) => {
+      const textarea = getTextarea(event.target);
+
+      if (!textarea || event.touches.length !== 1) {
+        activeTextarea = null;
+        return;
+      }
+
+      activeTextarea = textarea;
+      lastTouchY = event.touches[0].clientY;
+      extendGestureSuppression();
+      stopSectionGesture(event);
+    },
+    { capture: true, passive: true },
+  );
+
+  document.addEventListener(
+    "touchmove",
+    (event) => {
+      const textarea = activeTextarea || getTextarea(event.target);
+
+      if (!textarea || event.touches.length !== 1) {
+        return;
+      }
+
+      const currentY = event.touches[0].clientY;
+      const deltaY = lastTouchY - currentY;
+      lastTouchY = currentY;
+
+      extendGestureSuppression();
+      stopSectionGesture(event);
+
+      if (!canScroll(textarea)) {
+        event.preventDefault();
+        return;
+      }
+
+      const movingDown = deltaY > 0;
+      const movingUp = deltaY < 0;
+
+      if ((movingUp && isAtTop(textarea)) || (movingDown && isAtBottom(textarea))) {
+        event.preventDefault();
+      }
+    },
+    { capture: true, passive: false },
+  );
+
+  document.addEventListener(
+    "touchend",
+    (event) => {
+      if (shouldSuppressRelease(event)) {
+        extendGestureSuppression();
+        stopSectionGesture(event, true);
+      }
+
+      window.setTimeout(() => {
+        activeTextarea = null;
+      }, 180);
+    },
+    { capture: true, passive: false },
+  );
+
+  document.addEventListener(
+    "touchcancel",
+    (event) => {
+      if (shouldSuppressRelease(event)) {
+        extendGestureSuppression();
+        stopSectionGesture(event, true);
+      }
+
+      window.setTimeout(() => {
+        activeTextarea = null;
+      }, 180);
+    },
+    { capture: true, passive: false },
+  );
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupInquiryTextareaScrollLock, { once: true });
+} else {
+  setupInquiryTextareaScrollLock();
+}
+/* MOBILE_ROUND1_SECTION5_TEXTAREA_SCROLL_LOCK_END */
+
