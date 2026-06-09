@@ -11287,3 +11287,36 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* MOBILE_ROUND1_SECTION5_TEXTAREA_SCROLL_LOCK_CSS_END */
+
+/* MOBILE_ROUND1_SECTION6_ALL_CUTS_DISABLED_VISUAL_START */
+/*
+  Makes the All Cuts inquiry sheet state visible.
+  The Step 6 JS disables Confirm/Create correctly, but these buttons previously
+  had no disabled visual style, so disabled buttons still looked clickable.
+*/
+.all-cuts-footer-inquiry__action:disabled,
+.all-cuts-footer-inquiry__action[aria-disabled="true"] {
+  color: rgba(243, 240, 234, 0.34) !important;
+  border-color: rgba(243, 240, 234, 0.08) !important;
+  background: rgba(243, 240, 234, 0.025) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+  transform: none !important;
+}
+
+.all-cuts-footer-inquiry__action:disabled:hover,
+.all-cuts-footer-inquiry__action:disabled:focus-visible,
+.all-cuts-footer-inquiry__action[aria-disabled="true"]:hover,
+.all-cuts-footer-inquiry__action[aria-disabled="true"]:focus-visible {
+  color: rgba(243, 240, 234, 0.34) !important;
+  border-color: rgba(243, 240, 234, 0.08) !important;
+  background: rgba(243, 240, 234, 0.025) !important;
+  outline: none !important;
+  transform: none !important;
+}
+
+.all-cuts-footer-inquiry__action:not(:disabled):not([aria-disabled="true"]) {
+  opacity: 1 !important;
+}
+/* MOBILE_ROUND1_SECTION6_ALL_CUTS_DISABLED_VISUAL_END */

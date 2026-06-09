@@ -849,22 +849,8 @@ function initHeroButtonFeedback() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("about-modal-open");
   });
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
-
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal.open) {
       closeModal();
@@ -990,22 +976,8 @@ function initHeroButtonFeedback() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("about-modal-open");
   });
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
-
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal.open) {
       closeModal();
@@ -2585,22 +2557,8 @@ requestAnimationFrame(() => {
       bodyNode.innerHTML = "";
     }
   });
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
-
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("keydown", (event) => {
     const activeLightbox = modal.querySelector("[data-product-list-image-lightbox]");
     const isLightboxOpen = Boolean(activeLightbox && !activeLightbox.hidden);
@@ -2716,21 +2674,8 @@ const setupDialogScrollResetOnOpen = () => {
 };
 
 if (document.readyState === "loading") {
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", setupDialogScrollResetOnOpen, { once: true });
 } else {
   setupDialogScrollResetOnOpen();
@@ -2886,21 +2831,8 @@ const initRound3Section4SearchPolish = () => {
 };
 
 if (document.readyState === "loading") {
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initRound3Section4SearchPolish, { once: true });
 } else {
   initRound3Section4SearchPolish();
@@ -2950,21 +2882,8 @@ const initContactMessageScrollContainment = () => {
 };
 
 if (document.readyState === "loading") {
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initContactMessageScrollContainment, { once: true });
 } else {
   initContactMessageScrollContainment();
@@ -3372,22 +3291,8 @@ const initProviderModalInquirySelection = () => {
       }, 340);
     }, 180);
   };
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
-
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "click",
     (event) => {
@@ -3430,22 +3335,8 @@ const initProviderModalInquirySelection = () => {
     },
     true,
   );
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
-
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "keydown",
     (event) => {
@@ -3490,21 +3381,8 @@ const initProviderModalInquirySelection = () => {
 };
 
 if (document.readyState === "loading") {
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initProviderModalInquirySelection, { once: true });
 } else {
   initProviderModalInquirySelection();
@@ -3813,22 +3691,8 @@ const initSharedInquiryListCore = () => {
     clear: () => setItems([]),
     syncSavedInquiryRows,
   };
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
-
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener(
     "click",
     (event) => {
@@ -3866,21 +3730,8 @@ const initSharedInquiryListCore = () => {
 };
 
 if (document.readyState === "loading") {
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
-  window.addEventListener(
-    "resize",
-    () => {
-      const modal = getAllCutsModal();
+/* STEP6H removed broken out-of-scope All Cuts resize sync. */
 
-      if (!modal) {
-        return;
-      }
-
-      window.requestAnimationFrame(() => syncAllCutsIndexBodyHeight(modal));
-    },
-    { passive: true },
-  );
-  // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_END
   document.addEventListener("DOMContentLoaded", initSharedInquiryListCore, { once: true });
 } else {
   initSharedInquiryListCore();
@@ -3889,6 +3740,7 @@ if (document.readyState === "loading") {
 
 
 /* ROUND4_ALL_CUTS_INQUIRY_CTA_SAFE_START */
+  /* MOBILE_ROUND1_SECTION6_ALL_CUTS_INQUIRY_FLOW_FIX_START */
 const initAllCutsInquiryCtaSafe = () => {
   const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
   const selectedPageIds = new Set();
@@ -3957,6 +3809,25 @@ const initAllCutsInquiryCtaSafe = () => {
 
   const getSelectedPageButtons = (modal) =>
     Array.from(modal?.querySelectorAll?.("[data-product-list-page-jump][data-all-cuts-inquiry-selected='true']") || []);
+
+  const getSavedPageButtons = (modal) =>
+    Array.from(
+      modal?.querySelectorAll?.(
+        "[data-product-list-page-jump][data-all-cuts-inquiry-saved='true'], [data-product-list-page-jump].is-all-cuts-inquiry-saved",
+      ) || [],
+    );
+
+  const setActionDisabled = (button, disabled) => {
+    if (!button) {
+      return;
+    }
+
+    button.disabled = Boolean(disabled);
+    button.setAttribute("aria-disabled", String(Boolean(disabled)));
+  };
+
+  const isActionDisabled = (button) =>
+    !button || button.disabled || button.getAttribute("aria-disabled") === "true";
 
   const removeBrokenBodyEntry = (modal) => {
     const body = modal?.querySelector?.("[data-product-list-body], .product-list-modal__body");
@@ -4035,10 +3906,14 @@ const initAllCutsInquiryCtaSafe = () => {
     const list = getInquiryList();
     const count = list?.getItems?.().length || 0;
     const selectedCount = getSelectedPageButtons(modal).length;
+    const savedCount = getSavedPageButtons(modal).length;
+    const confirmedCount = Math.max(count, savedCount);
     const footer = modal?.querySelector?.("[data-all-cuts-footer-actions]");
 
     const contextNode = footer?.querySelector?.("[data-all-cuts-inquiry-context]");
     const countNode = footer?.querySelector?.("[data-all-cuts-inquiry-count]");
+    const confirmButton = footer?.querySelector?.("[data-all-cuts-inquiry-confirm]");
+    const createButton = footer?.querySelector?.("[data-all-cuts-inquiry-contact]");
 
     if (contextNode) {
       contextNode.textContent =
@@ -4050,6 +3925,9 @@ const initAllCutsInquiryCtaSafe = () => {
     if (countNode) {
       countNode.textContent = count === 1 ? "Inquiry list: 1 item saved" : `Inquiry list: ${count} items saved`;
     }
+
+    setActionDisabled(confirmButton, selectedCount < 1);
+    setActionDisabled(createButton, confirmedCount < 1);
   };
 
   const syncIndexSelectionState = (modal) => {
@@ -4161,10 +4039,10 @@ const initAllCutsInquiryCtaSafe = () => {
               </div>
 
               <div class="all-cuts-footer-inquiry__actions">
-                <button class="all-cuts-footer-inquiry__action" type="button" data-all-cuts-inquiry-confirm>
+                <button class="all-cuts-footer-inquiry__action" type="button" data-all-cuts-inquiry-confirm disabled aria-disabled="true">
                   Confirm Selected Items
                 </button>
-                <button class="all-cuts-footer-inquiry__action all-cuts-footer-inquiry__action--primary" type="button" data-all-cuts-inquiry-contact>
+                <button class="all-cuts-footer-inquiry__action all-cuts-footer-inquiry__action--primary" type="button" data-all-cuts-inquiry-contact disabled aria-disabled="true">
                   Create Inquiry Message
                 </button>
                 <button class="all-cuts-footer-inquiry__action all-cuts-footer-inquiry__action--quiet" type="button" data-all-cuts-inquiry-dismiss>
@@ -4216,7 +4094,11 @@ const initAllCutsInquiryCtaSafe = () => {
 
     window.requestAnimationFrame(() => {
       sheet.classList.add("is-visible");
-      sheet.querySelector("[data-all-cuts-inquiry-confirm]")?.focus({ preventScroll: true });
+      const focusTarget =
+        sheet.querySelector("[data-all-cuts-inquiry-confirm]:not(:disabled)") ||
+        sheet.querySelector("[data-all-cuts-inquiry-contact]:not(:disabled)") ||
+        sheet.querySelector("[data-all-cuts-inquiry-dismiss]");
+      focusTarget?.focus({ preventScroll: true });
     });
   };
 
@@ -4247,20 +4129,11 @@ const initAllCutsInquiryCtaSafe = () => {
 
     syncIndexSelectionState(modal);
 
-    let buttons = getSelectedPageButtons(modal);
+    const buttons = getSelectedPageButtons(modal);
 
     if (!buttons.length) {
-      const active = getActivePageButton(modal);
-      if (active) {
-        const item = createAllCutsItemFromButton(modal, active);
-        selectedPageIds.add(createItemId(item));
-        active.dataset.allCutsInquirySelected = "true";
-        buttons = [active];
-      }
-    }
-
-    if (!buttons.length) {
-      setFooterFeedback(modal, "Select one or more cuts of meat from the index to the left.");
+      setFooterFeedback(modal, "Select one or more cuts from the index before confirming.");
+      syncFooterText(modal);
       return;
     }
 
@@ -4290,27 +4163,116 @@ const initAllCutsInquiryCtaSafe = () => {
     return true;
   };
 
+  /* MOBILE_ROUND1_SECTION6_ALL_CUTS_CREATE_MESSAGE_FINAL_FIX_START */
+  const createAllCutsFallbackInquiryMessage = (items = []) => {
+    const lines = items
+      .map((item) => {
+        if (!item) {
+          return "";
+        }
+
+        if (typeof item === "string") {
+          return normalizeText(item);
+        }
+
+        const primary =
+          item.text ||
+          item.title ||
+          item.name ||
+          item.label ||
+          item.product ||
+          item.cut ||
+          item.value ||
+          item.id ||
+          "";
+
+        if (primary) {
+          return normalizeText(primary);
+        }
+
+        return normalizeText(
+          Object.values(item)
+            .filter((value) => typeof value === "string")
+            .join(" · "),
+        );
+      })
+      .filter(Boolean);
+
+    if (!lines.length) {
+      return "";
+    }
+
+    return [
+      "Hello Paragon Purveyors,",
+      "",
+      "I would like pricing and availability for the following selected All Cuts items:",
+      "",
+      "Products:",
+      ...lines.map((line) => `- ${line}`),
+      "",
+      "Thank you.",
+    ].join("\n");
+  };
+
+  const getConfirmedAllCutsInquiryItems = (modal, list) => {
+    const listItems = Array.isArray(list?.getItems?.()) ? list.getItems() : [];
+
+    if (listItems.length) {
+      return listItems;
+    }
+
+    return getSavedPageButtons(modal)
+      .map((button) => createAllCutsItemFromButton(modal, button))
+      .filter(Boolean);
+  };
+
+  /* STEP6H_ALL_CUTS_SCOPE_REPAIR_START */
+  const closeAllCutsModalSafely = (modal) => {
+    const closeButton = modal?.querySelector?.("[data-product-list-close], .product-list-modal__close");
+
+    if (closeButton instanceof HTMLElement) {
+      closeButton.click();
+      return;
+    }
+
+    if (modal?.open && typeof modal.close === "function") {
+      modal.close();
+      document.body.classList.remove("product-list-modal-open");
+    }
+  };
+  /* STEP6H_ALL_CUTS_SCOPE_REPAIR_END */
+
   const createMessageFromAllCuts = (button) => {
     const modal = getAllCutsModal();
     const list = getInquiryList();
 
-    if (!modal || !list?.createMessage) {
+    if (!modal) {
       return;
     }
 
-    if (!list.getItems?.().length) {
-      confirmAllCutsSelection(button);
-    }
+    syncIndexSelectionState(modal);
+    syncFooterText(modal);
 
-    const message = list.createMessage();
+    const confirmedItems = getConfirmedAllCutsInquiryItems(modal, list);
 
-    if (!message) {
+    if (!confirmedItems.length) {
       setFooterFeedback(modal, "Confirm selected items first.");
+      syncFooterText(modal);
       return;
     }
 
-    lastTrigger = null;
-    closeProductList();
+    const listMessage = typeof list?.createMessage === "function" ? list.createMessage() : "";
+    const message = normalizeText(listMessage) ? listMessage : createAllCutsFallbackInquiryMessage(confirmedItems);
+
+    if (!normalizeText(message)) {
+      setFooterFeedback(modal, "Unable to create the inquiry message. Confirm selected items again.");
+      syncFooterText(modal);
+      return;
+    }
+
+    setFooterFeedback(modal, "Creating inquiry message.");
+
+    closeAllCutsModalSafely(modal);
 
     window.setTimeout(() => {
       window.dispatchEvent(
@@ -4329,6 +4291,7 @@ const initAllCutsInquiryCtaSafe = () => {
       }, 340);
     }, 180);
   };
+  /* MOBILE_ROUND1_SECTION6_ALL_CUTS_CREATE_MESSAGE_FINAL_FIX_END */
 
   // ROUND4_TRACK1_INDEX_BODY_HEIGHT_RESIZE_SYNC_START
   window.addEventListener(
@@ -4372,6 +4335,13 @@ const initAllCutsInquiryCtaSafe = () => {
       if (confirmButton) {
         event.preventDefault();
         event.stopPropagation();
+
+        if (isActionDisabled(confirmButton)) {
+          setFooterFeedback(modal, "Select one or more cuts from the index before confirming.");
+          syncFooterText(modal);
+          return;
+        }
+
         confirmAllCutsSelection(confirmButton);
         return;
       }
@@ -4383,6 +4353,12 @@ const initAllCutsInquiryCtaSafe = () => {
 
         if (typeof event.stopImmediatePropagation === "function") {
           event.stopImmediatePropagation();
+        }
+
+        if (isActionDisabled(createButton)) {
+          setFooterFeedback(modal, "Confirm selected items first.");
+          syncFooterText(modal);
+          return;
         }
 
         createMessageFromAllCuts(createButton);
@@ -4424,6 +4400,7 @@ if (document.readyState === "loading") {
 } else {
   initAllCutsInquiryCtaSafe();
 }
+  /* MOBILE_ROUND1_SECTION6_ALL_CUTS_INQUIRY_FLOW_FIX_END */
 /* ROUND4_ALL_CUTS_INQUIRY_CTA_SAFE_END */
 
 /* MOBILE_ROUND1_SECTION4_ALL_CUTS_SCROLL_RESET_START */
