@@ -11877,8 +11877,8 @@ body.selected-cut-modal-open .global-contact-cta {
 
   .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
     max-height: min(176px, 25dvh) !important;
-    padding-bottom: 72px !important;
-    scroll-padding-bottom: 72px !important;
+    padding-bottom: 10px !important;
+    scroll-padding-bottom: 10px !important;
   }
 
   .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry {
@@ -11918,8 +11918,8 @@ body.selected-cut-modal-open .global-contact-cta {
 
   .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
     max-height: min(156px, 22dvh) !important;
-    padding-bottom: 68px !important;
-    scroll-padding-bottom: 68px !important;
+    padding-bottom: 8px !important;
+    scroll-padding-bottom: 8px !important;
   }
 
   .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry {
