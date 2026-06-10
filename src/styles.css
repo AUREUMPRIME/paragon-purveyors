@@ -11320,3 +11320,441 @@ body.selected-cut-modal-open .global-contact-cta {
   opacity: 1 !important;
 }
 /* MOBILE_ROUND1_SECTION6_ALL_CUTS_DISABLED_VISUAL_END */
+
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_SIZE_AND_SCROLL_START */
+/*
+  Mobile-only Section 4 refinement:
+  - reduces the All Cuts button/card footprint on phone
+  - preserves centered premium composition
+  - keeps the Cut Cards list as the scroll owner
+*/
+@media (max-width: 760px) {
+  .panel-cuts .cuts-head > .cut-card--all-cuts,
+  .panel-cuts .cut-scroll .cut-card--all-cuts,
+  .panel-cuts .cut-card--all-cuts {
+    width: min(100%, 14.75rem) !important;
+    min-height: 76px !important;
+    padding: 11px 14px !important;
+    gap: 4px !important;
+    justify-self: center !important;
+    align-self: center !important;
+    margin-inline: auto !important;
+  }
+
+  .panel-cuts .cuts-head > .cut-card--all-cuts h3,
+  .panel-cuts .cut-scroll .cut-card--all-cuts h3,
+  .panel-cuts .cut-card--all-cuts h3 {
+    font-size: clamp(1.35rem, 6.4vw, 1.76rem) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  .panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-description,
+  .panel-cuts .cut-scroll .cut-card--all-cuts .cut-card-description,
+  .panel-cuts .cut-card--all-cuts .cut-card-description {
+    margin-top: 4px !important;
+    font-size: 0.48rem !important;
+    line-height: 1.08 !important;
+    letter-spacing: 0.14em !important;
+  }
+
+  .panel-cuts .cut-scroll {
+    overscroll-behavior: contain !important;
+    overscroll-behavior-y: contain !important;
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 420px) {
+  .panel-cuts .cuts-head > .cut-card--all-cuts,
+  .panel-cuts .cut-scroll .cut-card--all-cuts,
+  .panel-cuts .cut-card--all-cuts {
+    width: min(100%, 13.25rem) !important;
+    min-height: 68px !important;
+    padding: 9px 12px !important;
+  }
+
+  .panel-cuts .cuts-head > .cut-card--all-cuts h3,
+  .panel-cuts .cut-scroll .cut-card--all-cuts h3,
+  .panel-cuts .cut-card--all-cuts h3 {
+    font-size: clamp(1.18rem, 5.9vw, 1.52rem) !important;
+  }
+
+  .panel-cuts .cuts-head > .cut-card--all-cuts .cut-card-description,
+  .panel-cuts .cut-scroll .cut-card--all-cuts .cut-card-description,
+  .panel-cuts .cut-card--all-cuts .cut-card-description {
+    font-size: 0.44rem !important;
+  }
+}
+/* MOBILE_ROUND1_SECTION4_ALL_CUTS_SIZE_AND_SCROLL_END */
+
+
+/* MOBILE_ROUND1_STEP8_SAFE_VIEWPORT_LAYOUT_START */
+/*
+  Final mobile viewport layout pass after Step 7J:
+  - keeps the working forwardDepth touch guard untouched
+  - keeps the smaller All Cuts button
+  - bounds Section 4 so cut cards do not render behind the bottom index
+  - enlarges the top CTA enough to show Request Pricing and Availability
+  - compacts the actual .section-index bottom navigation
+*/
+@media (max-width: 760px) {
+  :root {
+    --mobile-top-cta-safe: 76px !important;
+    --mobile-bottom-index-safe: 72px !important;
+  }
+
+  .scene {
+    padding-top: var(--mobile-top-cta-safe) !important;
+    padding-bottom: var(--mobile-bottom-index-safe) !important;
+    overflow: hidden !important;
+  }
+
+  .panel-cuts {
+    width: min(calc(100vw - 24px), 390px) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: calc(100dvh - var(--mobile-top-cta-safe) - var(--mobile-bottom-index-safe) - 10px) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    transform: translateY(0) scale(0.952) !important;
+    transform-origin: center center !important;
+  }
+
+  .panel-cuts .cuts-head {
+    row-gap: clamp(8px, 1.7dvh, 13px) !important;
+    margin-bottom: clamp(8px, 1.6dvh, 12px) !important;
+  }
+
+  .panel-cuts .cuts-title {
+    font-size: clamp(2.2rem, 9.6vw, 3.32rem) !important;
+    line-height: 0.91 !important;
+  }
+
+  .panel-cuts .cut-scroll,
+  .panel-cuts .cut-scroll--grouped {
+    max-height: clamp(168px, 29dvh, 248px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    overscroll-behavior-y: contain !important;
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-right: 6px !important;
+    padding-bottom: 10px !important;
+    scroll-padding-bottom: 10px !important;
+    scrollbar-gutter: stable both-edges !important;
+  }
+
+  .panel-cuts .cut-group__grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts),
+  .panel-cuts .cut-group__grid .cut-card {
+    min-height: clamp(76px, 10dvh, 92px) !important;
+  }
+
+  .global-contact-cta {
+    top: max(8px, env(safe-area-inset-top)) !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: 50% !important;
+    width: min(calc(100vw - 26px), 370px) !important;
+    max-width: calc(100vw - 26px) !important;
+    padding: 7px 12px 7px 10px !important;
+    transform: translateX(-50%) !important;
+    transform-origin: center top !important;
+    z-index: 126 !important;
+  }
+
+  .global-contact-cta:hover,
+  .global-contact-cta:focus-visible {
+    transform: translateX(-50%) translateY(1px) !important;
+  }
+
+  .global-contact-cta__inner {
+    width: 100% !important;
+    max-width: none !important;
+    grid-template-columns: 31px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    justify-content: center !important;
+  }
+
+  .global-contact-cta__mark {
+    width: 31px !important;
+    height: 31px !important;
+  }
+
+  .global-contact-cta__copy {
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  .global-contact-cta__eyebrow {
+    display: block !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    font-size: 0.48rem !important;
+    letter-spacing: 0.15em !important;
+  }
+
+  .global-contact-cta__label {
+    display: block !important;
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    font-size: clamp(0.58rem, 2.45vw, 0.66rem) !important;
+    letter-spacing: 0.045em !important;
+    line-height: 1.08 !important;
+  }
+
+  .section-index {
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    display: grid !important;
+    grid-template-columns: 42px 1px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 5px !important;
+    width: min(calc(100vw - 14px), 382px) !important;
+    max-width: calc(100vw - 14px) !important;
+    min-height: 56px !important;
+    padding: 6px 7px !important;
+    overflow: hidden !important;
+    border-radius: 999px !important;
+    transform: translateX(-50%) !important;
+    box-sizing: border-box !important;
+  }
+
+  .section-index__brand {
+    display: grid !important;
+    place-items: center !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .section-index__brand img {
+    width: 42px !important;
+    max-width: 42px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    object-fit: contain !important;
+  }
+
+  .section-index__rule {
+    width: 1px !important;
+    height: 28px !important;
+    margin: 0 !important;
+  }
+
+  .section-index__items {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    gap: 3px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .section-index__item {
+    display: grid !important;
+    place-items: center !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    padding: 0 !important;
+    border-radius: 999px !important;
+  }
+
+  .section-index__number {
+    display: block !important;
+    font-size: 0.64rem !important;
+    line-height: 1 !important;
+  }
+
+  .section-index__label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --mobile-top-cta-safe: 72px !important;
+    --mobile-bottom-index-safe: 68px !important;
+  }
+
+  .panel-cuts {
+    width: min(calc(100vw - 18px), 366px) !important;
+    max-width: calc(100vw - 18px) !important;
+    transform: translateY(0) scale(0.94) !important;
+  }
+
+  .panel-cuts .cuts-title {
+    font-size: clamp(2rem, 9.2vw, 3rem) !important;
+  }
+
+  .panel-cuts .cut-scroll,
+  .panel-cuts .cut-scroll--grouped {
+    max-height: clamp(154px, 27dvh, 226px) !important;
+    padding-bottom: 8px !important;
+  }
+
+  .global-contact-cta {
+    width: min(calc(100vw - 18px), 360px) !important;
+    max-width: calc(100vw - 18px) !important;
+    padding: 6px 10px 6px 9px !important;
+  }
+
+  .global-contact-cta__inner {
+    grid-template-columns: 28px minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .global-contact-cta__mark {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .global-contact-cta__eyebrow {
+    font-size: 0.45rem !important;
+    letter-spacing: 0.13em !important;
+  }
+
+  .global-contact-cta__label {
+    font-size: clamp(0.52rem, 2.36vw, 0.59rem) !important;
+    letter-spacing: 0.035em !important;
+  }
+
+  .section-index {
+    width: min(calc(100vw - 10px), 370px) !important;
+    max-width: calc(100vw - 10px) !important;
+    min-height: 52px !important;
+    grid-template-columns: 38px 1px minmax(0, 1fr) !important;
+    gap: 4px !important;
+    padding: 5px 6px !important;
+  }
+
+  .section-index__brand {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+  }
+
+  .section-index__brand img {
+    width: 38px !important;
+    max-width: 38px !important;
+  }
+
+  .section-index__rule {
+    height: 25px !important;
+  }
+
+  .section-index__items {
+    gap: 2px !important;
+  }
+
+  .section-index__item {
+    min-height: 38px !important;
+  }
+
+  .section-index__number {
+    font-size: 0.6rem !important;
+  }
+}
+/* MOBILE_ROUND1_STEP8_SAFE_VIEWPORT_LAYOUT_END */
+
+
+/* MOBILE_ROUND1_STEP8C_CONTENT_FIT_CTA_START */
+/*
+  Mobile CTA refinement:
+  Step 8B made the full label visible but too wide.
+  This final override makes the CTA size to its content while preserving the
+  complete "Request Pricing and Availability" label.
+*/
+@media (max-width: 760px) {
+  .global-contact-cta {
+    width: fit-content !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 28px) !important;
+    padding: 7px 13px 7px 10px !important;
+    border-radius: 999px !important;
+  }
+
+  .global-contact-cta__inner {
+    width: auto !important;
+    max-width: 100% !important;
+    grid-template-columns: 30px max-content !important;
+    gap: 9px !important;
+  }
+
+  .global-contact-cta__mark {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .global-contact-cta__copy {
+    width: max-content !important;
+    max-width: calc(100vw - 98px) !important;
+    overflow: visible !important;
+  }
+
+  .global-contact-cta__eyebrow {
+    font-size: 0.47rem !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0.145em !important;
+  }
+
+  .global-contact-cta__label {
+    font-size: clamp(0.56rem, 2.3vw, 0.62rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: 0.04em !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .global-contact-cta {
+    max-width: calc(100vw - 22px) !important;
+    padding: 6px 11px 6px 9px !important;
+  }
+
+  .global-contact-cta__inner {
+    grid-template-columns: 28px max-content !important;
+    gap: 8px !important;
+  }
+
+  .global-contact-cta__mark {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .global-contact-cta__copy {
+    max-width: calc(100vw - 86px) !important;
+  }
+
+  .global-contact-cta__eyebrow {
+    font-size: 0.43rem !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .global-contact-cta__label {
+    font-size: clamp(0.5rem, 2.16vw, 0.56rem) !important;
+    letter-spacing: 0.03em !important;
+  }
+}
+/* MOBILE_ROUND1_STEP8C_CONTENT_FIT_CTA_END */
+

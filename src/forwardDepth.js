@@ -285,6 +285,9 @@ export function initForwardDepth() {
   let activeIndex = 0;
   let isAnimating = false;
   let touchStartY = 0;
+  // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_STATE_START
+  let isInternalScrollGesture = false;
+  // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_STATE_END
 
   function isModalInteractionOpen() {
     return Boolean(
@@ -293,6 +296,12 @@ export function initForwardDepth() {
         document.querySelector("dialog[open]"),
     );
   }
+
+  // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_HELPER_START
+  function isInternalScrollTarget(target) {
+    return target instanceof Element && Boolean(target.closest(".cut-scroll"));
+  }
+  // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_HELPER_END
 
   function goToSpot(targetIndex, source = "input") {
     const nextIndex = Math.max(0, Math.min(scenes.length - 1, targetIndex));
@@ -475,8 +484,18 @@ export function initForwardDepth() {
     }
   }
 
+  // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_START
   function handleTouchStart(event) {
     if (isModalInteractionOpen()) {
+      isInternalScrollGesture = false;
+      return;
+    }
+
+    isInternalScrollGesture =
+      isInternalScrollTarget(event.target) || window.__paragonCutScrollActive === true;
+
+    if (isInternalScrollGesture) {
+      touchStartY = 0;
       return;
     }
 
@@ -484,20 +503,23 @@ export function initForwardDepth() {
   }
 
   function handleTouchMove(event) {
-    if (isModalInteractionOpen()) {
+    if (isModalInteractionOpen() || isInternalScrollGesture) {
       return;
     }
 
     event.preventDefault();
   }
+
   function handleTouchEnd(event) {
-    if (isModalInteractionOpen()) {
+    if (isModalInteractionOpen() || isInternalScrollGesture) {
       touchStartY = 0;
+      isInternalScrollGesture = false;
       return;
     }
 
     const touchEndY = event.changedTouches[0]?.clientY || 0;
     const deltaY = touchStartY - touchEndY;
+    touchStartY = 0;
 
     if (Math.abs(deltaY) < TOUCH_THRESHOLD) {
       return;
@@ -509,6 +531,7 @@ export function initForwardDepth() {
       goPrevious();
     }
   }
+  // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_END
 
   function handleKeyDown(event) {
     if (isModalInteractionOpen()) {
