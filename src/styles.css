@@ -11758,3 +11758,185 @@ body.selected-cut-modal-open .global-contact-cta {
 }
 /* MOBILE_ROUND1_STEP8C_CONTENT_FIT_CTA_END */
 
+
+/* MOBILE_ROUND1_STEP10_CUT_CARD_IMAGE_NORMALIZE_START */
+/*
+  Mobile-only Section 4 cut card image normalization:
+  - normal cut-card images use the same right-side image zone
+  - images keep a safe gap from the right border
+  - all images use the same visible box size
+  - mobile opacity returns to the desktop/base value
+  - All Cuts card is excluded
+*/
+@media (max-width: 760px) {
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts),
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts) {
+    position: relative !important;
+    overflow: hidden !important;
+    padding-right: clamp(112px, 31vw, 132px) !important;
+    padding-left: clamp(16px, 4.8vw, 22px) !important;
+  }
+
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts) h3,
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts) h3 {
+    position: relative !important;
+    z-index: 2 !important;
+    max-width: 100% !important;
+  }
+
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts) .cut-card-image,
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts) .cut-card-image {
+    position: absolute !important;
+    top: 50% !important;
+    right: clamp(14px, 4.2vw, 18px) !important;
+    bottom: auto !important;
+    left: auto !important;
+    display: block !important;
+    width: clamp(88px, 23vw, 104px) !important;
+    height: clamp(52px, 13.5vw, 64px) !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    opacity: 0.38 !important;
+    transform: translateY(-50%) !important;
+    transform-origin: center center !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+  }
+
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts):hover .cut-card-image,
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts):focus-visible .cut-card-image,
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts):hover .cut-card-image,
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts):focus-visible .cut-card-image {
+    opacity: 0.38 !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts),
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts) {
+    padding-right: clamp(102px, 30vw, 118px) !important;
+    padding-left: clamp(14px, 4.4vw, 18px) !important;
+  }
+
+  .panel-cuts .cut-scroll .cut-card:not(.cut-card--all-cuts) .cut-card-image,
+  .panel-cuts .cut-group__grid .cut-card:not(.cut-card--all-cuts) .cut-card-image {
+    right: clamp(13px, 3.9vw, 16px) !important;
+    width: clamp(82px, 22vw, 94px) !important;
+    height: clamp(48px, 13vw, 58px) !important;
+  }
+}
+/* MOBILE_ROUND1_STEP10_CUT_CARD_IMAGE_NORMALIZE_END */
+
+
+/* MOBILE_ROUND1_STEP10D_GROUP_HEADING_AND_ALL_CUTS_FOOTER_START */
+/*
+  Mobile-only Section 4 refinements:
+  - restore Wagyu/Pork group labels to the left edge on phone
+  - keep All Cuts inquiry actions in normal flow with safe clearance
+  - prevent the inquiry actions from covering or crowding the index
+  - desktop remains untouched
+*/
+@media (max-width: 760px) {
+  .panel-cuts .cut-group,
+  .panel-cuts .cut-group__head,
+  .panel-cuts .cut-group__header,
+  .panel-cuts .cut-group__title,
+  .panel-cuts .cut-category,
+  .panel-cuts [class*="cut-group"] {
+    text-align: left !important;
+    justify-items: start !important;
+    align-items: start !important;
+  }
+
+  .panel-cuts .cut-group__head,
+  .panel-cuts .cut-group__header {
+    width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  .panel-cuts .cut-group__title,
+  .panel-cuts .cut-category,
+  .panel-cuts [class*="cut-group"] small,
+  .panel-cuts [class*="cut-group"] span {
+    text-align: left !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-gallery-shell {
+    gap: 12px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+    max-height: min(188px, 27dvh) !important;
+    margin-bottom: 0 !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+    max-height: min(176px, 25dvh) !important;
+    padding-bottom: 72px !important;
+    scroll-padding-bottom: 72px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry {
+    position: static !important;
+    inset: auto !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px auto 0 !important;
+    padding: 8px 8px 9px !important;
+    border-radius: 18px !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7px !important;
+    width: 100% !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__action {
+    min-height: 36px !important;
+    padding: 8px 8px !important;
+    font-size: 0.56rem !important;
+    letter-spacing: 0.1em !important;
+    line-height: 1.08 !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index {
+    max-height: min(168px, 24dvh) !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .product-list-page-index__list {
+    max-height: min(156px, 22dvh) !important;
+    padding-bottom: 68px !important;
+    scroll-padding-bottom: 68px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry {
+    margin-top: 8px !important;
+    padding: 7px 7px 8px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__actions {
+    gap: 6px !important;
+  }
+
+  .product-list-modal.product-list-modal--page-gallery .all-cuts-footer-inquiry__action {
+    min-height: 34px !important;
+    padding: 7px 7px !important;
+    font-size: 0.52rem !important;
+    letter-spacing: 0.08em !important;
+  }
+}
+/* MOBILE_ROUND1_STEP10D_GROUP_HEADING_AND_ALL_CUTS_FOOTER_END */
+
