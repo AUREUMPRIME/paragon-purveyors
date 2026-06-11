@@ -4500,6 +4500,145 @@ if (document.readyState === "loading") {
 }
 /* MOBILE_ROUND1_SECTION4_ALL_CUTS_SCROLL_RESET_END */
 
+
+/* MOBILE_ROUND1_STEP11_SEARCH_FOCUS_GUARD_START */
+/*
+  Mobile-only Section 4 search focus guard.
+  Root cause from audit:
+  - the search input itself only filters cards
+  - the jump occurs when mobile keyboard focus/viewport adjustment interacts with page/section scroll state
+  This guard preserves the current Section 4 scroll position during the short keyboard-focus window.
+*/
+function setupMobileCutsSearchFocusGuard() {
+  const searchRoot = document.querySelector("[data-cuts-search]");
+  const searchInput = document.querySelector("[data-cuts-search-input]");
+  const mobileQuery = window.matchMedia("(max-width: 760px)");
+
+  if (!searchRoot || !searchInput) {
+    return;
+  }
+
+  let guardUntil = 0;
+  let savedScroll = null;
+  let restoreTimer = 0;
+  let restoreFrame = 0;
+
+  const isMobile = () => mobileQuery.matches;
+
+  const isSearchTarget = (target) =>
+    target instanceof Element &&
+    Boolean(target.closest("[data-cuts-search], [data-cuts-search-input], [data-cuts-search-clear]"));
+
+  const captureScroll = () => ({
+    x: window.scrollX || window.pageXOffset || 0,
+    y: window.scrollY || window.pageYOffset || 0,
+  });
+
+  const restoreScrollIfNeeded = () => {
+    restoreFrame = 0;
+
+    if (!isMobile() || !savedScroll || Date.now() > guardUntil) {
+      return;
+    }
+
+    const currentY = window.scrollY || window.pageYOffset || 0;
+    const jumpedTowardTop = currentY < savedScroll.y - 72;
+    const searchStillRelevant =
+      document.activeElement === searchInput ||
+      searchRoot.contains(document.activeElement) ||
+      Date.now() < guardUntil;
+
+    if (!jumpedTowardTop || !searchStillRelevant) {
+      return;
+    }
+
+    window.scrollTo({
+      left: savedScroll.x,
+      top: savedScroll.y,
+      behavior: "auto",
+    });
+  };
+
+  const scheduleRestore = () => {
+    if (restoreFrame) {
+      window.cancelAnimationFrame(restoreFrame);
+    }
+
+    if (restoreTimer) {
+      window.clearTimeout(restoreTimer);
+    }
+
+    restoreFrame = window.requestAnimationFrame(() => {
+      restoreScrollIfNeeded();
+
+      window.setTimeout(restoreScrollIfNeeded, 80);
+      window.setTimeout(restoreScrollIfNeeded, 180);
+      window.setTimeout(restoreScrollIfNeeded, 360);
+      restoreTimer = window.setTimeout(restoreScrollIfNeeded, 720);
+    });
+  };
+
+  const beginGuard = () => {
+    if (!isMobile()) {
+      return;
+    }
+
+    savedScroll = captureScroll();
+    guardUntil = Date.now() + 1200;
+    scheduleRestore();
+  };
+
+  const guardSearchEvent = (event) => {
+    if (!isMobile() || !isSearchTarget(event.target)) {
+      return;
+    }
+
+    beginGuard();
+    event.stopPropagation();
+
+    if (typeof event.stopImmediatePropagation === "function" && event.type !== "focusin") {
+      event.stopImmediatePropagation();
+    }
+  };
+
+  searchInput.addEventListener("pointerdown", guardSearchEvent, true);
+  searchInput.addEventListener("touchstart", guardSearchEvent, { capture: true, passive: true });
+  searchInput.addEventListener("click", guardSearchEvent, true);
+  searchInput.addEventListener("focusin", guardSearchEvent, true);
+  searchInput.addEventListener("keydown", guardSearchEvent, true);
+
+  searchRoot.addEventListener("pointerdown", guardSearchEvent, true);
+  searchRoot.addEventListener("touchstart", guardSearchEvent, { capture: true, passive: true });
+  searchRoot.addEventListener("click", guardSearchEvent, true);
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (Date.now() < guardUntil) {
+        scheduleRestore();
+      }
+    },
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (Date.now() < guardUntil) {
+        scheduleRestore();
+      }
+    },
+    { passive: true },
+  );
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupMobileCutsSearchFocusGuard, { once: true });
+} else {
+  setupMobileCutsSearchFocusGuard();
+}
+/* MOBILE_ROUND1_STEP11_SEARCH_FOCUS_GUARD_END */
+
 /* MOBILE_ROUND1_SECTION5_TEXTAREA_SCROLL_LOCK_START */
 function setupInquiryTextareaScrollLock() {
   const textareaSelector = ".inquiry-textarea[data-inquiry-message]";
