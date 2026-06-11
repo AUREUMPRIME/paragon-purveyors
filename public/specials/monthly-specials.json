@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-11T19:19:54.708Z",
+  "generatedAt": "2026-06-11T21:21:35.483Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -58,7 +58,7 @@
       "sort": 2,
       "active": true,
       "cutId": "ribeye",
-      "displayName": "Rib Eye / Cube Roll",
+      "displayName": "Cube Roll / Rib Eye",
       "brand": "Black Opal",
       "brandLogoKey": "black-opal",
       "productLine": "F1 Australian Wagyu",
@@ -100,7 +100,7 @@
       "productLine": "F1 Australian Wagyu",
       "marblingScore": "MB 5+",
       "quantityAvailable": "12 pieces available",
-      "primaryPriceLabel": "2-pack roast",
+      "primaryPriceLabel": "2-pack roast AVG 5 lb",
       "primaryPrice": "$90.00",
       "secondaryPriceLabel": "",
       "secondaryPrice": "",
