@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-11T06:30:58.800Z",
+  "generatedAt": "2026-06-11T07:01:30.225Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -68,7 +68,7 @@
       "sort": 3,
       "active": true,
       "cutId": "tri-tip",
-      "displayName": "Tri Tip",
+      "displayName": "Tri Tip Roast",
       "quantityAvailable": "12 pieces available",
       "compareAt": "$55/lb",
       "pricePerSteak": "$0.00",
