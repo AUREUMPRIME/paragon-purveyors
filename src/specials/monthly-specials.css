@@ -842,6 +842,65 @@ body {
 }
 /* MONTHLY_FEATURED_CUTS_CARD_REFINEMENT_END */
 
+
+/* WORLD_CUP_DEALS_HEADER_START */
+.specials-header--campaign {
+  grid-template-columns: 1.08in minmax(2.55in, 1fr) 0.86in 2.22in;
+  column-gap: 0.2in;
+}
+
+.specials-header--campaign .brand-text-block {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.035in;
+}
+
+.delivery-badge {
+  margin: 0;
+  color: rgba(197, 114, 88, 0.96);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.campaign-mark-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0.9in;
+}
+
+.campaign-mark__image {
+  display: block;
+  width: 0.68in;
+  height: 0.68in;
+  object-fit: contain;
+  filter: drop-shadow(0 0.06in 0.08in rgba(0, 0, 0, 0.3));
+}
+
+.specials-header--campaign .month-block {
+  max-width: 2.22in;
+}
+
+.specials-header--campaign .month-title {
+  max-width: 2.22in;
+}
+
+.specials-header--campaign .month-title span {
+  display: block;
+}
+
+.specials-header--campaign .month-title span + span {
+  margin-top: 3px;
+  font-size: 0.76em;
+  letter-spacing: -0.035em;
+}
+/* WORLD_CUP_DEALS_HEADER_END */
+
 /* MONTHLY_FEATURED_CUTS_TITLE_START */
 .month-title {
   max-width: 190px;

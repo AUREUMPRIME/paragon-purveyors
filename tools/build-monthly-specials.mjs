@@ -375,6 +375,8 @@ const findBrandMark = async () => toDataUrl("assets/brand/paragon-cow-mark.svg")
 
 const findBrandTextLogo = async () => toDataUrl("assets/brand/Paragon_Purveyors_logo_text.svg");
 
+const findWorldCupMark = async () => toDataUrl("specials/tournaments_fifa-world-cup-2026--white_1500x1500.football-logos.cc.png");
+
 const validateData = (data) => {
   const errors = [];
 
@@ -513,7 +515,8 @@ const createSpecialCard = async (item) => {
 
 const createHtml = async (data, activeSpecials, css) => {
   const brandMarkData = await findBrandMark();
-  const brandTextLogoData = await findBrandTextLogo();
+    const brandTextLogoData = await findBrandTextLogo();
+    const worldCupMarkData = await findWorldCupMark();
   const cards = [];
 
   for (const item of activeSpecials) {
@@ -521,7 +524,11 @@ const createHtml = async (data, activeSpecials, css) => {
   }
 
   const settings = data.settings;
-    const documentTitle = `${settings.month} Monthly Featured Cuts | Paragon Purveyors`;
+    const campaignTitle = normalizeText(settings.headline) && settings.headline !== "Monthly Featured Cuts" ? settings.headline : "World Cup Deals";
+    const campaignTitleParts = campaignTitle === "World Cup Deals" ? ["World Cup", "Deals"] : [campaignTitle];
+    const campaignTitleHtml = campaignTitleParts.map((part) => `<span>${escapeHtml(part)}</span>`).join("");
+    const deliveryBadge = "Free Delivery";
+    const documentTitle = `${settings.month} ${campaignTitle} | Paragon Purveyors`;
   const siteUrl = toPublicUrl(settings.footerUrl);
   const contactCards = createContactCards(data.contacts || []);
 
@@ -535,16 +542,20 @@ const createHtml = async (data, activeSpecials, css) => {
 </head>
 <body>
   <main class="monthly-specials-page" aria-label="${escapeHtml(settings.headline)}">
-    <header class="specials-header">
+    <header class="specials-header specials-header--campaign">
       <section class="brand-block" aria-label="Paragon Purveyors mark">
         <img class="brand-logo" src="${brandMarkData}" alt="Paragon Purveyors">
       </section>
       <section class="brand-text-block" aria-label="Paragon Purveyors">
+        <p class="delivery-badge">${escapeHtml(deliveryBadge)}</p>
         <img class="brand-text-logo" src="${brandTextLogoData}" alt="Paragon Purveyors">
       </section>
-      <section class="month-block" aria-label="Monthly specials">
+      <section class="campaign-mark-block" aria-label="${escapeHtml(campaignTitle)}">
+        <img class="campaign-mark__image" src="${worldCupMarkData}" alt="${escapeHtml(campaignTitle)}">
+      </section>
+      <section class="month-block" aria-label="${escapeHtml(campaignTitle)}">
         <p class="month-label">${escapeHtml(settings.month)}</p>
-        <h1 class="month-title" aria-label="Monthly Featured Cuts"><span>Monthly</span><span>Featured Cuts</span></h1>
+        <h1 class="month-title" aria-label="${escapeHtml(campaignTitle)}">${campaignTitleHtml}</h1>
         <p class="month-subline">${escapeHtml(settings.year)}</p>
       </section>
     </header>
@@ -574,6 +585,7 @@ const createHtml = async (data, activeSpecials, css) => {
 
 const createLandingHtml = (data, activeSpecials, buildId) => {
   const settings = data.settings;
+  const campaignTitle = normalizeText(settings.headline) && settings.headline !== "Monthly Featured Cuts" ? settings.headline : "World Cup Deals";
   const siteUrl = toPublicUrl(settings.footerUrl);
   const pdfUrl = `./monthly-specials.pdf?b=${encodeURIComponent(buildId)}`;
 
@@ -602,7 +614,7 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Monthly Featured Cuts | Paragon Purveyors</title>
+  <title>${escapeHtml(campaignTitle)} | Paragon Purveyors</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -736,9 +748,9 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
 <body>
   <main>
     <p class="eyebrow">${escapeHtml(settings.month)} ${escapeHtml(settings.year)}</p>
-    <h1>Monthly<br>Featured Cuts</h1>
+    <h1>${campaignTitle === "World Cup Deals" ? "World Cup<br>Deals" : escapeHtml(campaignTitle)}</h1>
     <p>${escapeHtml(settings.subheadline || "Monthly selections for direct ordering.")}</p>
-    <p>${activeSpecials.length} current featured cuts are available in the latest monthly PDF.</p>
+    <p>${activeSpecials.length} current featured cuts are available in the latest campaign PDF.</p>
 
     <div class="actions">
       <a href="${escapeHtml(pdfUrl)}">Open latest PDF</a>
