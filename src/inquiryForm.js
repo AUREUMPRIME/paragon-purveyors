@@ -1,5 +1,7 @@
 const COPY_READY_TEXT = "Copy";
 const COPY_DONE_TEXT = "Copied";
+const INQUIRY_ENDPOINT_URL =
+  "https://script.google.com/macros/s/AKfycbxNFlI8SbEBiRB_x9rQ-JDGxvGwSPp6vWlrhlsFdG8P1pmLAq6_sm-B9H_P-dEBSUfTuA/exec";
 
 const copyToClipboard = async (value) => {
   if (navigator.clipboard?.writeText) {
@@ -28,6 +30,25 @@ const setStatus = (statusNode, message, type = "neutral") => {
 };
 
 const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+const sendInquiry = async ({ email, message, honeypot }) => {
+  const payload = new URLSearchParams({
+    email,
+    message,
+    website: honeypot,
+    sourcePage: window.location.href,
+    userAgent: window.navigator.userAgent,
+  });
+
+  await fetch(INQUIRY_ENDPOINT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    },
+    body: payload.toString(),
+  });
+};
 
 export function initInquiryForm() {
   const form = document.querySelector("[data-inquiry-form]");
@@ -67,14 +88,17 @@ export function initInquiryForm() {
 
   form.dataset.inquiryReady = "true";
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const emailInput = form.querySelector("[data-inquiry-email]");
     const messageInput = form.querySelector("[data-inquiry-message]");
+    const honeypotInput = form.querySelector("[data-inquiry-website]");
+    const submitButton = form.querySelector("[data-inquiry-submit]");
 
     const email = emailInput?.value.trim() || "";
     const message = messageInput?.value.trim() || "";
+    const honeypot = honeypotInput?.value.trim() || "";
 
     if (!isValidEmail(email)) {
       emailInput?.focus();
@@ -84,14 +108,32 @@ export function initInquiryForm() {
 
     if (message.length < 12) {
       messageInput?.focus();
-      setStatus(statusNode, "Add a brief message before preparing the inquiry.", "error");
+      setStatus(statusNode, "Add a brief message before sending the inquiry.", "error");
       return;
     }
 
-    setStatus(
-      statusNode,
-      "Inquiry prepared locally. Email sending will be connected during the final hosting setup.",
-      "success",
-    );
+    try {
+      submitButton?.setAttribute("disabled", "");
+      submitButton?.setAttribute("aria-disabled", "true");
+      setStatus(statusNode, "Sending inquiry...", "neutral");
+
+      await sendInquiry({ email, message, honeypot });
+
+      form.reset();
+      setStatus(
+        statusNode,
+        "Inquiry sent. The Paragon Purveyors team will review your request.",
+        "success",
+      );
+    } catch {
+      setStatus(
+        statusNode,
+        "Inquiry could not be sent. Please email info@paragonpurveyors.com directly.",
+        "error",
+      );
+    } finally {
+      submitButton?.removeAttribute("disabled");
+      submitButton?.setAttribute("aria-disabled", "false");
+    }
   });
 }

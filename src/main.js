@@ -664,7 +664,7 @@ app.innerHTML = `
               <p class="inquiry-form-kicker">Private Inquiry</p>
               <h3>Start a conversation.</h3>
               <p>
-                Share what you are sourcing and the team will review availability. Email sending will be connected in the final hosting step.
+                Share what you are sourcing and the Paragon Purveyors team will review availability directly.
               </p>
             </div>
 
@@ -692,9 +692,18 @@ app.innerHTML = `
                 required
               ></textarea>
             </label>
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+              data-inquiry-website
+              aria-hidden="true"
+              style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;"
+            />
 
-            <button class="inquiry-submit" type="submit">
-              Prepare Inquiry
+            <button class="inquiry-submit" type="submit" data-inquiry-submit>
+              Send Inquiry
             </button>
 
             <p class="inquiry-form-status" data-inquiry-status role="status" aria-live="polite"></p>
