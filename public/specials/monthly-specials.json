@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-11T09:02:55.768Z",
+  "generatedAt": "2026-06-11T09:09:41.171Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -24,14 +24,14 @@
       "sort": 1,
       "active": true,
       "name": "Blake B.",
-      "location": "Orange county",
+      "location": "Irvine / Orange County",
       "phone": "(949) 303-9726"
     },
     {
       "sort": 2,
       "active": true,
       "name": "Clayton U.",
-      "location": "French valley / Temecula area",
+      "location": "French Valley / Temecula Area",
       "phone": "(949) 514-3127"
     }
   ],
