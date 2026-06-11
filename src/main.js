@@ -630,28 +630,27 @@ app.innerHTML = `
                   Copy
                 </button>
               </article>
-
               <article class="inquiry-detail-card inquiry-detail-card--copy">
-                <span class="inquiry-detail-label">Direct Line</span>
-                <strong class="inquiry-detail-value">Clayton U. — +1 (000) 000-0000</strong>
+                <span class="inquiry-detail-label">Irvine / Orange County</span>
+                <strong class="inquiry-detail-value">Blake B. — (949) 303-9726</strong>
                 <button
                   class="inquiry-copy-button"
                   type="button"
-                  data-copy-value="+1 (000) 000-0000"
-                  aria-label="Copy Clayton U. phone number"
+                  data-copy-value="(949) 303-9726"
+                  aria-label="Copy Blake B. phone number"
                 >
                   Copy
                 </button>
               </article>
 
               <article class="inquiry-detail-card inquiry-detail-card--copy">
-                <span class="inquiry-detail-label">Second Contact</span>
-                <strong class="inquiry-detail-value">Blake B. — +1 (000) 000-0000</strong>
+                <span class="inquiry-detail-label">French Valley / Temecula Area</span>
+                <strong class="inquiry-detail-value">Clayton U. — (949) 514-3127</strong>
                 <button
                   class="inquiry-copy-button"
                   type="button"
-                  data-copy-value="+1 (000) 000-0000"
-                  aria-label="Copy Blake B. phone number"
+                  data-copy-value="(949) 514-3127"
+                  aria-label="Copy Clayton U. phone number"
                 >
                   Copy
                 </button>
@@ -4797,4 +4796,5 @@ if (document.readyState === "loading") {
   setupInquiryTextareaScrollLock();
 }
 /* MOBILE_ROUND1_SECTION5_TEXTAREA_SCROLL_LOCK_END */
+
 
