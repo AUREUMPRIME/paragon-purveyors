@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-08T07:28:53.448Z",
+  "generatedAt": "2026-06-11T05:24:24.004Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -40,7 +40,7 @@
       "sort": 1,
       "active": true,
       "cutId": "tenderloin",
-      "displayName": "Tenderloin",
+      "displayName": "Tenderloin / Filet Mignon",
       "quantityAvailable": "24 steaks available",
       "compareAt": "$80/lb",
       "pricePerSteak": "$0.00",
@@ -54,7 +54,7 @@
       "sort": 2,
       "active": true,
       "cutId": "ribeye",
-      "displayName": "Ribeye",
+      "displayName": "Cube Roll / Ribeye",
       "quantityAvailable": "18 steaks available",
       "compareAt": "$75/lb",
       "pricePerSteak": "$0.00",
