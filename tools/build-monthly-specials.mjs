@@ -246,14 +246,18 @@ const parseSpecialsRows = (rows) => {
     active: ["Active"],
     cutId: ["Cut ID"],
     displayName: ["Display Name"],
-    quantityAvailable: ["Quantity Available"],
-      compareAt: ["Compare At", "Compare At Price", "Traditional Retail", "Traditional Retail Price"],
-    pricePerSteak: ["Price Per Steak"],
-    priceFivePlusSteaks: ["Price 5+ Steaks", "Price Five Plus Steaks"],
-    pricePerRoll: ["Price Per Roll"],
-    pricePerCase: ["Price Per Case"],
-    imagePath: ["Image Path"],
-    description: ["Description"],
+      brand: ["Brand"],
+      brandLogoKey: ["Brand Logo Key", "Brand Key"],
+      productLine: ["Product Line"],
+      marblingScore: ["Marbling Score", "Marble Score"],
+      quantityAvailable: ["Quantity Available"],
+      primaryPriceLabel: ["Primary Price Label"],
+      primaryPrice: ["Primary Price"],
+      secondaryPriceLabel: ["Secondary Price Label"],
+      secondaryPrice: ["Secondary Price"],
+      savingsMessage: ["Savings Message"],
+      imagePath: ["Image Path"],
+      description: ["Description"],
   });
 
   const specials = rows
@@ -263,14 +267,18 @@ const parseSpecialsRows = (rows) => {
       active: isActive(valueFrom(row, headerMap, "active")),
       cutId: valueFrom(row, headerMap, "cutId"),
       displayName: valueFrom(row, headerMap, "displayName"),
-      quantityAvailable: valueFrom(row, headerMap, "quantityAvailable"),
-      compareAt: valueFrom(row, headerMap, "compareAt"),
-      pricePerSteak: valueFrom(row, headerMap, "pricePerSteak"),
-      priceFivePlusSteaks: valueFrom(row, headerMap, "priceFivePlusSteaks"),
-      pricePerRoll: valueFrom(row, headerMap, "pricePerRoll"),
-      pricePerCase: valueFrom(row, headerMap, "pricePerCase"),
-      imagePath: valueFrom(row, headerMap, "imagePath"),
-      description: valueFrom(row, headerMap, "description"),
+        brand: valueFrom(row, headerMap, "brand"),
+        brandLogoKey: valueFrom(row, headerMap, "brandLogoKey"),
+        productLine: valueFrom(row, headerMap, "productLine"),
+        marblingScore: valueFrom(row, headerMap, "marblingScore"),
+        quantityAvailable: valueFrom(row, headerMap, "quantityAvailable"),
+        primaryPriceLabel: valueFrom(row, headerMap, "primaryPriceLabel"),
+        primaryPrice: valueFrom(row, headerMap, "primaryPrice"),
+        secondaryPriceLabel: valueFrom(row, headerMap, "secondaryPriceLabel"),
+        secondaryPrice: valueFrom(row, headerMap, "secondaryPrice"),
+        savingsMessage: valueFrom(row, headerMap, "savingsMessage"),
+        imagePath: valueFrom(row, headerMap, "imagePath"),
+        description: valueFrom(row, headerMap, "description"),
     }))
     .filter((special) => special.active)
     .sort((a, b) => a.sort - b.sort);
@@ -383,7 +391,7 @@ const validateData = (data) => {
   for (const item of activeSpecials) {
     const label = item.displayName || item.cutId || "Unknown item";
 
-    for (const key of ["displayName", "quantityAvailable", "pricePerSteak", "priceFivePlusSteaks", "pricePerRoll", "pricePerCase"]) {
+    for (const key of ["displayName", "brand", "brandLogoKey", "productLine", "marblingScore", "quantityAvailable", "primaryPriceLabel", "primaryPrice", "savingsMessage"]) {
       if (!normalizeText(item[key])) errors.push(`${label} is missing ${key}.`);
     }
 
@@ -403,58 +411,94 @@ const validateData = (data) => {
   return activeSpecials.sort((a, b) => Number(a.sort || 0) - Number(b.sort || 0));
 };
 
-const createPriceRows = (item) => [
-  ["EA", "Single Steak", item.pricePerSteak],
-  ["5+", "5+ Steaks", item.priceFivePlusSteaks],
-  ["RL", "Roll", item.pricePerRoll],
-  ["CS", "Case", item.pricePerCase],
-];
+const brandLogoPaths = new Map([
+    ["black-opal", "assets/provider-logos/modal/black-opal_modal_logo.png"],
+    ["altair", "assets/provider-logos/modal/altair_modal_logo.png"],
+  ]);
 
-const resolveImagePath = (item) =>
+  const toBrandLogoKey = (value) => normalizeText(value).replace(/\s+/g, "-");
+
+  const resolveBrandLogoPath = (item) =>
+    brandLogoPaths.get(toBrandLogoKey(item.brandLogoKey)) ||
+    brandLogoPaths.get(toBrandLogoKey(item.brand)) ||
+    "";
+
+  const createPriceRows = (item) =>
+    [
+      ["EA", item.primaryPriceLabel, item.primaryPrice],
+      normalizeText(item.secondaryPriceLabel) || normalizeText(item.secondaryPrice)
+        ? ["CUT", item.secondaryPriceLabel, item.secondaryPrice]
+        : null,
+    ].filter(Boolean);
+
+  const resolveImagePath = (item) =>
   normalizeText(item.imagePath) || path.join("assets", "cuts", item.imageFile).replaceAll("\\", "/");
 
 const createSpecialCard = async (item) => {
-  const imageData = await toDataUrl(resolveImagePath(item));
-  const priceRows = createPriceRows(item)
-    .map(
-      ([icon, label, value]) => `
-        <div class="price-row">
-          <span class="price-icon">${escapeHtml(icon)}</span>
-          <div>
-            <p class="price-label">${escapeHtml(label)}</p>
-            <p class="price-value">${escapeHtml(value)}</p>
-          </div>
-        </div>`,
-    )
-    .join("");
+    const imageData = await toDataUrl(resolveImagePath(item));
+    const brandLogoPath = resolveBrandLogoPath(item);
+    const brandLogoData = brandLogoPath ? await toDataUrl(brandLogoPath).catch(() => "") : "";
+    const brandLabel = item.brand || item.brandLogoKey || "";
+    const brandMark = brandLogoData
+      ? `<img class="product-brand__logo" src="${brandLogoData}" alt="${escapeHtml(brandLabel)}">`
+      : brandLabel
+        ? `<span class="product-brand__fallback">${escapeHtml(brandLabel)}</span>`
+        : "";
+    const productBrand = brandMark ? `<div class="product-brand">${brandMark}</div>` : "";
 
-  return `
-    <article class="special-card">
-      <div class="special-card__content">
-                <div class="special-card__topline">
-          <h2 class="special-card__name">${escapeHtml(item.displayName)}</h2>
-          <div class="special-card__meta">
-            <p class="special-card__qty">${escapeHtml(item.quantityAvailable)}</p>
-            ${
-              item.compareAt
-                ? `<div class="compare-at">
-                    <p class="compare-at__label">COMPARE AT</p>
-                    <p class="compare-at__value">${escapeHtml(item.compareAt)}</p>
-                  </div>`
-                : ""
-            }
+    const priceRowItems = createPriceRows(item);
+    const priceRows = priceRowItems
+      .map(
+        ([icon, label, value]) => `
+          <div class="price-row">
+            <span class="price-icon">${escapeHtml(icon)}</span>
+            <div>
+              <p class="price-label">${escapeHtml(label)}</p>
+              <p class="price-value">${escapeHtml(value)}</p>
+            </div>
+          </div>`,
+      )
+      .join("");
+
+    const priceListClass = priceRowItems.length === 1 ? "price-list price-list--single" : "price-list";
+
+    const marblingBlock =
+      normalizeText(item.marblingScore) || normalizeText(item.productLine)
+        ? `<div class="marbling-score">
+            <p class="marbling-score__label">Marbling Score</p>
+            ${item.marblingScore ? `<p class="marbling-score__value">${escapeHtml(item.marblingScore)}</p>` : ""}
+            ${item.productLine ? `<p class="marbling-score__line">${escapeHtml(item.productLine)}</p>` : ""}
+          </div>`
+        : "";
+
+    const savingsMessage = normalizeText(item.savingsMessage)
+      ? `<p class="savings-message">${escapeHtml(item.savingsMessage)}</p>`
+      : "";
+
+    return `
+      <article class="special-card">
+        <div class="special-card__content">
+          <div class="special-card__topline">
+            <div class="special-card__heading">
+              <h2 class="special-card__name">${escapeHtml(item.displayName)}</h2>
+              ${productBrand}
+            </div>
+            <div class="special-card__meta">
+              <p class="special-card__qty">${escapeHtml(item.quantityAvailable)}</p>
+              ${marblingBlock}
+            </div>
           </div>
+          <div class="${priceListClass}">${priceRows}</div>
+          ${savingsMessage}
+          ${item.description ? `<p class="special-description">${escapeHtml(item.description)}</p>` : ""}
         </div>
-        <div class="price-list">${priceRows}</div>
-        ${item.description ? `<p class="special-description">${escapeHtml(item.description)}</p>` : ""}
-      </div>
-      <div class="special-card__image-wrap">
-        <img class="special-card__image" src="${imageData}" alt="${escapeHtml(item.displayName)}">
-      </div>
-    </article>`;
-};
+        <div class="special-card__image-wrap">
+          <img class="special-card__image" src="${imageData}" alt="${escapeHtml(item.displayName)}">
+        </div>
+      </article>`;
+  };
 
-const createContactCards = (contacts) =>
+  const createContactCards = (contacts) =>
   contacts
     .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location))
     .map(
