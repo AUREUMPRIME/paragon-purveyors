@@ -11940,3 +11940,97 @@ body.selected-cut-modal-open .global-contact-cta {
 }
 /* MOBILE_ROUND1_STEP10D_GROUP_HEADING_AND_ALL_CUTS_FOOTER_END */
 
+/* CLIENT_PRIORITY_NAME_AND_PERMIT_CSS_START */
+/*
+  Seller's Permit presentation:
+  - Wide desktop: positioned above the fixed left brand mark.
+  - Compact/tablet/mobile: shown as a restrained trust detail in Section 5.
+  - Does not alter the mobile bottom navigation geometry.
+*/
+.section-index__permit {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 17px);
+  display: grid;
+  width: min(178px, 14vw);
+  gap: 4px;
+  margin: 0;
+  color: rgba(243, 240, 234, 0.5);
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.section-index__permit span {
+  font-size: 0.48rem;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+  line-height: 1;
+}
+
+.section-index__permit strong {
+  color: rgba(243, 240, 234, 0.78);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1;
+}
+
+.inquiry-permit {
+  display: none;
+  width: min(430px, 92%);
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 10px auto 0;
+  padding-top: 9px;
+  color: rgba(243, 240, 234, 0.48);
+  border-top: 1px solid rgba(243, 240, 234, 0.1);
+  text-transform: uppercase;
+}
+
+.inquiry-permit span {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  line-height: 1;
+}
+
+.inquiry-permit strong {
+  color: rgba(243, 240, 234, 0.74);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1;
+}
+
+@media (max-width: 1180px) {
+  .section-index__permit {
+    display: none;
+  }
+
+  .inquiry-permit {
+    display: flex;
+  }
+}
+
+@media (max-width: 760px) {
+  .panel-inquiry--form .inquiry-permit {
+    width: 100%;
+    gap: 10px;
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+
+  .panel-inquiry--form .inquiry-permit span {
+    font-size: 0.46rem;
+    letter-spacing: 0.14em;
+  }
+
+  .panel-inquiry--form .inquiry-permit strong {
+    font-size: 0.56rem;
+    letter-spacing: 0.09em;
+  }
+}
+/* CLIENT_PRIORITY_NAME_AND_PERMIT_CSS_END */

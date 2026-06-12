@@ -8,6 +8,8 @@ import { cuts, producerCutLinks, producers } from "./catalogData.js";
 import { initCutScrollIsolation } from "./cutScrollIsolation.js";
 import { initInquiryForm } from "./inquiryForm.js";
 
+const SELLERS_PERMIT_NUMBER = "232-616288";
+
 const app = document.getElementById("app");
 
 if (!app) {
@@ -19,6 +21,15 @@ app.innerHTML = `
     <div class="frame"></div>
 
     <nav class="section-index" aria-label="Section navigation">
+      <!-- CLIENT_PRIORITY_NAME_AND_PERMIT_START -->
+      <p
+        class="section-index__permit"
+        aria-label="Seller's Permit number 232-616288"
+      >
+        <span>Seller's Permit</span>
+        <strong>#${SELLERS_PERMIT_NUMBER}</strong>
+      </p>
+
       <button class="section-index__brand" type="button" data-section-target="hero" aria-label="Go to home section">
         <img
           src="${assetPath("assets/brand/paragon-footer-logo.svg")}"
@@ -52,6 +63,7 @@ app.innerHTML = `
           <span class="section-index__label">Contact</span>
         </button>
       </div>
+      <!-- CLIENT_PRIORITY_NAME_AND_PERMIT_END -->
     </nav>
 
     <button class="global-contact-cta" type="button" data-section-target="inquiry" aria-label="Request pricing and availability from Paragon Purveyors">
@@ -656,16 +668,35 @@ app.innerHTML = `
                 </button>
               </article>
             </div>
+
+            <p
+              class="inquiry-permit"
+              aria-label="Seller's Permit number 232-616288"
+            >
+              <span>Seller's Permit</span>
+              <strong>#${SELLERS_PERMIT_NUMBER}</strong>
+            </p>
           </div>
 
           <form class="inquiry-form" data-inquiry-form novalidate>
             <div class="inquiry-form-head">
               <p class="inquiry-form-kicker">Private Inquiry</p>
               <h3>Start a conversation.</h3>
-              <p>
-                Share what you are sourcing and the Paragon Purveyors team will review availability directly.
-              </p>
             </div>
+
+            <label class="inquiry-field">
+              <span>Your Name</span>
+              <input
+                class="inquiry-input"
+                type="text"
+                name="name"
+                autocomplete="name"
+                maxlength="120"
+                placeholder="Full name"
+                data-inquiry-name
+                required
+              />
+            </label>
 
             <label class="inquiry-field">
               <span>Your Email</span>

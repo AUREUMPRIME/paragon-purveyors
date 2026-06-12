@@ -1,6 +1,8 @@
 const CONFIG = Object.freeze({
   recipientEmail: "info@paragonpurveyors.com",
   subject: "Paragon Purveyors Inquiry",
+  minNameLength: 2,
+  maxNameLength: 120,
   minMessageLength: 12,
   maxMessageLength: 5000,
   maxEmailLength: 254,
@@ -22,11 +24,19 @@ function doPost(event) {
       return createJsonResponse({ ok: true, ignored: true });
     }
 
+    const customerName = normalizeText(data.name || data.customerName);
     const customerEmail = normalizeText(data.email);
     const message = normalizeText(data.message);
     const sourcePage = normalizeText(data.sourcePage || data.page || "https://paragonpurveyors.com");
     const userAgent = normalizeText(data.userAgent || "");
     const submittedAt = new Date().toISOString();
+
+    if (
+      customerName.length < CONFIG.minNameLength ||
+      customerName.length > CONFIG.maxNameLength
+    ) {
+      return createJsonResponse({ ok: false, error: "Enter your full name." });
+    }
 
     if (!isValidEmail(customerEmail)) {
       return createJsonResponse({ ok: false, error: "Enter a valid email address." });
@@ -46,6 +56,9 @@ function doPost(event) {
 
     const emailBody = [
       "New website inquiry from Paragon Purveyors.",
+      "",
+      "Customer name:",
+      customerName,
       "",
       "Customer email:",
       customerEmail,

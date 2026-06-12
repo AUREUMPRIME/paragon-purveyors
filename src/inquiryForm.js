@@ -31,8 +31,9 @@ const setStatus = (statusNode, message, type = "neutral") => {
 
 const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-const sendInquiry = async ({ email, message, honeypot }) => {
+const sendInquiry = async ({ name, email, message, honeypot }) => {
   const payload = new URLSearchParams({
+    name,
     email,
     message,
     website: honeypot,
@@ -91,14 +92,22 @@ export function initInquiryForm() {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    const nameInput = form.querySelector("[data-inquiry-name]");
     const emailInput = form.querySelector("[data-inquiry-email]");
     const messageInput = form.querySelector("[data-inquiry-message]");
     const honeypotInput = form.querySelector("[data-inquiry-website]");
     const submitButton = form.querySelector("[data-inquiry-submit]");
 
+    const name = nameInput?.value.trim() || "";
     const email = emailInput?.value.trim() || "";
     const message = messageInput?.value.trim() || "";
     const honeypot = honeypotInput?.value.trim() || "";
+
+    if (name.length < 2 || name.length > 120) {
+      nameInput?.focus();
+      setStatus(statusNode, "Enter your full name.", "error");
+      return;
+    }
 
     if (!isValidEmail(email)) {
       emailInput?.focus();
@@ -117,7 +126,7 @@ export function initInquiryForm() {
       submitButton?.setAttribute("aria-disabled", "true");
       setStatus(statusNode, "Sending inquiry...", "neutral");
 
-      await sendInquiry({ email, message, honeypot });
+      await sendInquiry({ name, email, message, honeypot });
 
       form.reset();
       setStatus(
