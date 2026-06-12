@@ -6,6 +6,63 @@ const TRANSITION_DURATION = 1.08;
 const WHEEL_THRESHOLD = 12;
 const TOUCH_THRESHOLD = 44;
 
+/* FORWARD_DEPTH_INPUT_SAFETY_START */
+const INTERACTIVE_TARGET_SELECTOR = [
+  "input",
+  "textarea",
+  "select",
+  "option",
+  "button",
+  "a[href]",
+  "label",
+  "form",
+  "[contenteditable]:not([contenteditable='false'])",
+  "[role='textbox']",
+  "[role='searchbox']",
+  "[role='button']",
+  "[role='link']",
+  "[data-cuts-search]",
+  "[data-inquiry-form]",
+  ".cut-scroll",
+].join(", ");
+
+function getTargetElement(target) {
+  if (target instanceof Element) {
+    return target;
+  }
+
+  if (target instanceof Node) {
+    return target.parentElement;
+  }
+
+  return null;
+}
+
+function isInteractiveTarget(target) {
+  const element = getTargetElement(target);
+
+  return Boolean(element?.closest(INTERACTIVE_TARGET_SELECTOR));
+}
+
+function getForwardDepthViewportWidth() {
+  return Math.round(
+    window.visualViewport?.width ||
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      0,
+  );
+}
+
+function getPreviousActiveSceneIndex() {
+  const previousState = window.__paragonForwardDepth?.getState?.();
+  const previousIndex = Number(previousState?.activeIndex);
+
+  return Number.isInteger(previousIndex) && previousIndex >= 0
+    ? previousIndex
+    : 0;
+}
+/* FORWARD_DEPTH_INPUT_SAFETY_END */
+
 const PARAGON_DEPTH_TRANSITION_START = "paragon:depth-transition-start";
 const PARAGON_DEPTH_TRANSITION_COMPLETE = "paragon:depth-transition-complete";
 
@@ -146,7 +203,10 @@ function clearForwardDepthState() {
   });
 }
 
-function prepareSceneBase(scenes) {
+function prepareSceneBase(scenes, activeIndex = 0) {
+  const initialScene =
+    scenes[Math.max(0, Math.min(scenes.length - 1, activeIndex))];
+
   gsap.set(scenes, {
     autoAlpha: 0,
     scale: 0.86,
@@ -168,17 +228,17 @@ function prepareSceneBase(scenes) {
     }
   });
 
-  gsap.set(scenes[0], {
+  gsap.set(initialScene, {
     autoAlpha: 1,
     scale: 1,
     yPercent: 0,
     zIndex: 40,
   });
 
-  const firstForeground = getForegroundElements(scenes[0]);
+  const initialForeground = getForegroundElements(initialScene);
 
-  if (firstForeground.length > 0) {
-    gsap.set(firstForeground, {
+  if (initialForeground.length > 0) {
+    gsap.set(initialForeground, {
       y: 0,
       scale: 1,
     });
@@ -230,7 +290,12 @@ function wireHeroButtons(scenes, goToSpot, cleanupCallbacks) {
   });
 }
 
-function wireSectionNavigation(scenes, goToSpot, cleanupCallbacks) {
+function wireSectionNavigation(
+  scenes,
+  goToSpot,
+  cleanupCallbacks,
+  activeIndex = 0,
+) {
   document.querySelectorAll(".section-index [data-section-target], .global-contact-cta[data-section-target]").forEach((control) => {
     const targetIndex = getTargetSceneIndex(scenes, control.dataset.sectionTarget);
 
@@ -250,10 +315,11 @@ function wireSectionNavigation(scenes, goToSpot, cleanupCallbacks) {
     cleanupCallbacks.push(() => control.removeEventListener("click", handler));
   });
 
-  updateSectionNavigation(scenes, 0);
+  updateSectionNavigation(scenes, activeIndex);
 }
 
 export function initForwardDepth() {
+  const previousActiveIndex = getPreviousActiveSceneIndex();
   const reduceMotion = window.matchMedia(REDUCE_MOTION_QUERY).matches;
   const desktop = window.matchMedia(DESKTOP_QUERY).matches;
 
@@ -279,10 +345,15 @@ export function initForwardDepth() {
     scene.setAttribute("data-depth-scene", String(index));
   });
 
-  prepareSceneBase(scenes);
+  const initialActiveIndex = Math.max(
+    0,
+    Math.min(scenes.length - 1, previousActiveIndex),
+  );
+
+  prepareSceneBase(scenes, initialActiveIndex);
 
   const cleanupCallbacks = [];
-  let activeIndex = 0;
+  let activeIndex = initialActiveIndex;
   let isAnimating = false;
   let touchStartY = 0;
   // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_STATE_START
@@ -299,7 +370,7 @@ export function initForwardDepth() {
 
   // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_HELPER_START
   function isInternalScrollTarget(target) {
-    return target instanceof Element && Boolean(target.closest(".cut-scroll"));
+    return isInteractiveTarget(target);
   }
   // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_HELPER_END
 
@@ -464,9 +535,14 @@ export function initForwardDepth() {
   }
 
   function handleWheel(event) {
-    if (window.__paragonCutScrollActive === true) {
+    if (
+      event.defaultPrevented ||
+      isInteractiveTarget(event.target) ||
+      window.__paragonCutScrollActive === true
+    ) {
       return;
     }
+
     if (isModalInteractionOpen()) {
       return;
     }
@@ -534,7 +610,13 @@ export function initForwardDepth() {
   // MOBILE_ROUND1_SECTION4_FORWARD_DEPTH_TOUCH_GUARD_END
 
   function handleKeyDown(event) {
-    if (isModalInteractionOpen()) {
+    if (
+      event.defaultPrevented ||
+      event.isComposing ||
+      isModalInteractionOpen() ||
+      isInteractiveTarget(event.target) ||
+      isInteractiveTarget(document.activeElement)
+    ) {
       return;
     }
 
@@ -575,7 +657,12 @@ export function initForwardDepth() {
   cleanupCallbacks.push(() => window.removeEventListener("keydown", handleKeyDown));
 
   wireHeroButtons(scenes, goToSpot, cleanupCallbacks);
-  wireSectionNavigation(scenes, goToSpot, cleanupCallbacks);
+  wireSectionNavigation(
+    scenes,
+    goToSpot,
+    cleanupCallbacks,
+    activeIndex,
+  );
 
   setSceneInteractivity(scenes, activeIndex, false);
   updateSectionNavigation(scenes, activeIndex);
@@ -600,12 +687,43 @@ export function initForwardDepth() {
   console.info(`[Paragon V3.2] Direct step model active: ${scenes.length} scenes, spot 0-${scenes.length - 1}.`);
 }
 
-window.addEventListener("resize", () => {
-  window.clearTimeout(window.__paragonForwardDepthResizeTimer);
-  window.__paragonForwardDepthResizeTimer = window.setTimeout(() => {
-    initForwardDepth();
-  }, 220);
-});
+/* FORWARD_DEPTH_KEYBOARD_SAFE_RESIZE_START */
+let lastForwardDepthViewportWidth = getForwardDepthViewportWidth();
+
+window.addEventListener(
+  "resize",
+  () => {
+    const nextViewportWidth = getForwardDepthViewportWidth();
+    const widthChanged =
+      Math.abs(nextViewportWidth - lastForwardDepthViewportWidth) >= 2;
+
+    /*
+      Mobile software keyboards primarily change viewport height.
+      A height-only resize must not destroy the active scene controller,
+      remove focus, close the keyboard, or return the site to Section 1.
+    */
+    if (!widthChanged) {
+      return;
+    }
+
+    /*
+      During a real width/orientation change, wait until the user is no
+      longer editing before rebuilding the scene measurements.
+    */
+    if (isInteractiveTarget(document.activeElement)) {
+      return;
+    }
+
+    lastForwardDepthViewportWidth = nextViewportWidth;
+
+    window.clearTimeout(window.__paragonForwardDepthResizeTimer);
+    window.__paragonForwardDepthResizeTimer = window.setTimeout(() => {
+      initForwardDepth();
+    }, 220);
+  },
+  { passive: true },
+);
+/* FORWARD_DEPTH_KEYBOARD_SAFE_RESIZE_END */
 
 
 
