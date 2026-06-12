@@ -593,7 +593,7 @@ const createHtml = async (data, activeSpecials, css) => {
 
 const createLandingHtml = (data, activeSpecials, buildId) => {
   const settings = data.settings;
-  const campaignTitle = normalizeText(settings.headline) && settings.headline !== "Monthly Featured Cuts" ? settings.headline : "World Cup Deals";
+  const campaignTitle = "Monthly Featured Cuts";
   const siteUrl = toPublicUrl(settings.footerUrl);
   const pdfUrl = "./monthly-specials.pdf";
   const pageTitle = "Monthly Featured Cuts | Paragon Purveyors";
