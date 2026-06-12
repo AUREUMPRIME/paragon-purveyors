@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-12T04:07:23.591Z",
+  "generatedAt": "2026-06-12T23:57:37.943Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -26,15 +26,15 @@
       "name": "Blake B.",
       "location": "Irvine / Orange County",
       "phone": "(949) 303-9726",
-      "email": ""
+      "email": "blake@paragonpurveyors.com"
     },
     {
       "sort": 2,
       "active": true,
       "name": "Clayton U.",
-      "location": "French Valley / Temecula Area",
+      "location": "French Valley / Temecula",
       "phone": "(949) 514-3127",
-      "email": ""
+      "email": "clay@paragonpurveyors.com"
     }
   ],
   "specials": [
@@ -52,7 +52,7 @@
       "primaryPrice": "$35.00",
       "secondaryPriceLabel": "Tenderloin AVG 5.5 lb",
       "secondaryPrice": "$260.00",
-      "savingsMessage": "Save 20% on 5+ pieces",
+      "savingsMessage": "buy 5 get an extra steak for free",
       "imagePath": "assets/all-cuts/enlarge/18-tenderloin-side-strap-off.webp",
       "description": "Lean, tender, and refined. A classic center-plate cut for elegant preparations."
     },
@@ -70,7 +70,7 @@
       "primaryPrice": "$34.00",
       "secondaryPriceLabel": "Cube Roll AVG 12–13 lb",
       "secondaryPrice": "$450.00",
-      "savingsMessage": "Save 20% on 5+ pieces",
+      "savingsMessage": "buy 5 get an extra steak for free",
       "imagePath": "assets/all-cuts/enlarge/13-rib-eye-cap.webp",
       "description": "Richly marbled with full beef flavor. Built for a bold, memorable steak experience."
     },
@@ -88,7 +88,7 @@
       "primaryPrice": "$30.00",
       "secondaryPriceLabel": "Striploin AVG 12–13 lb",
       "secondaryPrice": "$390.00",
-      "savingsMessage": "Save 20% on 5+ pieces",
+      "savingsMessage": "buy 5 get an extra steak for free",
       "imagePath": "assets/all-cuts/enlarge/17-striploin.webp",
       "description": "Classic steakhouse cut with a clean bite, rich flavor, and refined texture."
     },
@@ -106,7 +106,7 @@
       "primaryPrice": "$90.00",
       "secondaryPriceLabel": "",
       "secondaryPrice": "",
-      "savingsMessage": "Save 20% on 5+ pieces",
+      "savingsMessage": "buy 5 get an extra steak for free",
       "imagePath": "assets/all-cuts/enlarge/21-tri-tip.webp",
       "description": "Versatile and deeply savory, with a distinctive shape and satisfying texture."
     }
