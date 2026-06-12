@@ -595,7 +595,7 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
   const settings = data.settings;
   const campaignTitle = normalizeText(settings.headline) && settings.headline !== "Monthly Featured Cuts" ? settings.headline : "World Cup Deals";
   const siteUrl = toPublicUrl(settings.footerUrl);
-  const pdfUrl = `./monthly-specials.pdf?b=${encodeURIComponent(buildId)}`;
+  const pdfUrl = "./monthly-specials.pdf";
   const pageTitle = "Monthly Featured Cuts | Paragon Purveyors";
   const pageDescription = "Explore this month's featured cuts from Paragon Purveyors.";
   const pageUrl = "https://paragonpurveyors.com/specials/";
