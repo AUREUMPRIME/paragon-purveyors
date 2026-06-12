@@ -217,6 +217,7 @@ const parseContactsRows = (rows) => {
     name: ["Name"],
     location: ["Location"],
     phone: ["Phone"],
+    email: ["Email"],
   });
 
   const contacts = rows
@@ -227,8 +228,9 @@ const parseContactsRows = (rows) => {
       name: valueFrom(row, headerMap, "name"),
       location: valueFrom(row, headerMap, "location"),
       phone: valueFrom(row, headerMap, "phone"),
+      email: valueFrom(row, headerMap, "email"),
     }))
-    .filter((contact) => contact.active && (contact.name || contact.location || contact.phone))
+    .filter((contact) => contact.active && (contact.name || contact.location || contact.phone || contact.email))
     .sort((a, b) => a.sort - b.sort);
 
   return contacts;
@@ -502,13 +504,16 @@ const createSpecialCard = async (item) => {
 
   const createContactCards = (contacts) =>
   contacts
-    .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location))
+    .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location) || normalizeText(contact.email))
     .map(
       (contact) => `
         <article class="contact-card">
-          <p class="contact-kicker">${escapeHtml(contact.location || "Contact")}</p>
-          <h2 class="contact-name">${escapeHtml(contact.name || "Paragon Purveyors")}</h2>
-          <p class="contact-meta">${escapeHtml(contact.phone || "Phone pending")}</p>
+          <div class="contact-card__main">
+            <p class="contact-kicker">${escapeHtml(contact.location || "Contact")}</p>
+            <h2 class="contact-name">${escapeHtml(contact.name || "Paragon Purveyors")}</h2>
+            <p class="contact-meta">${escapeHtml(contact.phone || "Phone pending")}</p>
+          </div>
+          ${contact.email ? `<p class="contact-email">${escapeHtml(contact.email)}</p>` : ""}
         </article>`,
     )
     .join("");
@@ -590,22 +595,26 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
   const pdfUrl = `./monthly-specials.pdf?b=${encodeURIComponent(buildId)}`;
 
   const contactCards = (data.contacts || [])
-    .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location))
+    .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location) || normalizeText(contact.email))
     .map((contact) => {
       const phone = normalizeText(contact.phone || "");
       const name = normalizeText(contact.name || "Paragon Purveyors");
       const location = normalizeText(contact.location || "Contact");
+      const email = normalizeText(contact.email || "");
 
       return `
         <article class="contact-card">
-          <p class="contact-kicker">${escapeHtml(location)}</p>
-          <h2>${escapeHtml(name)}</h2>
-          <p class="contact-phone">${escapeHtml(phone || "Phone pending")}</p>
-          ${
-            phone
-              ? `<button class="copy-phone-button" type="button" data-copy-phone="${escapeHtml(phone)}" aria-label="Copy ${escapeHtml(name)} phone number">Copy phone</button>`
-              : ""
-          }
+          <div class="contact-card__main">
+            <p class="contact-kicker">${escapeHtml(location)}</p>
+            <h2>${escapeHtml(name)}</h2>
+            <p class="contact-phone">${escapeHtml(phone || "Phone pending")}</p>
+            ${
+              phone
+                ? `<button class="copy-phone-button" type="button" data-copy-phone="${escapeHtml(phone)}" aria-label="Copy ${escapeHtml(name)} phone number">Copy phone</button>`
+                : ""
+            }
+          </div>
+          ${email ? `<p class="contact-email">${escapeHtml(email)}</p>` : ""}
         </article>`;
     })
     .join("");
@@ -709,9 +718,30 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
     }
 
     .contact-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
       padding: 20px;
       border: 1px solid rgba(248, 242, 232, 0.15);
       background: rgba(0, 0, 0, 0.14);
+    }
+
+    .contact-card__main {
+      min-width: 0;
+    }
+
+    .contact-email {
+      margin: 0;
+      flex: 0 0 auto;
+      max-width: 230px;
+      color: rgba(248, 242, 232, 0.72);
+      font-size: 11px;
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+      text-align: right;
+      text-transform: lowercase;
+      white-space: nowrap;
     }
 
     .contact-phone {

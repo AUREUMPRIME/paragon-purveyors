@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-11T23:41:54.497Z",
+  "generatedAt": "2026-06-12T01:52:54.759Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -25,14 +25,16 @@
       "active": true,
       "name": "Blake B.",
       "location": "Irvine / Orange County",
-      "phone": "(949) 303-9726"
+      "phone": "(949) 303-9726",
+      "email": "blake@paragonpurveyors.com"
     },
     {
       "sort": 2,
       "active": true,
       "name": "Clayton U.",
       "location": "French Valley / Temecula Area",
-      "phone": "(949) 514-3127"
+      "phone": "(949) 514-3127",
+      "email": "clay@paragonpurveyors.com"
     }
   ],
   "specials": [
