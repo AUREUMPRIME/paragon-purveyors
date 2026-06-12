@@ -533,7 +533,7 @@ const createHtml = async (data, activeSpecials, css) => {
     const campaignTitleParts = campaignTitle === "World Cup Deals" ? ["World Cup", "Deals"] : [campaignTitle];
     const campaignTitleHtml = campaignTitleParts.map((part) => `<span>${escapeHtml(part)}</span>`).join("");
     const deliveryBadge = "Free Delivery";
-    const documentTitle = `${settings.month} ${campaignTitle} | Paragon Purveyors`;
+    const documentTitle = "Monthly Featured Cuts | Paragon Purveyors";
   const siteUrl = toPublicUrl(settings.footerUrl);
   const contactCards = createContactCards(data.contacts || []);
 
@@ -542,6 +542,9 @@ const createHtml = async (data, activeSpecials, css) => {
 <head>
   <meta charset="utf-8">
   <title>${escapeHtml(documentTitle)}</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="/PP16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/PP32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/PP48x48.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>${css}</style>
 </head>
@@ -593,6 +596,10 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
   const campaignTitle = normalizeText(settings.headline) && settings.headline !== "Monthly Featured Cuts" ? settings.headline : "World Cup Deals";
   const siteUrl = toPublicUrl(settings.footerUrl);
   const pdfUrl = `./monthly-specials.pdf?b=${encodeURIComponent(buildId)}`;
+  const pageTitle = "Monthly Featured Cuts | Paragon Purveyors";
+  const pageDescription = "Explore this month's featured cuts from Paragon Purveyors.";
+  const pageUrl = "https://paragonpurveyors.com/specials/";
+  const previewImageUrl = "https://paragonpurveyors.com/PP48x48.png";
 
   const contactCards = (data.contacts || [])
     .filter((contact) => normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location) || normalizeText(contact.email))
@@ -623,7 +630,21 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>${escapeHtml(campaignTitle)} | Paragon Purveyors</title>
+  <title>${escapeHtml(pageTitle)}</title>
+  <meta name="description" content="${escapeHtml(pageDescription)}">
+  <link rel="canonical" href="${escapeHtml(pageUrl)}">
+  <link rel="icon" type="image/png" sizes="16x16" href="/PP16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/PP32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/PP48x48.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtml(pageTitle)}">
+  <meta property="og:description" content="${escapeHtml(pageDescription)}">
+  <meta property="og:url" content="${escapeHtml(pageUrl)}">
+  <meta property="og:image" content="${escapeHtml(previewImageUrl)}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="${escapeHtml(pageTitle)}">
+  <meta name="twitter:description" content="${escapeHtml(pageDescription)}">
+  <meta name="twitter:image" content="${escapeHtml(previewImageUrl)}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
