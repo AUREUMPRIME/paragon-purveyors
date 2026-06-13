@@ -532,7 +532,9 @@ const createHtml = async (data, activeSpecials, css) => {
     const campaignTitle = normalizeText(settings.headline) && settings.headline !== "Monthly Featured Cuts" ? settings.headline : "World Cup Deals";
     const campaignTitleParts = campaignTitle === "World Cup Deals" ? ["World Cup", "Deals"] : [campaignTitle];
     const campaignTitleHtml = campaignTitleParts.map((part) => `<span>${escapeHtml(part)}</span>`).join("");
-    const deliveryBadge = "Free Delivery";
+    const deliveryBadge =
+      normalizeText(settings.deliveryMessage) ||
+      "No Minimum Required for Free Delivery";
     const documentTitle = "Monthly Featured Cuts | Paragon Purveyors";
   const siteUrl = toPublicUrl(settings.footerUrl);
   const contactCards = createContactCards(data.contacts || []);

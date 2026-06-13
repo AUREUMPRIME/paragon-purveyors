@@ -857,12 +857,14 @@ body {
 }
 
 .delivery-badge {
+  width: 100%;
   margin: 0;
   color: rgba(197, 114, 88, 0.96);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10.5px;
-  line-height: 1;
-  letter-spacing: 0.22em;
+  font-size: 7.2px;
+  line-height: 1.15;
+  letter-spacing: 0.11em;
+  text-align: center;
   text-transform: uppercase;
   white-space: nowrap;
 }
