@@ -657,11 +657,11 @@ app.innerHTML = `
 
               <article class="inquiry-detail-card inquiry-detail-card--copy">
                 <span class="inquiry-detail-label">French Valley / Temecula Area</span>
-                <strong class="inquiry-detail-value">Clayton U. — (949) 514-3127</strong>
+                <strong class="inquiry-detail-value">Clayton U. — (951) 414-5230</strong>
                 <button
                   class="inquiry-copy-button"
                   type="button"
-                  data-copy-value="(949) 514-3127"
+                  data-copy-value="(951) 414-5230"
                   aria-label="Copy Clayton U. phone number"
                 >
                   Copy
