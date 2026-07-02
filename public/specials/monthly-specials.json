@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-13T00:35:20.907Z",
+  "generatedAt": "2026-07-02T05:28:03.648Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -47,7 +47,7 @@
       "brandLogoKey": "black-opal",
       "productLine": "F1 Australian Wagyu",
       "marblingScore": "MB 6-7",
-      "quantityAvailable": "24 steaks available",
+      "quantityAvailable": "Available",
       "primaryPriceLabel": "8 oz steak",
       "primaryPrice": "$35.00",
       "secondaryPriceLabel": "Tenderloin AVG 5.5 lb",
@@ -65,7 +65,7 @@
       "brandLogoKey": "black-opal",
       "productLine": "F1 Australian Wagyu",
       "marblingScore": "MB 6-7",
-      "quantityAvailable": "18 steaks available",
+      "quantityAvailable": "Available",
       "primaryPriceLabel": "12 oz steak",
       "primaryPrice": "$34.00",
       "secondaryPriceLabel": "Cube Roll AVG 12–13 lb",
@@ -83,7 +83,7 @@
       "brandLogoKey": "black-opal",
       "productLine": "F1 Australian Wagyu",
       "marblingScore": "MB 6-7",
-      "quantityAvailable": "10 steaks available",
+      "quantityAvailable": "Available",
       "primaryPriceLabel": "12 oz steak",
       "primaryPrice": "$30.00",
       "secondaryPriceLabel": "Striploin AVG 12–13 lb",
@@ -101,7 +101,7 @@
       "brandLogoKey": "altair",
       "productLine": "F1 Australian Wagyu",
       "marblingScore": "MB 5+",
-      "quantityAvailable": "12 packs available",
+      "quantityAvailable": "Available",
       "primaryPriceLabel": "2-pack roast AVG 5 lb",
       "primaryPrice": "$90.00",
       "secondaryPriceLabel": "",
