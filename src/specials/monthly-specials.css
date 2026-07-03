@@ -56,13 +56,12 @@ body {
 }
 
 .brand-logo {
-  width: 0.88in;
-  height: 0.88in;
-  max-width: 0.88in;
-  max-height: 0.88in;
+  width: 0.96in;
+  height: 0.96in;
   object-fit: contain;
   object-position: center;
-  filter: brightness(0) invert(1);
+  display: block;
+  opacity: 1;
 }
 
 .brand-kicker {
@@ -78,14 +77,13 @@ body {
 }
 
 .brand-text-logo {
-  width: 3.45in;
-  height: 0.78in;
+  width: 3.18in;
+  height: 0.66in;
   object-fit: contain;
   object-position: center;
-  filter: brightness(0) invert(1);
-  opacity: 0.96;
-  transform: scale(1.38);
-  transform-origin: center center;
+  display: block;
+  opacity: 1;
+  transform: translateY(0.06in);
 }
 
 .month-block {

@@ -204,6 +204,16 @@ const parseSettingsRows = (rows) => {
   return settings;
 };
 
+const resolveContactPhoneOverride = (name, phone) => {
+  const normalizedName = normalizeText(name).toLowerCase();
+  const normalizedPhone = normalizeText(phone);
+
+  if (normalizedName === "clayton u." || normalizedPhone === "(949) 514-3127") {
+    return "(951) 414-5230";
+  }
+
+  return phone;
+};
 const parseContactsRows = (rows) => {
   const headerIndex = findHeaderIndex(rows, ["active", "name", "location", "phone"]);
 
@@ -227,7 +237,10 @@ const parseContactsRows = (rows) => {
       active: isActive(valueFrom(row, headerMap, "active")),
       name: valueFrom(row, headerMap, "name"),
       location: valueFrom(row, headerMap, "location"),
-      phone: valueFrom(row, headerMap, "phone"),
+      phone: resolveContactPhoneOverride(
+        valueFrom(row, headerMap, "name"),
+        valueFrom(row, headerMap, "phone")
+      ),
       email: valueFrom(row, headerMap, "email"),
     }))
     .filter((contact) => contact.active && (contact.name || contact.location || contact.phone || contact.email))
@@ -597,6 +610,7 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
   const settings = data.settings;
   const campaignTitle = "Monthly Featured Cuts";
   const siteUrl = toPublicUrl(settings.footerUrl);
+  const livePageUrl = "./monthly-specials.html";
   const pdfUrl = "./monthly-specials.pdf";
   const pageTitle = "Monthly Featured Cuts | Paragon Purveyors";
   const pageDescription = "Explore this month's featured cuts from Paragon Purveyors.";
@@ -787,6 +801,58 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
       line-height: 1.45;
     }
 
+/* SPECIALS_LANDING_PREMIUM_MENU_START */
+    .specials-landing-menu {
+      position: relative;
+      width: min(94vw, 1060px);
+      border-color: rgba(248, 242, 232, 0.2);
+      background:
+        radial-gradient(circle at 16% 12%, rgba(197, 114, 88, 0.08), transparent 34%),
+        linear-gradient(135deg, rgba(248, 242, 232, 0.055), rgba(248, 242, 232, 0.015)),
+        rgba(12, 10, 8, 0.94);
+      box-shadow: 0 32px 92px rgba(0, 0, 0, 0.36);
+    }
+
+    .specials-landing-menu .actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .specials-landing-menu .actions a {
+      min-height: 112px;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 22px;
+      border-radius: 0;
+      background: rgba(248, 242, 232, 0.035);
+      text-align: left;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .specials-landing-menu .actions a:hover,
+    .specials-landing-menu .actions a:focus-visible {
+      transform: translateY(-2px);
+      background: rgba(248, 242, 232, 0.06);
+    }
+
+    .specials-landing-menu .actions a:first-child {
+      border-color: rgba(197, 114, 88, 0.44);
+      background: linear-gradient(135deg, rgba(197, 114, 88, 0.13), rgba(248, 242, 232, 0.025));
+    }
+
+    @media (max-width: 760px) {
+      .specials-landing-menu .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .specials-landing-menu .actions a {
+        min-height: 76px;
+      }
+    }
+/* SPECIALS_LANDING_PREMIUM_MENU_END */
+
     @media (max-width: 680px) {
       .contact-grid {
         grid-template-columns: 1fr;
@@ -799,13 +865,15 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
   </style>
 </head>
 <body>
-  <main>
+  <main class="specials-landing-menu">
     <p class="eyebrow">${escapeHtml(settings.month)} ${escapeHtml(settings.year)}</p>
     <h1>${campaignTitle === "World Cup Deals" ? "World Cup<br>Deals" : escapeHtml(campaignTitle)}</h1>
     <p>${escapeHtml(settings.subheadline || "Monthly selections for direct ordering.")}</p>
     <p>${activeSpecials.length} current featured cuts are available in the latest campaign PDF.</p>
 
     <div class="actions">
+          <a href="${escapeHtml(livePageUrl)}">View live specials</a>
+
       <a href="${escapeHtml(pdfUrl)}">Open latest PDF</a>
       <a href="${escapeHtml(siteUrl)}">${escapeHtml(settings.footerButtonLabel || "Visit ParagonPurveyors.com")}</a>
     </div>

@@ -157,6 +157,58 @@
       line-height: 1.45;
     }
 
+/* SPECIALS_LANDING_PREMIUM_MENU_START */
+    .specials-landing-menu {
+      position: relative;
+      width: min(94vw, 1060px);
+      border-color: rgba(248, 242, 232, 0.2);
+      background:
+        radial-gradient(circle at 16% 12%, rgba(197, 114, 88, 0.08), transparent 34%),
+        linear-gradient(135deg, rgba(248, 242, 232, 0.055), rgba(248, 242, 232, 0.015)),
+        rgba(12, 10, 8, 0.94);
+      box-shadow: 0 32px 92px rgba(0, 0, 0, 0.36);
+    }
+
+    .specials-landing-menu .actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .specials-landing-menu .actions a {
+      min-height: 112px;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 22px;
+      border-radius: 0;
+      background: rgba(248, 242, 232, 0.035);
+      text-align: left;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .specials-landing-menu .actions a:hover,
+    .specials-landing-menu .actions a:focus-visible {
+      transform: translateY(-2px);
+      background: rgba(248, 242, 232, 0.06);
+    }
+
+    .specials-landing-menu .actions a:first-child {
+      border-color: rgba(197, 114, 88, 0.44);
+      background: linear-gradient(135deg, rgba(197, 114, 88, 0.13), rgba(248, 242, 232, 0.025));
+    }
+
+    @media (max-width: 760px) {
+      .specials-landing-menu .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .specials-landing-menu .actions a {
+        min-height: 76px;
+      }
+    }
+/* SPECIALS_LANDING_PREMIUM_MENU_END */
+
     @media (max-width: 680px) {
       .contact-grid {
         grid-template-columns: 1fr;
@@ -169,13 +221,15 @@
   </style>
 </head>
 <body>
-  <main>
+  <main class="specials-landing-menu">
     <p class="eyebrow">July 2026</p>
     <h1>Monthly Featured Cuts</h1>
     <p>Monthly selections for direct ordering.</p>
     <p>4 current featured cuts are available in the latest campaign PDF.</p>
 
     <div class="actions">
+          <a href="./monthly-specials.html">View live specials</a>
+
       <a href="./monthly-specials.pdf">Open latest PDF</a>
       <a href="https://paragonpurveyors.com">Visit ParagonPurveyors.com</a>
     </div>
@@ -197,8 +251,8 @@
           <div class="contact-card__main">
             <p class="contact-kicker">French Valley / Temecula</p>
             <h2>Clayton U.</h2>
-            <p class="contact-phone">(949) 514-3127</p>
-            <button class="copy-phone-button" type="button" data-copy-phone="(949) 514-3127" aria-label="Copy Clayton U. phone number">Copy phone</button>
+            <p class="contact-phone">(951) 414-5230</p>
+            <button class="copy-phone-button" type="button" data-copy-phone="(951) 414-5230" aria-label="Copy Clayton U. phone number">Copy phone</button>
           </div>
           <p class="contact-email">clay@paragonpurveyors.com</p>
         </article>
