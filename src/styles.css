@@ -2817,9 +2817,6 @@ body.selected-cut-modal-open {
 }
 /* MOBILE_FIXED_SCENE_FIT_END */
 
-
-
-
 /* HERO_CTA_POLISH_START */
 .hero-actions {
   align-items: center;
@@ -2914,8 +2911,6 @@ body.selected-cut-modal-open {
   }
 }
 /* HERO_CTA_POLISH_END */
-
-
 
 /* SECTION_2_STORY_ABOUT_CARD_START */
 .panel-story {
@@ -5063,10 +5058,6 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* PRODUCER_CARD_SIZE_AND_FEEDBACK_TUNE_END */
-
-
-
-
 
 /* PRODUCER_MODAL_OFFICIAL_LINK_FIX_START */
 .provider-modal-official {
@@ -7396,17 +7387,6 @@ body.selected-cut-modal-open .global-contact-cta {
 }
 /* SECTION_4_CHUCK_TAIL_FLAP_TITLE_FIX_END */
 
-
-
-
-
-
-
-
-
-
-
-
 /* CLIENT_SECTION_1_BUTTON_POLISH_START */
 .hero-actions,
 .hero-buttons,
@@ -8592,9 +8572,6 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 
-
-
-
 @media (max-width: 720px) {
 
 
@@ -9081,8 +9058,6 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* ROUND3_PROVIDER_MODAL_INQUIRY_CTA_END */
-
-
 
 /* ROUND3_TRI_TIP_CARD_IMAGE_FIT_START */
 .cut-card--tri-tip .cut-card-image {
@@ -12072,3 +12047,142 @@ body.selected-cut-modal-open .global-contact-cta {
   }
 }
 /* REAL_LOGO_RENDER_FIX_END */
+
+/* OWNER_IMAGES_ONLY_START */
+.section-about-logo-card__owner-image,
+.owners-portrait-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: 1;
+}
+
+.section-about-logo-card__owner-slot,
+.owners-portrait-card__image-frame {
+  overflow: hidden;
+}
+/* OWNER_IMAGES_ONLY_END */
+
+/* OWNER_BIO_CLICK_FEEDBACK_START */
+.owners-portrait-card--action {
+  position: relative;
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+
+.owners-portrait-card--action:focus-visible {
+  outline: 1px solid rgba(248, 242, 232, 0.52);
+  outline-offset: 4px;
+}
+
+.owners-portrait-card__bio-hover {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.68));
+  color: #fffaf2;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.owners-portrait-card--action:hover .owners-portrait-card__bio-hover,
+.owners-portrait-card--action:focus-visible .owners-portrait-card__bio-hover {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.owners-story__body--bio {
+  max-width: 24rem;
+  margin-top: 1.25rem;
+}
+/* OWNER_BIO_CLICK_FEEDBACK_END */
+
+/* SECTION2_OWNER_IMAGE_PAIR_ONLY_START */
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-stage {
+  width: min(72%, 15rem);
+  height: 76%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-inline: auto;
+}
+
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-slot {
+  position: relative;
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-slot--clayton,
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-slot--blake {
+  margin: 0;
+  transform: none;
+}
+
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-image {
+  width: 112%;
+  height: 108%;
+  object-fit: cover;
+  object-position: center top;
+  transform-origin: center center;
+}
+
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-image--clayton {
+  transform: translateX(3%);
+  object-position: 54% 42%;
+}
+
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-image--blake {
+  transform: translateX(-3%) scaleX(-1);
+  object-position: 46% 42%;
+}
+/* SECTION2_OWNER_IMAGE_PAIR_ONLY_END */
+
+/* SECTION2_OWNER_EDGE_BLEND_START */
+.section-about-logo-card[data-owners-trigger] .section-about-logo-card__owner-stage {
+  -webkit-mask-image: radial-gradient(
+    ellipse 66% 62% at 50% 46%,
+    #000 0%,
+    #000 56%,
+    rgba(0, 0, 0, 0.72) 72%,
+    rgba(0, 0, 0, 0.28) 86%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 66% 62% at 50% 46%,
+    #000 0%,
+    #000 56%,
+    rgba(0, 0, 0, 0.72) 72%,
+    rgba(0, 0, 0, 0.28) 86%,
+    transparent 100%
+  );
+}
+/* SECTION2_OWNER_EDGE_BLEND_END */

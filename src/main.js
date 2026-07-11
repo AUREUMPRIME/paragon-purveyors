@@ -141,7 +141,7 @@ app.innerHTML = `
                 />
               </span>
               <span class="section-about-logo-card__label">About Paragon Purveyors</span>
-              <span class="section-about-logo-card__copy">View the brand introduction.</span>
+              <span class="section-about-logo-card__copy">Established 2026</span>
             </button>
 
             <button
@@ -153,16 +153,14 @@ app.innerHTML = `
               <span class="section-about-logo-card__owner-cover" aria-hidden="true">
                   <span class="section-about-logo-card__owner-stage">
                     <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--clayton">
-                      <span class="section-about-logo-card__owner-placeholder section-about-logo-card__owner-placeholder--clayton" aria-hidden="true"></span>
+                      <img class="section-about-logo-card__owner-image section-about-logo-card__owner-image--clayton" src="${assetPath("assets/owners/ClayU.jpeg")}" alt="" loading="lazy" decoding="async" />
                     </span>
                     <span class="section-about-logo-card__owner-slot section-about-logo-card__owner-slot--blake">
-                      <span class="section-about-logo-card__owner-placeholder section-about-logo-card__owner-placeholder--blake" aria-hidden="true"></span>
+                      <img class="section-about-logo-card__owner-image section-about-logo-card__owner-image--blake" src="${assetPath("assets/owners/BlakeB.jpeg")}" alt="" loading="lazy" decoding="async" />
                     </span>
                   </span>
                 </span>
                 <span class="section-about-logo-card__label">Meet the Owners</span>
-              <span class="section-about-logo-card__date">Established 2026</span>
-              <span class="section-about-logo-card__copy">Read the story behind Paragon Purveyors.</span>
             </button>
           </div>
         </div>
@@ -907,10 +905,8 @@ function initHeroButtonFeedback() {
 
       <div class="about-modal__layout owners-modal__layout">
         <section class="about-modal__copy owners-modal__copy">
-          <p class="about-modal__eyebrow">About Paragon Purveyors</p>
           <h2 id="owners-modal-title">Meet the Owners</h2>
 
-          <p class="owners-modal__established">Established in 2026</p>
 
           <div class="owners-story" aria-label="Paragon Purveyors founder story">
             <div class="owners-story__founders">
@@ -920,31 +916,32 @@ function initHeroButtonFeedback() {
 
             <div class="owners-story__body">
               <p>Paragon Purveyors was created from a shared passion for exceptional meat and the people who seek it. Based in California, the company was built to make exceptional cuts easier to access, understand, and enjoy.</p>
-              <p>For new and experienced buyers, Paragon serves as a trusted sourcing partner focused on quality, clarity, and convenience.</p>
             </div>
           </div>
         </section>
 
         <aside class="owners-portraits" aria-label="Paragon Purveyors founder portraits">
-          <article class="owners-portrait-card owners-portrait-card--clayton">
+          <button class="owners-portrait-card owners-portrait-card--clayton owners-portrait-card--action" type="button" data-owner-bio-trigger="clayton" aria-label="Open Clayton U. bio">
             <div class="owners-portrait-card__image-frame">
-              <span class="owners-portrait-card__placeholder owners-portrait-card__placeholder--clayton" aria-hidden="true"></span>
+              <img class="owners-portrait-card__image owners-portrait-card__image--clayton" src="${assetPath("assets/owners/ClayU.jpeg")}" alt="Clayton U." loading="lazy" decoding="async" />
             </div>
+            <span class="owners-portrait-card__bio-hover" aria-hidden="true">Open Bio</span>
             <div class="owners-portrait-card__caption">
               <p class="owners-portrait-card__name">Clayton U.</p>
               <p class="owners-portrait-card__role">Founder</p>
             </div>
-          </article>
+          </button>
 
-          <article class="owners-portrait-card owners-portrait-card--blake">
+          <button class="owners-portrait-card owners-portrait-card--blake owners-portrait-card--action" type="button" data-owner-bio-trigger="blake" aria-label="Open Blake B. bio">
             <div class="owners-portrait-card__image-frame">
-              <span class="owners-portrait-card__placeholder owners-portrait-card__placeholder--blake" aria-hidden="true"></span>
+              <img class="owners-portrait-card__image owners-portrait-card__image--blake" src="${assetPath("assets/owners/BlakeB.jpeg")}" alt="Blake B." loading="lazy" decoding="async" />
             </div>
+            <span class="owners-portrait-card__bio-hover" aria-hidden="true">Open Bio</span>
             <div class="owners-portrait-card__caption">
               <p class="owners-portrait-card__name">Blake B.</p>
               <p class="owners-portrait-card__role">Founder</p>
             </div>
-          </article>
+          </button>
         </aside>
       </div>
     </div>
@@ -963,6 +960,67 @@ function initHeroButtonFeedback() {
   modal.innerHTML = modalContent;
 
   const closeButton = modal.querySelector("[data-owners-close]");
+
+    // OWNERS_BIO_INTERACTION_START
+  const ownersDefaultCopy = `
+          <h2 id="owners-modal-title">Meet the Owners</h2>
+
+          <div class="owners-story" aria-label="Paragon Purveyors founder story">
+            <div class="owners-story__founders">
+              <p class="owners-story__label">Founded by</p>
+              <p class="owners-story__names">Clayton U. and Blake B.</p>
+            </div>
+
+            <div class="owners-story__body">
+              <p>Paragon Purveyors was created from a shared passion for exceptional meat and the people who seek it. Based in California, the company was built to make exceptional cuts easier to access, understand, and enjoy.</p>
+            </div>
+          </div>
+  `;
+
+  const ownerBioProfiles = {
+    clayton: {
+      name: "Clayton U.",
+      bio: "Clayton helps carry the Paragon Purveyors standard through thoughtful service, clear communication, and careful attention to each client relationship. His approach reflects the brand’s focus on quality, trust, and a refined buying experience."
+    },
+    blake: {
+      name: "Blake B.",
+      bio: "Blake helps shape the Paragon Purveyors experience through attentive service, clear guidance, and a steady commitment to client care. His approach reflects the brand’s focus on quality, trust, and a refined buying experience."
+    }
+  };
+
+  const ownersCopyNode = modal.querySelector(".owners-modal__copy");
+
+  const resetOwnersCopy = () => {
+    if (!ownersCopyNode) {
+      return;
+    }
+
+    ownersCopyNode.innerHTML = ownersDefaultCopy;
+  };
+
+  const showOwnerBio = (ownerKey) => {
+    const profile = ownerBioProfiles[ownerKey];
+
+    if (!profile || !ownersCopyNode) {
+      return;
+    }
+
+    ownersCopyNode.innerHTML = `
+          <h2 id="owners-modal-title">${profile.name}</h2>
+          <div class="owners-story__body owners-story__body--bio">
+            <p>${profile.bio}</p>
+          </div>
+    `;
+  };
+
+  modal.querySelectorAll("[data-owner-bio-trigger]").forEach((card) => {
+    card.addEventListener("click", () => {
+      showOwnerBio(card.getAttribute("data-owner-bio-trigger"));
+    });
+  });
+
+  modal.addEventListener("close", resetOwnersCopy);
+  // OWNERS_BIO_INTERACTION_END
   const panel = modal.querySelector(".about-modal__panel");
 
   const openModal = () => {
