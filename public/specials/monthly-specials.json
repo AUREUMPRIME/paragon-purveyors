@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T22:17:30.068Z",
+  "generatedAt": "2026-07-13T22:22:04.031Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -13,11 +13,11 @@
     "year": "2026",
     "headline": "Monthly Featured Cuts",
     "subheadline": "Monthly selections for direct ordering.",
-    "footerUrl": "Paragon Purveyors",
-    "footerButtonLabel": "Selected Cuts",
+    "footerUrl": "paragonpurveyors.com",
+    "footerButtonLabel": "Paragon Purveyors",
     "footerMessage": "For wholesale pricing/availability reach out to Blake or Clay directly.",
     "disclaimer": "Pricing and availability are subject to change.",
-    "contactInstruction": "To place an order, contact the representative closest to your area. For custom requests or larger allocations, use the website link below."
+    "contactInstruction": "To place an order, contact the representative closest to your area."
   },
   "contacts": [
     {
