@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "specials:build": "node tools/build-monthly-specials.mjs",
-    "specials:v2:build": "node tools/build-monthly-specials-v2.mjs"
+    "specials:v2:build": "node tools/build-monthly-specials-v2.mjs",
+    "specials:v2:build:workbook": "python tools/export-monthly-specials-v2-workbook.py && node tools/build-monthly-specials-v2.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",

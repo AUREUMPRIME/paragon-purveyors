@@ -1,9 +1,7 @@
 {
-  "version": "2.0",
   "source": {
-    "type": "fixture",
-    "label": "Local V2 workbook mirror",
-    "workbookSha256": "AA53C51452CF8FF956CAD04542FD2162DB251814C3359100F397C7FEFA92DE0D"
+    "type": "workbook",
+    "file": "C:\\Users\\Psyfr\\Documents\\Data\\GitHub\\PP Wagyu\\Assets\\Live PDF 2.0 Audit\\Paragon Monthly Specials Source V2.xlsx"
   },
   "settings": {
     "month": "July",
@@ -24,7 +22,7 @@
     "headerSupportingLineVisible": "no",
     "contactInstruction": "To place an order, contact the representative closest to your area.",
     "contactBrollPath": "assets/specials/broll/contact.webp",
-    "contactBrollAlt": "Premium Wagyu selection prepared for presentation",
+    "contactBrollAlt": "Paragon Purveyors contact section editorial image",
     "contactBrollVisible": "yes",
     "contactBrollPosition": "center",
     "footerMessage": "For wholesale pricing/availability reach out to Blake or Clay directly.",
@@ -32,14 +30,14 @@
     "footerButtonLabel": "Paragon Purveyors",
     "footerUrl": "https://paragonpurveyors.com",
     "footerBrollPath": "assets/specials/broll/footer.webp",
-    "footerBrollAlt": "Paragon Purveyors premium meat presentation",
+    "footerBrollAlt": "Paragon Purveyors footer editorial image",
     "footerBrollVisible": "yes",
     "footerBrollPosition": "center"
   },
   "contacts": [
     {
       "sort": 1,
-      "active": "yes",
+      "active": true,
       "name": "Blake B.",
       "location": "Irvine / Orange County",
       "phone": "(949) 303-9726",
@@ -47,7 +45,7 @@
     },
     {
       "sort": 2,
-      "active": "yes",
+      "active": true,
       "name": "Clayton U.",
       "location": "French Valley / Temecula",
       "phone": "(951) 414-5230",
@@ -57,7 +55,7 @@
   "specials": [
     {
       "sort": 1,
-      "active": "yes",
+      "active": true,
       "cutId": "tenderloin",
       "offerMode": "dual-offer",
       "displayName": "Tenderloin / Filet Mignon",
@@ -84,7 +82,7 @@
     },
     {
       "sort": 2,
-      "active": "yes",
+      "active": true,
       "cutId": "ribeye",
       "offerMode": "dual-offer",
       "displayName": "Cube Roll / Rib Eye",
@@ -111,7 +109,7 @@
     },
     {
       "sort": 3,
-      "active": "yes",
+      "active": true,
       "cutId": "striploin",
       "offerMode": "dual-offer",
       "displayName": "Striploin / NY Strip",
@@ -138,7 +136,7 @@
     },
     {
       "sort": 4,
-      "active": "yes",
+      "active": true,
       "cutId": "tri-tip",
       "offerMode": "single-offer",
       "displayName": "Tri Tip Roast",
@@ -163,11 +161,5 @@
       "description": "Versatile and deeply savory, with a distinctive shape and satisfying texture.",
       "internalNotes": "Single-offer state. No Secondary price or image assigned."
     }
-  ],
-  "lookups": {
-    "boolean": ["yes", "no"],
-    "offerMode": ["dual-offer", "single-offer"],
-    "imageFit": ["cover", "contain"],
-    "imagePosition": ["center", "center top", "center bottom", "left center", "right center"]
-  }
+  ]
 }

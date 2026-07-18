@@ -1,13 +1,6 @@
 @page {
-  size: Letter;
+  size: Legal;
   margin: 0;
-}
-
-:root {
-  color-scheme: dark;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #11100e;
-  color: #f4eee5;
 }
 
 * {
@@ -17,10 +10,13 @@
 html,
 body {
   width: 8.5in;
-  min-height: 11in;
+  height: 14in;
+  min-height: 14in;
   margin: 0;
-  padding: 0;
-  background: #11100e;
+  overflow: hidden;
+  background: #0b0908;
+  color: #f7f0e6;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -28,167 +24,941 @@ body {
   print-color-adjust: exact;
 }
 
-.v2-proof {
+.monthly-specials-page {
   width: 8.5in;
-  min-height: 11in;
-  padding: 0.34in;
+  height: 14in;
+  min-height: 14in;
+  display: grid;
+  grid-template-rows: 1.18in 9.9in 1.06in 0.74in;
+  row-gap: 0.12in;
+  padding: 0.34in 0.46in 0.26in;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.07), transparent 26%),
+    linear-gradient(180deg, #11100d 0%, #090807 100%);
+}
+
+.specials-header {
+  display: grid;
+  grid-template-columns: 1.08in minmax(3.1in, 1fr) 2.38in;
+  column-gap: 0.22in;
+  align-items: center;
+  border-bottom: 1px solid rgba(247, 240, 230, 0.2);
+  padding-bottom: 0.12in;
+  min-height: 1.18in;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 0.9in;
+}
+
+.brand-logo {
+  width: 0.96in;
+  height: 0.96in;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  opacity: 1;
+}
+
+.brand-kicker {
+  display: none;
+}
+
+.brand-text-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 0.9in;
+  overflow: visible;
+}
+
+.brand-text-logo {
+  width: 3.18in;
+  height: 0.66in;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  opacity: 1;
+  transform: translateY(0.06in);
+}
+
+.month-block {
+  display: flex;
+  min-height: 0.9in;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
+  overflow: visible;
+}
+
+.month-label {
+  margin: 0 0 0.04in;
+  font-size: 0.075in;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(247, 240, 230, 0.56);
+  white-space: nowrap;
+}
+
+.month-title {
+  margin: 0;
+  max-width: 2.3in;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.36in;
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  color: #fffaf2;
+  white-space: normal;
+}
+
+.month-subline {
+  margin: 0.045in 0 0;
+  font-size: 0.076in;
+  line-height: 1.16;
+  color: rgba(247, 240, 230, 0.66);
+  white-space: nowrap;
+}
+
+.specials-grid {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.105in;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.special-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1.9in;
+  min-height: 0;
+  border: 1px solid rgba(247, 240, 230, 0.18);
+  background:
+    linear-gradient(90deg, #17120f 0%, #100d0b 63%, #0b0908 100%);
+  color: #f8f2e8;
+  box-shadow: 0 0.075in 0.22in rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+}
+
+.special-card__content {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 0.18in;
-  background: #11100e;
+  align-content: center;
+  min-height: 0;
+  padding: 0.13in 0.16in 0.11in;
 }
 
-.v2-proof__header,
-.v2-proof__footer {
-  border: 1px solid rgba(221, 205, 184, 0.24);
-  padding: 0.14in 0.18in;
+.special-card__topline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0.14in;
+  align-items: start;
+  margin: 0 0 0.075in;
 }
 
-.v2-proof__eyebrow {
-  margin: 0 0 4px;
-  color: #b77768;
+.special-card__name {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.24in;
+  line-height: 0.94;
+  letter-spacing: -0.018em;
+  color: #fffaf2;
+}
+
+.special-card__qty {
+  margin: 0.035in 0 0;
+  font-size: 0.061in;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c9877a;
+  white-space: nowrap;
+}
+
+.price-list {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.052in 0.1in;
+  min-height: 0;
+}
+
+.price-row {
+  display: grid;
+  grid-template-columns: 0.285in 1fr;
+  gap: 0.06in;
+  align-items: center;
+  min-width: 0;
+}
+
+.price-icon {
+  display: grid;
+  place-items: center;
+  width: 0.245in;
+  height: 0.245in;
+  border: 1px solid rgba(247, 240, 230, 0.34);
+  border-radius: 999px;
+  background: rgba(247, 240, 230, 0.045);
+  color: #fffaf2;
+  font-size: 0.058in;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.price-label {
+  margin: 0;
+  font-size: 0.06in;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(247, 240, 230, 0.52);
+}
+
+.price-value {
+  margin: 0.019in 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.15in;
+  line-height: 1;
+  color: #fffaf2;
+}
+
+.special-description {
+  margin: 0.072in 0 0;
+  max-width: 4.45in;
+  font-size: 0.071in;
+  line-height: 1.22;
+  color: rgba(247, 240, 230, 0.62);
+}
+
+.special-card__image-wrap {
+  position: relative;
+  min-height: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.03)),
+    #080706;
+  border-left: 1px solid rgba(247, 240, 230, 0.12);
+  overflow: hidden;
+}
+
+.special-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: 0.055in;
+  filter: drop-shadow(0 0.07in 0.12in rgba(0, 0, 0, 0.36));
+}
+
+.contact-section {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: 0.075in;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.contact-instruction {
+  margin: 0;
+  max-width: 7.1in;
+  font-size: 0.077in;
+  line-height: 1.28;
+  color: rgba(247, 240, 230, 0.66);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.1in;
+  min-height: 0;
+}
+
+.contact-card {
+  border: 1px solid rgba(247, 240, 230, 0.18);
+  padding: 0.095in 0.13in;
+  background: rgba(247, 240, 230, 0.045);
+}
+
+.contact-kicker {
+  margin: 0 0 0.036in;
+  font-size: 0.058in;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(247, 240, 230, 0.5);
+}
+
+.contact-name {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.16in;
+  line-height: 1;
+  color: #fffaf2;
+}
+
+.contact-meta {
+  margin: 0.036in 0 0;
+  font-size: 0.077in;
+  line-height: 1.22;
+  color: rgba(247, 240, 230, 0.72);
+}
+
+.specials-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.2in;
+  min-height: 0;
+  border-top: 1px solid rgba(247, 240, 230, 0.18);
+  padding-top: 0.11in;
+}
+
+.footer-message {
+  margin: 0;
+  max-width: 5.7in;
+  font-size: 0.075in;
+  line-height: 1.25;
+  color: rgba(247, 240, 230, 0.62);
+}
+
+.site-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.72in;
+  padding: 0.085in 0.14in;
+  border: 1px solid rgba(247, 240, 230, 0.34);
+  border-radius: 999px;
+  color: #fffaf2;
+  text-decoration: none;
+  font-size: 0.062in;
+  line-height: 1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.disclaimer {
+  margin: 0.045in 0 0;
+  font-size: 0.057in;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(247, 240, 230, 0.42);
+}
+
+/* MONTHLY_SPECIALS_READABILITY_REBALANCE_START */
+.specials-header {
+  column-gap: 28px;
+  padding-bottom: 16px;
+}
+
+.month-block {
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  text-align: right;
+}
+
+.month-label,
+.month-title,
+.month-subline {
+  margin: 0;
+}
+
+.month-label {
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.28em;
+}
+
+.month-title {
+  font-size: 38px;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.month-subline {
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.24em;
+}
+
+.special-card__name {
+  font-size: 27px;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+}
+
+.special-card__qty {
   font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+}
+
+.price-label {
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.13em;
+}
+
+.price-value {
+  font-size: 17px;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+}
+
+.price-icon {
+  font-size: 7px;
+}
+
+.special-description {
+  font-size: 8.5px;
+  line-height: 1.32;
+}
+
+.contact-instruction {
+  font-size: 9.5px;
+  line-height: 1.35;
+}
+
+.contact-kicker {
+  font-size: 7.5px;
+  letter-spacing: 0.15em;
+}
+
+.contact-name {
+  font-size: 15px;
+  line-height: 1.08;
+}
+
+.contact-meta {
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.footer-message,
+.disclaimer {
+  font-size: 8.5px;
+  line-height: 1.35;
+}
+
+.site-button {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+/* MONTHLY_SPECIALS_READABILITY_REBALANCE_END */
+
+/* MONTHLY_FEATURED_CUTS_CARD_REDESIGN_START */
+.special-card__content {
+  position: relative;
+  grid-template-rows: auto auto auto 1fr;
+}
+
+.special-card__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 7px;
+}
+
+.special-card__heading {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.special-card__name {
+  max-width: 3.15in;
+}
+
+.product-brand {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0.7in;
+  max-width: 0.92in;
+  min-height: 0.25in;
+  margin-top: 1px;
+  opacity: 0.92;
+}
+
+.product-brand__logo {
+  display: block;
+  max-width: 0.9in;
+  max-height: 0.28in;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.product-brand__fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0.19in;
+  padding: 0.025in 0.08in;
+  border: 1px solid rgba(247, 240, 230, 0.18);
+  color: rgba(247, 240, 230, 0.74);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.special-card__meta {
+  min-width: 1.48in;
+  display: block;
+  text-align: right;
+}
+
+.marbling-score {
+  margin-top: 8px;
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+}
+
+.marbling-score__label,
+.marbling-score__value,
+.marbling-score__line {
+  margin: 0;
+}
+
+.marbling-score__label {
+  color: rgba(197, 114, 88, 0.82);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7px;
+  line-height: 1;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.marbling-score__value {
+  color: rgba(248, 242, 232, 0.88);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+
+.marbling-score__line {
+  color: rgba(247, 240, 230, 0.54);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7.5px;
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.price-list {
+  align-self: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 3.55in;
+  margin-top: 1px;
+  gap: 8px 24px;
+}
+
+.price-list--single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1.95in;
+}
+
+.price-row {
+  grid-template-columns: 0.28in minmax(0, 1fr);
+  gap: 7px;
+}
+
+.price-label {
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.13em;
+}
+
+.price-value {
+  margin-top: 3px;
+  font-size: 18px;
+  line-height: 1.05;
+}
+
+.price-icon {
+  width: 0.24in;
+  height: 0.24in;
+  font-size: 7px;
+}
+
+.savings-message {
+  margin: 6px 0 0;
+  color: rgba(197, 114, 88, 0.9);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8px;
+  line-height: 1.15;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.v2-proof__title {
+.special-description {
+  margin-top: 8px;
+}
+
+.contact-instruction {
+  max-width: 7.35in;
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(247, 240, 230, 0.78);
+}
+
+.footer-message {
+  max-width: 6.1in;
+  font-size: 10px;
+  line-height: 1.35;
+  color: rgba(247, 240, 230, 0.72);
+}
+
+.disclaimer {
+  font-size: 8.5px;
+  line-height: 1.3;
+}
+/* MONTHLY_FEATURED_CUTS_CARD_REDESIGN_END */
+
+
+/* MONTHLY_FEATURED_CUTS_CARD_REFINEMENT_START */
+/*
+  Fixed internal card layout:
+  Prevents one product's content from pushing into the next card.
+*/
+.specials-list {
+  row-gap: 0.055in;
+}
+
+.special-card {
+  min-height: 1.38in;
+  overflow: hidden;
+}
+
+.special-card__content {
+  position: relative;
+  display: block;
+  min-height: 1.38in;
+  overflow: hidden;
+  padding: 0;
+}
+
+.special-card__topline {
+  display: block;
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+}
+
+.special-card__heading {
+  position: absolute;
+  top: 0.105in;
+  left: 0.16in;
+  width: 3.62in;
+  min-width: 0;
+}
+
+.special-card__name {
+  display: block;
+  max-width: 3.62in;
+  white-space: nowrap;
   font-size: 24px;
-  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.034em;
 }
 
-.v2-proof__meta,
-.v2-proof__footer {
-  color: #c9beb1;
-  font-size: 8px;
-  line-height: 1.4;
+.product-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 0.92in;
+  min-height: 0.2in;
+  margin: 0.038in 0 0;
+  opacity: 0.94;
 }
 
-.v2-proof__grid {
+.product-brand__logo {
+  display: block;
+  max-width: 0.82in;
+  max-height: 0.235in;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.product-brand__fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 0.18in;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(197, 154, 90, 0.9);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.special-card__meta {
+  position: absolute;
+  top: 0.105in;
+  right: 0.16in;
+  width: 1.48in;
+  min-height: 1.04in;
+  text-align: right;
+}
+
+.special-card__qty {
+  margin: 0;
+  color: rgba(197, 114, 88, 0.88);
+}
+
+.marbling-score {
+  position: absolute;
+  top: 0.43in;
+  right: 0;
+  margin: 0;
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+}
+
+.marbling-score__label {
+  color: rgba(197, 114, 88, 0.9);
+}
+
+.marbling-score__line {
+  color: rgba(247, 240, 230, 0.62);
+  font-size: 7.5px;
+}
+
+.price-list {
+  position: absolute;
+  top: 0.69in;
+  left: 0.16in;
+  width: 3.6in;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.14in;
+  gap: 0 0.32in;
+  margin: 0;
 }
 
-.v2-card {
-  min-height: 3.88in;
+.price-list--single {
+  grid-template-columns: minmax(0, 1fr);
+  width: 1.9in;
+}
+
+.price-row {
   display: grid;
-  grid-template-rows: auto auto 1fr auto auto;
-  gap: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(221, 205, 184, 0.2);
-  padding: 0.12in;
-  background: #171512;
+  align-items: center;
+  grid-template-columns: 0.28in minmax(0, 1fr);
+  gap: 0.065in;
+  min-height: 0.28in;
 }
 
-.v2-card__topline {
+.price-label {
+  font-size: 7.8px;
+  line-height: 1;
+  letter-spacing: 0.13em;
+}
+
+.price-value {
+  margin-top: 0.022in;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.price-icon {
+  width: 0.235in;
+  height: 0.235in;
+  font-size: 7px;
+}
+
+.savings-message {
+  position: absolute;
+  left: 0.16in;
+  bottom: 0.245in;
+  margin: 0;
+  color: rgba(197, 114, 88, 0.96);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8.7px;
+  line-height: 1.1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.special-description {
+  position: absolute;
+  left: 0.16in;
+  right: 0.16in;
+  bottom: 0.095in;
+  margin: 0;
+  font-size: 7.1px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-instruction {
+  max-width: 7.45in;
+  font-size: 12px;
+  line-height: 1.38;
+  color: rgba(197, 114, 88, 0.92);
+  letter-spacing: 0.01em;
+}
+
+.footer-message {
+  max-width: 6.4in;
+  font-size: 10.8px;
+  line-height: 1.36;
+  color: rgba(247, 240, 230, 0.82);
+}
+
+.disclaimer {
+  margin-top: 4px;
+  font-size: 9.4px;
+  line-height: 1.28;
+  color: rgba(197, 114, 88, 0.62);
+  letter-spacing: 0.16em;
+}
+
+.specials-footer {
+  padding-top: 0.12in;
+}
+/* MONTHLY_FEATURED_CUTS_CARD_REFINEMENT_END */
+
+
+/* WORLD_CUP_DEALS_HEADER_START */
+.specials-header--campaign {
+  grid-template-columns: 1.08in minmax(2.55in, 1fr) 0.86in 2.22in;
+  column-gap: 0.2in;
+}
+
+.specials-header--campaign .brand-text-block {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.035in;
+}
+
+.delivery-badge {
+  width: 100%;
+  margin: 0;
+  color: rgba(197, 114, 88, 0.96);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7.2px;
+  line-height: 1.15;
+  letter-spacing: 0.11em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.campaign-mark-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0.9in;
+}
+
+.campaign-mark__image {
+  display: block;
+  width: 0.68in;
+  height: 0.68in;
+  object-fit: contain;
+  filter: drop-shadow(0 0.06in 0.08in rgba(0, 0, 0, 0.3));
+}
+
+.specials-header--campaign .month-block {
+  max-width: 2.22in;
+}
+
+.specials-header--campaign .month-title {
+  max-width: 2.22in;
+}
+
+.specials-header--campaign .month-title span {
+  display: block;
+}
+
+.specials-header--campaign .month-title span + span {
+  margin-top: 3px;
+  font-size: 0.76em;
+  letter-spacing: -0.035em;
+}
+/* WORLD_CUP_DEALS_HEADER_END */
+
+/* MONTHLY_FEATURED_CUTS_TITLE_START */
+.month-title {
+  max-width: 190px;
+}
+
+.month-title span {
+  display: block;
+}
+
+.month-title span + span {
+  margin-top: 3px;
+  font-size: 0.72em;
+  letter-spacing: -0.035em;
+}
+/* MONTHLY_FEATURED_CUTS_TITLE_END */
+/* Contact email extension */
+.contact-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 24px;
 }
 
-.v2-card__brand {
-  max-width: 88px;
-  max-height: 24px;
-  object-fit: contain;
-  object-position: left center;
-}
-
-.v2-card__availability {
-  color: #b77768;
-  font-size: 7px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.v2-card__title {
-  margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.08;
-}
-
-.v2-card__submeta {
-  margin: 3px 0 0;
-  color: #bcb1a4;
-  font-size: 7.5px;
-}
-
-.v2-card__images {
-  min-height: 1.7in;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.v2-card[data-offer-mode="single-offer"] .v2-card__images {
-  grid-template-columns: 1fr;
-}
-
-.v2-card__image-slot {
+.contact-card__main {
   min-width: 0;
+}
+
+.contact-email {
+  margin: 0;
+  flex: 0 0 auto;
+  max-width: 220px;
+  color: rgba(251, 247, 239, 0.82);
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-align: right;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+
+/* LIVE_PDF_V2_DUAL_IMAGE_PANEL_START */
+.special-card__image-wrap--dual {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.special-card__image-slot {
   min-height: 0;
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  background: #0d0c0a;
 }
 
-.v2-card__image {
-  width: 100%;
-  height: 100%;
-  max-height: 1.9in;
+.special-card__image-slot + .special-card__image-slot {
+  border-top: 1px solid rgba(247, 240, 230, 0.12);
 }
 
-.v2-card__offers {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.v2-card[data-offer-mode="single-offer"] .v2-card__offers {
-  grid-template-columns: 1fr;
-}
-
-.v2-offer {
-  border-top: 1px solid rgba(221, 205, 184, 0.18);
-  padding-top: 6px;
-}
-
-.v2-offer__label {
+.special-card__image-wrap--dual .special-card__image {
   display: block;
-  color: #bcb1a4;
-  font-size: 7px;
-  line-height: 1.25;
+  padding: 0.035in 0.05in;
 }
-
-.v2-offer__price {
-  display: block;
-  margin-top: 2px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 15px;
-  font-weight: 400;
-}
-
-.v2-card__copy {
-  margin: 0;
-  color: #c9beb1;
-  font-size: 7.5px;
-  line-height: 1.35;
-}
-
-.v2-card__savings {
-  color: #b77768;
-}
-
-.v2-proof__status {
-  margin-left: 8px;
-  color: #b77768;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+/* LIVE_PDF_V2_DUAL_IMAGE_PANEL_END */

@@ -28,6 +28,7 @@ jobs:
     env:
       MONTHLY_SPECIALS_SOURCE: google
       MONTHLY_SPECIALS_ALLOW_JSON_FALLBACK: "false"
+      MONTHLY_SPECIALS_V2_PUBLISH: "true"
       GOOGLE_SHEET_SETTINGS_NAME: Settings
       GOOGLE_SHEET_CONTACTS_NAME: Contacts
       GOOGLE_SHEET_SPECIALS_NAME: Specials
@@ -66,7 +67,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build monthly specials PDF
-        run: npm run specials:build
+        run: npm run specials:v2:build
 
       - name: Verify Google Sheets source
         shell: bash
@@ -80,12 +81,26 @@ jobs:
             process.exit(1);
           }
 
-          if (!Array.isArray(data.specials) || data.specials.length < 1) {
-            console.error("Expected at least one active special.");
+          if (!Array.isArray(data.specials) || data.specials.length < 1 || data.specials.length > 4) {
+            console.error("Expected between 1 and 4 active specials.");
             process.exit(1);
           }
 
-          console.log(`Verified Google Sheets source with ${data.specials.length} active specials.`);
+          const missingImages = data.specials.filter((item) => !item.primaryImagePath);
+          if (missingImages.length > 0) {
+            console.error("Every active special must include Primary Image Path.");
+            process.exit(1);
+          }
+
+          const invalidDualOffers = data.specials.filter(
+            (item) => item.offerMode === "dual-offer" && !item.secondaryImagePath,
+          );
+          if (invalidDualOffers.length > 0) {
+            console.error("Every dual-offer special must include Secondary Image Path.");
+            process.exit(1);
+          }
+
+          console.log(`Verified Google Sheets V2 source with ${data.specials.length} active specials.`);
           NODE
 
       - name: Verify PDF page count
@@ -102,6 +117,13 @@ jobs:
             console.error("Expected monthly specials PDF to be exactly 1 page.");
             process.exit(1);
           }
+
+          if (!/\/MediaBox\s*\[\s*0\s+0\s+612\s+1008\s*\]/.test(pdf)) {
+            console.error("Expected monthly specials PDF to use US Legal MediaBox 0 0 612 1008.");
+            process.exit(1);
+          }
+
+          console.log("Verified one-page US Legal PDF.");
           NODE
 
       - name: Build website
