@@ -534,14 +534,16 @@ const createSpecialCard = async (item) => {
               <h2 class="special-card__name">${escapeHtml(item.displayName)}</h2>
               ${productBrand}
             </div>
-            <div class="special-card__meta">
-              <p class="special-card__qty">${escapeHtml(item.quantityAvailable)}</p>
-              ${marblingBlock}
-            </div>
+            <p class="special-card__qty">${escapeHtml(item.quantityAvailable)}</p>
           </div>
-          <div class="${priceListClass}">${priceRows}</div>
-          ${savingsMessage}
-          ${item.description ? `<p class="special-description">${escapeHtml(item.description)}</p>` : ""}
+          <div class="special-card__center">
+            <div class="${priceListClass}">${priceRows}</div>
+            ${marblingBlock}
+          </div>
+          <div class="special-card__bottom">
+            ${savingsMessage}
+            ${item.description ? `<p class="special-description">${escapeHtml(item.description)}</p>` : ""}
+          </div>
         </div>
         <div class="${imagePanelClass}">
           ${imageMarkup}
