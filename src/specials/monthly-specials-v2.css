@@ -962,3 +962,55 @@ body {
   padding: 0.035in 0.05in;
 }
 /* LIVE_PDF_V2_DUAL_IMAGE_PANEL_END */
+
+/* LIVE_PDF_V2_HEADER_AND_FOOTER_POLISH_START */
+.specials-header--campaign .brand-block {
+  overflow: visible;
+}
+
+.specials-header--campaign .brand-logo {
+  width: 1.08in;
+  height: 1.08in;
+  max-width: none;
+  transform: translateX(-0.01in) scale(1.04);
+  transform-origin: center;
+}
+
+.specials-footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.specials-footer--with-broll::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 6, 5, 0.8) 0%,
+      rgba(7, 6, 5, 0.68) 58%,
+      rgba(7, 6, 5, 0.58) 100%
+    );
+  pointer-events: none;
+}
+
+.footer-broll {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.76;
+  filter: saturate(0.76) contrast(0.96) brightness(0.84);
+}
+
+.specials-footer--with-broll > *:not(.footer-broll) {
+  position: relative;
+  z-index: 2;
+}
+/* LIVE_PDF_V2_HEADER_AND_FOOTER_POLISH_END */

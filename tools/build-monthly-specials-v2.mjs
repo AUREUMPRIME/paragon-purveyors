@@ -642,6 +642,22 @@ const createHtml = async (data, activeSpecials, css) => {
   const footerMessage = normalizeText(settings.footerMessage);
   const disclaimer = normalizeText(settings.disclaimer);
   const footerButtonLabel = normalizeText(settings.footerButtonLabel);
+  const footerBrollVisible = isSettingVisible(
+    settings,
+    "footerBrollVisible",
+    false,
+  );
+  const footerBrollPath = normalizeText(settings.footerBrollPath);
+  const footerBrollAlt =
+    normalizeText(settings.footerBrollAlt) ||
+    "Paragon Purveyors footer editorial image";
+  const footerBrollPosition =
+    normalizeText(settings.footerBrollPosition) ||
+    "center";
+  const footerBrollData =
+    footerBrollVisible && footerBrollPath
+      ? await toDataUrl(footerBrollPath)
+      : "";
   const footerMessageMarkup = footerMessage
     ? `<p class="footer-message">${escapeHtml(footerMessage)}</p>`
     : "";
@@ -651,6 +667,12 @@ const createHtml = async (data, activeSpecials, css) => {
   const footerButtonMarkup = footerButtonLabel && siteUrl
     ? `<a class="site-button" href="${escapeHtml(siteUrl)}">${escapeHtml(footerButtonLabel)}</a>`
     : "";
+  const footerBrollMarkup = footerBrollData
+    ? `<img class="footer-broll" src="${footerBrollData}" alt="${escapeHtml(footerBrollAlt)}" style="object-position: ${escapeHtml(footerBrollPosition)};">`
+    : "";
+  const footerClass = footerBrollData
+    ? "specials-footer specials-footer--with-broll"
+    : "specials-footer";
 
   return `<!doctype html>
 <html lang="en">
@@ -695,7 +717,8 @@ const createHtml = async (data, activeSpecials, css) => {
       </div>
     </section>
 
-    <footer class="specials-footer">
+    <footer class="${footerClass}">
+      ${footerBrollMarkup}
       <div>
         ${footerMessageMarkup}
         ${disclaimerMarkup}
