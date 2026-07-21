@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-21T19:22:32.226Z",
+  "generatedAt": "2026-07-21T19:27:40.200Z",
   "source": {
     "type": "google",
     "tabs": {
@@ -147,7 +147,7 @@
       "active": true,
       "cutId": "striploin",
       "offerMode": "dual-offer",
-      "displayName": "Striploin / NY Strip",
+      "displayName": "Primal / NY Strip",
       "brand": "Black Opal",
       "brandLogoKey": "black-opal",
       "productLine": "Australian Wagyu",
@@ -163,7 +163,7 @@
       "primaryImageFocusX": 57,
       "primaryImageFocusY": 57,
       "secondaryPriceLabel": "Primal AVG 14+ lb",
-      "secondaryPrice": "$459.00",
+      "secondaryPrice": "$249.00",
       "secondaryImagePath": "assets/specials/products/striploin/whole-cut.webp",
       "secondaryImageAlt": "Black Opal whole Striploin cut",
       "secondaryImageFit": "contain",
