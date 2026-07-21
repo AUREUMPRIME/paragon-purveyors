@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { existsSync } from "node:fs";
@@ -12,6 +13,13 @@ const paths = {
   outputDir: path.join(projectRoot, "public", "specials"),
   publicDir: path.join(projectRoot, "public"),
   envLocal: path.join(projectRoot, ".env.local"),
+  visualManifest: path.join(
+    projectRoot,
+    "tools",
+    "paragon-cut-image-studio",
+    "manifests",
+    "approved-selection.json",
+  ),
 };
 
 const outputPaths = {
@@ -61,6 +69,21 @@ const isSettingVisible = (settings, key, fallback = true) => {
 };
 
 const readJson = async (filePath) => JSON.parse(await fs.readFile(filePath, "utf8"));
+
+const sha256Hex = (value) => createHash("sha256").update(value).digest("hex");
+
+const normalizeAssetPath = (value) =>
+  normalizeText(value).replaceAll("\\", "/").replace(/^public\//, "");
+
+const resolveRequiredNumber = (value, label, minimum, maximum) => {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || parsed < minimum || parsed > maximum) {
+    throw new Error(`${label} must be between ${minimum} and ${maximum}. Found: ${value}`);
+  }
+
+  return parsed;
+};
 
 const loadEnvFile = async () => {
   if (!existsSync(paths.envLocal)) return;
@@ -381,11 +404,292 @@ const loadSourceData = async () => {
 
   const data = await readJson(paths.sourceData);
   return {
+    ...data,
     source: {
       type: "json",
       file: "src/data/monthly-specials-v2.fixture.json",
     },
-    ...data,
+  };
+};
+
+const loadVisualAuthority = async () => {
+  const rawManifest = await fs.readFile(paths.visualManifest);
+  const manifest = JSON.parse(rawManifest.toString("utf8"));
+
+  if (manifest?.schema !== "typed-asset-slots") {
+    throw new Error(`Unsupported Studio manifest schema: ${manifest?.schema || "<missing>"}`);
+  }
+
+  if (!Array.isArray(manifest.sections) || !Array.isArray(manifest.slots)) {
+    throw new Error("Studio manifest must contain sections and slots arrays.");
+  }
+
+  const expectedProductSectionIds = ["ribeye", "striploin", "tenderloin", "tri-tip"];
+  const productSections = manifest.sections.filter((section) => section.category === "product");
+  const footerSections = manifest.sections.filter((section) => section.category === "footer");
+  const productSlots = manifest.slots.filter((slot) => slot.category === "product");
+  const footerSlots = manifest.slots.filter((slot) => slot.category === "footer");
+  const actualProductSectionIds = productSections
+    .map((section) => normalizeText(section.sectionId))
+    .sort();
+
+  if (JSON.stringify(actualProductSectionIds) !== JSON.stringify(expectedProductSectionIds)) {
+    throw new Error(
+      `Studio manifest product sections must be ${expectedProductSectionIds.join(", ")}. Found: ${actualProductSectionIds.join(", ")}`,
+    );
+  }
+
+  if (productSections.length !== 4 || footerSections.length !== 1) {
+    throw new Error(
+      `Studio manifest must contain four product sections and one footer section. Found: ${productSections.length} product, ${footerSections.length} footer.`,
+    );
+  }
+
+  if (productSlots.length !== 7 || footerSlots.length !== 1 || manifest.slots.length !== 8) {
+    throw new Error(
+      `Studio manifest must contain seven product slots and one footer slot. Found: ${productSlots.length} product, ${footerSlots.length} footer, ${manifest.slots.length} total.`,
+    );
+  }
+
+  const slotsByAssetId = new Map();
+
+  for (const slot of manifest.slots) {
+    const assetId = normalizeText(slot.assetId);
+
+    if (!assetId) {
+      throw new Error("Studio manifest contains a slot without assetId.");
+    }
+
+    if (slotsByAssetId.has(assetId)) {
+      throw new Error(`Studio manifest contains duplicate assetId: ${assetId}`);
+    }
+
+    if (!normalizeText(slot.sectionId)) {
+      throw new Error(`${assetId} is missing sectionId.`);
+    }
+
+    if (!normalizeText(slot.selectedFileName)) {
+      throw new Error(`${assetId} is missing selectedFileName.`);
+    }
+
+    const productionPath = normalizeAssetPath(slot.productionPath);
+    const requiredPrefix = slot.category === "footer"
+      ? "assets/specials/broll/"
+      : "assets/specials/products/";
+
+    if (!productionPath.startsWith(requiredPrefix)) {
+      throw new Error(`${assetId} has invalid productionPath: ${productionPath}`);
+    }
+
+    if (!normalizeText(slot.alt)) {
+      throw new Error(`${assetId} is missing alt text.`);
+    }
+
+    if (!new Set(["contain", "cover"]).has(normalizeText(slot.fit))) {
+      throw new Error(`${assetId} has invalid fit: ${slot.fit}`);
+    }
+
+    resolveRequiredNumber(slot.zoom, `${assetId} zoom`, 1, 2.5);
+    resolveRequiredNumber(slot.focusX, `${assetId} focusX`, 0, 100);
+    resolveRequiredNumber(slot.focusY, `${assetId} focusY`, 0, 100);
+
+    const libraryPath = path.join(
+      projectRoot,
+      "tools",
+      "paragon-cut-image-studio",
+      "image-library",
+      normalizeText(slot.libraryId),
+      normalizeText(slot.selectedFileName),
+    );
+    const productionFilePath = path.join(paths.publicDir, productionPath);
+
+    if (!existsSync(libraryPath)) {
+      throw new Error(`${assetId} selected library file is missing: ${libraryPath}`);
+    }
+
+    if (!existsSync(productionFilePath)) {
+      throw new Error(`${assetId} production asset is missing: ${productionFilePath}`);
+    }
+
+    const [libraryBytes, productionBytes] = await Promise.all([
+      fs.readFile(libraryPath),
+      fs.readFile(productionFilePath),
+    ]);
+
+    if (sha256Hex(libraryBytes) !== sha256Hex(productionBytes)) {
+      throw new Error(`${assetId} production asset does not match the approved Studio library file.`);
+    }
+
+    if (slot.category === "footer") {
+      if (typeof slot.visible !== "boolean") {
+        throw new Error(`${assetId} visible must be a boolean.`);
+      }
+
+      resolveRequiredNumber(slot.opacity, `${assetId} opacity`, 0, 1);
+      resolveRequiredNumber(slot.saturation, `${assetId} saturation`, 0, 2);
+      resolveRequiredNumber(slot.contrast, `${assetId} contrast`, 0, 2);
+      resolveRequiredNumber(slot.brightness, `${assetId} brightness`, 0, 2);
+    }
+
+    slotsByAssetId.set(assetId, {
+      ...slot,
+      productionPath,
+    });
+  }
+
+  for (const section of manifest.sections) {
+    const sectionId = normalizeText(section.sectionId);
+    const slotAssetIds = Array.isArray(section.slotAssetIds) ? section.slotAssetIds : [];
+
+    if (slotAssetIds.length === 0) {
+      throw new Error(`Studio manifest section ${sectionId} has no slotAssetIds.`);
+    }
+
+    const sectionSlots = slotAssetIds.map((assetId) => {
+      const slot = slotsByAssetId.get(assetId);
+
+      if (!slot) {
+        throw new Error(`Studio manifest section ${sectionId} references missing slot ${assetId}.`);
+      }
+
+      if (normalizeText(slot.sectionId) !== sectionId) {
+        throw new Error(`${assetId} sectionId does not match section ${sectionId}.`);
+      }
+
+      return slot;
+    });
+
+    if (section.category === "product") {
+      const expectedSlotCount = section.layout === "single" ? 1 : section.layout === "dual" ? 2 : 0;
+
+      if (!expectedSlotCount || sectionSlots.length !== expectedSlotCount) {
+        throw new Error(
+          `Product section ${sectionId} layout ${section.layout} requires ${expectedSlotCount || "a supported number of"} slots. Found: ${sectionSlots.length}`,
+        );
+      }
+
+      const roles = sectionSlots.map((slot) => normalizeText(slot.role)).sort();
+      const expectedRoles = expectedSlotCount === 1 ? ["primary"] : ["primary", "secondary"];
+
+      if (JSON.stringify(roles) !== JSON.stringify(expectedRoles)) {
+        throw new Error(`Product section ${sectionId} has invalid roles: ${roles.join(", ")}`);
+      }
+    }
+  }
+
+  const manifestHash = sha256Hex(rawManifest);
+
+  return {
+    manifest,
+    manifestHash,
+    slotsByAssetId,
+    metadata: {
+      type: "studio-manifest",
+      schema: manifest.schema,
+      version: manifest.version,
+      studioVersion: manifest.studioVersion,
+      manifestPath: "tools/paragon-cut-image-studio/manifests/approved-selection.json",
+      sha256: manifestHash,
+      generatedAt: manifest.generatedAt,
+      slotCount: manifest.slots.length,
+      productSlotCount: productSlots.length,
+      footerSlotCount: footerSlots.length,
+    },
+  };
+};
+
+const visualFieldsFromSlot = (slot, prefix) => ({
+  [`${prefix}ImagePath`]: slot.productionPath,
+  [`${prefix}ImageAlt`]: normalizeText(slot.alt),
+  [`${prefix}ImageFit`]: normalizeText(slot.fit),
+  [`${prefix}ImagePosition`]: `${Number(slot.focusX)}% ${Number(slot.focusY)}%`,
+  [`${prefix}ImageZoom`]: Number(slot.zoom),
+  [`${prefix}ImageFocusX`]: Number(slot.focusX),
+  [`${prefix}ImageFocusY`]: Number(slot.focusY),
+});
+
+const applyVisualAuthority = (businessData, visualAuthority) => {
+  const { manifest, slotsByAssetId, metadata } = visualAuthority;
+  const productSections = new Map(
+    manifest.sections
+      .filter((section) => section.category === "product")
+      .map((section) => [normalizeText(section.sectionId), section]),
+  );
+  const activeCutIds = new Set();
+
+  const specials = (businessData.specials || []).map((item) => {
+    const cutId = normalizeText(item.cutId);
+    const section = productSections.get(cutId);
+
+    if (!section) {
+      throw new Error(`Google business data contains cutId without an approved Studio section: ${cutId}`);
+    }
+
+    if (activeCutIds.has(cutId)) {
+      throw new Error(`Google business data contains duplicate active cutId: ${cutId}`);
+    }
+
+    activeCutIds.add(cutId);
+
+    const slots = section.slotAssetIds.map((assetId) => slotsByAssetId.get(assetId));
+    const primarySlot = slots.find((slot) => slot.role === "primary");
+    const secondarySlot = slots.find((slot) => slot.role === "secondary");
+
+    if (!primarySlot) {
+      throw new Error(`Approved Studio section ${cutId} is missing its primary slot.`);
+    }
+
+    const merged = {
+      ...item,
+      ...visualFieldsFromSlot(primarySlot, "primary"),
+    };
+
+    if (secondarySlot) {
+      Object.assign(merged, visualFieldsFromSlot(secondarySlot, "secondary"));
+    } else {
+      Object.assign(merged, {
+        secondaryImagePath: "",
+        secondaryImageAlt: "",
+        secondaryImageFit: "",
+        secondaryImagePosition: "",
+        secondaryImageZoom: "",
+        secondaryImageFocusX: "",
+        secondaryImageFocusY: "",
+      });
+    }
+
+    return merged;
+  });
+
+  const missingCutIds = [...productSections.keys()].filter((cutId) => !activeCutIds.has(cutId));
+
+  if (missingCutIds.length > 0) {
+    throw new Error(`Google business data is missing approved Studio cuts: ${missingCutIds.join(", ")}`);
+  }
+
+  const footerSection = manifest.sections.find((section) => section.category === "footer");
+  const footerSlot = slotsByAssetId.get(footerSection.slotAssetIds[0]);
+  const settings = {
+    ...(businessData.settings || {}),
+    footerBrollPath: footerSlot.productionPath,
+    footerBrollAlt: normalizeText(footerSlot.alt),
+    footerBrollVisible: footerSlot.visible ? "yes" : "no",
+    footerBrollFit: normalizeText(footerSlot.fit),
+    footerBrollPosition: `${Number(footerSlot.focusX)}% ${Number(footerSlot.focusY)}%`,
+    footerBrollZoom: Number(footerSlot.zoom),
+    footerBrollFocusX: Number(footerSlot.focusX),
+    footerBrollFocusY: Number(footerSlot.focusY),
+    footerBrollOpacity: Number(footerSlot.opacity),
+    footerBrollSaturation: Number(footerSlot.saturation),
+    footerBrollContrast: Number(footerSlot.contrast),
+    footerBrollBrightness: Number(footerSlot.brightness),
+  };
+
+  return {
+    ...businessData,
+    settings,
+    specials,
+    visualSource: metadata,
   };
 };
 
@@ -1163,7 +1467,9 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
 const main = async () => {
   await fs.mkdir(paths.outputDir, { recursive: true });
 
-  const data = await loadSourceData();
+  const businessData = await loadSourceData();
+  const visualAuthority = await loadVisualAuthority();
+  const data = applyVisualAuthority(businessData, visualAuthority);
   const css = await fs.readFile(paths.sourceCss, "utf8");
   const activeSpecials = validateData(data);
   const buildId = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
@@ -1178,15 +1484,16 @@ const main = async () => {
       type: data.source?.type || "unknown",
       tabs: data.source?.tabs || null,
     },
+    visualSource: data.visualSource,
     settings: data.settings,
     contacts: data.contacts || [],
     specials: publicSpecials,
   };
 
   await fs.writeFile(activeOutputPaths.html, html, "utf8");
+  await fs.writeFile(activeOutputPaths.json, `${JSON.stringify(publicJson, null, 2)}\n`, "utf8");
 
   if (publishMode) {
-    await fs.writeFile(activeOutputPaths.json, `${JSON.stringify(publicJson, null, 2)}\n`, "utf8");
     await fs.writeFile(activeOutputPaths.index, createLandingHtml(data, activeSpecials, buildId), "utf8");
   }
 
@@ -1223,8 +1530,9 @@ const main = async () => {
   console.log(`- mode: ${publishMode ? "production" : "preview"}`);
   console.log(skipPdf ? "- PDF generation skipped for control testing" : `- public/specials/${outputLabel}.pdf (${pdfStats.size} bytes)`);
   console.log(`- public/specials/${outputLabel}.html`);
+  console.log(`- public/specials/${outputLabel}.json`);
+  console.log(`- visual source: ${data.visualSource?.type || "unknown"} (${data.visualSource?.sha256 || "missing hash"})`);
   if (publishMode) {
-    console.log("- public/specials/monthly-specials.json");
     console.log("- public/specials/index.html");
   }
 

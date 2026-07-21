@@ -27,15 +27,30 @@ SPECIAL_FIELDS = {
     "Primary Image Alt": "primaryImageAlt",
     "Primary Image Fit": "primaryImageFit",
     "Primary Image Position": "primaryImagePosition",
+    "Primary Image Zoom": "primaryImageZoom",
+    "Primary Image Focus X": "primaryImageFocusX",
+    "Primary Image Focus Y": "primaryImageFocusY",
     "Secondary Price Label": "secondaryPriceLabel",
     "Secondary Price": "secondaryPrice",
     "Secondary Image Path": "secondaryImagePath",
     "Secondary Image Alt": "secondaryImageAlt",
     "Secondary Image Fit": "secondaryImageFit",
     "Secondary Image Position": "secondaryImagePosition",
+    "Secondary Image Zoom": "secondaryImageZoom",
+    "Secondary Image Focus X": "secondaryImageFocusX",
+    "Secondary Image Focus Y": "secondaryImageFocusY",
     "Savings Message": "savingsMessage",
     "Description": "description",
     "Internal Notes": "internalNotes",
+}
+
+OPTIONAL_SPECIAL_HEADERS = {
+    "Primary Image Zoom",
+    "Primary Image Focus X",
+    "Primary Image Focus Y",
+    "Secondary Image Zoom",
+    "Secondary Image Focus X",
+    "Secondary Image Focus Y",
 }
 
 CONTACT_FIELDS = {
@@ -113,10 +128,19 @@ def parse_settings(sheet) -> dict[str, str]:
     return settings
 
 
-def parse_table(sheet, field_map: dict[str, str]) -> list[dict[str, object]]:
+def parse_table(
+    sheet,
+    field_map: dict[str, str],
+    optional_headers: set[str] | None = None,
+) -> list[dict[str, object]]:
     headers, rows = table_rows(sheet)
     header_map = {header: index for index, header in enumerate(headers) if header}
-    missing = [header for header in field_map if header not in header_map]
+    optional_headers = optional_headers or set()
+    missing = [
+        header
+        for header in field_map
+        if header not in header_map and header not in optional_headers
+    ]
     if missing:
         raise ValueError(
             f"{sheet.title} sheet is missing required columns: {', '.join(missing)}"
@@ -126,8 +150,8 @@ def parse_table(sheet, field_map: dict[str, str]) -> list[dict[str, object]]:
     for row in rows:
         item: dict[str, object] = {}
         for header, field_name in field_map.items():
-            index = header_map[header]
-            raw_value = row[index] if index < len(row) else ""
+            index = header_map.get(header)
+            raw_value = row[index] if index is not None and index < len(row) else ""
             if field_name == "active":
                 item[field_name] = as_bool(raw_value)
             elif field_name == "sort":
@@ -269,7 +293,11 @@ def main() -> int:
 
     settings = parse_settings(workbook["Settings"])
     contacts = parse_table(workbook["Contacts"], CONTACT_FIELDS)
-    specials = parse_table(workbook["Specials"], SPECIAL_FIELDS)
+    specials = parse_table(
+        workbook["Specials"],
+        SPECIAL_FIELDS,
+        optional_headers=OPTIONAL_SPECIAL_HEADERS,
+    )
     validate(settings, contacts, specials)
     contacts.sort(key=lambda item: int(item.get("sort", 0)))
     specials.sort(key=lambda item: int(item.get("sort", 0)))

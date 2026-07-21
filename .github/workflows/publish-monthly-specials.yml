@@ -103,6 +103,9 @@ jobs:
           console.log(`Verified Google Sheets V2 source with ${data.specials.length} active specials.`);
           NODE
 
+      - name: Verify Studio visual authority
+        run: node tools/verify-monthly-specials-visual-parity.mjs public/specials/monthly-specials.json
+
       - name: Verify PDF page count
         shell: bash
         run: |
