@@ -1,0 +1,1449 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paragon Visual Asset Studio</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #090807;
+      --panel: #12100e;
+      --panel-deep: #0c0a09;
+      --border: rgba(247, 240, 230, 0.16);
+      --border-strong: rgba(247, 240, 230, 0.3);
+      --text: #fffaf2;
+      --muted: rgba(247, 240, 230, 0.64);
+      --soft: rgba(247, 240, 230, 0.43);
+      --red: #c92b32;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 80% 0, rgba(255, 255, 255, 0.05), transparent 30%),
+        var(--background);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+
+    button,
+    input[type="text"],
+    input[type="number"],
+    select {
+      color: var(--text);
+      background: #0b0908;
+      border: 1px solid var(--border-strong);
+    }
+
+    button {
+      min-height: 38px;
+      padding: 0 15px;
+      cursor: pointer;
+    }
+
+    button:hover { border-color: rgba(247, 240, 230, 0.58); }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 2px;
+    }
+
+    .shell {
+      width: min(1560px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 28px;
+      margin-bottom: 24px;
+      padding-bottom: 23px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--red);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 9px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 66px);
+      line-height: 0.95;
+      font-weight: 400;
+      letter-spacing: -0.035em;
+    }
+
+    .intro {
+      max-width: 900px;
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .toolbar .primary {
+      color: #11100e;
+      background: var(--text);
+      border-color: var(--text);
+    }
+
+    .toolbar .danger {
+      color: #ffb8bb;
+      border-color: rgba(201, 43, 50, 0.5);
+    }
+
+    .status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-bottom: 26px;
+      padding: 14px 17px;
+      border: 1px solid var(--border);
+      background: rgba(247, 240, 230, 0.025);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status strong { color: var(--text); }
+    .section-list { display: grid; gap: 28px; }
+
+    .asset-section {
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .asset-section--footer {
+      border-color: rgba(201, 43, 50, 0.32);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 19px 22px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header h2 {
+      margin-bottom: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      font-weight: 400;
+    }
+
+    .section-meta {
+      margin-bottom: 0;
+      color: var(--soft);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    .section-body {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.82fr) minmax(0, 2fr);
+      gap: 22px;
+      padding: 22px;
+    }
+
+    .preview-column { align-self: start; }
+
+    .production-profile {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+      color: var(--soft);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .pdf-preview {
+      --panel-aspect: 0.793;
+      position: relative;
+      display: grid;
+      aspect-ratio: var(--panel-aspect) / 1;
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      background: #070605;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
+    }
+
+    .pdf-preview--dual {
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+    }
+
+    .preview-slot {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.03)),
+        #080706;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .preview-slot:active { cursor: grabbing; }
+
+    .pdf-preview--dual .preview-slot + .preview-slot {
+      border-top: 1px solid rgba(247, 240, 230, 0.12);
+    }
+
+    .preview-slot img {
+      position: relative;
+      z-index: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .preview-slot[data-profile="product-dual-slot"] img {
+      padding: 1.842% 2.632%;
+    }
+
+    .preview-slot[data-profile="product-single-full-panel"] img {
+      padding: 2.895%;
+    }
+
+    .preview-slot[data-profile="footer-broll"] {
+      background: #080706;
+    }
+
+    .preview-slot[data-profile="footer-broll"]::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(8, 7, 6, 0.2) 0%, rgba(8, 7, 6, 0.02) 34%, transparent 62%);
+      pointer-events: none;
+    }
+
+    .preview-label {
+      position: absolute;
+      top: 9px;
+      left: 10px;
+      z-index: 3;
+      margin: 0;
+      padding: 5px 7px;
+      background: rgba(5, 4, 3, 0.72);
+      color: rgba(255, 250, 242, 0.84);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .preview-empty {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 20px;
+      color: var(--soft);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .preview-help {
+      margin: 11px 0 0;
+      color: var(--soft);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .controls--single { grid-template-columns: minmax(0, 1fr); }
+
+    .control {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--border);
+      background: var(--panel-deep);
+    }
+
+    .control h3 {
+      margin-bottom: 5px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .control-profile {
+      margin: 0 0 14px;
+      color: var(--soft);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 13px;
+    }
+
+    .field label,
+    .field-title {
+      color: rgba(247, 240, 230, 0.7);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 36px;
+    }
+
+    .checkbox-row input { accent-color: var(--red); }
+
+    select,
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 9px;
+    }
+
+    .range {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 74px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--red);
+    }
+
+    .appearance-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 13px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .actions button {
+      min-height: 33px;
+      padding: 0 11px;
+      font-size: 11px;
+    }
+
+    .library-note {
+      margin: 28px 0 0;
+      padding: 15px 17px;
+      border-left: 3px solid var(--red);
+      background: rgba(201, 43, 50, 0.08);
+      color: rgba(247, 240, 230, 0.73);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+
+    .context-panel {
+      margin-bottom: 28px;
+      border: 1px solid rgba(201, 43, 50, 0.34);
+      background: var(--panel-deep);
+    }
+
+    .context-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 22px;
+      padding: 19px 22px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .context-header h2 {
+      margin-bottom: 5px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      font-weight: 400;
+    }
+
+    .context-description,
+    .context-help {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .context-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .context-scale {
+      display: grid;
+      grid-template-columns: auto 150px 62px;
+      align-items: center;
+      gap: 8px;
+      color: var(--soft);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .context-scale input[type="range"] { width: 150px; }
+
+    .context-scale output {
+      color: var(--text);
+      text-align: right;
+    }
+
+    .context-body { padding: 22px; }
+
+    .context-viewport {
+      position: relative;
+      width: 100%;
+      min-height: 720px;
+      max-height: 1040px;
+      overflow: auto;
+      border: 1px solid var(--border-strong);
+      background:
+        linear-gradient(45deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%),
+        #070605;
+      background-size: 24px 24px;
+      background-position: 0 0, 0 12px;
+    }
+
+    .context-stage {
+      position: relative;
+      width: 816px;
+      height: 1344px;
+      margin: 18px;
+    }
+
+    .context-page {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 816px;
+      height: 1344px;
+      border: 0;
+      background: #0b0908;
+      box-shadow: 0 22px 58px rgba(0, 0, 0, 0.52);
+      transform-origin: top left;
+    }
+
+    .context-footer-line {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px 22px;
+      margin-top: 12px;
+    }
+
+    .context-status {
+      margin: 0;
+      color: var(--red);
+      font-size: 10px;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1080px) {
+      .header { grid-template-columns: 1fr; }
+      .toolbar { justify-content: flex-start; }
+      .section-body { grid-template-columns: 1fr; }
+      .pdf-preview { width: min(480px, 100%); }
+      .context-header { grid-template-columns: 1fr; }
+      .context-tools { justify-content: flex-start; }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 20px, 1560px); padding-top: 22px; }
+      .controls, .appearance-grid { grid-template-columns: 1fr; }
+      .context-body { padding: 12px; }
+      .context-viewport { min-height: 560px; }
+      .context-stage { margin: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Paragon Purveyors · Production Geometry</p>
+        <h1>Visual Asset Studio</h1>
+        <p class="intro">
+          Adjust product and footer imagery in isolated production slots or directly
+          inside the complete US Legal page. The context view uses the approved renderer
+          markup and CSS so crop decisions match the current PDF composition.
+        </p>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" data-action="refresh">Refresh Library</button>
+        <button type="button" data-action="restore">Restore Approved</button>
+        <button type="button" data-action="save">Save Settings</button>
+        <button type="button" data-action="export">Export JSON</button>
+        <button class="primary" type="button" data-action="open-library">Open Library</button>
+        <button class="danger" type="button" data-action="close">Close Studio</button>
+      </div>
+    </header>
+
+    <section class="status" aria-live="polite">
+      <span>Sections: <strong data-section-count>0</strong></span>
+      <span>Product slots: <strong data-product-count>0</strong></span>
+      <span>Footer slots: <strong data-footer-count>0</strong></span>
+      <span>Selected: <strong data-selected-count>0</strong></span>
+      <span>Library images: <strong data-library-count>0</strong></span>
+    </section>
+
+
+    <section class="context-panel" aria-labelledby="production-context-title">
+      <header class="context-header">
+        <div>
+          <p class="eyebrow">Exact Production Context</p>
+          <h2 id="production-context-title">Full US Legal Page</h2>
+          <p class="context-description">
+            Drag or use the mouse wheel directly on any product image or the footer
+            B-roll. Every adjustment remains synchronized with the isolated controls below.
+          </p>
+        </div>
+
+        <div class="context-tools">
+          <button type="button" data-context-action="fit">Fit Page</button>
+          <button type="button" data-context-action="actual">100%</button>
+          <label class="context-scale">
+            Page zoom
+            <input type="range" min="35" max="100" step="1" value="60" data-context-scale>
+            <output data-context-scale-output>60%</output>
+          </label>
+        </div>
+      </header>
+
+      <div class="context-body">
+        <div class="context-viewport" data-context-viewport>
+          <div class="context-stage" data-context-stage>
+            <iframe
+              class="context-page"
+              title="Paragon Purveyors monthly specials production context"
+              data-context-frame
+            ></iframe>
+          </div>
+        </div>
+        <div class="context-footer-line">
+          <p class="context-help">
+            This is a scaled 816 × 1344 px rendering of the current one-page Legal PDF HTML.
+          </p>
+          <p class="context-status" data-context-status>Loading production context…</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-list" data-section-list></section>
+
+    <p class="library-note">
+      Permanent library: <strong>tools\paragon-cut-image-studio\image-library</strong>.
+      Product candidates belong in their cut folders. Footer candidates belong in
+      <strong>image-library\footer</strong>. SVG support is enabled for future brand slots,
+      but brand and campaign controls are not part of this parity phase.
+    </p>
+  </main>
+
+  <script>
+    const storageKey = "paragon-cut-image-studio-v3";
+    let library = {};
+    let approvedManifest = null;
+    let state = new Map();
+    let contextReady = false;
+    let contextScale = 0.6;
+    const contextBindings = new Map();
+
+    const clamp = (value, minimum, maximum) =>
+      Math.min(maximum, Math.max(minimum, value));
+
+    const round = (value, digits = 2) => {
+      const factor = 10 ** digits;
+      return Math.round(value * factor) / factor;
+    };
+
+    const escapeHtml = (value) =>
+      String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    const slotIdFor = (slot) => slot.assetId;
+    const profileFor = (slot) =>
+      approvedManifest.containerProfiles[slot.containerProfile];
+
+    const getLibraryItems = (libraryId) =>
+      Array.isArray(library[libraryId])
+        ? library[libraryId]
+        : [];
+
+    const selectedImageUrl = (slot) => {
+      const item = getLibraryItems(slot.libraryId).find(
+        (candidate) => candidate.name === slot.selectedFileName,
+      );
+      return item?.url || "";
+    };
+
+    const loadManifest = async () => {
+      const response = await fetch("/api/manifest");
+      if (!response.ok) {
+        throw new Error(`Could not load manifest: ${response.status}`);
+      }
+      approvedManifest = await response.json();
+    };
+
+    const loadLibrary = async () => {
+      const response = await fetch("/api/library", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Could not load library: ${response.status}`);
+      }
+      library = (await response.json()).libraries;
+    };
+
+    const savedKeys = [
+      "selectedFileName",
+      "fit",
+      "zoom",
+      "focusX",
+      "focusY",
+      "alt",
+      "productionPath",
+      "visible",
+      "opacity",
+      "saturation",
+      "contrast",
+      "brightness",
+    ];
+
+    const createApprovedState = (useSavedSettings = true) => {
+      state = new Map(
+        approvedManifest.slots.map((slot) => [
+          slotIdFor(slot),
+          { ...slot },
+        ]),
+      );
+
+      if (!useSavedSettings) return;
+
+      try {
+        const saved = JSON.parse(
+          localStorage.getItem(storageKey) || "{}",
+        );
+
+        for (const [slotId, values] of Object.entries(saved)) {
+          const slot = state.get(slotId);
+          if (!slot) continue;
+
+          for (const key of savedKeys) {
+            if (values[key] !== undefined) slot[key] = values[key];
+          }
+        }
+      } catch {
+        localStorage.removeItem(storageKey);
+      }
+    };
+
+    const createPreview = (slot) => {
+      const slotId = slotIdFor(slot);
+      return `
+        <div
+          class="preview-slot"
+          data-preview="${escapeHtml(slotId)}"
+          data-profile="${escapeHtml(slot.containerProfile)}"
+          data-category="${escapeHtml(slot.category)}"
+          tabindex="0"
+        >
+          <p class="preview-label">${escapeHtml(slot.roleLabel)}</p>
+          <img alt="" draggable="false" data-preview-image="${escapeHtml(slotId)}">
+          <p class="preview-empty" data-preview-empty="${escapeHtml(slotId)}">
+            Select an image from this library.
+          </p>
+        </div>
+      `;
+    };
+
+    const rangeField = ({ title, slotId, key, min, max, step }) => `
+      <div class="field">
+        <span class="field-title">${escapeHtml(title)}</span>
+        <div class="range">
+          <input
+            type="range"
+            min="${min}"
+            max="${max}"
+            step="${step}"
+            data-${key}-range="${escapeHtml(slotId)}"
+          >
+          <input
+            type="number"
+            min="${min}"
+            max="${max}"
+            step="${step}"
+            data-${key}-number="${escapeHtml(slotId)}"
+          >
+        </div>
+      </div>
+    `;
+
+    const createAppearanceControls = (slot) => {
+      if (slot.category !== "footer") return "";
+      const slotId = slotIdFor(slot);
+
+      return `
+        <div class="appearance-grid">
+          ${rangeField({ title: "Opacity", slotId, key: "opacity", min: 0, max: 1, step: 0.01 })}
+          ${rangeField({ title: "Saturation", slotId, key: "saturation", min: 0.2, max: 1.5, step: 0.01 })}
+          ${rangeField({ title: "Contrast", slotId, key: "contrast", min: 0.5, max: 1.5, step: 0.01 })}
+          ${rangeField({ title: "Brightness", slotId, key: "brightness", min: 0.5, max: 1.5, step: 0.01 })}
+        </div>
+      `;
+    };
+
+    const createControl = (slot) => {
+      const slotId = slotIdFor(slot);
+      const profile = profileFor(slot);
+
+      return `
+        <article
+          class="control"
+          data-control="${escapeHtml(slotId)}"
+          data-category="${escapeHtml(slot.category)}"
+        >
+          <h3>${escapeHtml(slot.roleLabel)}</h3>
+          <p class="control-profile">
+            ${escapeHtml(profile.label)} · ${Number(profile.aspectRatio).toFixed(3)}:1
+          </p>
+
+          <div class="field">
+            <label for="${escapeHtml(slotId)}-image">Image</label>
+            <select id="${escapeHtml(slotId)}-image" data-image-select="${escapeHtml(slotId)}"></select>
+          </div>
+
+          ${slot.category === "footer" ? `
+            <div class="field">
+              <span class="field-title">Visibility</span>
+              <label class="checkbox-row">
+                <input type="checkbox" data-visible="${escapeHtml(slotId)}">
+                Show this asset in the production slot
+              </label>
+            </div>
+          ` : ""}
+
+          <div class="field">
+            <label for="${escapeHtml(slotId)}-fit">Fit mode</label>
+            <select id="${escapeHtml(slotId)}-fit" data-fit="${escapeHtml(slotId)}">
+              <option value="contain">Contain</option>
+              <option value="cover">Cover</option>
+            </select>
+          </div>
+
+          ${rangeField({ title: "Zoom", slotId, key: "zoom", min: 1, max: 2.5, step: 0.01 })}
+          ${rangeField({ title: "Focus X", slotId, key: "x", min: 0, max: 100, step: 1 })}
+          ${rangeField({ title: "Focus Y", slotId, key: "y", min: 0, max: 100, step: 1 })}
+
+          ${createAppearanceControls(slot)}
+
+          <div class="field">
+            <label for="${escapeHtml(slotId)}-alt">Alt text</label>
+            <input id="${escapeHtml(slotId)}-alt" type="text" data-alt="${escapeHtml(slotId)}">
+          </div>
+
+          <div class="field">
+            <label for="${escapeHtml(slotId)}-path">Production path</label>
+            <input id="${escapeHtml(slotId)}-path" type="text" data-path="${escapeHtml(slotId)}">
+          </div>
+
+          <div class="actions">
+            <button type="button" data-reset-crop="${escapeHtml(slotId)}">Reset Crop</button>
+            ${slot.category === "footer" ? `
+              <button type="button" data-reset-appearance="${escapeHtml(slotId)}">Reset Appearance</button>
+            ` : ""}
+          </div>
+        </article>
+      `;
+    };
+
+
+    const contextFrame = () =>
+      document.querySelector("[data-context-frame]");
+
+    const contextDocument = () => {
+      const frame = contextFrame();
+      return frame?.contentDocument || null;
+    };
+
+    const absoluteLibraryUrl = (relativeUrl) =>
+      relativeUrl ? new URL(relativeUrl, window.location.origin).href : "";
+
+    const resolveContextElements = (slot) => {
+      const documentContext = contextDocument();
+      if (!documentContext) return null;
+
+      if (slot.category === "footer") {
+        const image = documentContext.querySelector(".footer-broll");
+        const target = documentContext.querySelector(".specials-closing__media");
+        return image && target ? { image, target } : null;
+      }
+
+      const card = documentContext.querySelector(
+        `[data-cut-id="${CSS.escape(slot.sectionId)}"]`,
+      );
+      if (!card) return null;
+
+      const images = [...card.querySelectorAll(".special-card__image")];
+      const index = slot.role === "secondary" ? 1 : 0;
+      const image = images[index];
+      if (!image) return null;
+
+      const target = image.closest(".special-card__image-slot") ||
+        card.querySelector(".special-card__image-wrap");
+      return target ? { image, target } : null;
+    };
+
+    const updateContextSlot = (slotId) => {
+      if (!contextReady) return;
+      const slot = state.get(slotId);
+      const profile = profileFor(slot);
+      const elements = contextBindings.get(slotId) ||
+        resolveContextElements(slot);
+      if (!elements) return;
+
+      contextBindings.set(slotId, elements);
+      const imageUrl = selectedImageUrl(slot);
+      const visible = slot.visible !== false;
+
+      if (imageUrl && visible) {
+        elements.image.src = absoluteLibraryUrl(imageUrl);
+        elements.image.alt = slot.alt;
+        elements.image.hidden = false;
+        elements.image.style.display = "block";
+        elements.image.style.objectFit = slot.fit;
+        elements.image.style.objectPosition = `${slot.focusX}% ${slot.focusY}%`;
+        elements.image.style.transform = `scale(${slot.zoom})`;
+        elements.image.style.transformOrigin = `${slot.focusX}% ${slot.focusY}%`;
+        elements.image.style.opacity = String(slot.opacity ?? 1);
+        elements.image.style.filter = buildImageFilter(slot, profile);
+      } else {
+        elements.image.hidden = true;
+        elements.image.style.display = "none";
+      }
+    };
+
+    const updateAllContextSlots = () => {
+      if (!contextReady) return;
+      for (const slotId of state.keys()) updateContextSlot(slotId);
+    };
+
+    const bindContextInteraction = (target, slotId) => {
+      let drag = null;
+
+      target.dataset.paragonContextTarget = slotId;
+      target.tabIndex = 0;
+
+      target.addEventListener("pointerdown", (event) => {
+        const slot = state.get(slotId);
+        if (!selectedImageUrl(slot) || slot.visible === false) return;
+        target.setPointerCapture(event.pointerId);
+        drag = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          focusX: slot.focusX,
+          focusY: slot.focusY,
+        };
+      });
+
+      target.addEventListener("pointermove", (event) => {
+        if (!drag || drag.pointerId !== event.pointerId) return;
+        const rect = target.getBoundingClientRect();
+        const deltaX = ((event.clientX - drag.startX) / rect.width) * 100;
+        const deltaY = ((event.clientY - drag.startY) / rect.height) * 100;
+        const slot = state.get(slotId);
+        slot.focusX = Math.round(clamp(drag.focusX - deltaX, 0, 100));
+        slot.focusY = Math.round(clamp(drag.focusY - deltaY, 0, 100));
+        updateSlot(slotId);
+      });
+
+      const stopDrag = (event) => {
+        if (drag && drag.pointerId === event.pointerId) drag = null;
+      };
+
+      target.addEventListener("pointerup", stopDrag);
+      target.addEventListener("pointercancel", stopDrag);
+      target.addEventListener("wheel", (event) => {
+        const slot = state.get(slotId);
+        if (!selectedImageUrl(slot) || slot.visible === false) return;
+        event.preventDefault();
+        slot.zoom = round(
+          clamp(slot.zoom + (event.deltaY < 0 ? 0.05 : -0.05), 1, 2.5),
+          2,
+        );
+        updateSlot(slotId);
+      }, { passive: false });
+    };
+
+    const installContextInteractionStyles = () => {
+      const documentContext = contextDocument();
+      if (!documentContext) return;
+      const style = documentContext.createElement("style");
+      style.dataset.paragonStudioContext = "true";
+      style.textContent = `
+        [data-paragon-context-target] {
+          cursor: grab;
+          outline: 0 solid transparent;
+          outline-offset: -2px;
+          transition: outline-color 120ms ease;
+          touch-action: none;
+          user-select: none;
+        }
+        [data-paragon-context-target]:hover,
+        [data-paragon-context-target]:focus-visible {
+          outline: 2px solid rgba(201, 43, 50, 0.88);
+        }
+        [data-paragon-context-target]:active { cursor: grabbing; }
+      `;
+      documentContext.head.append(style);
+    };
+
+    const bindProductionContext = () => {
+      contextBindings.clear();
+      installContextInteractionStyles();
+
+      for (const [slotId, slot] of state) {
+        const elements = resolveContextElements(slot);
+        if (!elements) {
+          throw new Error(`Production context slot was not found: ${slotId}`);
+        }
+        contextBindings.set(slotId, elements);
+        elements.image.dataset.paragonContextImage = slotId;
+        bindContextInteraction(elements.target, slotId);
+      }
+
+      contextReady = true;
+      updateAllContextSlots();
+      document.querySelector("[data-context-status]").textContent =
+        "8 synchronized image slots ready";
+      window.__PARAGON_CONTEXT_READY__ = true;
+    };
+
+    const applyContextScale = (scale) => {
+      contextScale = clamp(Number(scale), 0.35, 1);
+      const frame = contextFrame();
+      const stage = document.querySelector("[data-context-stage]");
+      const input = document.querySelector("[data-context-scale]");
+      const output = document.querySelector("[data-context-scale-output]");
+      if (!frame || !stage || !input || !output) return;
+
+      frame.style.transform = `scale(${contextScale})`;
+      stage.style.width = `${816 * contextScale}px`;
+      stage.style.height = `${1344 * contextScale}px`;
+      input.value = String(Math.round(contextScale * 100));
+      output.textContent = `${Math.round(contextScale * 100)}%`;
+    };
+
+    const fitContextPage = () => {
+      const viewport = document.querySelector("[data-context-viewport]");
+      if (!viewport) return;
+      const availableWidth = Math.max(286, viewport.clientWidth - 38);
+      applyContextScale(Math.min(1, availableWidth / 816));
+    };
+
+    const initializeProductionContext = () => {
+      const frame = contextFrame();
+      frame.addEventListener("load", () => {
+        try {
+          bindProductionContext();
+          fitContextPage();
+        } catch (error) {
+          document.querySelector("[data-context-status]").textContent =
+            `Context error: ${error.message}`;
+          throw error;
+        }
+      }, { once: true });
+      frame.src = "/context/monthly-specials-v2.html";
+    };
+
+    const render = () => {
+      const sectionList = document.querySelector("[data-section-list]");
+      sectionList.innerHTML = "";
+
+      for (const sectionData of approvedManifest.sections) {
+        const slots = sectionData.slotAssetIds.map((assetId) => state.get(assetId));
+        const section = document.createElement("section");
+        section.className = `asset-section asset-section--${sectionData.category}`;
+        section.dataset.section = sectionData.sectionId;
+
+        const imageCount = getLibraryItems(sectionData.libraryId).length;
+        const profileLabels = [...new Set(
+          slots.map((slot) => profileFor(slot).label),
+        )].join(" + ");
+
+        section.innerHTML = `
+          <header class="section-header">
+            <h2>${escapeHtml(sectionData.sectionName)}</h2>
+            <p class="section-meta">
+              ${escapeHtml(sectionData.category)} · ${escapeHtml(sectionData.layout)} · ${imageCount} images
+            </p>
+          </header>
+
+          <div class="section-body">
+            <div class="preview-column">
+              <div class="production-profile">
+                <span>${escapeHtml(profileLabels)}</span>
+                <span>${Number(sectionData.previewAspectRatio).toFixed(3)}:1 panel</span>
+              </div>
+              <div
+                class="pdf-preview pdf-preview--${escapeHtml(sectionData.layout)}"
+                style="--panel-aspect: ${Number(sectionData.previewAspectRatio)}"
+              >
+                ${slots.map(createPreview).join("")}
+              </div>
+              <p class="preview-help">
+                Drag to reposition. Use the mouse wheel over the image to zoom.
+                This frame matches the active PDF container geometry.
+              </p>
+            </div>
+
+            <div class="controls ${slots.length === 1 ? "controls--single" : ""}">
+              ${slots.map(createControl).join("")}
+            </div>
+          </div>
+        `;
+
+        sectionList.append(section);
+      }
+
+      bindPreviewControls();
+      updateAllSlots();
+      updateSummary();
+    };
+
+    const setElementValue = (selector, value) => {
+      const element = document.querySelector(selector);
+      if (element) element.value = String(value);
+    };
+
+    const buildImageFilter = (slot, profile) => {
+      if (slot.category === "footer") {
+        return `saturate(${slot.saturation}) contrast(${slot.contrast}) brightness(${slot.brightness})`;
+      }
+      return profile.imageFilter || "none";
+    };
+
+    const updateSummary = () => {
+      const slots = [...state.values()];
+      const selectedCount = slots.filter((slot) => selectedImageUrl(slot)).length;
+      const libraryCount = Object.values(library).flat().length;
+
+      document.querySelector("[data-section-count]").textContent =
+        String(approvedManifest.sections.length);
+      document.querySelector("[data-product-count]").textContent =
+        String(slots.filter((slot) => slot.category === "product").length);
+      document.querySelector("[data-footer-count]").textContent =
+        String(slots.filter((slot) => slot.category === "footer").length);
+      document.querySelector("[data-selected-count]").textContent =
+        String(selectedCount);
+      document.querySelector("[data-library-count]").textContent =
+        String(libraryCount);
+    };
+
+    const updateSlot = (slotId) => {
+      const slot = state.get(slotId);
+      const profile = profileFor(slot);
+      const items = getLibraryItems(slot.libraryId);
+      const imageSelect = document.querySelector(
+        `[data-image-select="${slotId}"]`,
+      );
+
+      imageSelect.innerHTML = [
+        '<option value="">Select image…</option>',
+        ...items.map((item) => `
+          <option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>
+        `),
+      ].join("");
+
+      imageSelect.value = items.some(
+        (item) => item.name === slot.selectedFileName,
+      ) ? slot.selectedFileName : "";
+
+      setElementValue(`[data-fit="${slotId}"]`, slot.fit);
+      setElementValue(`[data-zoom-range="${slotId}"]`, slot.zoom);
+      setElementValue(`[data-zoom-number="${slotId}"]`, Number(slot.zoom).toFixed(2));
+      setElementValue(`[data-x-range="${slotId}"]`, slot.focusX);
+      setElementValue(`[data-x-number="${slotId}"]`, Math.round(slot.focusX));
+      setElementValue(`[data-y-range="${slotId}"]`, slot.focusY);
+      setElementValue(`[data-y-number="${slotId}"]`, Math.round(slot.focusY));
+      setElementValue(`[data-alt="${slotId}"]`, slot.alt);
+      setElementValue(`[data-path="${slotId}"]`, slot.productionPath);
+
+      if (slot.category === "footer") {
+        const visible = document.querySelector(`[data-visible="${slotId}"]`);
+        visible.checked = slot.visible !== false;
+        setElementValue(`[data-opacity-range="${slotId}"]`, slot.opacity);
+        setElementValue(`[data-opacity-number="${slotId}"]`, Number(slot.opacity).toFixed(2));
+        setElementValue(`[data-saturation-range="${slotId}"]`, slot.saturation);
+        setElementValue(`[data-saturation-number="${slotId}"]`, Number(slot.saturation).toFixed(2));
+        setElementValue(`[data-contrast-range="${slotId}"]`, slot.contrast);
+        setElementValue(`[data-contrast-number="${slotId}"]`, Number(slot.contrast).toFixed(2));
+        setElementValue(`[data-brightness-range="${slotId}"]`, slot.brightness);
+        setElementValue(`[data-brightness-number="${slotId}"]`, Number(slot.brightness).toFixed(2));
+      }
+
+      const image = document.querySelector(`[data-preview-image="${slotId}"]`);
+      const empty = document.querySelector(`[data-preview-empty="${slotId}"]`);
+      const imageUrl = selectedImageUrl(slot);
+      const visible = slot.visible !== false;
+
+      if (imageUrl && visible) {
+        image.src = imageUrl;
+        image.alt = slot.alt;
+        image.hidden = false;
+        empty.hidden = true;
+        image.style.objectFit = slot.fit;
+        image.style.objectPosition = `${slot.focusX}% ${slot.focusY}%`;
+        image.style.transform = `scale(${slot.zoom})`;
+        image.style.transformOrigin = `${slot.focusX}% ${slot.focusY}%`;
+        image.style.opacity = String(slot.opacity ?? 1);
+        image.style.filter = buildImageFilter(slot, profile);
+      } else {
+        image.removeAttribute("src");
+        image.alt = "";
+        image.hidden = true;
+        empty.hidden = false;
+        empty.textContent = imageUrl
+          ? "This asset is hidden by the visibility control."
+          : "Select an image from this library.";
+      }
+
+      updateContextSlot(slotId);
+      updateSummary();
+    };
+
+    const updateAllSlots = () => {
+      for (const slotId of state.keys()) updateSlot(slotId);
+    };
+
+    const saveSettings = () => {
+      const values = {};
+      for (const [slotId, slot] of state) {
+        values[slotId] = Object.fromEntries(
+          savedKeys.map((key) => [key, slot[key]]),
+        );
+      }
+      localStorage.setItem(storageKey, JSON.stringify(values));
+    };
+
+    const numericRules = {
+      zoom: { min: 1, max: 2.5, digits: 2 },
+      focusX: { min: 0, max: 100, digits: 0 },
+      focusY: { min: 0, max: 100, digits: 0 },
+      opacity: { min: 0, max: 1, digits: 2 },
+      saturation: { min: 0.2, max: 1.5, digits: 2 },
+      contrast: { min: 0.5, max: 1.5, digits: 2 },
+      brightness: { min: 0.5, max: 1.5, digits: 2 },
+    };
+
+    const setNumericValue = (slotId, property, value) => {
+      const slot = state.get(slotId);
+      const rule = numericRules[property];
+      const normalized = clamp(Number(value), rule.min, rule.max);
+      slot[property] = rule.digits === 0
+        ? Math.round(normalized)
+        : round(normalized, rule.digits);
+      updateSlot(slotId);
+    };
+
+    document.addEventListener("change", (event) => {
+      const imageSlot = event.target.dataset.imageSelect;
+      if (imageSlot) {
+        state.get(imageSlot).selectedFileName = event.target.value;
+        updateSlot(imageSlot);
+        return;
+      }
+
+      const fitSlot = event.target.dataset.fit;
+      if (fitSlot) {
+        state.get(fitSlot).fit = event.target.value;
+        updateSlot(fitSlot);
+        return;
+      }
+
+      const visibleSlot = event.target.dataset.visible;
+      if (visibleSlot) {
+        state.get(visibleSlot).visible = event.target.checked;
+        updateSlot(visibleSlot);
+        return;
+      }
+
+      const altSlot = event.target.dataset.alt;
+      if (altSlot) {
+        state.get(altSlot).alt = event.target.value;
+        updateSlot(altSlot);
+        return;
+      }
+
+      const pathSlot = event.target.dataset.path;
+      if (pathSlot) {
+        state.get(pathSlot).productionPath = event.target.value.trim();
+        updateSlot(pathSlot);
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      if (event.target.matches("[data-context-scale]")) {
+        applyContextScale(Number(event.target.value) / 100);
+        return;
+      }
+
+      const bindings = [
+        ["zoomRange", "zoom"],
+        ["zoomNumber", "zoom"],
+        ["xRange", "focusX"],
+        ["xNumber", "focusX"],
+        ["yRange", "focusY"],
+        ["yNumber", "focusY"],
+        ["opacityRange", "opacity"],
+        ["opacityNumber", "opacity"],
+        ["saturationRange", "saturation"],
+        ["saturationNumber", "saturation"],
+        ["contrastRange", "contrast"],
+        ["contrastNumber", "contrast"],
+        ["brightnessRange", "brightness"],
+        ["brightnessNumber", "brightness"],
+      ];
+
+      for (const [datasetKey, property] of bindings) {
+        const slotId = event.target.dataset[datasetKey];
+        if (slotId) {
+          setNumericValue(slotId, property, event.target.value);
+          return;
+        }
+      }
+    });
+
+    document.addEventListener("click", async (event) => {
+      const contextAction = event.target.dataset.contextAction;
+      if (contextAction === "fit") {
+        fitContextPage();
+        return;
+      }
+      if (contextAction === "actual") {
+        applyContextScale(1);
+        return;
+      }
+
+      const resetCrop = event.target.dataset.resetCrop;
+      if (resetCrop) {
+        const slot = state.get(resetCrop);
+        const approved = approvedManifest.slots.find(
+          (candidate) => candidate.assetId === resetCrop,
+        );
+        slot.fit = approved.fit;
+        slot.zoom = approved.zoom;
+        slot.focusX = approved.focusX;
+        slot.focusY = approved.focusY;
+        updateSlot(resetCrop);
+        return;
+      }
+
+      const resetAppearance = event.target.dataset.resetAppearance;
+      if (resetAppearance) {
+        const slot = state.get(resetAppearance);
+        const approved = approvedManifest.slots.find(
+          (candidate) => candidate.assetId === resetAppearance,
+        );
+        for (const key of [
+          "visible",
+          "opacity",
+          "saturation",
+          "contrast",
+          "brightness",
+        ]) slot[key] = approved[key];
+        updateSlot(resetAppearance);
+        return;
+      }
+
+      const action = event.target.dataset.action;
+      if (action === "refresh") {
+        await loadLibrary();
+        render();
+        return;
+      }
+
+      if (action === "restore") {
+        localStorage.removeItem(storageKey);
+        createApprovedState(false);
+        render();
+        return;
+      }
+
+      if (action === "save") {
+        saveSettings();
+        event.target.textContent = "Saved";
+        setTimeout(() => { event.target.textContent = "Save Settings"; }, 1200);
+        return;
+      }
+
+      if (action === "export") {
+        saveSettings();
+        const exportManifest = {
+          ...approvedManifest,
+          tool: "Paragon Visual Asset Studio",
+          version: 3,
+          studioVersion: 4,
+          productionContext: {
+            template: "monthly-specials-v2.html",
+            pageWidthPx: 816,
+            pageHeightPx: 1344,
+            pageSize: "US Legal portrait",
+          },
+          generatedAt: new Date().toISOString(),
+          slots: [...state.values()],
+        };
+        const blob = new Blob(
+          [JSON.stringify(exportManifest, null, 2)],
+          { type: "application/json" },
+        );
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "PARAGON_VISUAL_ASSET_STUDIO_MANIFEST.json";
+        anchor.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        return;
+      }
+
+      if (action === "open-library") {
+        await fetch("/api/open-library", { method: "POST" });
+        return;
+      }
+
+      if (action === "close") {
+        event.target.disabled = true;
+        event.target.textContent = "Closing…";
+        await fetch("/api/close", { method: "POST" });
+      }
+    });
+
+    const bindPreviewControls = () => {
+      document.querySelectorAll("[data-preview]").forEach((preview) => {
+        const slotId = preview.dataset.preview;
+        let drag = null;
+
+        preview.addEventListener("pointerdown", (event) => {
+          const slot = state.get(slotId);
+          if (!selectedImageUrl(slot) || slot.visible === false) return;
+          preview.setPointerCapture(event.pointerId);
+          drag = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            focusX: slot.focusX,
+            focusY: slot.focusY,
+          };
+        });
+
+        preview.addEventListener("pointermove", (event) => {
+          if (!drag || drag.pointerId !== event.pointerId) return;
+          const rect = preview.getBoundingClientRect();
+          const deltaX = ((event.clientX - drag.startX) / rect.width) * 100;
+          const deltaY = ((event.clientY - drag.startY) / rect.height) * 100;
+          const slot = state.get(slotId);
+          slot.focusX = Math.round(clamp(drag.focusX - deltaX, 0, 100));
+          slot.focusY = Math.round(clamp(drag.focusY - deltaY, 0, 100));
+          updateSlot(slotId);
+        });
+
+        const stopDrag = (event) => {
+          if (drag && drag.pointerId === event.pointerId) drag = null;
+        };
+        preview.addEventListener("pointerup", stopDrag);
+        preview.addEventListener("pointercancel", stopDrag);
+
+        preview.addEventListener("wheel", (event) => {
+          const slot = state.get(slotId);
+          if (!selectedImageUrl(slot) || slot.visible === false) return;
+          event.preventDefault();
+          slot.zoom = round(
+            clamp(slot.zoom + (event.deltaY < 0 ? 0.05 : -0.05), 1, 2.5),
+            2,
+          );
+          updateSlot(slotId);
+        }, { passive: false });
+      });
+    };
+
+    const initialize = async () => {
+      await Promise.all([loadManifest(), loadLibrary()]);
+      createApprovedState(true);
+      render();
+      initializeProductionContext();
+      window.__PARAGON_STUDIO_READY__ = true;
+    };
+
+    initialize().catch((error) => {
+      document.body.innerHTML = `
+        <main class="shell">
+          <p class="eyebrow">Studio Error</p>
+          <h1>Unable to Open</h1>
+          <p class="intro">${escapeHtml(error.message)}</p>
+        </main>
+      `;
+      console.error(error);
+    });
+  </script>
+</body>
+</html>

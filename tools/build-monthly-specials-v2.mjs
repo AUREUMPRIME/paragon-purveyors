@@ -272,12 +272,18 @@ const parseSpecialsRows = (rows) => {
     primaryImageAlt: ["Primary Image Alt"],
     primaryImageFit: ["Primary Image Fit"],
     primaryImagePosition: ["Primary Image Position"],
+    primaryImageZoom: ["Primary Image Zoom"],
+    primaryImageFocusX: ["Primary Image Focus X"],
+    primaryImageFocusY: ["Primary Image Focus Y"],
     secondaryPriceLabel: ["Secondary Price Label"],
     secondaryPrice: ["Secondary Price"],
     secondaryImagePath: ["Secondary Image Path"],
     secondaryImageAlt: ["Secondary Image Alt"],
     secondaryImageFit: ["Secondary Image Fit"],
     secondaryImagePosition: ["Secondary Image Position"],
+    secondaryImageZoom: ["Secondary Image Zoom"],
+    secondaryImageFocusX: ["Secondary Image Focus X"],
+    secondaryImageFocusY: ["Secondary Image Focus Y"],
     savingsMessage: ["Savings Message"],
     description: ["Description"],
     internalNotes: ["Internal Notes"],
@@ -302,12 +308,18 @@ const parseSpecialsRows = (rows) => {
       primaryImageAlt: valueFrom(row, headerMap, "primaryImageAlt"),
       primaryImageFit: valueFrom(row, headerMap, "primaryImageFit"),
       primaryImagePosition: valueFrom(row, headerMap, "primaryImagePosition"),
+      primaryImageZoom: valueFrom(row, headerMap, "primaryImageZoom"),
+      primaryImageFocusX: valueFrom(row, headerMap, "primaryImageFocusX"),
+      primaryImageFocusY: valueFrom(row, headerMap, "primaryImageFocusY"),
       secondaryPriceLabel: valueFrom(row, headerMap, "secondaryPriceLabel"),
       secondaryPrice: valueFrom(row, headerMap, "secondaryPrice"),
       secondaryImagePath: valueFrom(row, headerMap, "secondaryImagePath"),
       secondaryImageAlt: valueFrom(row, headerMap, "secondaryImageAlt"),
       secondaryImageFit: valueFrom(row, headerMap, "secondaryImageFit"),
       secondaryImagePosition: valueFrom(row, headerMap, "secondaryImagePosition"),
+      secondaryImageZoom: valueFrom(row, headerMap, "secondaryImageZoom"),
+      secondaryImageFocusX: valueFrom(row, headerMap, "secondaryImageFocusX"),
+      secondaryImageFocusY: valueFrom(row, headerMap, "secondaryImageFocusY"),
       savingsMessage: valueFrom(row, headerMap, "savingsMessage"),
       description: valueFrom(row, headerMap, "description"),
       internalNotes: valueFrom(row, headerMap, "internalNotes"),
@@ -477,11 +489,27 @@ const createSpecialCard = async (item) => {
     const imagePanelClass = hasSecondaryImage
       ? "special-card__image-wrap special-card__image-wrap--dual"
       : "special-card__image-wrap";
-    const imageStyle = (fit, position) =>
-      `object-fit: ${normalizeText(fit) === "cover" ? "cover" : "contain"}; object-position: ${escapeHtml(normalizeText(position) || "center")};`;
-    const primaryImageMarkup = `<img class="special-card__image" src="${primaryImageData}" alt="${escapeHtml(item.primaryImageAlt || item.displayName)}" style="${imageStyle(item.primaryImageFit, item.primaryImagePosition)}">`;
+    const resolveImageNumber = (value, fallback, minimum, maximum) => {
+      const text = normalizeText(value);
+      if (!text) return fallback;
+      const parsed = Number(text);
+      if (!Number.isFinite(parsed)) return fallback;
+      return Math.min(maximum, Math.max(minimum, parsed));
+    };
+    const imageStyle = (fit, position, zoom, focusX, focusY) => {
+      const focusXText = normalizeText(focusX);
+      const focusYText = normalizeText(focusY);
+      const resolvedZoom = resolveImageNumber(zoom, 1, 1, 2.5);
+      const resolvedFocusX = resolveImageNumber(focusX, 50, 0, 100);
+      const resolvedFocusY = resolveImageNumber(focusY, 50, 0, 100);
+      const resolvedPosition = focusXText || focusYText
+        ? `${resolvedFocusX}% ${resolvedFocusY}%`
+        : normalizeText(position) || "center";
+      return `object-fit: ${normalizeText(fit) === "cover" ? "cover" : "contain"}; object-position: ${escapeHtml(resolvedPosition)}; transform: scale(${resolvedZoom}); transform-origin: ${resolvedFocusX}% ${resolvedFocusY}%;`;
+    };
+    const primaryImageMarkup = `<img class="special-card__image" src="${primaryImageData}" alt="${escapeHtml(item.primaryImageAlt || item.displayName)}" style="${imageStyle(item.primaryImageFit, item.primaryImagePosition, item.primaryImageZoom, item.primaryImageFocusX, item.primaryImageFocusY)}">`;
     const secondaryImageMarkup = hasSecondaryImage
-      ? `<img class="special-card__image" src="${secondaryImageData}" alt="${escapeHtml(item.secondaryImageAlt || item.displayName)}" style="${imageStyle(item.secondaryImageFit, item.secondaryImagePosition)}">`
+      ? `<img class="special-card__image" src="${secondaryImageData}" alt="${escapeHtml(item.secondaryImageAlt || item.displayName)}" style="${imageStyle(item.secondaryImageFit, item.secondaryImagePosition, item.secondaryImageZoom, item.secondaryImageFocusX, item.secondaryImageFocusY)}">`
       : "";
     const imageMarkup = hasSecondaryImage
       ? `<div class="special-card__image-slot">${primaryImageMarkup}</div>
@@ -553,16 +581,27 @@ const createSpecialCard = async (item) => {
 
   const createContactCards = (contacts) =>
   contacts
-    .filter((contact) => contact.active !== false && (normalizeText(contact.name) || normalizeText(contact.phone) || normalizeText(contact.location) || normalizeText(contact.email)))
+    .filter(
+      (contact) =>
+        contact.active !== false &&
+        (
+          normalizeText(contact.name) ||
+          normalizeText(contact.phone) ||
+          normalizeText(contact.location) ||
+          normalizeText(contact.email)
+        ),
+    )
     .map(
       (contact) => `
         <article class="contact-card">
-          <div class="contact-card__main">
+          <div class="contact-card__row contact-card__row--primary">
             <p class="contact-kicker">${escapeHtml(contact.location || "Contact")}</p>
             <h2 class="contact-name">${escapeHtml(contact.name || "Paragon Purveyors")}</h2>
-            <p class="contact-meta">${escapeHtml(contact.phone || "Phone pending")}</p>
           </div>
-          ${contact.email ? `<p class="contact-email">${escapeHtml(contact.email)}</p>` : ""}
+          <div class="contact-card__row contact-card__row--secondary">
+            <p class="contact-meta">${escapeHtml(contact.phone || "Phone pending")}</p>
+            ${contact.email ? `<p class="contact-email">${escapeHtml(contact.email)}</p>` : ""}
+          </div>
         </article>`,
     )
     .join("");
@@ -599,7 +638,6 @@ const createHtml = async (data, activeSpecials, css) => {
     "No Minimum Required for Free Delivery";
   const headerSupportingLine = normalizeText(settings.headerSupportingLine);
   const documentTitle = "Monthly Featured Cuts | Paragon Purveyors";
-  const siteUrl = normalizeText(settings.footerUrl) ? toPublicUrl(settings.footerUrl) : "";
   const contactCards = createContactCards(activeContacts);
   const cards = [];
 
@@ -638,12 +676,8 @@ const createHtml = async (data, activeSpecials, css) => {
   const contactInstructionMarkup = contactInstruction
     ? `<p class="contact-instruction">${escapeHtml(contactInstruction)}</p>`
     : "";
-  const contactGridStyle = activeContacts.length === 1
-    ? ' style="grid-template-columns: 1fr;"'
-    : "";
   const footerMessage = normalizeText(settings.footerMessage);
   const disclaimer = normalizeText(settings.disclaimer);
-  const footerButtonLabel = normalizeText(settings.footerButtonLabel);
   const footerBrollVisible = isSettingVisible(
     settings,
     "footerBrollVisible",
@@ -653,9 +687,67 @@ const createHtml = async (data, activeSpecials, css) => {
   const footerBrollAlt =
     normalizeText(settings.footerBrollAlt) ||
     "Paragon Purveyors footer editorial image";
-  const footerBrollPosition =
-    normalizeText(settings.footerBrollPosition) ||
-    "center";
+  const resolveFooterNumber = (value, fallback, minimum, maximum) => {
+    const text = normalizeText(value);
+    if (!text) return fallback;
+
+    const parsed = Number(text);
+    if (!Number.isFinite(parsed)) return fallback;
+
+    return Math.min(maximum, Math.max(minimum, parsed));
+  };
+  const footerBrollFit =
+    normalizeText(settings.footerBrollFit) === "contain"
+      ? "contain"
+      : "cover";
+  const footerBrollZoom = resolveFooterNumber(
+    settings.footerBrollZoom,
+    1,
+    1,
+    2.5,
+  );
+  const footerBrollFocusX = resolveFooterNumber(
+    settings.footerBrollFocusX,
+    50,
+    0,
+    100,
+  );
+  const footerBrollFocusY = resolveFooterNumber(
+    settings.footerBrollFocusY,
+    50,
+    0,
+    100,
+  );
+  const footerHasFocusValues =
+    normalizeText(settings.footerBrollFocusX) ||
+    normalizeText(settings.footerBrollFocusY);
+  const footerBrollPosition = footerHasFocusValues
+    ? `${footerBrollFocusX}% ${footerBrollFocusY}%`
+    : normalizeText(settings.footerBrollPosition) || "center";
+  const footerBrollOpacity = resolveFooterNumber(
+    settings.footerBrollOpacity,
+    1,
+    0,
+    1,
+  );
+  const footerBrollSaturation = resolveFooterNumber(
+    settings.footerBrollSaturation,
+    0.82,
+    0,
+    2,
+  );
+  const footerBrollContrast = resolveFooterNumber(
+    settings.footerBrollContrast,
+    1.02,
+    0,
+    2,
+  );
+  const footerBrollBrightness = resolveFooterNumber(
+    settings.footerBrollBrightness,
+    0.88,
+    0,
+    2,
+  );
   const footerBrollData =
     footerBrollVisible && footerBrollPath
       ? await toDataUrl(footerBrollPath)
@@ -666,15 +758,20 @@ const createHtml = async (data, activeSpecials, css) => {
   const disclaimerMarkup = disclaimer
     ? `<p class="disclaimer">${escapeHtml(disclaimer)}</p>`
     : "";
-  const footerButtonMarkup = footerButtonLabel && siteUrl
-    ? `<a class="site-button" href="${escapeHtml(siteUrl)}">${escapeHtml(footerButtonLabel)}</a>`
-    : "";
+  const footerBrollStyle = [
+    `object-fit: ${footerBrollFit}`,
+    `object-position: ${footerBrollPosition}`,
+    `transform: scale(${footerBrollZoom})`,
+    `transform-origin: ${footerBrollFocusX}% ${footerBrollFocusY}%`,
+    `opacity: ${footerBrollOpacity}`,
+    `filter: saturate(${footerBrollSaturation}) contrast(${footerBrollContrast}) brightness(${footerBrollBrightness})`,
+  ].join("; ");
   const footerBrollMarkup = footerBrollData
-    ? `<img class="footer-broll" src="${footerBrollData}" alt="${escapeHtml(footerBrollAlt)}" style="object-position: ${escapeHtml(footerBrollPosition)};">`
+    ? `<img class="footer-broll" src="${footerBrollData}" alt="${escapeHtml(footerBrollAlt)}" style="${footerBrollStyle};">`
     : "";
-  const footerClass = footerBrollData
-    ? "specials-footer specials-footer--with-broll"
-    : "specials-footer";
+  const closingClass = footerBrollData
+    ? "specials-closing specials-closing--with-broll"
+    : "specials-closing";
 
   return `<!doctype html>
 <html lang="en">
@@ -712,20 +809,20 @@ const createHtml = async (data, activeSpecials, css) => {
       ${cards.join("\n")}
     </section>
 
-    <section class="contact-section" aria-label="Ordering contacts">
-      ${contactInstructionMarkup}
-      <div class="contact-grid"${contactGridStyle}>
-        ${contactCards}
+    <footer class="${closingClass}" aria-label="Ordering contacts and footer">
+      <div class="specials-closing__content">
+        <div class="specials-closing__contacts">
+          ${contactCards}
+        </div>
+        <div class="specials-closing__instructions">
+          ${contactInstructionMarkup}
+          ${footerMessageMarkup}
+          ${disclaimerMarkup}
+        </div>
       </div>
-    </section>
-
-    <footer class="${footerClass}">
-      ${footerBrollMarkup}
-      <div>
-        ${footerMessageMarkup}
-        ${disclaimerMarkup}
+      <div class="specials-closing__media">
+        ${footerBrollMarkup}
       </div>
-      ${footerButtonMarkup}
     </footer>
   </main>
 </body>
@@ -789,6 +886,11 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
   <meta name="twitter:image" content="${escapeHtml(previewImageUrl)}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    :root {
+      --specials-accent: #c92b32;
+      --specials-accent-rgb: 201, 43, 50;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -808,7 +910,7 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
 
     .eyebrow,
     .contact-kicker {
-      color: rgba(197, 114, 88, 0.78);
+      color: rgba(var(--specials-accent-rgb), 0.78);
       text-transform: uppercase;
       letter-spacing: 0.16em;
       font-size: 11px;
@@ -933,7 +1035,7 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
       width: min(94vw, 1060px);
       border-color: rgba(248, 242, 232, 0.2);
       background:
-        radial-gradient(circle at 16% 12%, rgba(197, 114, 88, 0.08), transparent 34%),
+        radial-gradient(circle at 16% 12%, rgba(var(--specials-accent-rgb), 0.08), transparent 34%),
         linear-gradient(135deg, rgba(248, 242, 232, 0.055), rgba(248, 242, 232, 0.015)),
         rgba(12, 10, 8, 0.94);
       box-shadow: 0 32px 92px rgba(0, 0, 0, 0.36);
@@ -964,8 +1066,8 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
     }
 
     .specials-landing-menu .actions a:first-child {
-      border-color: rgba(197, 114, 88, 0.44);
-      background: linear-gradient(135deg, rgba(197, 114, 88, 0.13), rgba(248, 242, 232, 0.025));
+      border-color: rgba(var(--specials-accent-rgb), 0.44);
+      background: linear-gradient(135deg, rgba(var(--specials-accent-rgb), 0.13), rgba(248, 242, 232, 0.025));
     }
 
     @media (max-width: 760px) {

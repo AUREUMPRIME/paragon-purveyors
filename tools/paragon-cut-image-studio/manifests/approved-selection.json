@@ -1,0 +1,265 @@
+{
+  "project": "Paragon Purveyors Live PDF",
+  "tool": "Paragon Visual Asset Studio",
+  "version": 3,
+  "schema": "typed-asset-slots",
+  "generatedAt": "2026-07-21T16:04:28.238Z",
+  "sourceGeometry": {
+    "pageSize": "US Legal portrait",
+    "pageWidthIn": 8.5,
+    "pageHeightIn": 14,
+    "productPanelWidthIn": 1.9,
+    "productRowHeightIn": 2.39625,
+    "footerHeightIn": 1.92,
+    "footerMediaWidthIn": 4.4387387387
+  },
+  "containerProfiles": {
+    "product-dual-slot": {
+      "label": "Product dual-image slot",
+      "aspectRatio": 1.586,
+      "productionSelector": ".special-card__image-wrap--dual .special-card__image-slot",
+      "defaultFit": "contain",
+      "imagePaddingInlinePercent": 2.632,
+      "imagePaddingBlockPercent": 1.842,
+      "imageFilter": "drop-shadow(0 7px 12px rgba(0, 0, 0, 0.36))",
+      "overflow": "hidden"
+    },
+    "product-single-full-panel": {
+      "label": "Product single full-height panel",
+      "aspectRatio": 0.793,
+      "productionSelector": ".special-card__image-wrap:not(.special-card__image-wrap--dual)",
+      "defaultFit": "contain",
+      "imagePaddingInlinePercent": 2.895,
+      "imagePaddingBlockPercent": 2.895,
+      "imageFilter": "drop-shadow(0 7px 12px rgba(0, 0, 0, 0.36))",
+      "overflow": "hidden"
+    },
+    "footer-broll": {
+      "label": "Unified footer B-roll media",
+      "aspectRatio": 2.312,
+      "productionSelector": ".specials-closing__media",
+      "defaultFit": "cover",
+      "imagePaddingInlinePercent": 0,
+      "imagePaddingBlockPercent": 0,
+      "overflow": "hidden",
+      "overlay": "linear-gradient(90deg, rgba(8, 7, 6, 0.2) 0%, rgba(8, 7, 6, 0.02) 34%, transparent 62%)",
+      "defaultAppearance": {
+        "visible": true,
+        "opacity": 1,
+        "saturation": 0.82,
+        "contrast": 1.02,
+        "brightness": 0.88
+      }
+    }
+  },
+  "sections": [
+    {
+      "sectionId": "tenderloin",
+      "sectionName": "Tenderloin / Filet Mignon",
+      "category": "product",
+      "layout": "dual",
+      "previewAspectRatio": 0.793,
+      "libraryId": "tenderloin",
+      "slotAssetIds": [
+        "product.tenderloin.primary",
+        "product.tenderloin.secondary"
+      ]
+    },
+    {
+      "sectionId": "ribeye",
+      "sectionName": "Cube Roll / Rib Eye",
+      "category": "product",
+      "layout": "dual",
+      "previewAspectRatio": 0.793,
+      "libraryId": "ribeye",
+      "slotAssetIds": [
+        "product.ribeye.primary",
+        "product.ribeye.secondary"
+      ]
+    },
+    {
+      "sectionId": "striploin",
+      "sectionName": "Striploin / NY Strip",
+      "category": "product",
+      "layout": "dual",
+      "previewAspectRatio": 0.793,
+      "libraryId": "striploin",
+      "slotAssetIds": [
+        "product.striploin.primary",
+        "product.striploin.secondary"
+      ]
+    },
+    {
+      "sectionId": "tri-tip",
+      "sectionName": "Tri Tip Roast",
+      "category": "product",
+      "layout": "single",
+      "previewAspectRatio": 0.793,
+      "libraryId": "tri-tip",
+      "slotAssetIds": [
+        "product.tri-tip.primary"
+      ]
+    },
+    {
+      "sectionId": "footer",
+      "sectionName": "Unified Footer B-Roll",
+      "category": "footer",
+      "layout": "footer",
+      "previewAspectRatio": 2.312,
+      "libraryId": "footer",
+      "slotAssetIds": [
+        "footer.broll"
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "assetId": "product.tenderloin.primary",
+      "sectionId": "tenderloin",
+      "category": "product",
+      "libraryId": "tenderloin",
+      "role": "primary",
+      "roleLabel": "Primary — Steak",
+      "containerProfile": "product-dual-slot",
+      "sourceType": "library",
+      "selectedFileName": "Filet Mignon2.webp",
+      "productionPath": "assets/specials/products/tenderloin/steak.webp",
+      "alt": "Black Opal Filet Mignon steak",
+      "fit": "cover",
+      "zoom": 1.91,
+      "focusX": 47,
+      "focusY": 48
+    },
+    {
+      "assetId": "product.tenderloin.secondary",
+      "sectionId": "tenderloin",
+      "category": "product",
+      "libraryId": "tenderloin",
+      "role": "secondary",
+      "roleLabel": "Secondary — Whole Cut",
+      "containerProfile": "product-dual-slot",
+      "sourceType": "library",
+      "selectedFileName": "Extra B Roll4.webp",
+      "productionPath": "assets/specials/products/tenderloin/whole-cut.webp",
+      "alt": "Black Opal whole Tenderloin cut",
+      "fit": "cover",
+      "zoom": 1.5,
+      "focusX": 57,
+      "focusY": 46
+    },
+    {
+      "assetId": "product.ribeye.primary",
+      "sectionId": "ribeye",
+      "category": "product",
+      "libraryId": "ribeye",
+      "role": "primary",
+      "roleLabel": "Primary — Steak",
+      "containerProfile": "product-dual-slot",
+      "sourceType": "library",
+      "selectedFileName": "Rib Eye Steak2.webp",
+      "productionPath": "assets/specials/products/ribeye/steak.webp",
+      "alt": "Black Opal Rib Eye steak",
+      "fit": "cover",
+      "zoom": 1.39,
+      "focusX": 46,
+      "focusY": 49
+    },
+    {
+      "assetId": "product.ribeye.secondary",
+      "sectionId": "ribeye",
+      "category": "product",
+      "libraryId": "ribeye",
+      "role": "secondary",
+      "roleLabel": "Secondary — Whole Cut",
+      "containerProfile": "product-dual-slot",
+      "sourceType": "library",
+      "selectedFileName": "Rib Eye Cube Roll.webp",
+      "productionPath": "assets/specials/products/ribeye/whole-cut.webp",
+      "alt": "Black Opal whole Cube Roll cut",
+      "fit": "contain",
+      "zoom": 1.21,
+      "focusX": 61,
+      "focusY": 47
+    },
+    {
+      "assetId": "product.striploin.primary",
+      "sectionId": "striploin",
+      "category": "product",
+      "libraryId": "striploin",
+      "role": "primary",
+      "roleLabel": "Primary — Steak",
+      "containerProfile": "product-dual-slot",
+      "sourceType": "library",
+      "selectedFileName": "New York Strip Steak.webp",
+      "productionPath": "assets/specials/products/striploin/steak.webp",
+      "alt": "Black Opal New York Strip steak",
+      "fit": "contain",
+      "zoom": 2.5,
+      "focusX": 57,
+      "focusY": 57
+    },
+    {
+      "assetId": "product.striploin.secondary",
+      "sectionId": "striploin",
+      "category": "product",
+      "libraryId": "striploin",
+      "role": "secondary",
+      "roleLabel": "Secondary — Whole Cut",
+      "containerProfile": "product-dual-slot",
+      "sourceType": "library",
+      "selectedFileName": "New York Strip Roll.webp",
+      "productionPath": "assets/specials/products/striploin/whole-cut.webp",
+      "alt": "Black Opal whole Striploin cut",
+      "fit": "contain",
+      "zoom": 1.19,
+      "focusX": 100,
+      "focusY": 45
+    },
+    {
+      "assetId": "product.tri-tip.primary",
+      "sectionId": "tri-tip",
+      "category": "product",
+      "libraryId": "tri-tip",
+      "role": "primary",
+      "roleLabel": "Primary — Roast",
+      "containerProfile": "product-single-full-panel",
+      "sourceType": "library",
+      "selectedFileName": "Tri Tip Raw Image.webp",
+      "productionPath": "assets/specials/products/tri-tip/roast.webp",
+      "alt": "Altair Wagyu Tri Tip roast",
+      "fit": "contain",
+      "zoom": 1.88,
+      "focusX": 48,
+      "focusY": 53
+    },
+    {
+      "assetId": "footer.broll",
+      "sectionId": "footer",
+      "category": "footer",
+      "libraryId": "footer",
+      "role": "broll",
+      "roleLabel": "Footer — Editorial B-Roll",
+      "containerProfile": "footer-broll",
+      "sourceType": "library",
+      "selectedFileName": "Extra B Roll1.webp",
+      "productionPath": "assets/specials/broll/footer.webp",
+      "alt": "Paragon Purveyors editorial Wagyu preparation",
+      "fit": "cover",
+      "zoom": 1,
+      "focusX": 50,
+      "focusY": 100,
+      "visible": true,
+      "opacity": 1,
+      "saturation": 0.82,
+      "contrast": 1.02,
+      "brightness": 0.88
+    }
+  ],
+  "studioVersion": 4,
+  "productionContext": {
+    "template": "monthly-specials-v2.html",
+    "pageWidthPx": 816,
+    "pageHeightPx": 1344,
+    "pageSize": "US Legal portrait"
+  }
+}
