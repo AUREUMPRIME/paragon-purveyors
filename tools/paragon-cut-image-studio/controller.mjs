@@ -9,13 +9,19 @@ import { chromium } from "playwright";
 
 const currentFile = fileURLToPath(import.meta.url);
 const studioRoot = path.dirname(currentFile);
+const projectRoot = path.resolve(studioRoot, "..", "..");
 const indexPath = path.join(studioRoot, "index.html");
 const contextTemplatePath = path.join(
   studioRoot,
   "context",
   "monthly-specials-v2.html",
 );
-const libraryRoot = path.join(studioRoot, "image-library");
+const sharedCssPath = path.join(
+  projectRoot,
+  "src",
+  "live-pdf",
+  "monthly-specials.css",
+);const libraryRoot = path.join(studioRoot, "image-library");
 const manifestPath = path.join(
   studioRoot,
   "manifests",
@@ -304,6 +310,18 @@ server = http.createServer(async (request, response) => {
       return;
     }
 
+    if (
+      request.method === "GET" &&
+      requestUrl.pathname === "/context/monthly-specials.css"
+    ) {
+      send(
+        response,
+        200,
+        await fs.readFile(sharedCssPath, "utf8"),
+        "text/css; charset=utf-8",
+      );
+      return;
+    }
     if (
       request.method === "GET" &&
       requestUrl.pathname === "/api/health"

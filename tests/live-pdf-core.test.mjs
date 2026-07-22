@@ -385,3 +385,85 @@ test("production builder delegates monthly rendering while retaining Node orches
     assert.doesNotMatch(rendererSource, pattern);
   }
 });
+
+const sharedMonthlyCssUrl = new URL(
+  "../src/live-pdf/monthly-specials.css",
+  import.meta.url,
+);
+const legacyMonthlyCssUrl = new URL(
+  "../src/specials/monthly-specials-v2.css",
+  import.meta.url,
+);
+const studioContextUrl = new URL(
+  "../tools/paragon-cut-image-studio/context/monthly-specials-v2.html",
+  import.meta.url,
+);
+const studioControllerUrl = new URL(
+  "../tools/paragon-cut-image-studio/controller.mjs",
+  import.meta.url,
+);
+const productionMonthlyHtmlUrl = new URL(
+  "../public/specials/monthly-specials.html",
+  import.meta.url,
+);
+
+const normalizeCssText = (value) =>
+  String(value).replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+
+test("shared monthly CSS is the single committed source authority", async () => {
+  const css = await fs.readFile(sharedMonthlyCssUrl, "utf8");
+
+  assert.match(css, /^@page \{/);
+  assert.match(css, /\.monthly-specials-page \{/);
+  await assert.rejects(
+    fs.access(legacyMonthlyCssUrl),
+    (error) => error?.code === "ENOENT",
+  );
+});
+
+test("production builder reads the shared monthly CSS authority", async () => {
+  const source = await fs.readFile(builderUrl, "utf8");
+
+  assert.match(
+    source,
+    /sourceCss: path\.join\(projectRoot, "src", "live-pdf", "monthly-specials\.css"\)/,
+  );
+  assert.doesNotMatch(
+    source,
+    /sourceCss: path\.join\(projectRoot, "src", "specials", "monthly-specials-v2\.css"\)/,
+  );
+});
+
+test("Studio context links the shared CSS without an inline duplicate", async () => {
+  const context = await fs.readFile(studioContextUrl, "utf8");
+
+  assert.match(
+    context,
+    /<link rel="stylesheet" href="\/context\/monthly-specials\.css">/,
+  );
+  assert.doesNotMatch(context, /<style>[\s\S]*?<\/style>/);
+});
+
+test("Studio controller serves the shared monthly CSS authority", async () => {
+  const controller = await fs.readFile(studioControllerUrl, "utf8");
+
+  assert.match(
+    controller,
+    /const sharedCssPath = path\.join\(\s+projectRoot,\s+"src",\s+"live-pdf",\s+"monthly-specials\.css",\s+\);/s,
+  );
+  assert.match(
+    controller,
+    /requestUrl\.pathname === "\/context\/monthly-specials\.css"[\s\S]*?await fs\.readFile\(sharedCssPath, "utf8"\)[\s\S]*?"text\/css; charset=utf-8"/,
+  );
+});
+
+test("production monthly HTML embeds the shared CSS bytes", async () => {
+  const [css, html] = await Promise.all([
+    fs.readFile(sharedMonthlyCssUrl, "utf8"),
+    fs.readFile(productionMonthlyHtmlUrl, "utf8"),
+  ]);
+  const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/);
+
+  assert.ok(styleMatch, "Expected production monthly HTML to contain one style block.");
+  assert.equal(normalizeCssText(styleMatch[1]), normalizeCssText(css));
+});

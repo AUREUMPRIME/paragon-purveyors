@@ -20,7 +20,7 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 
 const paths = {
   sourceData: path.join(projectRoot, "src", "data", "monthly-specials-v2.fixture.json"),
-  sourceCss: path.join(projectRoot, "src", "specials", "monthly-specials-v2.css"),
+  sourceCss: path.join(projectRoot, "src", "live-pdf", "monthly-specials.css"),
   outputDir: path.join(projectRoot, "public", "specials"),
   publicDir: path.join(projectRoot, "public"),
   envLocal: path.join(projectRoot, ".env.local"),
