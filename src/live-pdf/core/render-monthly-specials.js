@@ -159,8 +159,18 @@ export const renderMonthlySpecialsHtml = async ({ data, activeSpecials, css, res
   const yearVisible = isSettingVisible(settings, "yearVisible");
   const headerSupportingLineVisible = isSettingVisible(settings, "headerSupportingLineVisible", false);
 
-  const brandMarkData = headerBrandMarkVisible ? await resolveAssetDataUrl("assets/brand/paragon-cow-mark.svg") : "";
-  const brandTextLogoData = headerWordmarkVisible ? await resolveAssetDataUrl("assets/brand/Paragon_Purveyors_logo_text.svg") : "";
+  const brandMarkPath =
+    normalizeText(settings.headerBrandMarkPath) ||
+    "assets/brand/paragon-cow-mark.svg";
+  const brandWordmarkPath =
+    normalizeText(settings.headerWordmarkPath) ||
+    "assets/brand/Paragon_Purveyors_logo_text.svg";
+  const brandMarkData = headerBrandMarkVisible
+    ? await resolveAssetDataUrl(brandMarkPath)
+    : "";
+  const brandTextLogoData = headerWordmarkVisible
+    ? await resolveAssetDataUrl(brandWordmarkPath)
+    : "";
   const campaignMarkPath =
     normalizeText(settings.campaignMarkPath) ||
     "specials/tournaments_fifa-world-cup-2026--white_1500x1500.football-logos.cc.png";

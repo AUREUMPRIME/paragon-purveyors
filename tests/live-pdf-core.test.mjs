@@ -18,7 +18,11 @@ import {
 import {
   escapeHtml,
   renderMonthlySpecialsHtml,
-} from "../src/live-pdf/core/render-monthly-specials.js";
+} from "../src/live-pdf/core/render-monthly-specials.js";import {
+  adaptCanonicalDocument,
+  formatCanonicalPrice,
+  resolveCanonicalAsset,
+} from "../src/live-pdf/core/adapt-canonical-document.js";
 
 test("normalizeText preserves the current trimmed-string contract", () => {
   assert.equal(normalizeText(null), "");
@@ -466,4 +470,217 @@ test("production monthly HTML embeds the shared CSS bytes", async () => {
 
   assert.ok(styleMatch, "Expected production monthly HTML to contain one style block.");
   assert.equal(normalizeCssText(styleMatch[1]), normalizeCssText(css));
+});
+
+const canonicalSourceUrl = new URL(
+  "../src/data/paragon-live-pdf-studio.json",
+  import.meta.url,
+);
+const liveMonthlyJsonUrl = new URL(
+  "../public/specials/monthly-specials.json",
+  import.meta.url,
+);
+const canonicalAdapterUrl = new URL(
+  "../src/live-pdf/core/adapt-canonical-document.js",
+  import.meta.url,
+);
+
+const readJsonUrl = async (url) =>
+  JSON.parse(await fs.readFile(url, "utf8"));
+
+const settingsProjectionKeys = [
+  "month",
+  "monthVisible",
+  "year",
+  "yearVisible",
+  "headerBrandMarkVisible",
+  "headerWordmarkVisible",
+  "deliveryMessage",
+  "deliveryMessageVisible",
+  "campaignMarkPath",
+  "campaignMarkAlt",
+  "campaignMarkVisible",
+  "campaignTitleLine1",
+  "campaignTitleLine2",
+  "campaignTitleVisible",
+  "headerSupportingLine",
+  "headerSupportingLineVisible",
+  "contactInstruction",
+  "footerMessage",
+  "disclaimer",
+  "footerButtonLabel",
+  "footerUrl",
+  "footerBrollAlt",
+  "footerBrollVisible",
+  "footerBrollFit",
+  "footerBrollPosition",
+  "footerBrollZoom",
+  "footerBrollFocusX",
+  "footerBrollFocusY",
+  "footerBrollOpacity",
+  "footerBrollSaturation",
+  "footerBrollContrast",
+  "footerBrollBrightness",
+];
+
+const specialProjectionKeys = [
+  "sort",
+  "active",
+  "cutId",
+  "offerMode",
+  "displayName",
+  "brand",
+  "brandLogoKey",
+  "productLine",
+  "marblingScore",
+  "quantityAvailable",
+  "primaryPriceLabel",
+  "primaryPrice",
+  "primaryImageAlt",
+  "primaryImageFit",
+  "primaryImagePosition",
+  "primaryImageZoom",
+  "primaryImageFocusX",
+  "primaryImageFocusY",
+  "secondaryPriceLabel",
+  "secondaryPrice",
+  "secondaryImageAlt",
+  "secondaryImageFit",
+  "secondaryImagePosition",
+  "secondaryImageZoom",
+  "secondaryImageFocusX",
+  "secondaryImageFocusY",
+  "savingsMessage",
+  "description",
+];
+
+const projectKeys = (value, keys) =>
+  Object.fromEntries(keys.map((key) => [key, value[key]]));
+
+const normalizeComparableHtml = (value) =>
+  String(value)
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .trimEnd();
+
+test("canonical asset resolution enforces active asset-library references", async () => {
+  const document = await readJsonUrl(canonicalSourceUrl);
+  const asset = resolveCanonicalAsset(
+    document,
+    document.footer.broll,
+    "footer.broll",
+  );
+
+  assert.equal(asset.id, document.footer.broll.assetId);
+  assert.equal(asset.archived, false);
+  assert.match(asset.path, /^assets\/specials\/library\//);
+
+  assert.throws(
+    () =>
+      resolveCanonicalAsset(
+        document,
+        { assetId: "asset_missing" },
+        "missing",
+      ),
+    /references missing asset/,
+  );
+
+  const archivedDocument = structuredClone(document);
+  archivedDocument.assetLibrary[document.footer.broll.assetId].archived = true;
+
+  assert.throws(
+    () =>
+      resolveCanonicalAsset(
+        archivedDocument,
+        archivedDocument.footer.broll,
+        "footer.broll",
+      ),
+    /references archived asset/,
+  );
+});
+
+test("canonical price formatting preserves publication currency and locale", () => {
+  assert.equal(
+    formatCanonicalPrice(249, {
+      currency: "USD",
+      locale: "en-US",
+    }),
+    "$249.00",
+  );
+
+  assert.throws(
+    () => formatCanonicalPrice(-1, { currency: "USD", locale: "en-US" }),
+    /non-negative number/,
+  );
+});
+
+test("canonical adapter preserves the current renderer-facing business contract", async () => {
+  const [document, live] = await Promise.all([
+    readJsonUrl(canonicalSourceUrl),
+    readJsonUrl(liveMonthlyJsonUrl),
+  ]);
+  const adapted = adaptCanonicalDocument(document);
+
+  assert.deepEqual(
+    projectKeys(adapted.settings, settingsProjectionKeys),
+    projectKeys(live.settings, settingsProjectionKeys),
+  );
+  assert.deepEqual(adapted.contacts, live.contacts);
+  assert.deepEqual(
+    adapted.specials.map((special) =>
+      projectKeys(special, specialProjectionKeys),
+    ),
+    live.specials.map((special) =>
+      projectKeys(special, specialProjectionKeys),
+    ),
+  );
+  assert.equal(adapted.source.type, "canonical");
+  assert.equal(adapted.visualSource.type, "canonical-document");
+});
+
+test("canonical document adapter remains browser-safe", async () => {
+  const source = await fs.readFile(canonicalAdapterUrl, "utf8");
+
+  for (const pattern of [
+    /from\s+["']node:/,
+    /\bfs\./,
+    /\bpath\./,
+    /\bprocess\./,
+    /\bBuffer\b/,
+    /\bchromium\b/,
+  ]) {
+    assert.doesNotMatch(source, pattern);
+  }
+});
+
+test("adapted canonical document reproduces the current production HTML", async () => {
+  const [document, css, productionHtml] = await Promise.all([
+    readJsonUrl(canonicalSourceUrl),
+    fs.readFile(sharedMonthlyCssUrl, "utf8"),
+    fs.readFile(productionMonthlyHtmlUrl, "utf8"),
+  ]);
+  const adapted = adaptCanonicalDocument(document);
+  const activeSpecials = [...adapted.specials].sort(
+    (left, right) => Number(left.sort) - Number(right.sort),
+  );
+  const resolveAssetDataUrl = createAssetDataUrlResolver({
+    readAsset: async (normalizedPath) =>
+      fs.readFile(
+        new URL(`../public/${normalizedPath}`, import.meta.url),
+      ),
+    encodeBase64: (data) => data.toString("base64"),
+  });
+  const rendered = (
+    await renderMonthlySpecialsHtml({
+      data: adapted,
+      activeSpecials,
+      css,
+      resolveAssetDataUrl,
+    })
+  ).replace(/^[ \t]+$/gm, "");
+
+  assert.equal(
+    normalizeComparableHtml(rendered),
+    normalizeComparableHtml(productionHtml),
+  );
 });
