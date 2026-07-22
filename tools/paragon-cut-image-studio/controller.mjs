@@ -16,12 +16,53 @@ const contextTemplatePath = path.join(
   "context",
   "monthly-specials-v2.html",
 );
-const sharedCssPath = path.join(
+const livePdfRoot = path.join(
   projectRoot,
   "src",
   "live-pdf",
+);
+const sharedCssPath = path.join(
+  livePdfRoot,
   "monthly-specials.css",
-);const libraryRoot = path.join(studioRoot, "image-library");
+);
+const canonicalDocumentPath = path.join(
+  projectRoot,
+  "src",
+  "data",
+  "paragon-live-pdf-studio.json",
+);
+const publicAssetsRoot = path.join(
+  projectRoot,
+  "public",
+  "assets",
+);
+const sharedModulePaths = new Map([
+  [
+    "/live-pdf/core/normalize-document.js",
+    path.join(livePdfRoot, "core", "normalize-document.js"),
+  ],
+  [
+    "/live-pdf/core/format-price.js",
+    path.join(livePdfRoot, "core", "format-price.js"),
+  ],
+  [
+    "/live-pdf/core/resolve-asset.js",
+    path.join(livePdfRoot, "core", "resolve-asset.js"),
+  ],
+  [
+    "/live-pdf/core/adapt-canonical-document.js",
+    path.join(livePdfRoot, "core", "adapt-canonical-document.js"),
+  ],
+  [
+    "/live-pdf/core/render-monthly-specials.js",
+    path.join(livePdfRoot, "core", "render-monthly-specials.js"),
+  ],
+  [
+    "/live-pdf/browser/resolve-browser-asset.js",
+    path.join(livePdfRoot, "browser", "resolve-browser-asset.js"),
+  ],
+]);
+const libraryRoot = path.join(studioRoot, "image-library");
 const manifestPath = path.join(
   studioRoot,
   "manifests",
@@ -45,6 +86,7 @@ const contentTypes = new Map([
   [".jpg", "image/jpeg"],
   [".jpeg", "image/jpeg"],
   [".svg", "image/svg+xml; charset=utf-8"],
+  [".js", "text/javascript; charset=utf-8"],
 ]);
 
 const readManifest = async () => {
@@ -212,6 +254,133 @@ const sendJson = (response, status, value) => {
   );
 };
 
+const readCanonicalDocument = async () =>
+  JSON.parse(
+    await fs.readFile(canonicalDocumentPath, "utf8"),
+  );
+
+const resolveSafeChild = (root, relativePath) => {
+  if (
+    !relativePath ||
+    relativePath.includes("\0") ||
+    relativePath.includes("\\")
+  ) {
+    return null;
+  }
+
+  const resolvedRoot = path.resolve(root);
+  const candidate = path.resolve(resolvedRoot, relativePath);
+  const rootPrefix = `${resolvedRoot}${path.sep}`.toLowerCase();
+  const normalizedCandidate = candidate.toLowerCase();
+
+  return normalizedCandidate.startsWith(rootPrefix)
+    ? candidate
+    : null;
+};
+
+const verifyTransportFoundation = async (baseUrl) => {
+  const canonicalDocument = await readCanonicalDocument();
+  const brandMarkReference = canonicalDocument.header.brandMark;
+  const brandMarkAsset =
+    canonicalDocument.assetLibrary[brandMarkReference.assetId];
+
+  if (!brandMarkAsset?.path) {
+    throw new Error(
+      "Canonical brand-mark asset is unavailable for transport validation.",
+    );
+  }
+
+  const checks = [
+    {
+      pathname: "/api/canonical-document",
+      contentType: "application/json",
+      includes: '"documentId":"monthly-specials"',
+    },
+    {
+      pathname: "/live-pdf/core/adapt-canonical-document.js",
+      contentType: "text/javascript",
+      includes: "adaptCanonicalDocument",
+    },
+    {
+      pathname: "/live-pdf/core/render-monthly-specials.js",
+      contentType: "text/javascript",
+      includes: "renderMonthlySpecialsHtml",
+    },
+    {
+      pathname: "/live-pdf/browser/resolve-browser-asset.js",
+      contentType: "text/javascript",
+      includes: "createBrowserAssetUrlResolver",
+    },
+    {
+      pathname: "/context/monthly-specials.css",
+      contentType: "text/css",
+      includes: ".monthly-specials-page",
+    },
+    {
+      pathname: `/${brandMarkAsset.path}`,
+      contentType: "image/svg+xml",
+      minimumBytes: 1,
+    },
+  ];
+
+  for (const check of checks) {
+    const response = await fetch(
+      new URL(check.pathname, baseUrl),
+      { cache: "no-store" },
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Transport route failed: ${check.pathname} (${response.status})`,
+      );
+    }
+
+    const contentType =
+      response.headers.get("content-type") || "";
+
+    if (!contentType.includes(check.contentType)) {
+      throw new Error(
+        `Transport content type mismatch for ${check.pathname}: ${contentType}`,
+      );
+    }
+
+    if (check.includes) {
+      const text = await response.text();
+
+      if (!text.includes(check.includes)) {
+        throw new Error(
+          `Transport payload mismatch for ${check.pathname}.`,
+        );
+      }
+    } else {
+      const bytes = await response.arrayBuffer();
+
+      if (bytes.byteLength < check.minimumBytes) {
+        throw new Error(
+          `Transport asset is empty: ${check.pathname}.`,
+        );
+      }
+    }
+  }
+
+  for (const pathname of [
+    "/live-pdf/core/not-allowlisted.js",
+    "/assets/%2e%2e/package.json",
+  ]) {
+    const response = await fetch(
+      new URL(pathname, baseUrl),
+      { cache: "no-store" },
+    );
+
+    if (![403, 404].includes(response.status)) {
+      throw new Error(
+        `Unsafe transport route was not rejected: ${pathname}`,
+      );
+    }
+  }
+};
+
+
 const readLibrary = async () => {
   const libraries = {};
 
@@ -322,6 +491,76 @@ server = http.createServer(async (request, response) => {
       );
       return;
     }
+
+    if (
+      request.method === "GET" &&
+      requestUrl.pathname === "/api/canonical-document"
+    ) {
+      sendJson(
+        response,
+        200,
+        await readCanonicalDocument(),
+      );
+      return;
+    }
+
+    if (
+      request.method === "GET" &&
+      sharedModulePaths.has(requestUrl.pathname)
+    ) {
+      send(
+        response,
+        200,
+        await fs.readFile(
+          sharedModulePaths.get(requestUrl.pathname),
+          "utf8",
+        ),
+        "text/javascript; charset=utf-8",
+      );
+      return;
+    }
+
+    if (
+      request.method === "GET" &&
+      requestUrl.pathname.startsWith("/assets/")
+    ) {
+      let relativeAssetPath = "";
+
+      try {
+        relativeAssetPath = decodeURIComponent(
+          requestUrl.pathname.slice("/assets/".length),
+        );
+      } catch {
+        send(response, 400, "Invalid asset path.");
+        return;
+      }
+
+      const assetPath = resolveSafeChild(
+        publicAssetsRoot,
+        relativeAssetPath,
+      );
+      const extension = assetPath
+        ? path.extname(assetPath).toLowerCase()
+        : "";
+
+      if (
+        !assetPath ||
+        !allowedExtensions.has(extension)
+      ) {
+        send(response, 403, "Invalid public asset path.");
+        return;
+      }
+
+      send(
+        response,
+        200,
+        await fs.readFile(assetPath),
+        contentTypes.get(extension) ||
+          "application/octet-stream",
+      );
+      return;
+    }
+
     if (
       request.method === "GET" &&
       requestUrl.pathname === "/api/health"
@@ -448,6 +687,13 @@ if (!address || typeof address === "string") {
 }
 
 const studioUrl = `http://127.0.0.1:${address.port}/`;
+
+if (validateMode) {
+  await verifyTransportFoundation(studioUrl);
+  console.log(
+    "[OK] Browser transport foundation routes verified.",
+  );
+}
 const persistentRoot = path.join(
   process.env.LOCALAPPDATA || os.tmpdir(),
   "Paragon Purveyors",

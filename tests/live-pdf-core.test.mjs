@@ -453,7 +453,11 @@ test("Studio controller serves the shared monthly CSS authority", async () => {
 
   assert.match(
     controller,
-    /const sharedCssPath = path\.join\(\s+projectRoot,\s+"src",\s+"live-pdf",\s+"monthly-specials\.css",\s+\);/s,
+    /const livePdfRoot = path\.join\(\s+projectRoot,\s+"src",\s+"live-pdf",\s+\);/s,
+  );
+  assert.match(
+    controller,
+    /const sharedCssPath = path\.join\(\s+livePdfRoot,\s+"monthly-specials\.css",\s+\);/s,
   );
   assert.match(
     controller,
@@ -682,5 +686,146 @@ test("adapted canonical document reproduces the current production HTML", async 
   assert.equal(
     normalizeComparableHtml(rendered),
     normalizeComparableHtml(productionHtml),
+  );
+});
+
+const browserAssetAdapterUrl = new URL(
+  "../src/live-pdf/browser/resolve-browser-asset.js",
+  import.meta.url,
+);
+const studioIndexUrl = new URL(
+  "../tools/paragon-cut-image-studio/index.html",
+  import.meta.url,
+);
+
+test("browser asset URL resolver normalizes production and Studio paths", async () => {
+  const {
+    createBrowserAssetUrlResolver,
+    resolveBrowserAssetUrl,
+  } = await import(browserAssetAdapterUrl);
+
+  const baseUrl = "http://127.0.0.1:5190/";
+
+  assert.equal(
+    resolveBrowserAssetUrl(
+      "public\\assets\\specials\\image.webp",
+      { baseUrl },
+    ),
+    "http://127.0.0.1:5190/assets/specials/image.webp",
+  );
+  assert.equal(
+    resolveBrowserAssetUrl(
+      "/library/ribeye/image.webp",
+      { baseUrl },
+    ),
+    "http://127.0.0.1:5190/library/ribeye/image.webp",
+  );
+
+  const resolveAsset = createBrowserAssetUrlResolver({
+    baseUrl,
+  });
+
+  assert.equal(
+    await resolveAsset("assets/brand/logo.svg"),
+    "http://127.0.0.1:5190/assets/brand/logo.svg",
+  );
+});
+
+test("browser asset URL resolver preserves browser-native references and requires a base URL", async () => {
+  const {
+    resolveBrowserAssetUrl,
+  } = await import(browserAssetAdapterUrl);
+
+  for (const reference of [
+    "data:image/png;base64,UFA=",
+    "blob:http://127.0.0.1:5190/asset",
+    "https://example.com/image.webp",
+  ]) {
+    assert.equal(
+      resolveBrowserAssetUrl(reference, {
+        baseUrl: "http://127.0.0.1:5190/",
+      }),
+      reference,
+    );
+  }
+
+  assert.throws(
+    () =>
+      resolveBrowserAssetUrl(
+        "assets/image.webp",
+        { baseUrl: "" },
+      ),
+    /baseUrl is required/,
+  );
+});
+
+test("Studio controller exposes the canonical document and allowlisted shared ESM routes", async () => {
+  const controller = await fs.readFile(
+    studioControllerUrl,
+    "utf8",
+  );
+
+  assert.match(
+    controller,
+    /const canonicalDocumentPath = path\.join\([\s\S]*?"paragon-live-pdf-studio\.json"[\s\S]*?\);/,
+  );
+  assert.match(
+    controller,
+    /const sharedModulePaths = new Map\(\[[\s\S]*?"\/live-pdf\/core\/adapt-canonical-document\.js"[\s\S]*?"\/live-pdf\/core\/render-monthly-specials\.js"[\s\S]*?"\/live-pdf\/browser\/resolve-browser-asset\.js"[\s\S]*?\]\);/,
+  );
+  assert.match(
+    controller,
+    /requestUrl\.pathname === "\/api\/canonical-document"[\s\S]*?await readCanonicalDocument\(\)/,
+  );
+  assert.match(
+    controller,
+    /sharedModulePaths\.has\(requestUrl\.pathname\)[\s\S]*?"text\/javascript; charset=utf-8"/,
+  );
+});
+
+test("Studio controller serves shared CSS and safe public assets", async () => {
+  const controller = await fs.readFile(
+    studioControllerUrl,
+    "utf8",
+  );
+
+  assert.match(
+    controller,
+    /requestUrl\.pathname === "\/context\/monthly-specials\.css"[\s\S]*?await fs\.readFile\(sharedCssPath, "utf8"\)/,
+  );
+  assert.match(
+    controller,
+    /const resolveSafeChild = \(root, relativePath\) =>[\s\S]*?normalizedCandidate\.startsWith\(rootPrefix\)/,
+  );
+  assert.match(
+    controller,
+    /requestUrl\.pathname\.startsWith\("\/assets\/"\)[\s\S]*?resolveSafeChild\(\s*publicAssetsRoot,\s*relativeAssetPath,\s*\)[\s\S]*?allowedExtensions\.has\(extension\)/,
+  );
+});
+
+test("Studio validation probes browser transport while preserving the static preview checkpoint", async () => {
+  const [controller, studioIndex, staticContext] =
+    await Promise.all([
+      fs.readFile(studioControllerUrl, "utf8"),
+      fs.readFile(studioIndexUrl, "utf8"),
+      fs.readFile(studioContextUrl, "utf8"),
+    ]);
+
+  assert.match(
+    controller,
+    /await verifyTransportFoundation\(studioUrl\)/,
+  );
+  assert.match(
+    controller,
+    /Browser transport foundation routes verified/,
+  );
+  assert.match(
+    studioIndex,
+    /frame\.src = "\/context\/monthly-specials-v2\.html";/,
+  );
+  assert.doesNotMatch(studioIndex, /\bsrcdoc\b/);
+  assert.match(
+    staticContext,
+    /<main class="monthly-specials-page"/,
   );
 });
