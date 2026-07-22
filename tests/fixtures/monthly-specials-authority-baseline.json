@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Locked Phase 0 migration baseline before Live PDF Studio refactoring",
+  "gitBaseline": "8c20fdea280515148223ec5d2a723b249f22225a",
+  "manifestSha256": "02dd0ff7081363182ef2cca981216e240e7e9dec0762e4544ab60fff2e7e4649",
+  "publicJsonNormalizedSha256": "5ee2480657d06538667f35ed76202d4e3615a006225e034df59dd02e6bc870d4",
+  "publicPdfSha256": "7cd6402816bbcedc52bfa2570034d792d745f811aabd39b6afd8788ba25b5c67",
+  "pdf": {
+    "pageCount": 1,
+    "mediaBox": "0 0 612 1008"
+  },
+  "manifest": {
+    "sectionCount": 5,
+    "productSectionCount": 4,
+    "slotCount": 8,
+    "productSlotCount": 7,
+    "footerSlotCount": 1,
+    "tenderloinSecondaryZoom": 1.5,
+    "footerFocusY": 100
+  },
+  "assets": {
+    "product.tenderloin.primary": "436ae92089e27251d7dbdc0069e34505f4c38ed1adf1718238f7161911f71265",
+    "product.tenderloin.secondary": "e3602dbdc4f2cbb5e7b980d5cc6c8493a365133e29f09c663db9b093cc77b055",
+    "product.ribeye.primary": "c2b28238aeca13e402ecc1055eaac8b53d084cf5855a0aa01305685937d06e1f",
+    "product.ribeye.secondary": "8be297e0f5cf3b504d45940d387423ac038e30b270e73d833ee9171ec6a7587a",
+    "product.striploin.primary": "ad97428e172c5aafdaafd1866beac99a461f1f9219341b96f07a8c0b03c9d27f",
+    "product.striploin.secondary": "1afd3bb1e8d5520c0f4aa53440239b520986f941bcc065eb1c6835a0f2dc3838",
+    "product.tri-tip.primary": "75fc925ebbd0b6e7f7d44ef8473c189f9008a310f9ef1467374299a832b00ea6",
+    "footer.broll": "18603beddba5e680d92076b64dcdd865a7914fd6467c3fb5b81829da28444670"
+  }
+}
