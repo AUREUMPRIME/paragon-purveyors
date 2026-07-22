@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
 import test from "node:test";
 
 import { createPriceRows } from "../src/live-pdf/core/format-price.js";
@@ -96,4 +97,38 @@ test("createPriceRows includes the secondary row when only its value is present"
       ["CUT", "", "$44.95/lb"],
     ],
   );
+});
+
+const builderUrl = new URL("../tools/build-monthly-specials-v2.mjs", import.meta.url);
+
+test("production builder imports the shared Live PDF helpers", async () => {
+  const source = await fs.readFile(builderUrl, "utf8");
+
+  assert.match(
+    source,
+    /import \{ createPriceRows \} from "\.\.\/src\/live-pdf\/core\/format-price\.js";/,
+  );
+  assert.match(
+    source,
+    /import \{\s+isActive,\s+isSettingVisible,\s+normalizeAssetPath,\s+normalizeKey,\s+normalizeText,\s+\} from "\.\.\/src\/live-pdf\/core\/normalize-document\.js";/s,
+  );
+});
+
+test("production builder contains no duplicate Live PDF helper declarations", async () => {
+  const source = await fs.readFile(builderUrl, "utf8");
+
+  for (const identifier of [
+    "createPriceRows",
+    "isActive",
+    "isSettingVisible",
+    "normalizeAssetPath",
+    "normalizeKey",
+    "normalizeText",
+  ]) {
+    assert.doesNotMatch(
+      source,
+      new RegExp(`\\bconst\\s+${identifier}\\s*=`),
+      `Expected ${identifier} to be imported rather than redeclared.`,
+    );
+  }
 });

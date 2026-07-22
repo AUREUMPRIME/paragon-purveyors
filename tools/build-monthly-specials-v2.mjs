@@ -4,6 +4,14 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { createPriceRows } from "../src/live-pdf/core/format-price.js";
+import {
+  isActive,
+  isSettingVisible,
+  normalizeAssetPath,
+  normalizeKey,
+  normalizeText,
+} from "../src/live-pdf/core/normalize-document.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -51,29 +59,9 @@ const escapeHtml = (value) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-const normalizeText = (value) => String(value ?? "").trim();
-
-const normalizeKey = (value) =>
-  normalizeText(value)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "");
-
-const isActive = (value) => {
-  const clean = normalizeText(value).toLowerCase();
-  return clean === "yes" || clean === "true" || clean === "1" || clean === "active";
-};
-
-const isSettingVisible = (settings, key, fallback = true) => {
-  const value = normalizeText(settings?.[key]);
-  return value ? isActive(value) : fallback;
-};
-
 const readJson = async (filePath) => JSON.parse(await fs.readFile(filePath, "utf8"));
 
 const sha256Hex = (value) => createHash("sha256").update(value).digest("hex");
-
-const normalizeAssetPath = (value) =>
-  normalizeText(value).replaceAll("\\", "/").replace(/^public\//, "");
 
 const resolveRequiredNumber = (value, label, minimum, maximum) => {
   const parsed = Number(value);
@@ -774,14 +762,6 @@ const brandLogoPaths = new Map([
     brandLogoPaths.get(toBrandLogoKey(item.brandLogoKey)) ||
     brandLogoPaths.get(toBrandLogoKey(item.brand)) ||
     "";
-
-  const createPriceRows = (item) =>
-    [
-      ["EA", item.primaryPriceLabel, item.primaryPrice],
-      normalizeText(item.secondaryPriceLabel) || normalizeText(item.secondaryPrice)
-        ? ["CUT", item.secondaryPriceLabel, item.secondaryPrice]
-        : null,
-    ].filter(Boolean);
 
   const resolveImagePath = (item) =>
   normalizeText(item.imagePath) || path.join("assets", "cuts", item.imageFile).replaceAll("\\", "/");
