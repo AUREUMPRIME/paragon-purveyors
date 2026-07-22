@@ -1,0 +1,487 @@
+{
+  "schemaVersion": 1,
+  "documentId": "monthly-specials",
+  "revision": 1,
+  "updatedAt": "2026-07-22T00:15:42.881Z",
+  "updatedBy": "phase-1-current-live-migration",
+  "page": {
+    "size": "legal",
+    "orientation": "portrait",
+    "widthPx": 816,
+    "heightPx": 1344,
+    "pdfWidthPt": 612,
+    "pdfHeightPt": 1008,
+    "maxActiveSpecials": 4
+  },
+  "theme": {
+    "accentColor": "#c92b32",
+    "accentRgb": "201, 43, 50"
+  },
+  "header": {
+    "brandMark": {
+      "assetId": "asset_brand_marks_be7cd2f27b83",
+      "visible": true,
+      "alt": "Paragon Purveyors brand mark",
+      "fit": "contain",
+      "zoom": 1,
+      "focusX": 50,
+      "focusY": 50
+    },
+    "wordmark": {
+      "assetId": "asset_wordmarks_e3705c8fdbc2",
+      "visible": true,
+      "alt": "Paragon Purveyors wordmark",
+      "fit": "contain",
+      "zoom": 1,
+      "focusX": 50,
+      "focusY": 50
+    },
+    "deliveryMessage": {
+      "value": "NO MINIMUM REQUIRED FOR FREE DELIVERY",
+      "visible": true
+    },
+    "campaignMark": {
+      "assetId": "asset_campaign_marks_4f2c6075d73d",
+      "visible": false,
+      "alt": "FIFA World Cup 2026 campaign mark",
+      "fit": "contain",
+      "zoom": 1,
+      "focusX": 50,
+      "focusY": 50
+    },
+    "campaignTitle": {
+      "line1": "Selected",
+      "line2": "Cuts",
+      "visible": true
+    },
+    "month": {
+      "value": "July / August",
+      "visible": true
+    },
+    "year": {
+      "value": "2026",
+      "visible": true
+    },
+    "supportingLine": {
+      "value": "",
+      "visible": false
+    }
+  },
+  "specials": [
+    {
+      "id": "tenderloin",
+      "sort": 1,
+      "active": true,
+      "offerMode": "dual-offer",
+      "displayName": "Tenderloin / Filet Mignon",
+      "brand": "Black Opal",
+      "brandLogo": {
+        "assetId": "asset_product_brand_logos_f3813ec833cd",
+        "visible": true,
+        "alt": "Black Opal logo",
+        "fit": "contain",
+        "zoom": 1,
+        "focusX": 50,
+        "focusY": 50
+      },
+      "productLine": "Australian Wagyu",
+      "marblingScore": "MB 4-5",
+      "quantityAvailable": "Available",
+      "primaryOffer": {
+        "label": "6+ oz steak",
+        "price": 22,
+        "image": {
+          "assetId": "asset_tenderloin_436ae92089e2",
+          "visible": true,
+          "alt": "Black Opal Filet Mignon steak",
+          "fit": "cover",
+          "zoom": 1.91,
+          "focusX": 47,
+          "focusY": 48
+        }
+      },
+      "savingsMessage": "Buy 5 get an extra steak for free (P.O)",
+      "description": "Lean, tender, and refined. A classic center-plate cut for elegant preparations.",
+      "secondaryOffer": {
+        "label": "Tenderloin AVG 5.5+ lb",
+        "price": 249,
+        "image": {
+          "assetId": "asset_tenderloin_e3602dbdc4f2",
+          "visible": true,
+          "alt": "Black Opal whole Tenderloin cut",
+          "fit": "cover",
+          "zoom": 1.5,
+          "focusX": 57,
+          "focusY": 46
+        }
+      }
+    },
+    {
+      "id": "ribeye",
+      "sort": 2,
+      "active": true,
+      "offerMode": "dual-offer",
+      "displayName": "Cube Roll / Rib Eye",
+      "brand": "Black Opal",
+      "brandLogo": {
+        "assetId": "asset_product_brand_logos_f3813ec833cd",
+        "visible": true,
+        "alt": "Black Opal logo",
+        "fit": "contain",
+        "zoom": 1,
+        "focusX": 50,
+        "focusY": 50
+      },
+      "productLine": "Australian Wagyu",
+      "marblingScore": "MB 6-7",
+      "quantityAvailable": "Available",
+      "primaryOffer": {
+        "label": "12+ oz steak",
+        "price": 36,
+        "image": {
+          "assetId": "asset_ribeye_c2b28238aeca",
+          "visible": true,
+          "alt": "Black Opal Rib Eye steak",
+          "fit": "cover",
+          "zoom": 1.39,
+          "focusX": 46,
+          "focusY": 49
+        }
+      },
+      "savingsMessage": "Buy 5 get an extra steak for free (P.O)",
+      "description": "Richly marbled with full beef flavor. Built for a bold, memorable steak experience.",
+      "secondaryOffer": {
+        "label": "Cube Roll AVG 13+ lb",
+        "price": 459,
+        "image": {
+          "assetId": "asset_ribeye_8be297e0f5cf",
+          "visible": true,
+          "alt": "Black Opal whole Cube Roll cut",
+          "fit": "contain",
+          "zoom": 1.21,
+          "focusX": 61,
+          "focusY": 47
+        }
+      }
+    },
+    {
+      "id": "striploin",
+      "sort": 3,
+      "active": true,
+      "offerMode": "dual-offer",
+      "displayName": "Primal / NY Strip",
+      "brand": "Black Opal",
+      "brandLogo": {
+        "assetId": "asset_product_brand_logos_f3813ec833cd",
+        "visible": true,
+        "alt": "Black Opal logo",
+        "fit": "contain",
+        "zoom": 1,
+        "focusX": 50,
+        "focusY": 50
+      },
+      "productLine": "Australian Wagyu",
+      "marblingScore": "MB 8-9",
+      "quantityAvailable": "Available",
+      "primaryOffer": {
+        "label": "12+ oz steak",
+        "price": 35,
+        "image": {
+          "assetId": "asset_striploin_ad97428e172c",
+          "visible": true,
+          "alt": "Black Opal New York Strip steak",
+          "fit": "contain",
+          "zoom": 2.5,
+          "focusX": 57,
+          "focusY": 57
+        }
+      },
+      "savingsMessage": "Buy 5 get an extra steak for free (P.O)",
+      "description": "Classic steakhouse cut with a clean bite, rich flavor, and refined texture.",
+      "secondaryOffer": {
+        "label": "Primal AVG 14+ lb",
+        "price": 449,
+        "image": {
+          "assetId": "asset_striploin_1afd3bb1e8d5",
+          "visible": true,
+          "alt": "Black Opal whole Striploin cut",
+          "fit": "contain",
+          "zoom": 1.19,
+          "focusX": 100,
+          "focusY": 45
+        }
+      }
+    },
+    {
+      "id": "tri-tip",
+      "sort": 4,
+      "active": true,
+      "offerMode": "single-offer",
+      "displayName": "Tri Tip Roast",
+      "brand": "Altair",
+      "brandLogo": {
+        "assetId": "asset_product_brand_logos_6711aac99f54",
+        "visible": true,
+        "alt": "Altair logo",
+        "fit": "contain",
+        "zoom": 1,
+        "focusX": 50,
+        "focusY": 50
+      },
+      "productLine": "Australian Wagyu",
+      "marblingScore": "MB 5+",
+      "quantityAvailable": "Available",
+      "primaryOffer": {
+        "label": "2-Pack / 5 lb",
+        "price": 95,
+        "image": {
+          "assetId": "asset_tri_tip_75fc925ebbd0",
+          "visible": true,
+          "alt": "Altair Wagyu Tri Tip roast",
+          "fit": "contain",
+          "zoom": 1.88,
+          "focusX": 48,
+          "focusY": 53
+        }
+      },
+      "savingsMessage": "Each Pack is 2.5 lb (P.O)",
+      "description": "Versatile and deeply savory, with a distinctive shape and satisfying texture."
+    }
+  ],
+  "contacts": {
+    "instruction": "To place an order, contact the representative closest to your area.",
+    "items": [
+      {
+        "id": "blake",
+        "sort": 1,
+        "active": true,
+        "name": "Blake B.",
+        "location": "Irvine / Orange County",
+        "phone": "(949) 303-9726",
+        "email": "blake@paragonpurveyors.com"
+      },
+      {
+        "id": "clayton",
+        "sort": 2,
+        "active": true,
+        "name": "Clayton U.",
+        "location": "French Valley / Temecula",
+        "phone": "(951) 414-5230",
+        "email": "clay@paragonpurveyors.com"
+      }
+    ]
+  },
+  "footer": {
+    "message": "For wholesale pricing/availability reach out to Blake or Clay directly.",
+    "disclaimer": "Pricing and availability are subject to change.",
+    "buttonLabel": "Paragon Purveyors",
+    "url": "https://paragonpurveyors.com",
+    "broll": {
+      "assetId": "asset_footer_18603beddba5",
+      "visible": true,
+      "alt": "Paragon Purveyors editorial Wagyu preparation",
+      "fit": "cover",
+      "zoom": 1,
+      "focusX": 50,
+      "focusY": 100,
+      "opacity": 1,
+      "saturation": 0.82,
+      "contrast": 1.02,
+      "brightness": 0.88
+    }
+  },
+  "assetLibrary": {
+    "asset_brand_marks_be7cd2f27b83": {
+      "id": "asset_brand_marks_be7cd2f27b83",
+      "label": "Paragon Purveyors Brand Mark",
+      "category": "brand-mark",
+      "library": "brand-marks",
+      "path": "assets/specials/library/brand-marks/paragon-purveyors-brand-mark-be7cd2f27b83.svg",
+      "mimeType": "image/svg+xml",
+      "sha256": "be7cd2f27b83e08015ff574ce90ddb584eb36db7c166706e7f1b021e7de742d3",
+      "bytes": 5365,
+      "width": 375,
+      "height": 461,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_wordmarks_e3705c8fdbc2": {
+      "id": "asset_wordmarks_e3705c8fdbc2",
+      "label": "Paragon Purveyors Wordmark",
+      "category": "wordmark",
+      "library": "wordmarks",
+      "path": "assets/specials/library/wordmarks/paragon-purveyors-wordmark-e3705c8fdbc2.svg",
+      "mimeType": "image/svg+xml",
+      "sha256": "e3705c8fdbc2b15d6b2b49b702f2363e9b94053a739c30eb7a2835df048920d4",
+      "bytes": 11815,
+      "width": 375,
+      "height": 135,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_campaign_marks_4f2c6075d73d": {
+      "id": "asset_campaign_marks_4f2c6075d73d",
+      "label": "World Cup 2026 Campaign Mark",
+      "category": "campaign-mark",
+      "library": "campaign-marks",
+      "path": "assets/specials/library/campaign-marks/world-cup-2026-campaign-mark-4f2c6075d73d.png",
+      "mimeType": "image/png",
+      "sha256": "4f2c6075d73d8f5bc498b1250c39a3c5e4fdd3ca09d063595ff4bd4f101b75c0",
+      "bytes": 287928,
+      "width": 1500,
+      "height": 1500,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_product_brand_logos_f3813ec833cd": {
+      "id": "asset_product_brand_logos_f3813ec833cd",
+      "label": "Black Opal Logo",
+      "category": "product-brand-logo",
+      "library": "product-brand-logos",
+      "path": "assets/specials/library/product-brand-logos/black-opal-logo-f3813ec833cd.png",
+      "mimeType": "image/png",
+      "sha256": "f3813ec833cda164199c63b10cd348bc967e883f6f1854648b8d5e486fc9e89f",
+      "bytes": 12927,
+      "width": 196,
+      "height": 88,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_product_brand_logos_6711aac99f54": {
+      "id": "asset_product_brand_logos_6711aac99f54",
+      "label": "Altair Logo",
+      "category": "product-brand-logo",
+      "library": "product-brand-logos",
+      "path": "assets/specials/library/product-brand-logos/altair-logo-6711aac99f54.png",
+      "mimeType": "image/png",
+      "sha256": "6711aac99f544c7e94e5da99b222ccad89fc4d779c026141cfd1c2f963675bbc",
+      "bytes": 1756,
+      "width": 150,
+      "height": 50,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_tenderloin_436ae92089e2": {
+      "id": "asset_tenderloin_436ae92089e2",
+      "label": "Filet Mignon2",
+      "category": "product-photo",
+      "library": "tenderloin",
+      "path": "assets/specials/library/tenderloin/filet-mignon2-436ae92089e2.webp",
+      "mimeType": "image/webp",
+      "sha256": "436ae92089e27251d7dbdc0069e34505f4c38ed1adf1718238f7161911f71265",
+      "bytes": 231948,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_tenderloin_e3602dbdc4f2": {
+      "id": "asset_tenderloin_e3602dbdc4f2",
+      "label": "Extra B Roll4",
+      "category": "product-photo",
+      "library": "tenderloin",
+      "path": "assets/specials/library/tenderloin/extra-b-roll4-e3602dbdc4f2.webp",
+      "mimeType": "image/webp",
+      "sha256": "e3602dbdc4f2cbb5e7b980d5cc6c8493a365133e29f09c663db9b093cc77b055",
+      "bytes": 134222,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_ribeye_c2b28238aeca": {
+      "id": "asset_ribeye_c2b28238aeca",
+      "label": "Rib Eye Steak2",
+      "category": "product-photo",
+      "library": "ribeye",
+      "path": "assets/specials/library/ribeye/rib-eye-steak2-c2b28238aeca.webp",
+      "mimeType": "image/webp",
+      "sha256": "c2b28238aeca13e402ecc1055eaac8b53d084cf5855a0aa01305685937d06e1f",
+      "bytes": 188632,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_ribeye_8be297e0f5cf": {
+      "id": "asset_ribeye_8be297e0f5cf",
+      "label": "Rib Eye Cube Roll",
+      "category": "product-photo",
+      "library": "ribeye",
+      "path": "assets/specials/library/ribeye/rib-eye-cube-roll-8be297e0f5cf.webp",
+      "mimeType": "image/webp",
+      "sha256": "8be297e0f5cf3b504d45940d387423ac038e30b270e73d833ee9171ec6a7587a",
+      "bytes": 166710,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_striploin_ad97428e172c": {
+      "id": "asset_striploin_ad97428e172c",
+      "label": "New York Strip Steak",
+      "category": "product-photo",
+      "library": "striploin",
+      "path": "assets/specials/library/striploin/new-york-strip-steak-ad97428e172c.webp",
+      "mimeType": "image/webp",
+      "sha256": "ad97428e172c5aafdaafd1866beac99a461f1f9219341b96f07a8c0b03c9d27f",
+      "bytes": 135668,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_striploin_1afd3bb1e8d5": {
+      "id": "asset_striploin_1afd3bb1e8d5",
+      "label": "New York Strip Roll",
+      "category": "product-photo",
+      "library": "striploin",
+      "path": "assets/specials/library/striploin/new-york-strip-roll-1afd3bb1e8d5.webp",
+      "mimeType": "image/webp",
+      "sha256": "1afd3bb1e8d5520c0f4aa53440239b520986f941bcc065eb1c6835a0f2dc3838",
+      "bytes": 99850,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_tri_tip_75fc925ebbd0": {
+      "id": "asset_tri_tip_75fc925ebbd0",
+      "label": "Tri Tip Raw Image",
+      "category": "product-photo",
+      "library": "tri-tip",
+      "path": "assets/specials/library/tri-tip/tri-tip-raw-image-75fc925ebbd0.webp",
+      "mimeType": "image/webp",
+      "sha256": "75fc925ebbd0b6e7f7d44ef8473c189f9008a310f9ef1467374299a832b00ea6",
+      "bytes": 149862,
+      "width": 1535,
+      "height": 1024,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_footer_18603beddba5": {
+      "id": "asset_footer_18603beddba5",
+      "label": "Extra B Roll1",
+      "category": "footer-broll",
+      "library": "footer",
+      "path": "assets/specials/library/footer/extra-b-roll1-18603beddba5.webp",
+      "mimeType": "image/webp",
+      "sha256": "18603beddba5e680d92076b64dcdd865a7914fd6467c3fb5b81829da28444670",
+      "bytes": 137520,
+      "width": 1600,
+      "height": 1066,
+      "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    }
+  },
+  "publication": {
+    "profile": "monthly-specials-v1",
+    "currency": "USD",
+    "locale": "en-US",
+    "outputs": {
+      "json": "public/specials/monthly-specials.json",
+      "html": "public/specials/monthly-specials.html",
+      "pdf": "public/specials/monthly-specials.pdf"
+    }
+  }
+}
