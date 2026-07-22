@@ -12,6 +12,7 @@ import {
   normalizeKey,
   normalizeText,
 } from "../src/live-pdf/core/normalize-document.js";
+import { createAssetDataUrlResolver } from "../src/live-pdf/core/resolve-asset.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -44,13 +45,6 @@ const productionOutputPaths = {
   index: path.join(paths.outputDir, "index.html"),
 };
 
-const mimeTypes = new Map([
-  [".svg", "image/svg+xml"],
-  [".webp", "image/webp"],
-  [".png", "image/png"],
-  [".jpg", "image/jpeg"],
-  [".jpeg", "image/jpeg"],
-]);
 
 const escapeHtml = (value) =>
   String(value ?? "")
@@ -686,24 +680,18 @@ const toPublicUrl = (value) => {
   return clean ? `https://${clean}` : "#";
 };
 
-const toDataUrl = async (relativePublicPath) => {
-  const normalizedPath = String(relativePublicPath || "").replaceAll("\\", "/").replace(/^public\//, "");
-  const absolutePath = path.join(paths.publicDir, normalizedPath);
+const toDataUrl = createAssetDataUrlResolver({
+  readAsset: async (normalizedPath) => {
+    const absolutePath = path.join(paths.publicDir, normalizedPath);
 
-  if (!existsSync(absolutePath)) {
-    throw new Error(`Missing asset: public/${normalizedPath}`);
-  }
+    if (!existsSync(absolutePath)) {
+      throw new Error(`Missing asset: public/${normalizedPath}`);
+    }
 
-  const extension = path.extname(absolutePath).toLowerCase();
-  const mimeType = mimeTypes.get(extension);
-
-  if (!mimeType) {
-    throw new Error(`Unsupported asset type: ${normalizedPath}`);
-  }
-
-  const data = await fs.readFile(absolutePath);
-  return `data:${mimeType};base64,${data.toString("base64")}`;
-};
+    return fs.readFile(absolutePath);
+  },
+  encodeBase64: (data) => data.toString("base64"),
+});
 
 const findBrandMark = async () => toDataUrl("assets/brand/paragon-cow-mark.svg");
 
