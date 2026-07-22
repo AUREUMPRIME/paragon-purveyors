@@ -1,0 +1,702 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://paragonpurveyors.com/schemas/paragon-live-pdf-studio.schema.json",
+  "title": "Paragon Purveyors Live PDF Studio Document",
+  "description": "Canonical editable source contract for the Paragon Purveyors Monthly Specials Studio.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "documentId",
+    "revision",
+    "updatedAt",
+    "updatedBy",
+    "page",
+    "theme",
+    "header",
+    "specials",
+    "contacts",
+    "footer",
+    "assetLibrary",
+    "publication"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "documentId": {
+      "const": "monthly-specials"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "page": {
+      "$ref": "#/definitions/page"
+    },
+    "theme": {
+      "$ref": "#/definitions/theme"
+    },
+    "header": {
+      "$ref": "#/definitions/header"
+    },
+    "specials": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "contains": {
+        "type": "object",
+        "required": [
+          "active"
+        ],
+        "properties": {
+          "active": {
+            "const": true
+          }
+        }
+      },
+      "items": {
+        "$ref": "#/definitions/special"
+      },
+      "$comment": "Unique IDs and unique active sort values are enforced by the runtime validator. The v1 launch publication profile requires exactly four active specials."
+    },
+    "contacts": {
+      "$ref": "#/definitions/contacts"
+    },
+    "footer": {
+      "$ref": "#/definitions/footer"
+    },
+    "assetLibrary": {
+      "$ref": "#/definitions/assetLibrary"
+    },
+    "publication": {
+      "$ref": "#/definitions/publication"
+    }
+  },
+  "definitions": {
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "size",
+        "orientation",
+        "widthPx",
+        "heightPx",
+        "pdfWidthPt",
+        "pdfHeightPt",
+        "maxActiveSpecials"
+      ],
+      "properties": {
+        "size": {
+          "const": "legal"
+        },
+        "orientation": {
+          "const": "portrait"
+        },
+        "widthPx": {
+          "const": 816
+        },
+        "heightPx": {
+          "const": 1344
+        },
+        "pdfWidthPt": {
+          "const": 612
+        },
+        "pdfHeightPt": {
+          "const": 1008
+        },
+        "maxActiveSpecials": {
+          "const": 4
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accentColor",
+        "accentRgb"
+      ],
+      "properties": {
+        "accentColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "accentRgb": {
+          "type": "string",
+          "pattern": "^(?:25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}), (?:25[0-5]|2[0-4][0-9]|1?[0-9]{1,2}), (?:25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})$"
+        }
+      }
+    },
+    "visibleText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visible"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "visible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "assetReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetId",
+        "visible",
+        "alt",
+        "fit",
+        "zoom",
+        "focusX",
+        "focusY"
+      ],
+      "properties": {
+        "assetId": {
+          "type": "string",
+          "pattern": "^asset_[a-z0-9][a-z0-9_-]*$"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "alt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "fit": {
+          "type": "string",
+          "enum": [
+            "cover",
+            "contain"
+          ]
+        },
+        "zoom": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2.5
+        },
+        "focusX": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "focusY": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "saturation": {
+          "type": "number",
+          "minimum": 0
+        },
+        "contrast": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "brightness": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "campaignTitle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line1",
+        "line2",
+        "visible"
+      ],
+      "properties": {
+        "line1": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "visible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "header": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "brandMark",
+        "wordmark",
+        "deliveryMessage",
+        "campaignMark",
+        "campaignTitle",
+        "month",
+        "year",
+        "supportingLine"
+      ],
+      "properties": {
+        "brandMark": {
+          "$ref": "#/definitions/assetReference"
+        },
+        "wordmark": {
+          "$ref": "#/definitions/assetReference"
+        },
+        "deliveryMessage": {
+          "$ref": "#/definitions/visibleText"
+        },
+        "campaignMark": {
+          "$ref": "#/definitions/assetReference"
+        },
+        "campaignTitle": {
+          "$ref": "#/definitions/campaignTitle"
+        },
+        "month": {
+          "$ref": "#/definitions/visibleText"
+        },
+        "year": {
+          "$ref": "#/definitions/visibleText"
+        },
+        "supportingLine": {
+          "$ref": "#/definitions/visibleText"
+        }
+      }
+    },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "price",
+        "image"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0
+        },
+        "image": {
+          "$ref": "#/definitions/assetReference"
+        }
+      }
+    },
+    "special": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sort",
+        "active",
+        "offerMode",
+        "displayName",
+        "brand",
+        "brandLogo",
+        "productLine",
+        "marblingScore",
+        "quantityAvailable",
+        "primaryOffer",
+        "savingsMessage",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "sort": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "offerMode": {
+          "type": "string",
+          "enum": [
+            "single-offer",
+            "dual-offer"
+          ]
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "brandLogo": {
+          "$ref": "#/definitions/assetReference"
+        },
+        "productLine": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "marblingScore": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "quantityAvailable": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "primaryOffer": {
+          "$ref": "#/definitions/offer"
+        },
+        "secondaryOffer": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/offer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "savingsMessage": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "offerMode": {
+                "const": "dual-offer"
+              }
+            },
+            "required": [
+              "offerMode"
+            ]
+          },
+          "then": {
+            "required": [
+              "secondaryOffer"
+            ],
+            "properties": {
+              "secondaryOffer": {
+                "$ref": "#/definitions/offer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "offerMode": {
+                "const": "single-offer"
+              }
+            },
+            "required": [
+              "offerMode"
+            ]
+          },
+          "then": {
+            "properties": {
+              "secondaryOffer": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sort",
+        "active",
+        "name",
+        "location",
+        "phone",
+        "email"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "sort": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 40
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        }
+      }
+    },
+    "contacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instruction",
+        "items"
+      ],
+      "properties": {
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "contains": {
+            "type": "object",
+            "required": [
+              "active"
+            ],
+            "properties": {
+              "active": {
+                "const": true
+              }
+            }
+          },
+          "items": {
+            "$ref": "#/definitions/contact"
+          },
+          "$comment": "Unique contact IDs and unique active sort values are enforced by the runtime validator."
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "message",
+        "disclaimer",
+        "buttonLabel",
+        "url",
+        "broll"
+      ],
+      "properties": {
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "disclaimer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "buttonLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://[^\\s]+$"
+        },
+        "broll": {
+          "$ref": "#/definitions/assetReference"
+        }
+      }
+    },
+    "assetRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "category",
+        "library",
+        "path",
+        "mimeType",
+        "sha256",
+        "bytes",
+        "width",
+        "height",
+        "createdAt",
+        "archived"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^asset_[a-z0-9][a-z0-9_-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "brand-mark",
+            "wordmark",
+            "campaign-mark",
+            "product-brand-logo",
+            "product-photo",
+            "footer-broll"
+          ]
+        },
+        "library": {
+          "type": "string",
+          "enum": [
+            "brand-marks",
+            "wordmarks",
+            "campaign-marks",
+            "product-brand-logos",
+            "tenderloin",
+            "ribeye",
+            "striploin",
+            "tri-tip",
+            "footer"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^assets/specials/library/(?:brand-marks|wordmarks|campaign-marks|product-brand-logos|tenderloin|ribeye|striploin|tri-tip|footer)/[A-Za-z0-9][A-Za-z0-9._-]*\\.(?:svg|png|jpg|jpeg|webp)$"
+        },
+        "mimeType": {
+          "type": "string",
+          "enum": [
+            "image/svg+xml",
+            "image/png",
+            "image/jpeg",
+            "image/webp"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "archived": {
+          "type": "boolean"
+        }
+      },
+      "$comment": "The runtime validator enforces that the asset record id equals its assetLibrary object key and that the file exists with the recorded SHA-256."
+    },
+    "assetLibrary": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^asset_[a-z0-9][a-z0-9_-]*$": {
+          "$ref": "#/definitions/assetRecord"
+        }
+      },
+      "additionalProperties": false
+    },
+    "publicationOutputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "json",
+        "html",
+        "pdf"
+      ],
+      "properties": {
+        "json": {
+          "const": "public/specials/monthly-specials.json"
+        },
+        "html": {
+          "const": "public/specials/monthly-specials.html"
+        },
+        "pdf": {
+          "const": "public/specials/monthly-specials.pdf"
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "currency",
+        "locale",
+        "outputs"
+      ],
+      "properties": {
+        "profile": {
+          "const": "monthly-specials-v1"
+        },
+        "currency": {
+          "const": "USD"
+        },
+        "locale": {
+          "const": "en-US"
+        },
+        "outputs": {
+          "$ref": "#/definitions/publicationOutputs"
+        }
+      }
+    }
+  }
+}
