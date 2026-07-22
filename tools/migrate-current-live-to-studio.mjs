@@ -1,8 +1,7 @@
 import { createHash } from "node:crypto";
-import { constants as fsConstants } from "node:fs";
+
 import {
   access,
-  copyFile,
   mkdir,
   readFile,
   rename,
@@ -72,6 +71,17 @@ const sha256 = (bytes) =>
 
 const normalizeTextForHash = (text) =>
   text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trimEnd();
+
+const normalizeAssetBytes = (bytes, extension) => {
+  if (extension.toLowerCase() !== ".svg") return bytes;
+
+  const normalizedSvg = bytes
+    .toString("utf8")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
+
+  return Buffer.from(normalizedSvg, "utf8");
+};
 
 const assert = (condition, message) => {
   if (!condition) {
@@ -450,13 +460,19 @@ const registerAsset = async ({
   productionPath,
 }) => {
   await ensureFile(sourcePath, `Source asset ${label}`);
-  const bytes = await readFile(sourcePath);
+  const sourceBytes = await readFile(sourcePath);
+  const extension = path.extname(sourcePath).toLowerCase();
+  const bytes = normalizeAssetBytes(sourceBytes, extension);
   const hash = sha256(bytes);
 
   if (productionPath) {
     const production = resolvePublicPath(productionPath, `Production asset ${label}`);
     await ensureFile(production.absolutePath, `Production asset ${label}`);
-    const productionBytes = await readFile(production.absolutePath);
+    const productionSourceBytes = await readFile(production.absolutePath);
+    const productionBytes = normalizeAssetBytes(
+      productionSourceBytes,
+      extension,
+    );
     assert(
       sha256(productionBytes) === hash,
       `Selected-library and production bytes differ for ${label}.`,
@@ -470,7 +486,6 @@ const registerAsset = async ({
     return existingAssetId;
   }
 
-  const extension = path.extname(sourcePath).toLowerCase();
   const metadata = imageMetadata(bytes, extension);
   const hashPrefix = hash.slice(0, 12);
   const assetId = `asset_${library.replace(/-/g, "_")}_${hashPrefix}`;
@@ -504,6 +519,7 @@ const registerAsset = async ({
   copyPlans.push({
     assetId,
     sourcePath,
+    bytes,
     destinationAbsolutePath,
     repositoryPath,
     sha256: hash,
@@ -976,7 +992,7 @@ const writeAsset = async (plan) => {
   const temporaryPath = `${plan.destinationAbsolutePath}.tmp-${process.pid}`;
 
   try {
-    await copyFile(plan.sourcePath, temporaryPath, fsConstants.COPYFILE_EXCL);
+    await writeFile(temporaryPath, plan.bytes, { flag: "wx" });
     const temporaryBytes = await readFile(temporaryPath);
     assert(
       sha256(temporaryBytes) === plan.sha256,

@@ -19,7 +19,7 @@
   },
   "header": {
     "brandMark": {
-      "assetId": "asset_brand_marks_be7cd2f27b83",
+      "assetId": "asset_brand_marks_2c744d7e0d1f",
       "visible": true,
       "alt": "Paragon Purveyors brand mark",
       "fit": "contain",
@@ -28,7 +28,7 @@
       "focusY": 50
     },
     "wordmark": {
-      "assetId": "asset_wordmarks_e3705c8fdbc2",
+      "assetId": "asset_wordmarks_74146895287a",
       "visible": true,
       "alt": "Paragon Purveyors wordmark",
       "fit": "contain",
@@ -291,29 +291,29 @@
     }
   },
   "assetLibrary": {
-    "asset_brand_marks_be7cd2f27b83": {
-      "id": "asset_brand_marks_be7cd2f27b83",
+    "asset_brand_marks_2c744d7e0d1f": {
+      "id": "asset_brand_marks_2c744d7e0d1f",
       "label": "Paragon Purveyors Brand Mark",
       "category": "brand-mark",
       "library": "brand-marks",
-      "path": "assets/specials/library/brand-marks/paragon-purveyors-brand-mark-be7cd2f27b83.svg",
+      "path": "assets/specials/library/brand-marks/paragon-purveyors-brand-mark-2c744d7e0d1f.svg",
       "mimeType": "image/svg+xml",
-      "sha256": "be7cd2f27b83e08015ff574ce90ddb584eb36db7c166706e7f1b021e7de742d3",
-      "bytes": 5365,
+      "sha256": "2c744d7e0d1f1e9020ef90cb98c6aaba1fe3f1b64f8525984d2d48a3f235d46e",
+      "bytes": 5305,
       "width": 375,
       "height": 461,
       "createdAt": "2026-07-22T00:15:42.881Z",
       "archived": false
     },
-    "asset_wordmarks_e3705c8fdbc2": {
-      "id": "asset_wordmarks_e3705c8fdbc2",
+    "asset_wordmarks_74146895287a": {
+      "id": "asset_wordmarks_74146895287a",
       "label": "Paragon Purveyors Wordmark",
       "category": "wordmark",
       "library": "wordmarks",
-      "path": "assets/specials/library/wordmarks/paragon-purveyors-wordmark-e3705c8fdbc2.svg",
+      "path": "assets/specials/library/wordmarks/paragon-purveyors-wordmark-74146895287a.svg",
       "mimeType": "image/svg+xml",
-      "sha256": "e3705c8fdbc2b15d6b2b49b702f2363e9b94053a739c30eb7a2835df048920d4",
-      "bytes": 11815,
+      "sha256": "74146895287a6112970c65ef415056c174ed41d6c16fc1ee2d4af086301c4bb4",
+      "bytes": 11771,
       "width": 375,
       "height": 135,
       "createdAt": "2026-07-22T00:15:42.881Z",
