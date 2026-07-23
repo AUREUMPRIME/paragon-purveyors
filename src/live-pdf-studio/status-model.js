@@ -25,6 +25,40 @@ export const createInitialSectionStatuses = () => ({
   review: STUDIO_SECTION_STATUS.ERROR,
 });
 
+export const getSectionStatusTone = (status) => {
+  switch (status) {
+    case STUDIO_SECTION_STATUS.COMPLETE:
+      return "complete";
+    case STUDIO_SECTION_STATUS.MODIFIED:
+      return "modified";
+    case STUDIO_SECTION_STATUS.MISSING:
+      return "missing";
+    case STUDIO_SECTION_STATUS.ERROR:
+      return "error";
+    default:
+      return "neutral";
+  }
+};
+
+export const summarizeSectionStatuses = (statuses) => {
+  const values = Object.values(statuses);
+
+  return Object.freeze({
+    complete: values.filter(
+      (value) => value === STUDIO_SECTION_STATUS.COMPLETE,
+    ).length,
+    modified: values.filter(
+      (value) => value === STUDIO_SECTION_STATUS.MODIFIED,
+    ).length,
+    missing: values.filter(
+      (value) => value === STUDIO_SECTION_STATUS.MISSING,
+    ).length,
+    error: values.filter(
+      (value) => value === STUDIO_SECTION_STATUS.ERROR,
+    ).length,
+  });
+};
+
 export const getDraftStatusPresentation = ({
   persistenceStatus = STUDIO_DRAFT_STATUS.LOADING,
   isModified = false,

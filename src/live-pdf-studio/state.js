@@ -190,7 +190,11 @@ export const createStudioState = ({
     setValue(path, value) {
       draft = setValueAtPath(draft, path, value);
       draftFingerprint = fingerprintDocument(draft);
-      persistenceStatus = STUDIO_DRAFT_STATUS.DIRTY;
+      persistenceStatus = hasUnsavedChanges()
+        ? STUDIO_DRAFT_STATUS.DIRTY
+        : isModified()
+          ? STUDIO_DRAFT_STATUS.SAVED
+          : STUDIO_DRAFT_STATUS.CLEAN;
       errorMessage = "";
       notify();
     },
@@ -202,7 +206,11 @@ export const createStudioState = ({
       }
 
       pendingUploadCount = count;
-      persistenceStatus = STUDIO_DRAFT_STATUS.DIRTY;
+      persistenceStatus = hasUnsavedChanges()
+        ? STUDIO_DRAFT_STATUS.DIRTY
+        : isModified()
+          ? STUDIO_DRAFT_STATUS.SAVED
+          : STUDIO_DRAFT_STATUS.CLEAN;
       errorMessage = "";
       notify();
     },

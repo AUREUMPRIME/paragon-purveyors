@@ -35,7 +35,9 @@ body {
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
 }
 
@@ -44,7 +46,9 @@ button {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
   outline: 2px solid var(--studio-red);
   outline-offset: 3px;
 }
@@ -621,5 +625,289 @@ button:disabled {
 
   .review-dialog__tools {
     flex-wrap: wrap;
+  }
+}
+
+/* Phase 3.3 content editors */
+
+.studio-nav__content small[data-status-tone="complete"] {
+  color: rgba(154, 204, 169, 0.88);
+}
+
+.studio-nav__content small[data-status-tone="modified"] {
+  color: #d5b977;
+}
+
+.studio-nav__content small[data-status-tone="missing"] {
+  color: #e0a466;
+}
+
+.studio-nav__content small[data-status-tone="error"] {
+  color: #ef7075;
+}
+
+.studio-workspace--editor {
+  padding-bottom: 60px;
+}
+
+.editor-stack {
+  display: grid;
+  gap: 18px;
+  padding-top: 24px;
+}
+
+.editor-panel {
+  min-width: 0;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--studio-border);
+  background:
+    linear-gradient(145deg, rgba(246, 239, 229, 0.018), transparent 48%),
+    var(--studio-panel);
+}
+
+.editor-panel > legend {
+  padding: 0 10px 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.editor-panel--cut,
+.editor-panel--contact {
+  border-color: rgba(246, 239, 229, 0.16);
+}
+
+.editor-panel__copy {
+  max-width: 760px;
+  margin: 4px 0 22px;
+  color: var(--studio-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.editor-grid--cut {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.editor-field {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.editor-field:has(textarea),
+.editor-field:has([data-editor-field$=".description"]) {
+  grid-column: 1 / -1;
+}
+
+.editor-field__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.editor-field label,
+.editor-field__label-row label {
+  color: var(--studio-cream);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.editor-field__label-row > span {
+  color: var(--studio-soft);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.editor-field input:not([type="checkbox"]),
+.editor-field textarea,
+.editor-field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: var(--studio-cream);
+  border: 1px solid var(--studio-border-strong);
+  border-radius: 0;
+  background: var(--studio-panel-deep);
+}
+
+.editor-field textarea {
+  min-height: 112px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.editor-field input::placeholder,
+.editor-field textarea::placeholder {
+  color: var(--studio-soft);
+}
+
+.editor-field input[type="number"] {
+  appearance: textfield;
+}
+
+.editor-field input[type="number"]::-webkit-inner-spin-button,
+.editor-field input[type="number"]::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.editor-field--checkbox {
+  min-height: 44px;
+  align-content: center;
+  padding: 10px 12px;
+  border: 1px solid var(--studio-border);
+  background: rgba(246, 239, 229, 0.018);
+}
+
+.editor-field--checkbox > label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.editor-field--checkbox input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--studio-red);
+}
+
+.editor-field__affix {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.editor-field__affix > span {
+  display: grid;
+  place-items: center;
+  min-width: 42px;
+  border: 1px solid var(--studio-border-strong);
+  border-right: 0;
+  color: var(--studio-muted);
+  background: rgba(246, 239, 229, 0.025);
+}
+
+.editor-field__help,
+.editor-field__error {
+  min-height: 14px;
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.editor-field__help {
+  color: var(--studio-muted);
+}
+
+.editor-field__error {
+  color: #ef8589;
+}
+
+.editor-field[data-field-state="missing"] input:not([type="checkbox"]),
+.editor-field[data-field-state="missing"] textarea {
+  border-color: rgba(224, 164, 102, 0.72);
+}
+
+.editor-field[data-field-state="error"] input:not([type="checkbox"]),
+.editor-field[data-field-state="error"] textarea {
+  border-color: rgba(239, 112, 117, 0.86);
+}
+
+.editor-readonly-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 20px;
+}
+
+.editor-readonly {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid var(--studio-border);
+  background: var(--studio-panel-deep);
+}
+
+.editor-readonly span {
+  color: var(--studio-soft);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.editor-readonly output {
+  color: var(--studio-muted);
+  font-size: 12px;
+}
+
+.editor-section-summary {
+  flex: 0 0 auto;
+  min-width: 190px;
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--studio-border);
+  background: var(--studio-panel);
+}
+
+.editor-section-summary > span {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.editor-section-summary > small {
+  color: var(--studio-muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.editor-section-summary[data-section-status="Complete"] {
+  border-color: rgba(154, 204, 169, 0.32);
+}
+
+.editor-section-summary[data-section-status="Modified"] {
+  border-color: rgba(213, 185, 119, 0.46);
+}
+
+.editor-section-summary[data-section-status="Missing required field"] {
+  border-color: rgba(224, 164, 102, 0.52);
+}
+
+.editor-section-summary[data-section-status="Validation error"] {
+  border-color: rgba(239, 112, 117, 0.58);
+}
+
+@media (max-width: 1180px) {
+  .editor-grid--cut {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .editor-panel {
+    padding: 20px;
+  }
+
+  .editor-grid,
+  .editor-grid--cut,
+  .editor-readonly-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-section-summary {
+    width: 100%;
+    min-width: 0;
   }
 }

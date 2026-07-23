@@ -1,5 +1,8 @@
 import { STUDIO_SECTIONS } from "./navigation.js";
-import { getDraftStatusPresentation } from "./status-model.js";
+import {
+  getDraftStatusPresentation,
+  getSectionStatusTone,
+} from "./status-model.js";
 
 const sectionCopy = Object.freeze({
   overview: {
@@ -104,7 +107,10 @@ const navigationMarkup = (statuses) =>
       <span class="studio-nav__number">${section.number}</span>
       <span class="studio-nav__content">
         <strong>${section.label}</strong>
-        <small>${statuses[section.id]}</small>
+        <small
+          data-studio-nav-status="${section.id}"
+          data-status-tone="${getSectionStatusTone(statuses[section.id])}"
+        >${statuses[section.id]}</small>
       </span>
       <span class="studio-nav__indicator" aria-hidden="true"></span>
     </button>
@@ -436,15 +442,30 @@ export const renderStudioShell = ({ root, statuses }) => {
       restoreDialog.showModal();
     });
 
+  const setSectionStatuses = (nextStatuses) => {
+    for (const section of STUDIO_SECTIONS) {
+      const status = nextStatuses[section.id];
+      const statusNode = root.querySelector(
+        `[data-studio-nav-status="${section.id}"]`,
+      );
+
+      if (!statusNode || !status) continue;
+
+      statusNode.textContent = status;
+      statusNode.dataset.statusTone = getSectionStatusTone(status);
+    }
+  };
+
   return {
-    renderWorkspace(sectionId) {
+    renderWorkspace(sectionId, workspaceMarkup = "") {
       root.querySelector("[data-studio-content]").innerHTML =
-        placeholderMarkup(sectionId);
+        workspaceMarkup || placeholderMarkup(sectionId);
 
       if (latestDraftSnapshot) {
         applyDraftSnapshot(latestDraftSnapshot);
       }
     },
+    setSectionStatuses,
     setDraftState: applyDraftSnapshot,
     setDraftError(message) {
       applyDraftSnapshot({

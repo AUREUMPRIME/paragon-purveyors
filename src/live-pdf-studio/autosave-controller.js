@@ -74,14 +74,13 @@ export const createAutosaveController = ({
   };
 
   const schedule = (snapshot) => {
-    if (
-      disposed ||
-      snapshot.persistenceStatus !== "dirty"
-    ) {
-      return;
-    }
+    if (disposed) return;
 
     cancelPending();
+
+    if (snapshot.persistenceStatus !== "dirty") {
+      return;
+    }
 
     timer = setTimeoutImpl(() => {
       timer = null;

@@ -4,6 +4,7 @@ import {
   loadCanonicalDocument,
 } from "./document-source.js";
 import { createDraftStore } from "./draft-store.js";
+import { createEditorController } from "./editor-controller.js";
 import { createNavigationController } from "./navigation.js";
 import { createReviewDialogController } from "./review-dialog.js";
 import { renderStudioShell } from "./shell.js";
@@ -26,9 +27,12 @@ const assetDialog = root.querySelector("[data-asset-library-dialog]");
 const reviewController = createReviewDialogController(reviewDialog);
 
 let studioState = null;
+let validationAwareState = null;
 let draftStore = null;
 let autosaveController = null;
+let editorController = null;
 let unsubscribeDraftState = null;
+let activeSection = "overview";
 
 const openAssetLibrary = () => {
   if (!assetDialog.open) assetDialog.showModal();
@@ -46,9 +50,43 @@ assetDialog.addEventListener("click", (event) => {
 createNavigationController({
   root,
   onNavigate: (sectionId) => {
-    shell.renderWorkspace(sectionId);
+    activeSection = sectionId;
+
+    if (editorController) {
+      editorController.navigate(sectionId);
+    } else {
+      shell.renderWorkspace(sectionId);
+    }
+
     if (sectionId === "assets") openAssetLibrary();
     if (sectionId === "review") reviewController.open();
+  },
+});
+
+const createValidationAwareState = ({
+  state,
+  getValidationResults,
+}) => ({
+  getLiveBaseline: state.getLiveBaseline,
+  getDraft: state.getDraft,
+  isLiveBaselineFrozen: state.isLiveBaselineFrozen,
+  setValue: state.setValue,
+  setPendingUploadCount: state.setPendingUploadCount,
+  markSaving: state.markSaving,
+  markSaved: state.markSaved,
+  markError: state.markError,
+  restoreLive: state.restoreLive,
+  getSnapshot: () => ({
+    ...state.getSnapshot(),
+    validationResults: getValidationResults(),
+  }),
+  subscribe(listener) {
+    return state.subscribe((snapshot) => {
+      listener({
+        ...snapshot,
+        validationResults: getValidationResults(),
+      });
+    });
   },
 });
 
@@ -60,6 +98,7 @@ const handleRestoreLive = async () => {
 
   if (confirmed) {
     await autosaveController.restoreLive();
+    editorController?.refresh();
   }
 };
 
@@ -101,31 +140,70 @@ const initializeDraftFoundation = async () => {
     storedRecord,
   });
 
-  autosaveController = createAutosaveController({
+  editorController = createEditorController({
+    root,
+    shell,
     state: studioState,
+  });
+
+  validationAwareState = createValidationAwareState({
+    state: studioState,
+    getValidationResults:
+      editorController.getValidationResults,
+  });
+
+  autosaveController = createAutosaveController({
+    state: validationAwareState,
     store: draftStore,
   });
 
-  unsubscribeDraftState = studioState.subscribe((snapshot) => {
-    shell.setDraftState(snapshot);
-  });
+  unsubscribeDraftState = validationAwareState.subscribe(
+    (snapshot) => {
+      shell.setDraftState(snapshot);
+      editorController.handleSnapshot(snapshot);
+    },
+  );
+
+  editorController.navigate(activeSection);
 
   window.addEventListener("beforeunload", handleBeforeUnload);
 
   window.__PARAGON_LIVE_PDF_STUDIO_DRAFT__ = Object.freeze({
-    version: 1,
-    getSnapshot: () => studioState.getSnapshot(),
+    version: 2,
+    getSnapshot: () => validationAwareState.getSnapshot(),
     getDraft: () => studioState.getDraft(),
     getLiveBaseline: () => studioState.getLiveBaseline(),
     setValue: (path, value) => studioState.setValue(path, value),
     saveNow: () => autosaveController.saveNow(),
-    restoreLive: () => autosaveController.restoreLive(),
+    restoreLive: async () => {
+      const snapshot = await autosaveController.restoreLive();
+      editorController.refresh();
+      return snapshot;
+    },
+    getValidation: () => editorController.getValidation(),
+    getSectionStatuses: () =>
+      editorController.getSectionStatuses(),
+    getEditorRegistry: () => ({
+      bindingCount:
+        editorController.getRegistry().fields.length,
+      sectionCounts: Object.fromEntries(
+        Object.entries(
+          editorController.getRegistry().bySection,
+        ).map(([sectionId, fields]) => [
+          sectionId,
+          fields.length,
+        ]),
+      ),
+    }),
     getDiagnostics: () => ({
       liveBaselineFrozen: studioState.isLiveBaselineFrozen(),
       pendingAutosave:
         autosaveController.hasPendingAutosave(),
       databaseName: "paragon-live-pdf-studio",
       stores: ["documents", "metadata", "uploads"],
+      editorBindings:
+        editorController.getRegistry().fields.length,
+      editorSections: 4,
     }),
     dispose: async () => {
       window.removeEventListener(
@@ -133,11 +211,12 @@ const initializeDraftFoundation = async () => {
         handleBeforeUnload,
       );
       unsubscribeDraftState?.();
+      editorController?.dispose();
       await autosaveController.dispose();
     },
   });
 
-  return studioState.getSnapshot();
+  return validationAwareState.getSnapshot();
 };
 
 shell.setDraftState({
@@ -154,9 +233,11 @@ initializeDraftFoundation().catch((error) => {
 });
 
 window.__PARAGON_LIVE_PDF_STUDIO_SHELL__ = Object.freeze({
-  version: 2,
+  version: 3,
   navigationSections: 8,
   primaryActions: 5,
   productionPublishingEnabled: false,
   draftFoundation: "indexeddb",
+  contentEditors: 4,
+  editableBindings: 78,
 });
