@@ -398,10 +398,6 @@ const legacyMonthlyCssUrl = new URL(
   "../src/specials/monthly-specials-v2.css",
   import.meta.url,
 );
-const studioContextUrl = new URL(
-  "../tools/paragon-cut-image-studio/context/monthly-specials-v2.html",
-  import.meta.url,
-);
 const studioControllerUrl = new URL(
   "../tools/paragon-cut-image-studio/controller.mjs",
   import.meta.url,
@@ -438,14 +434,31 @@ test("production builder reads the shared monthly CSS authority", async () => {
   );
 });
 
-test("Studio context links the shared CSS without an inline duplicate", async () => {
-  const context = await fs.readFile(studioContextUrl, "utf8");
+test("Studio browser loads the shared CSS authority for renderer-driven context", async () => {
+  const studioIndex = await fs.readFile(
+    new URL(
+      "../tools/paragon-cut-image-studio/index.html",
+      import.meta.url,
+    ),
+    "utf8",
+  );
 
   assert.match(
-    context,
+    studioIndex,
+    /const loadSharedCss = async \(\) =>/,
+  );
+  assert.match(
+    studioIndex,
+    /fetch\(\s*"\/context\/monthly-specials\.css"/,
+  );
+  assert.match(
+    studioIndex,
+    /css: sharedCss/,
+  );
+  assert.doesNotMatch(
+    studioIndex,
     /<link rel="stylesheet" href="\/context\/monthly-specials\.css">/,
   );
-  assert.doesNotMatch(context, /<style>[\s\S]*?<\/style>/);
 });
 
 test("Studio controller serves the shared monthly CSS authority", async () => {
@@ -803,12 +816,11 @@ test("Studio controller serves shared CSS and safe public assets", async () => {
   );
 });
 
-test("Studio validation probes browser transport while preserving the static preview checkpoint", async () => {
-  const [controller, studioIndex, staticContext] =
+test("Studio validation probes the exact shared-renderer srcdoc preview", async () => {
+  const [controller, studioIndex] =
     await Promise.all([
       fs.readFile(studioControllerUrl, "utf8"),
       fs.readFile(studioIndexUrl, "utf8"),
-      fs.readFile(studioContextUrl, "utf8"),
     ]);
 
   assert.match(
@@ -817,15 +829,135 @@ test("Studio validation probes browser transport while preserving the static pre
   );
   assert.match(
     controller,
-    /Browser transport foundation routes verified/,
+    /Shared renderer supplies the iframe through srcdoc/,
   );
   assert.match(
     studioIndex,
+    /frame\.srcdoc =\s+await renderProductionContextHtml\(\);/,
+  );
+  assert.doesNotMatch(
+    studioIndex,
     /frame\.src = "\/context\/monthly-specials-v2\.html";/,
   );
-  assert.doesNotMatch(studioIndex, /\bsrcdoc\b/);
-  assert.match(
-    staticContext,
-    /<main class="monthly-specials-page"/,
+});
+
+test("Studio browser imports the committed canonical adapter and shared renderer", async () => {
+  const studioIndex = await fs.readFile(
+    studioIndexUrl,
+    "utf8",
   );
+
+  assert.match(studioIndex, /<script type="module">/);
+  assert.match(
+    studioIndex,
+    /from "\/live-pdf\/core\/render-monthly-specials\.js"/,
+  );
+  assert.match(
+    studioIndex,
+    /from "\/live-pdf\/core\/adapt-canonical-document\.js"/,
+  );
+  assert.match(
+    studioIndex,
+    /from "\/live-pdf\/browser\/resolve-browser-asset\.js"/,
+  );
+});
+
+test("Studio browser renders the canonical document through the shared renderer", async () => {
+  const studioIndex = await fs.readFile(
+    studioIndexUrl,
+    "utf8",
+  );
+
+  assert.match(
+    studioIndex,
+    /const loadCanonicalDocument = async \(\) =>/,
+  );
+  assert.match(
+    studioIndex,
+    /adaptCanonicalDocument\(canonicalDocument\)/,
+  );
+  assert.match(
+    studioIndex,
+    /return renderMonthlySpecialsHtml\(\{/,
+  );
+  assert.match(
+    studioIndex,
+    /activeSpecials: data\.specials/,
+  );
+  assert.match(
+    studioIndex,
+    /createBrowserAssetUrlResolver\(\{/,
+  );
+});
+
+test("Studio browser removes duplicate escaping and static context dependencies", async () => {
+  const studioIndex = await fs.readFile(
+    studioIndexUrl,
+    "utf8",
+  );
+
+  assert.doesNotMatch(
+    studioIndex,
+    /const escapeHtml = \(value\) =>/,
+  );
+  assert.doesNotMatch(
+    studioIndex,
+    /monthly-specials-v2\.html/,
+  );
+  assert.match(
+    studioIndex,
+    /window\.__PARAGON_SHARED_RENDERER_PREVIEW__ = true/,
+  );
+});
+
+test("Studio controller removes and rejects the obsolete static context route", async () => {
+  const controller = await fs.readFile(
+    studioControllerUrl,
+    "utf8",
+  );
+
+  assert.doesNotMatch(
+    controller,
+    /const contextTemplatePath = path\.join/,
+  );
+  assert.doesNotMatch(
+    controller,
+    /await fs\.readFile\(contextTemplatePath, "utf8"\)/,
+  );
+  assert.match(
+    controller,
+    /"\/context\/monthly-specials-v2\.html",/,
+  );
+  assert.match(
+    controller,
+    /initial\.context\.usesSrcdoc !== true/,
+  );
+});
+
+test("Studio deletes the stale context duplicate while preserving interaction selectors", async () => {
+  const studioIndex = await fs.readFile(
+    studioIndexUrl,
+    "utf8",
+  );
+  const staticContextUrl = new URL(
+    "../tools/paragon-cut-image-studio/context/monthly-specials-v2.html",
+    import.meta.url,
+  );
+
+  await assert.rejects(
+    fs.access(staticContextUrl),
+    (error) => error?.code === "ENOENT",
+  );
+
+  for (const pattern of [
+    /const resolveContextElements = \(slot\) =>/,
+    /\.footer-broll/,
+    /\.specials-closing__media/,
+    /\.special-card__image/,
+    /data-cut-id/,
+    /bindProductionContext\(\)/,
+    /updateAllContextSlots\(\)/,
+  ]) {
+    assert.match(studioIndex, pattern);
+  }
 });

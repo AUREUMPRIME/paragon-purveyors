@@ -11,11 +11,6 @@ const currentFile = fileURLToPath(import.meta.url);
 const studioRoot = path.dirname(currentFile);
 const projectRoot = path.resolve(studioRoot, "..", "..");
 const indexPath = path.join(studioRoot, "index.html");
-const contextTemplatePath = path.join(
-  studioRoot,
-  "context",
-  "monthly-specials-v2.html",
-);
 const livePdfRoot = path.join(
   projectRoot,
   "src",
@@ -366,6 +361,7 @@ const verifyTransportFoundation = async (baseUrl) => {
   for (const pathname of [
     "/live-pdf/core/not-allowlisted.js",
     "/assets/%2e%2e/package.json",
+    "/context/monthly-specials-v2.html",
   ]) {
     const response = await fetch(
       new URL(pathname, baseUrl),
@@ -466,18 +462,6 @@ server = http.createServer(async (request, response) => {
       return;
     }
 
-    if (
-      request.method === "GET" &&
-      requestUrl.pathname === "/context/monthly-specials-v2.html"
-    ) {
-      send(
-        response,
-        200,
-        await fs.readFile(contextTemplatePath, "utf8"),
-        "text/html; charset=utf-8",
-      );
-      return;
-    }
 
     if (
       request.method === "GET" &&
@@ -790,6 +774,10 @@ if (validateMode) {
     );
 
     return {
+      sharedRendererPreview:
+        window.__PARAGON_SHARED_RENDERER_PREVIEW__ === true,
+      moduleScript:
+        document.querySelector('script[type="module"]') !== null,
       sections: document.querySelectorAll("[data-section]").length,
       controls: document.querySelectorAll("[data-control]").length,
       selectors: document.querySelectorAll("[data-image-select]").length,
@@ -848,6 +836,8 @@ if (validateMode) {
           '[data-cut-id="tri-tip"]',
         );
         return {
+          usesSrcdoc: Boolean(frame.srcdoc),
+          frameSource: frame.getAttribute("src") || "",
           frameWidth: frame.getAttribute("width") || frame.clientWidth,
           frameHeight: frame.getAttribute("height") || frame.clientHeight,
           pageWidth: documentContext.querySelector(".monthly-specials-page")
@@ -888,6 +878,8 @@ if (validateMode) {
     Math.abs(actual - expected) <= tolerance;
 
   if (
+    initial.sharedRendererPreview !== true ||
+    initial.moduleScript !== true ||
     initial.sections !== 5 ||
     initial.controls !== 8 ||
     initial.selectors !== 8 ||
@@ -897,6 +889,8 @@ if (validateMode) {
     initial.triTipPreviews !== 1 ||
     initial.staleTriTipSecondary !== 0 ||
     initial.libraryCount !== 8 ||
+    initial.context.usesSrcdoc !== true ||
+    initial.context.frameSource !== "" ||
     initial.context.productImages !== 7 ||
     initial.context.triTipImages !== 1 ||
     initial.context.footerImages !== 1 ||
@@ -1078,6 +1072,8 @@ if (validateMode) {
   console.log("[OK] Footer uses exact production ratio and treatment.");
   console.log("[OK] Drag, wheel zoom, reset, save, and export work.");
   console.log("[OK] Complete US Legal production context rendered.");
+  console.log("[OK] Shared renderer supplies the iframe through srcdoc.");
+  console.log("[OK] Obsolete static context route remains unavailable.");
   console.log("[OK] Seven product images and one footer image synchronize live.");
   console.log("[OK] Context drag and crop controls share one state model.");
   console.log("[OK] Complete close lifecycle remains active.");

@@ -597,10 +597,23 @@
     </p>
   </main>
 
-  <script>
+  <script type="module">
+    import {
+      escapeHtml,
+      renderMonthlySpecialsHtml,
+    } from "/live-pdf/core/render-monthly-specials.js";
+    import {
+      adaptCanonicalDocument,
+    } from "/live-pdf/core/adapt-canonical-document.js";
+    import {
+      createBrowserAssetUrlResolver,
+    } from "/live-pdf/browser/resolve-browser-asset.js";
+
     const storageKey = "paragon-cut-image-studio-v3";
     let library = {};
     let approvedManifest = null;
+    let canonicalDocument = null;
+    let sharedCss = "";
     let state = new Map();
     let contextReady = false;
     let contextScale = 0.6;
@@ -614,13 +627,6 @@
       return Math.round(value * factor) / factor;
     };
 
-    const escapeHtml = (value) =>
-      String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
 
     const slotIdFor = (slot) => slot.assetId;
     const profileFor = (slot) =>
@@ -652,6 +658,32 @@
         throw new Error(`Could not load library: ${response.status}`);
       }
       library = (await response.json()).libraries;
+    };
+
+    const loadCanonicalDocument = async () => {
+      const response = await fetch(
+        "/api/canonical-document",
+        { cache: "no-store" },
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Could not load canonical document: ${response.status}`,
+        );
+      }
+      canonicalDocument = await response.json();
+    };
+
+    const loadSharedCss = async () => {
+      const response = await fetch(
+        "/context/monthly-specials.css",
+        { cache: "no-store" },
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Could not load shared CSS: ${response.status}`,
+        );
+      }
+      sharedCss = await response.text();
     };
 
     const savedKeys = [
@@ -973,6 +1005,7 @@
       }
 
       contextReady = true;
+      window.__PARAGON_SHARED_RENDERER_PREVIEW__ = true;
       updateAllContextSlots();
       document.querySelector("[data-context-status]").textContent =
         "8 synchronized image slots ready";
@@ -1001,19 +1034,40 @@
       applyContextScale(Math.min(1, availableWidth / 816));
     };
 
-    const initializeProductionContext = () => {
+    const renderProductionContextHtml = async () => {
+      const data = adaptCanonicalDocument(canonicalDocument);
+      const resolveAssetDataUrl =
+        createBrowserAssetUrlResolver({
+          baseUrl: window.location.origin,
+        });
+
+      return renderMonthlySpecialsHtml({
+        data,
+        activeSpecials: data.specials,
+        css: sharedCss,
+        resolveAssetDataUrl,
+      });
+    };
+
+    const initializeProductionContext = async () => {
       const frame = contextFrame();
+
       frame.addEventListener("load", () => {
         try {
           bindProductionContext();
           fitContextPage();
         } catch (error) {
-          document.querySelector("[data-context-status]").textContent =
+          document.querySelector(
+            "[data-context-status]",
+          ).textContent =
             `Context error: ${error.message}`;
           throw error;
         }
       }, { once: true });
-      frame.src = "/context/monthly-specials-v2.html";
+
+      frame.removeAttribute("src");
+      frame.srcdoc =
+        await renderProductionContextHtml();
     };
 
     const render = () => {
@@ -1345,7 +1399,7 @@
           version: 3,
           studioVersion: 4,
           productionContext: {
-            template: "monthly-specials-v2.html",
+            template: "shared-renderer-srcdoc",
             pageWidthPx: 816,
             pageHeightPx: 1344,
             pageSize: "US Legal portrait",
@@ -1427,10 +1481,15 @@
     };
 
     const initialize = async () => {
-      await Promise.all([loadManifest(), loadLibrary()]);
+      await Promise.all([
+        loadManifest(),
+        loadLibrary(),
+        loadCanonicalDocument(),
+        loadSharedCss(),
+      ]);
       createApprovedState(true);
       render();
-      initializeProductionContext();
+      await initializeProductionContext();
       window.__PARAGON_STUDIO_READY__ = true;
     };
 
