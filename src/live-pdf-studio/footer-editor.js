@@ -2,6 +2,7 @@ import {
   renderEditorWorkspace,
   renderFieldGrid,
 } from "./editor-controls.js";
+import { renderVisualReferenceEditor } from "./visual-controls.js";
 
 export const renderFooterEditor = ({
   draft,
@@ -14,7 +15,7 @@ export const renderFooterEditor = ({
         <legend>Closing Content</legend>
         <p class="editor-panel__copy">
           Edit the closing message, disclaimer, destination label, and secure
-          website URL. Editorial B-roll remains protected until Phase 3.4.
+          website URL. Art-direct the assigned footer B-roll below. Asset replacement remains in Phase 3.5.
         </p>
         ${renderFieldGrid({
           fields: registry.bySection.footer,
@@ -22,6 +23,7 @@ export const renderFooterEditor = ({
           fieldIssues: validation.fieldIssues,
         })}
       </fieldset>
+      ${renderVisualReferenceEditor({ draft, reference: draft.footer.broll, prefix: "footer.broll", label: "Footer B-roll", fields: registry.bySection.footer.filter((field) => field.visual), fieldIssues: validation.fieldIssues, footer: true })}
     </div>
   `;
 

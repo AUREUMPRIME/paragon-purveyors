@@ -1,3 +1,5 @@
+import { createVisualFieldRegistry } from "./visual-field-registry.js";
+import { validateVisualDraft } from "./visual-validation.js";
 import { fingerprintDocument } from "./state.js";
 import {
   createInitialSectionStatuses,
@@ -500,5 +502,45 @@ export const validateStudioDraft = ({
         ]),
       ),
     ),
+  });
+};
+
+
+const mergeStatus = (contentStatus, visualStatus) => {
+  const priority = {
+    [STUDIO_SECTION_STATUS.COMPLETE]: 0,
+    [STUDIO_SECTION_STATUS.MODIFIED]: 1,
+    [STUDIO_SECTION_STATUS.MISSING]: 2,
+    [STUDIO_SECTION_STATUS.ERROR]: 3,
+  };
+  return priority[visualStatus] > priority[contentStatus]
+    ? visualStatus
+    : contentStatus;
+};
+
+export const validateCompleteStudioDraft = (options = {}) => {
+  const content = validateStudioDraft(options);
+  const visualRegistry = createVisualFieldRegistry(options.draft);
+  const visual = validateVisualDraft({
+    ...options,
+    registry: visualRegistry,
+  });
+  const statuses = {
+    ...content.statuses,
+    logos: visual.statuses.logos,
+    cuts: mergeStatus(content.statuses.cuts, visual.statuses.cuts),
+    footer: mergeStatus(content.statuses.footer, visual.statuses.footer),
+  };
+  statuses.overview = [statuses.header, statuses.cuts, statuses.logos, statuses.contacts, statuses.footer].reduce(mergeStatus, STUDIO_SECTION_STATUS.COMPLETE);
+  return Object.freeze({
+    issues: Object.freeze([...content.issues, ...visual.issues]),
+    fieldIssues: Object.freeze({ ...content.fieldIssues, ...visual.fieldIssues }),
+    statuses: Object.freeze(statuses),
+    issueCounts: Object.freeze({
+      ...content.issueCounts,
+      logos: visual.issueCounts.logos,
+      cuts: content.issueCounts.cuts + visual.issueCounts.cuts,
+      footer: content.issueCounts.footer + visual.issueCounts.footer,
+    }),
   });
 };

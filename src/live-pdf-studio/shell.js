@@ -87,7 +87,7 @@ const assetCategories = Object.freeze([
   "Brand Marks",
   "Wordmarks",
   "Campaign Marks",
-  "Product Brand Logos",
+  "Product Brand Logos & Visual Geometry",
   "Tenderloin Images",
   "Ribeye Images",
   "Striploin Images",

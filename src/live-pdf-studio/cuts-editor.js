@@ -3,6 +3,7 @@ import {
   renderFieldGrid,
   renderReadOnlyField,
 } from "./editor-controls.js";
+import { renderVisualReferenceEditor } from "./visual-controls.js";
 
 export const renderCutsEditor = ({
   draft,
@@ -32,8 +33,7 @@ export const renderCutsEditor = ({
           })}
         </div>
         <p class="editor-panel__copy">
-          Product images, logo assignment, crop, zoom, and focus remain
-          protected until the visual-control checkpoint.
+          Edit product content and art-direct the currently assigned images. Asset replacement remains in Phase 3.5.
         </p>
         ${renderFieldGrid({
           fields,
@@ -41,6 +41,8 @@ export const renderCutsEditor = ({
           fieldIssues: validation.fieldIssues,
           className: "editor-grid--cut",
         })}
+        ${renderVisualReferenceEditor({ draft, reference: special.primaryOffer.image, prefix: `${prefix}.primaryOffer.image`, label: "Primary image", fields: registry.bySection.cuts.filter((field) => field.visual && field.key.startsWith(`${prefix}.primaryOffer.image`)), fieldIssues: validation.fieldIssues })}
+        ${special.offerMode === "dual-offer" ? renderVisualReferenceEditor({ draft, reference: special.secondaryOffer.image, prefix: `${prefix}.secondaryOffer.image`, label: "Secondary image", fields: registry.bySection.cuts.filter((field) => field.visual && field.key.startsWith(`${prefix}.secondaryOffer.image`)), fieldIssues: validation.fieldIssues }) : ""}
       </fieldset>
     `;
   }).join("");

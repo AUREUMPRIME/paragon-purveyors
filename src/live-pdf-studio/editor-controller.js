@@ -1,16 +1,19 @@
 import { renderContactsEditor } from "./contacts-editor.js";
 import { renderCutsEditor } from "./cuts-editor.js";
 import { renderFooterEditor } from "./footer-editor.js";
+import { renderLogosEditor } from "./logos-editor.js";
+import { renderVisualFieldControl } from "./visual-controls.js";
 import {
-  createEditorFieldRegistry,
-  EDITOR_SECTION_IDS,
+  createCompleteEditorRegistry,
+  COMPLETE_EDITOR_SECTION_IDS,
 } from "./editor-field-registry.js";
-import { validateStudioDraft } from "./editor-validation.js";
+import { validateCompleteStudioDraft } from "./editor-validation.js";
 import { renderHeaderEditor } from "./header-editor.js";
 
 const editorRenderers = Object.freeze({
   header: renderHeaderEditor,
   cuts: renderCutsEditor,
+  logos: renderLogosEditor,
   contacts: renderContactsEditor,
   footer: renderFooterEditor,
 });
@@ -32,7 +35,7 @@ export const parseEditorInputValue = ({
 
   const rawValue = element.value;
 
-  if (field.control === "number" || field.control === "integer") {
+  if (["number", "integer", "range"].includes(field.control)) {
     if (rawValue.trim() === "") {
       return {
         accepted: true,
@@ -88,13 +91,13 @@ export const createEditorController = ({
   }
 
   let activeSection = "overview";
-  let registry = createEditorFieldRegistry(state.getDraft());
+  let registry = createCompleteEditorRegistry(state.getDraft());
   let validation = null;
   const transientErrors = new Map();
 
   const computeValidation = () => {
-    registry = createEditorFieldRegistry(state.getDraft());
-    validation = validateStudioDraft({
+    registry = createCompleteEditorRegistry(state.getDraft());
+    validation = validateCompleteStudioDraft({
       draft: state.getDraft(),
       liveDocument: state.getLiveBaseline(),
       transientErrors: normalizeTransientErrors(transientErrors),
@@ -135,7 +138,7 @@ export const createEditorController = ({
       `[data-editor-section-summary="${activeSection}"]`,
     );
 
-    if (summary && EDITOR_SECTION_IDS.includes(activeSection)) {
+    if (summary && COMPLETE_EDITOR_SECTION_IDS.includes(activeSection)) {
       const issueCount = current.issueCounts[activeSection];
       const status = current.statuses[activeSection];
       summary.dataset.sectionStatus = status;
@@ -150,7 +153,7 @@ export const createEditorController = ({
   };
 
   const renderActiveSection = () => {
-    if (!EDITOR_SECTION_IDS.includes(activeSection)) {
+    if (!COMPLETE_EDITOR_SECTION_IDS.includes(activeSection)) {
       shell.renderWorkspace(activeSection);
       return;
     }
@@ -163,7 +166,10 @@ export const createEditorController = ({
       renderer({
         draft: state.getDraft(),
         registry,
-        validation: current,
+        validation: {
+          ...current,
+          renderField: (field) => renderVisualFieldControl({ field, draft: state.getDraft(), issue: current.fieldIssues[field.key] || null }),
+        },
       }),
     );
 
@@ -220,6 +226,48 @@ export const createEditorController = ({
     state.setValue(field.path, parsed.value);
   };
 
+  let dragState = null;
+  const getVisualFields = (prefix) => ({
+    focusX: registry.byKey.get(`${prefix}.focusX`),
+    focusY: registry.byKey.get(`${prefix}.focusY`),
+    zoom: registry.byKey.get(`${prefix}.zoom`),
+  });
+  const updateFocusFromPointer = (stage, event) => {
+    const fields = getVisualFields(stage.dataset.visualStage);
+    if (!fields.focusX || !fields.focusY) return;
+    const rect = stage.getBoundingClientRect();
+    const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+    const y = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
+    state.setValue(fields.focusX.path, Math.round(x));
+    state.setValue(fields.focusY.path, Math.round(y));
+    renderActiveSection();
+  };
+  const handlePointerDown = (event) => {
+    const stage = event.target.closest("[data-visual-stage]");
+    if (!stage) return;
+    dragState = stage;
+    stage.setPointerCapture?.(event.pointerId);
+    updateFocusFromPointer(stage, event);
+  };
+  const handlePointerMove = (event) => { if (dragState) updateFocusFromPointer(dragState, event); };
+  const handlePointerUp = () => { dragState = null; };
+  const handleWheel = (event) => {
+    const stage = event.target.closest("[data-visual-stage]");
+    if (!stage) return;
+    const field = getVisualFields(stage.dataset.visualStage).zoom;
+    if (!field) return;
+    event.preventDefault();
+    const current = field.path.reduce((value, segment) => value?.[segment], state.getDraft());
+    const next = Math.max(1, Math.min(2.5, Number((current + (event.deltaY < 0 ? 0.05 : -0.05)).toFixed(2))));
+    state.setValue(field.path, next);
+    renderActiveSection();
+  };
+
+  root.addEventListener("pointerdown", handlePointerDown);
+  root.addEventListener("pointermove", handlePointerMove);
+  root.addEventListener("pointerup", handlePointerUp);
+  root.addEventListener("pointercancel", handlePointerUp);
+  root.addEventListener("wheel", handleWheel, { passive: false });
   root.addEventListener("input", handleEditorEvent);
   root.addEventListener("change", handleEditorEvent);
 
@@ -239,7 +287,9 @@ export const createEditorController = ({
       renderActiveSection();
     },
     getActiveSection: () => activeSection,
-    getRegistry: () => registry,
+    getRegistry: () => registry.content,
+    getVisualRegistry: () => registry.visual,
+    getCompleteRegistry: () => registry,
     getValidation: () => computeValidation(),
     getValidationResults: () =>
       computeValidation().issues.map((issue) => ({ ...issue })),
@@ -247,6 +297,11 @@ export const createEditorController = ({
       ...computeValidation().statuses,
     }),
     dispose() {
+      root.removeEventListener("pointerdown", handlePointerDown);
+      root.removeEventListener("pointermove", handlePointerMove);
+      root.removeEventListener("pointerup", handlePointerUp);
+      root.removeEventListener("pointercancel", handlePointerUp);
+      root.removeEventListener("wheel", handleWheel);
       root.removeEventListener("input", handleEditorEvent);
       root.removeEventListener("change", handleEditorEvent);
     },

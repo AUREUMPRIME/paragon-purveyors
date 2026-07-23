@@ -186,6 +186,10 @@ const initializeDraftFoundation = async () => {
     getEditorRegistry: () => ({
       bindingCount:
         editorController.getRegistry().fields.length,
+      visualBindingCount:
+        editorController.getVisualRegistry().fields.length,
+      totalBindingCount:
+        editorController.getCompleteRegistry().fields.length,
       sectionCounts: Object.fromEntries(
         Object.entries(
           editorController.getRegistry().bySection,
@@ -203,7 +207,11 @@ const initializeDraftFoundation = async () => {
       stores: ["documents", "metadata", "uploads"],
       editorBindings:
         editorController.getRegistry().fields.length,
-      editorSections: 4,
+      visualBindings:
+        editorController.getVisualRegistry().fields.length,
+      totalBindings:
+        editorController.getCompleteRegistry().fields.length,
+      editorSections: 5,
     }),
     dispose: async () => {
       window.removeEventListener(
@@ -239,5 +247,8 @@ window.__PARAGON_LIVE_PDF_STUDIO_SHELL__ = Object.freeze({
   productionPublishingEnabled: false,
   draftFoundation: "indexeddb",
   contentEditors: 4,
+  visualEditors: 3,
   editableBindings: 78,
+  visualBindings: 95,
+  totalBindings: 173,
 });

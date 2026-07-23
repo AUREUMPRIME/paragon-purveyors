@@ -1,3 +1,4 @@
+import { createVisualFieldRegistry } from "./visual-field-registry.js";
 const freezeFields = (fields) =>
   Object.freeze(fields.map((field) => Object.freeze(field)));
 
@@ -345,3 +346,28 @@ export const EDITOR_DEFERRED_VISUAL_PATHS = Object.freeze([
   "specials[].secondaryOffer.image",
   "footer.broll",
 ]);
+
+
+export const COMPLETE_EDITOR_SECTION_IDS = Object.freeze([
+  ...EDITOR_SECTION_IDS,
+  "logos",
+]);
+
+export const createCompleteEditorRegistry = (draft) => {
+  const content = createEditorFieldRegistry(draft);
+  const visual = createVisualFieldRegistry(draft);
+  const fields = Object.freeze([...content.fields, ...visual.fields]);
+  return Object.freeze({
+    fields,
+    content,
+    visual,
+    byKey: new Map(fields.map((definition) => [definition.key, definition])),
+    bySection: Object.freeze({
+      header: content.bySection.header,
+      cuts: Object.freeze([...content.bySection.cuts, ...visual.bySection.cuts]),
+      logos: visual.bySection.logos,
+      contacts: content.bySection.contacts,
+      footer: Object.freeze([...content.bySection.footer, ...visual.bySection.footer]),
+    }),
+  });
+};

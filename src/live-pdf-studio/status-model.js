@@ -1,3 +1,4 @@
+export const STUDIO_VISUAL_SECTION_IDS = Object.freeze(["logos", "cuts", "footer"]);
 export const STUDIO_SECTION_STATUS = Object.freeze({
   COMPLETE: "Complete",
   MODIFIED: "Modified",
