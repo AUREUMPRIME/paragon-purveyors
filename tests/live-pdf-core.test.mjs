@@ -23,6 +23,9 @@ import {
   formatCanonicalPrice,
   resolveCanonicalAsset,
 } from "../src/live-pdf/core/adapt-canonical-document.js";
+import {
+  validatePublicationSource,
+} from "../src/live-pdf/core/validate-publication-source.js";
 
 test("normalizeText preserves the current trimmed-string contract", () => {
   assert.equal(normalizeText(null), "");
@@ -960,4 +963,107 @@ test("Studio deletes the stale context duplicate while preserving interaction se
   ]) {
     assert.match(studioIndex, pattern);
   }
+});
+
+test("publication source validator preserves every non-production preview source", () => {
+  const cases = [
+    ["google", "google"],
+    [" JSON ", "json"],
+    ["fixture", "fixture"],
+    ["unknown", "unknown"],
+    ["", "unknown"],
+    [null, "unknown"],
+    [undefined, "unknown"],
+  ];
+
+  for (const [sourceType, expected] of cases) {
+    assert.equal(
+      validatePublicationSource({
+        publishMode: false,
+        sourceType,
+      }),
+      expected,
+    );
+  }
+});
+
+test("publication source validator accepts only Google business data for production", () => {
+  assert.equal(
+    validatePublicationSource({
+      publishMode: true,
+      sourceType: " GOOGLE ",
+    }),
+    "google",
+  );
+
+  for (const sourceType of [
+    "json",
+    "fixture",
+    "unknown",
+    "",
+    null,
+    undefined,
+  ]) {
+    assert.throws(
+      () =>
+        validatePublicationSource({
+          publishMode: true,
+          sourceType,
+        }),
+      /Production publication requires Google business data/,
+    );
+  }
+});
+
+test("production builder validates business source before rendering or writing outputs", async () => {
+  const source = await fs.readFile(builderUrl, "utf8");
+
+  assert.match(
+    source,
+    /import \{ validatePublicationSource \} from "\.\.\/src\/live-pdf\/core\/validate-publication-source\.js";/,
+  );
+
+  const businessDataIndex = source.indexOf(
+    "const businessData = await loadSourceData();",
+  );
+  const guardIndex = source.indexOf(
+    "validatePublicationSource({",
+  );
+  const outputDirectoryIndex = source.indexOf(
+    "await fs.mkdir(paths.outputDir",
+  );
+  const visualAuthorityIndex = source.indexOf(
+    "const visualAuthority = await loadVisualAuthority();",
+  );
+  const rendererIndex = source.indexOf(
+    "await renderMonthlySpecialsHtml({",
+  );
+  const writeIndex = source.indexOf(
+    "await fs.writeFile(activeOutputPaths.html",
+  );
+
+  for (const [label, index] of [
+    ["business data", businessDataIndex],
+    ["publication guard", guardIndex],
+    ["output directory", outputDirectoryIndex],
+    ["visual authority", visualAuthorityIndex],
+    ["renderer", rendererIndex],
+    ["publication write", writeIndex],
+  ]) {
+    assert.ok(
+      index >= 0,
+      "Missing builder evidence: " + label,
+    );
+  }
+
+  assert.ok(businessDataIndex < guardIndex);
+  assert.ok(guardIndex < outputDirectoryIndex);
+  assert.ok(guardIndex < visualAuthorityIndex);
+  assert.ok(guardIndex < rendererIndex);
+  assert.ok(guardIndex < writeIndex);
+
+  assert.doesNotMatch(
+    source,
+    /paragon-live-pdf-studio\.json|adaptCanonicalDocument/,
+  );
 });

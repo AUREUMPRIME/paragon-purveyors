@@ -11,6 +11,7 @@ import {
   normalizeText,
 } from "../src/live-pdf/core/normalize-document.js";
 import { createAssetDataUrlResolver } from "../src/live-pdf/core/resolve-asset.js";
+import { validatePublicationSource } from "../src/live-pdf/core/validate-publication-source.js";
 import {
   escapeHtml,
   renderMonthlySpecialsHtml,
@@ -1066,15 +1067,23 @@ const createLandingHtml = (data, activeSpecials, buildId) => {
 };
 
 const main = async () => {
+  const publishMode = isActive(
+    process.env.MONTHLY_SPECIALS_V2_PUBLISH,
+  );
+  const businessData = await loadSourceData();
+
+  validatePublicationSource({
+    publishMode,
+    sourceType: businessData.source?.type,
+  });
+
   await fs.mkdir(paths.outputDir, { recursive: true });
 
-  const businessData = await loadSourceData();
   const visualAuthority = await loadVisualAuthority();
   const data = applyVisualAuthority(businessData, visualAuthority);
   const css = await fs.readFile(paths.sourceCss, "utf8");
   const activeSpecials = validateData(data);
   const buildId = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
-  const publishMode = isActive(process.env.MONTHLY_SPECIALS_V2_PUBLISH);
   const activeOutputPaths = publishMode ? productionOutputPaths : outputPaths;
 
   const html = (
