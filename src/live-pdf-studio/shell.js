@@ -1,4 +1,5 @@
 import { STUDIO_SECTIONS } from "./navigation.js";
+import { getDraftStatusPresentation } from "./status-model.js";
 
 const sectionCopy = Object.freeze({
   overview: {
@@ -58,14 +59,14 @@ const primaryActions = Object.freeze([
     label: "Restore Live Version",
     action: "restore-live",
     disabled: true,
-    title: "Draft restoration becomes available in Phase 3.2.",
+    title: "Restore the local draft to the committed live version.",
   },
   {
     id: "save",
     label: "Save Draft",
     action: "save-draft",
     disabled: true,
-    title: "IndexedDB draft saving becomes available in Phase 3.2.",
+    title: "Save the current draft in this browser.",
   },
   { id: "review", label: "Review PDF", action: "open-review" },
   {
@@ -169,9 +170,9 @@ const placeholderMarkup = (sectionId) => {
 
         <article class="workspace-card">
           <p class="workspace-card__eyebrow">Draft status</p>
-          <h2>Not yet connected.</h2>
-          <p>
-            IndexedDB autosave and canonical draft ownership arrive in Phase 3.2.
+          <h2 data-workspace-draft-label>Loading draft.</h2>
+          <p data-workspace-draft-detail>
+            Preparing local draft storage.
           </p>
         </article>
       </div>
@@ -209,6 +210,16 @@ export const renderStudioShell = ({ root, statuses }) => {
           <div>
             <p class="studio-topbar__eyebrow">Monthly Specials · US Legal</p>
             <strong>Draft workspace</strong>
+          </div>
+          <div
+            class="workspace-phase"
+            data-draft-status
+            data-draft-tone="neutral"
+            role="status"
+            aria-live="polite"
+          >
+            <strong data-draft-status-label>Loading draft</strong>
+            <small data-draft-status-detail>Preparing local draft storage.</small>
           </div>
           <div class="studio-actions" aria-label="Studio actions">
             ${actionMarkup()}
@@ -253,6 +264,31 @@ export const renderStudioShell = ({ root, statuses }) => {
           Asset upload, assignment, archive, and delete controls arrive in
           Phase 3.5. File Explorer is never used by the permanent Studio.
         </p>
+      </div>
+    </dialog>
+
+    <dialog class="studio-dialog" data-restore-live-dialog>
+      <div class="studio-dialog__panel">
+        <header class="studio-dialog__header">
+          <div>
+            <p class="workspace-eyebrow">Discard Local Changes</p>
+            <h2>Restore Live Version?</h2>
+            <p>
+              This replaces the local draft with a fresh copy of the committed
+              live document and clears its saved browser draft.
+            </p>
+          </div>
+        </header>
+        <div class="asset-library-toolbar">
+          <button type="button" data-restore-cancel>Keep Draft</button>
+          <button
+            class="studio-action studio-action--primary"
+            type="button"
+            data-restore-confirm
+          >
+            Restore Live Version
+          </button>
+        </div>
       </div>
     </dialog>
 
@@ -304,10 +340,121 @@ export const renderStudioShell = ({ root, statuses }) => {
     </dialog>
   `;
 
+  const draftStatus = root.querySelector("[data-draft-status]");
+  const draftStatusLabel = root.querySelector(
+    "[data-draft-status-label]",
+  );
+  const draftStatusDetail = root.querySelector(
+    "[data-draft-status-detail]",
+  );
+  const saveButton = root.querySelector(
+    '[data-studio-action="save-draft"]',
+  );
+  const restoreButton = root.querySelector(
+    '[data-studio-action="restore-live"]',
+  );
+  const restoreDialog = root.querySelector(
+    "[data-restore-live-dialog]",
+  );
+
+  let latestDraftSnapshot = null;
+
+  const applyDraftSnapshot = (snapshot) => {
+    latestDraftSnapshot = snapshot;
+    const presentation = getDraftStatusPresentation(snapshot);
+
+    draftStatus.dataset.draftTone = presentation.tone;
+    draftStatusLabel.textContent = presentation.label;
+    draftStatusDetail.textContent = presentation.detail;
+
+    const isBusy = ["loading", "saving"].includes(
+      snapshot.persistenceStatus,
+    );
+
+    saveButton.disabled = isBusy;
+    restoreButton.disabled = isBusy || !snapshot.isModified;
+
+    const workspaceLabel = root.querySelector(
+      "[data-workspace-draft-label]",
+    );
+    const workspaceDetail = root.querySelector(
+      "[data-workspace-draft-detail]",
+    );
+
+    if (workspaceLabel) {
+      workspaceLabel.textContent = `${presentation.label}.`;
+    }
+
+    if (workspaceDetail) {
+      workspaceDetail.textContent = presentation.detail;
+    }
+  };
+
+  const confirmRestoreLive = () =>
+    new Promise((resolve) => {
+      let settled = false;
+      const abortController = new AbortController();
+      const { signal } = abortController;
+
+      const settle = (confirmed) => {
+        if (settled) return;
+        settled = true;
+        abortController.abort();
+
+        if (restoreDialog.open) {
+          restoreDialog.close();
+        }
+
+        resolve(confirmed);
+      };
+
+      restoreDialog
+        .querySelector("[data-restore-confirm]")
+        .addEventListener("click", () => settle(true), { signal });
+
+      restoreDialog
+        .querySelector("[data-restore-cancel]")
+        .addEventListener("click", () => settle(false), { signal });
+
+      restoreDialog.addEventListener(
+        "cancel",
+        (event) => {
+          event.preventDefault();
+          settle(false);
+        },
+        { signal },
+      );
+
+      restoreDialog.addEventListener(
+        "click",
+        (event) => {
+          if (event.target === restoreDialog) settle(false);
+        },
+        { signal },
+      );
+
+      restoreDialog.showModal();
+    });
+
   return {
     renderWorkspace(sectionId) {
       root.querySelector("[data-studio-content]").innerHTML =
         placeholderMarkup(sectionId);
+
+      if (latestDraftSnapshot) {
+        applyDraftSnapshot(latestDraftSnapshot);
+      }
     },
+    setDraftState: applyDraftSnapshot,
+    setDraftError(message) {
+      applyDraftSnapshot({
+        persistenceStatus: "error",
+        isModified: false,
+        lastSavedAt: null,
+        staleDraft: false,
+        errorMessage: message,
+      });
+    },
+    confirmRestoreLive,
   };
 };

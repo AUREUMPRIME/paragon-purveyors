@@ -5,6 +5,15 @@ export const STUDIO_SECTION_STATUS = Object.freeze({
   ERROR: "Validation error",
 });
 
+export const STUDIO_DRAFT_STATUS = Object.freeze({
+  LOADING: "loading",
+  CLEAN: "clean",
+  DIRTY: "dirty",
+  SAVING: "saving",
+  SAVED: "saved",
+  ERROR: "error",
+});
+
 export const createInitialSectionStatuses = () => ({
   overview: STUDIO_SECTION_STATUS.COMPLETE,
   header: STUDIO_SECTION_STATUS.MISSING,
@@ -15,3 +24,62 @@ export const createInitialSectionStatuses = () => ({
   assets: STUDIO_SECTION_STATUS.MODIFIED,
   review: STUDIO_SECTION_STATUS.ERROR,
 });
+
+export const getDraftStatusPresentation = ({
+  persistenceStatus = STUDIO_DRAFT_STATUS.LOADING,
+  isModified = false,
+  lastSavedAt = null,
+  staleDraft = false,
+  errorMessage = "",
+} = {}) => {
+  if (staleDraft) {
+    return {
+      label: "Saved draft needs review",
+      detail: "This local draft is based on an earlier live revision.",
+      tone: "warning",
+    };
+  }
+
+  const savedDetail = lastSavedAt
+    ? `Saved locally ${new Date(lastSavedAt).toLocaleString()}`
+    : "Saved in this browser.";
+
+  switch (persistenceStatus) {
+    case STUDIO_DRAFT_STATUS.CLEAN:
+      return {
+        label: "Live version loaded",
+        detail: "No local changes.",
+        tone: "neutral",
+      };
+    case STUDIO_DRAFT_STATUS.DIRTY:
+      return {
+        label: "Unsaved changes",
+        detail: "Autosave is pending.",
+        tone: "warning",
+      };
+    case STUDIO_DRAFT_STATUS.SAVING:
+      return {
+        label: "Saving draft",
+        detail: "Writing changes to this browser.",
+        tone: "neutral",
+      };
+    case STUDIO_DRAFT_STATUS.SAVED:
+      return {
+        label: isModified ? "Saved locally" : "Live version saved locally",
+        detail: savedDetail,
+        tone: "success",
+      };
+    case STUDIO_DRAFT_STATUS.ERROR:
+      return {
+        label: "Save failed",
+        detail: errorMessage || "The in-memory draft is still available.",
+        tone: "error",
+      };
+    default:
+      return {
+        label: "Loading draft",
+        detail: "Preparing local draft storage.",
+        tone: "neutral",
+      };
+  }
+};
