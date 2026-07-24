@@ -4,6 +4,7 @@
   "main": "src/index.js",
   "compatibility_date": "2026-07-24",
   "workers_dev": false,
+  "preview_urls": false,
   "vars": {
     "PASSWORD_PBKDF2_ITERATIONS": "210000",
     "SESSION_TTL_SECONDS": "28800",

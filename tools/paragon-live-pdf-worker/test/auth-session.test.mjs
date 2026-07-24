@@ -102,7 +102,8 @@ test("Tampered session payloads and signatures are rejected", async () => {
   const session = await issueSessionToken(env, { nowMs: NOW_MS });
   const segments = session.token.split(".");
   const tamperedPayload = `${segments[0]}.${segments[1]}x.${segments[2]}`;
-  const tamperedSignature = `${segments[0]}.${segments[1]}.${segments[2].slice(0, -1)}A`;
+  const signatureReplacement = segments[2][0] === "A" ? "B" : "A";
+  const tamperedSignature = `${segments[0]}.${segments[1]}.${signatureReplacement}${segments[2].slice(1)}`;
   assert.equal(await verifySessionToken(tamperedPayload, env, { nowMs: NOW_MS }), null);
   assert.equal(await verifySessionToken(tamperedSignature, env, { nowMs: NOW_MS }), null);
 });
