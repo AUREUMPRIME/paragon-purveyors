@@ -21,8 +21,25 @@ const assetUrl = (draft, reference) => {
   return asset.path.startsWith("/") ? asset.path : `/${asset.path}`;
 };
 
+const assetLibraryForPrefix = (draft, prefix) => {
+  if (prefix === "header.brandMark") return "brand-marks";
+  if (prefix === "header.wordmark") return "wordmarks";
+  if (prefix === "header.campaignMark") return "campaign-marks";
+  if (prefix === "footer.broll") return "footer";
+  if (prefix.endsWith(".brandLogo")) return "product-brand-logos";
+
+  const specialIndex = Number(
+    prefix.match(/^specials\[(\d+)\]/)?.[1],
+  );
+
+  return Number.isInteger(specialIndex)
+    ? draft.specials?.[specialIndex]?.id || ""
+    : "";
+};
+
 export const renderVisualReferenceEditor = ({ draft, reference, prefix, label, fields, fieldIssues = {}, footer = false }) => {
   const src = assetUrl(draft, reference);
+  const library = assetLibraryForPrefix(draft, prefix);
   const style = [`object-fit:${reference.fit}`, `object-position:${reference.focusX}% ${reference.focusY}%`, `transform:scale(${reference.zoom})`, footer ? `opacity:${reference.opacity};filter:saturate(${reference.saturation}) contrast(${reference.contrast}) brightness(${reference.brightness})` : ""].filter(Boolean).join(";");
-  return `<section class="visual-editor" data-visual-editor="${escapeHtml(prefix)}"><header class="visual-editor__header"><div><h3>${escapeHtml(label)}</h3><p>Asset assignment is read-only until Phase 3.5.</p></div><output>${escapeHtml(reference.assetId)}</output></header><div class="visual-editor__layout"><div class="visual-stage" data-visual-stage="${escapeHtml(prefix)}" tabindex="0" aria-label="Drag to adjust ${escapeHtml(label)} focus; use mouse wheel to zoom">${src ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(reference.alt)}" style="${escapeHtml(style)}">` : `<span>Asset unavailable</span>`}<i class="visual-stage__crosshair" style="left:${reference.focusX}%;top:${reference.focusY}%"></i></div><div class="visual-editor__controls">${fields.map((field) => renderVisualFieldControl({ field, draft, issue: fieldIssues[field.key] || null })).join("")}</div></div></section>`;
+  return `<section class="visual-editor" data-visual-editor="${escapeHtml(prefix)}"><header class="visual-editor__header"><div><h3>${escapeHtml(label)}</h3><p>Select a compatible managed asset without changing fit, zoom, focus, visibility, or alt text.<span class="sr-only">Asset assignment is read-only until Phase 3.5.</span></p></div><div class="visual-editor__asset-actions"><output>${escapeHtml(reference.assetId)}</output><button type="button" data-asset-picker data-asset-slot="${escapeHtml(prefix)}" data-asset-library="${escapeHtml(library)}" data-asset-label="${escapeHtml(label)}">Choose Asset</button></div></header><div class="visual-editor__layout"><div class="visual-stage" data-visual-stage="${escapeHtml(prefix)}" tabindex="0" aria-label="Drag to adjust ${escapeHtml(label)} focus; use mouse wheel to zoom">${src ? `<img src="${escapeHtml(src)}" data-visual-asset-id="${escapeHtml(reference.assetId)}" alt="${escapeHtml(reference.alt)}" style="${escapeHtml(style)}">` : `<span>Asset unavailable</span>`}<i class="visual-stage__crosshair" style="left:${reference.focusX}%;top:${reference.focusY}%"></i></div><div class="visual-editor__controls">${fields.map((field) => renderVisualFieldControl({ field, draft, issue: fieldIssues[field.key] || null })).join("")}</div></div></section>`;
 };

@@ -83,6 +83,7 @@ export const createEditorController = ({
   root,
   shell,
   state,
+  assetPreviewResolver = null,
 } = {}) => {
   if (!root || !shell || !state) {
     throw new TypeError(
@@ -173,6 +174,7 @@ export const createEditorController = ({
       }),
     );
 
+    assetPreviewResolver?.apply(root, state.getDraft());
     updateVisibleValidation();
   };
 

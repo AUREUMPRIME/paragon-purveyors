@@ -193,7 +193,82 @@ export const createDraftStore = ({
     await transactionToPromise(transaction);
   };
 
-  const countUploads = async () => {
+  const getUpload = async (documentId, assetId) => {
+    if (!documentId || !assetId) {
+      throw new TypeError(
+        "Pending upload lookup requires documentId and assetId.",
+      );
+    }
+
+    const database = await openDatabase();
+    const transaction = database.transaction(
+      DRAFT_STORE_NAMES.UPLOADS,
+      "readonly",
+    );
+
+    const upload = await requestToPromise(
+      transaction
+        .objectStore(DRAFT_STORE_NAMES.UPLOADS)
+        .get(`${documentId}:${assetId}`),
+    );
+
+    await transactionToPromise(transaction);
+    return upload || null;
+  };
+
+  const listUploads = async (documentId) => {
+    if (!documentId) {
+      throw new TypeError(
+        "Pending upload listing requires documentId.",
+      );
+    }
+
+    const database = await openDatabase();
+    const transaction = database.transaction(
+      DRAFT_STORE_NAMES.UPLOADS,
+      "readonly",
+    );
+
+    const uploads = await requestToPromise(
+      transaction
+        .objectStore(DRAFT_STORE_NAMES.UPLOADS)
+        .getAll(),
+    );
+
+    await transactionToPromise(transaction);
+
+    return uploads
+      .filter((upload) => upload.documentId === documentId)
+      .sort((left, right) =>
+        left.assetId.localeCompare(right.assetId),
+      );
+  };
+
+  const deleteUpload = async (documentId, assetId) => {
+    if (!documentId || !assetId) {
+      throw new TypeError(
+        "Pending upload deletion requires documentId and assetId.",
+      );
+    }
+
+    const database = await openDatabase();
+    const transaction = database.transaction(
+      DRAFT_STORE_NAMES.UPLOADS,
+      "readwrite",
+    );
+
+    transaction
+      .objectStore(DRAFT_STORE_NAMES.UPLOADS)
+      .delete(`${documentId}:${assetId}`);
+
+    await transactionToPromise(transaction);
+  };
+
+  const countUploads = async (documentId = "") => {
+    if (documentId) {
+      return (await listUploads(documentId)).length;
+    }
+
     const database = await openDatabase();
     const transaction = database.transaction(
       DRAFT_STORE_NAMES.UPLOADS,
@@ -227,6 +302,9 @@ export const createDraftStore = ({
     saveDraft,
     clearDraft,
     putUpload,
+    getUpload,
+    listUploads,
+    deleteUpload,
     countUploads,
     close,
   };

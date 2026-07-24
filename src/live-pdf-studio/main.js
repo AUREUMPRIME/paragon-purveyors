@@ -1,4 +1,6 @@
 import "./styles.css";
+import { createAssetLibraryController } from "./asset-library-controller.js";
+import { createAssetPreviewResolver } from "./asset-preview-resolver.js";
 import { createAutosaveController } from "./autosave-controller.js";
 import {
   loadCanonicalDocument,
@@ -31,10 +33,17 @@ let validationAwareState = null;
 let draftStore = null;
 let autosaveController = null;
 let editorController = null;
+let assetLibraryController = null;
+let assetPreviewResolver = null;
 let unsubscribeDraftState = null;
 let activeSection = "overview";
 
-const openAssetLibrary = () => {
+const openAssetLibrary = (options = {}) => {
+  if (assetLibraryController) {
+    void assetLibraryController.open(options);
+    return;
+  }
+
   if (!assetDialog.open) assetDialog.showModal();
 };
 
@@ -97,12 +106,26 @@ const handleRestoreLive = async () => {
   const confirmed = await shell.confirmRestoreLive();
 
   if (confirmed) {
+    const documentId = studioState.getSnapshot().documentId;
     await autosaveController.restoreLive();
+    await assetPreviewResolver?.reload(documentId);
+    await assetLibraryController?.refresh();
     editorController?.refresh();
   }
 };
 
 root.addEventListener("click", async (event) => {
+  const assetPicker = event.target.closest("[data-asset-picker]");
+
+  if (assetPicker) {
+    openAssetLibrary({
+      slotPath: assetPicker.dataset.assetSlot,
+      library: assetPicker.dataset.assetLibrary,
+      label: assetPicker.dataset.assetLabel,
+    });
+    return;
+  }
+
   const action =
     event.target.closest("[data-studio-action]")
       ?.dataset.studioAction;
@@ -140,10 +163,24 @@ const initializeDraftFoundation = async () => {
     storedRecord,
   });
 
+  assetPreviewResolver = createAssetPreviewResolver({
+    store: draftStore,
+  });
+
+  const restoredUploads = await assetPreviewResolver.reload(
+    source.document.documentId,
+  );
+  studioState.setPendingUploadCount(restoredUploads.length);
+
+  if (studioState.getSnapshot().restoredStoredDraft) {
+    studioState.markSaved(storedRecord.metadata);
+  }
+
   editorController = createEditorController({
     root,
     shell,
     state: studioState,
+    assetPreviewResolver,
   });
 
   validationAwareState = createValidationAwareState({
@@ -164,22 +201,37 @@ const initializeDraftFoundation = async () => {
     },
   );
 
+  assetLibraryController = createAssetLibraryController({
+    dialog: assetDialog,
+    state: studioState,
+    store: draftStore,
+    previewResolver: assetPreviewResolver,
+    shell,
+    onDraftChanged: () => editorController.refresh(),
+  });
+
+  await assetLibraryController.refresh();
   editorController.navigate(activeSection);
 
   window.addEventListener("beforeunload", handleBeforeUnload);
 
   window.__PARAGON_LIVE_PDF_STUDIO_DRAFT__ = Object.freeze({
-    version: 2,
+    version: 3,
     getSnapshot: () => validationAwareState.getSnapshot(),
     getDraft: () => studioState.getDraft(),
     getLiveBaseline: () => studioState.getLiveBaseline(),
     setValue: (path, value) => studioState.setValue(path, value),
     saveNow: () => autosaveController.saveNow(),
     restoreLive: async () => {
+      const documentId = studioState.getSnapshot().documentId;
       const snapshot = await autosaveController.restoreLive();
+      await assetPreviewResolver.reload(documentId);
+      await assetLibraryController.refresh();
       editorController.refresh();
       return snapshot;
     },
+    openAssetLibrary: (options = {}) =>
+      assetLibraryController.open(options),
     getValidation: () => editorController.getValidation(),
     getSectionStatuses: () =>
       editorController.getSectionStatuses(),
@@ -212,6 +264,12 @@ const initializeDraftFoundation = async () => {
       totalBindings:
         editorController.getCompleteRegistry().fields.length,
       editorSections: 5,
+      assetRecords: Object.keys(
+        studioState.getDraft().assetLibrary,
+      ).length,
+      pendingUploads:
+        assetLibraryController.getPendingAssetIds().size,
+      assetLibraryMode: "indexeddb-pending",
     }),
     dispose: async () => {
       window.removeEventListener(
@@ -219,6 +277,8 @@ const initializeDraftFoundation = async () => {
         handleBeforeUnload,
       );
       unsubscribeDraftState?.();
+      assetLibraryController?.dispose();
+      assetPreviewResolver?.dispose();
       editorController?.dispose();
       await autosaveController.dispose();
     },
@@ -241,7 +301,7 @@ initializeDraftFoundation().catch((error) => {
 });
 
 window.__PARAGON_LIVE_PDF_STUDIO_SHELL__ = Object.freeze({
-  version: 3,
+  version: 4,
   navigationSections: 8,
   primaryActions: 5,
   productionPublishingEnabled: false,
@@ -251,4 +311,7 @@ window.__PARAGON_LIVE_PDF_STUDIO_SHELL__ = Object.freeze({
   editableBindings: 78,
   visualBindings: 95,
   totalBindings: 173,
+  assetLibrary: "indexeddb-pending",
+  assetAssignmentEnabled: true,
+  committedAssetDeletionEnabled: false,
 });

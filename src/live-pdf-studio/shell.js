@@ -84,16 +84,15 @@ const primaryActions = Object.freeze([
 ]);
 
 const assetCategories = Object.freeze([
-  "Brand Marks",
-  "Wordmarks",
-  "Campaign Marks",
-  "Product Brand Logos & Visual Geometry",
-  "Tenderloin Images",
-  "Ribeye Images",
-  "Striploin Images",
-  "Tri Tip Images",
-  "Footer B-roll",
-  "Archived Assets",
+  ["brand-marks", "Brand Marks"],
+  ["wordmarks", "Wordmarks"],
+  ["campaign-marks", "Campaign Marks"],
+  ["product-brand-logos", "Product Brand Logos"],
+  ["tenderloin", "Tenderloin Images"],
+  ["ribeye", "Ribeye Images"],
+  ["striploin", "Striploin Images"],
+  ["tri-tip", "Tri Tip Images"],
+  ["footer", "Footer B-roll"],
 ]);
 
 const navigationMarkup = (statuses) =>
@@ -129,17 +128,13 @@ const actionMarkup = () =>
     </button>
   `).join("");
 
-const categoryMarkup = () =>
-  assetCategories.map((category, index) => `
-    <article class="asset-category-card">
-      <span class="asset-category-card__index">${String(index + 1).padStart(2, "0")}</span>
-      <div>
-        <h3>${category}</h3>
-        <p>Managed library category</p>
-      </div>
-      <span class="asset-category-card__status">Phase 3.5</span>
-    </article>
-  `).join("");
+const assetLibraryOptionsMarkup = () =>
+  assetCategories
+    .map(
+      ([value, label]) =>
+        `<option value="${value}">${label}</option>`,
+    )
+    .join("");
 
 const placeholderMarkup = (sectionId) => {
   const content = sectionCopy[sectionId];
@@ -245,8 +240,9 @@ export const renderStudioShell = ({ root, statuses }) => {
             <p class="workspace-eyebrow">Managed Media</p>
             <h2>Asset Library</h2>
             <p>
-              Upload, assign, archive, and remove reusable images and logos
-              entirely inside the Studio.
+              Upload, assign, archive, and remove pending reusable images and
+              logos entirely inside the Studio. Existing committed asset bytes
+              remain immutable.
             </p>
           </div>
           <button type="button" data-assets-close aria-label="Close Asset Library">
@@ -254,21 +250,51 @@ export const renderStudioShell = ({ root, statuses }) => {
           </button>
         </header>
 
+        <div class="asset-library-context" data-assets-context hidden></div>
+
         <div class="asset-library-toolbar">
           <label>
             <span>Search assets</span>
-            <input type="search" placeholder="Search by name, category, or usage" disabled>
+            <input
+              type="search"
+              placeholder="Search label, file, category, ID, or usage"
+              data-assets-search
+            >
           </label>
-          <button type="button" disabled>Upload New</button>
+          <label>
+            <span>Library</span>
+            <select data-assets-library>
+              ${assetLibraryOptionsMarkup()}
+            </select>
+          </label>
+          <label>
+            <span>Upload label</span>
+            <input
+              type="text"
+              maxlength="200"
+              placeholder="Friendly asset name"
+              data-assets-label
+            >
+          </label>
+          <label class="asset-library-toggle">
+            <input type="checkbox" data-assets-include-archived>
+            <span>Show archived</span>
+          </label>
+          <button type="button" data-assets-upload>Upload New</button>
+          <input type="file" data-assets-file hidden>
         </div>
 
-        <div class="asset-category-grid">
-          ${categoryMarkup()}
+        <div class="asset-library-feedback">
+          <p data-assets-summary>Loading asset catalog…</p>
+          <p data-assets-message data-message-tone="neutral" role="status" aria-live="polite"></p>
         </div>
+
+        <div class="asset-library-grid" data-assets-grid></div>
 
         <p class="studio-dialog__notice">
-          Asset upload, assignment, archive, and delete controls arrive in
-          Phase 3.5. File Explorer is never used by the permanent Studio.
+          File Explorer is never used by the permanent Studio. New files remain
+          local pending uploads in IndexedDB until a future secured publication
+          workflow is connected. Assigned crop geometry is preserved.
         </p>
       </div>
     </dialog>
@@ -361,6 +387,9 @@ export const renderStudioShell = ({ root, statuses }) => {
   );
   const restoreDialog = root.querySelector(
     "[data-restore-live-dialog]",
+  );
+  const assetStatusNode = root.querySelector(
+    '[data-studio-nav-status="assets"]',
   );
 
   let latestDraftSnapshot = null;
@@ -466,6 +495,15 @@ export const renderStudioShell = ({ root, statuses }) => {
       }
     },
     setSectionStatuses,
+    setAssetLibraryState({ pending = 0, total = 0 } = {}) {
+      if (!assetStatusNode) return;
+      assetStatusNode.textContent =
+        pending > 0
+          ? `${pending} pending`
+          : `${total} managed`;
+      assetStatusNode.dataset.statusTone =
+        pending > 0 ? "modified" : "complete";
+    },
     setDraftState: applyDraftSnapshot,
     setDraftError(message) {
       applyDraftSnapshot({

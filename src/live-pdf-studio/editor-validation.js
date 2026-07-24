@@ -1,8 +1,10 @@
+import { validateAssetCatalog } from "./asset-library-model.js";
 import { createVisualFieldRegistry } from "./visual-field-registry.js";
 import { validateVisualDraft } from "./visual-validation.js";
 import { fingerprintDocument } from "./state.js";
 import {
   createInitialSectionStatuses,
+  getAssetLibraryStatus,
   STUDIO_SECTION_STATUS,
 } from "./status-model.js";
 import { pathToFieldKey } from "./editor-field-registry.js";
@@ -525,22 +527,53 @@ export const validateCompleteStudioDraft = (options = {}) => {
     ...options,
     registry: visualRegistry,
   });
+  const assetIssues = validateAssetCatalog(options.draft);
+  const assetErrorCount = assetIssues.filter(
+    (issue) => issue.kind === "error",
+  ).length;
+  const assetMissingCount = assetIssues.filter(
+    (issue) => issue.kind === "missing",
+  ).length;
+  const catalogModified =
+    fingerprintDocument(options.draft.assetLibrary) !==
+    fingerprintDocument(options.liveDocument.assetLibrary);
+
   const statuses = {
     ...content.statuses,
     logos: visual.statuses.logos,
     cuts: mergeStatus(content.statuses.cuts, visual.statuses.cuts),
     footer: mergeStatus(content.statuses.footer, visual.statuses.footer),
+    assets: getAssetLibraryStatus({
+      issueCount: assetErrorCount,
+      missingCount: assetMissingCount,
+      catalogModified,
+    }),
   };
-  statuses.overview = [statuses.header, statuses.cuts, statuses.logos, statuses.contacts, statuses.footer].reduce(mergeStatus, STUDIO_SECTION_STATUS.COMPLETE);
+  statuses.overview = [
+    statuses.header,
+    statuses.cuts,
+    statuses.logos,
+    statuses.contacts,
+    statuses.footer,
+    statuses.assets,
+  ].reduce(mergeStatus, STUDIO_SECTION_STATUS.COMPLETE);
   return Object.freeze({
-    issues: Object.freeze([...content.issues, ...visual.issues]),
-    fieldIssues: Object.freeze({ ...content.fieldIssues, ...visual.fieldIssues }),
+    issues: Object.freeze([
+      ...content.issues,
+      ...visual.issues,
+      ...assetIssues,
+    ]),
+    fieldIssues: Object.freeze({
+      ...content.fieldIssues,
+      ...visual.fieldIssues,
+    }),
     statuses: Object.freeze(statuses),
     issueCounts: Object.freeze({
       ...content.issueCounts,
       logos: visual.issueCounts.logos,
       cuts: content.issueCounts.cuts + visual.issueCounts.cuts,
       footer: content.issueCounts.footer + visual.issueCounts.footer,
+      assets: assetIssues.length,
     }),
   });
 };

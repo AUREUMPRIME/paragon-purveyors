@@ -118,3 +118,24 @@ export const getDraftStatusPresentation = ({
       };
   }
 };
+
+export const getAssetLibraryStatus = ({
+  issueCount = 0,
+  missingCount = 0,
+  pendingUploadCount = 0,
+  catalogModified = false,
+} = {}) => {
+  if (issueCount > 0) {
+    return STUDIO_SECTION_STATUS.ERROR;
+  }
+
+  if (missingCount > 0) {
+    return STUDIO_SECTION_STATUS.MISSING;
+  }
+
+  if (pendingUploadCount > 0 || catalogModified) {
+    return STUDIO_SECTION_STATUS.MODIFIED;
+  }
+
+  return STUDIO_SECTION_STATUS.COMPLETE;
+};
