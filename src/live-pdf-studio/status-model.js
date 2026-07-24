@@ -139,3 +139,19 @@ export const getAssetLibraryStatus = ({
 
   return STUDIO_SECTION_STATUS.COMPLETE;
 };
+
+
+export const getReviewStatus = ({
+  errorCount = 0,
+  isModified = false,
+} = {}) => {
+  if (errorCount > 0) {
+    return STUDIO_SECTION_STATUS.ERROR;
+  }
+
+  if (isModified) {
+    return STUDIO_SECTION_STATUS.MODIFIED;
+  }
+
+  return STUDIO_SECTION_STATUS.COMPLETE;
+};

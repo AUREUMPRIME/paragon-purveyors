@@ -1263,3 +1263,54 @@ button:disabled {
     grid-row: auto;
   }
 }
+
+
+/* Phase 3.6 current-draft Review PDF */
+
+.review-validation {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.review-validation[data-review-state="rendering"] {
+  cursor: progress;
+}
+
+.review-validation__issues {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.review-validation__issues li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--studio-border);
+  background: var(--studio-panel-deep);
+}
+
+.review-validation__issues li[data-issue-kind="error"] {
+  border-color: rgba(239, 112, 117, 0.42);
+}
+
+.review-validation__issues li[data-issue-kind="warning"] {
+  border-color: rgba(213, 185, 119, 0.42);
+}
+
+.review-validation__issues span {
+  color: var(--studio-soft);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.review-validation__issues p {
+  margin: 0;
+  color: var(--studio-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}

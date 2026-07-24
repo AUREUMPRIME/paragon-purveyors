@@ -8,6 +8,7 @@ import {
   COMPLETE_EDITOR_SECTION_IDS,
 } from "./editor-field-registry.js";
 import { validateCompleteStudioDraft } from "./editor-validation.js";
+import { fingerprintDocument } from "./state.js";
 import { renderHeaderEditor } from "./header-editor.js";
 
 const editorRenderers = Object.freeze({
@@ -94,14 +95,24 @@ export const createEditorController = ({
   let activeSection = "overview";
   let registry = createCompleteEditorRegistry(state.getDraft());
   let validation = null;
+  let reviewValidation = null;
   const transientErrors = new Map();
 
-  const computeValidation = () => {
-    registry = createCompleteEditorRegistry(state.getDraft());
+  const computeValidation = ({ includeReview = true } = {}) => {
+    const draft = state.getDraft();
+    const draftFingerprint = fingerprintDocument(draft);
+    const currentReviewValidation =
+      includeReview &&
+      reviewValidation?.draftFingerprint === draftFingerprint
+        ? reviewValidation
+        : null;
+
+    registry = createCompleteEditorRegistry(draft);
     validation = validateCompleteStudioDraft({
-      draft: state.getDraft(),
+      draft,
       liveDocument: state.getLiveBaseline(),
       transientErrors: normalizeTransientErrors(transientErrors),
+      reviewValidation: currentReviewValidation,
     });
 
     return validation;
@@ -293,6 +304,13 @@ export const createEditorController = ({
     getVisualRegistry: () => registry.visual,
     getCompleteRegistry: () => registry,
     getValidation: () => computeValidation(),
+    getReviewInputValidation: () =>
+      computeValidation({ includeReview: false }),
+    setReviewValidation(nextValidation) {
+      reviewValidation = nextValidation || null;
+      updateVisibleValidation();
+    },
+    getReviewValidation: () => reviewValidation,
     getValidationResults: () =>
       computeValidation().issues.map((issue) => ({ ...issue })),
     getSectionStatuses: () => ({

@@ -9,8 +9,9 @@ import { createDraftStore } from "./draft-store.js";
 import { createEditorController } from "./editor-controller.js";
 import { createNavigationController } from "./navigation.js";
 import { createReviewDialogController } from "./review-dialog.js";
+import { createReviewPreview } from "./review-preview.js";
 import { renderStudioShell } from "./shell.js";
-import { createStudioState } from "./state.js";
+import { createStudioState, fingerprintDocument } from "./state.js";
 import {
   createInitialSectionStatuses,
   STUDIO_DRAFT_STATUS,
@@ -26,8 +27,6 @@ const statuses = createInitialSectionStatuses();
 const shell = renderStudioShell({ root, statuses });
 const reviewDialog = root.querySelector("[data-review-dialog]");
 const assetDialog = root.querySelector("[data-asset-library-dialog]");
-const reviewController = createReviewDialogController(reviewDialog);
-
 let studioState = null;
 let validationAwareState = null;
 let draftStore = null;
@@ -35,6 +34,8 @@ let autosaveController = null;
 let editorController = null;
 let assetLibraryController = null;
 let assetPreviewResolver = null;
+let reviewPreview = null;
+let reviewController = null;
 let unsubscribeDraftState = null;
 let activeSection = "overview";
 
@@ -68,7 +69,7 @@ createNavigationController({
     }
 
     if (sectionId === "assets") openAssetLibrary();
-    if (sectionId === "review") reviewController.open();
+    if (sectionId === "review") void reviewController?.open();
   },
 });
 
@@ -131,7 +132,7 @@ root.addEventListener("click", async (event) => {
       ?.dataset.studioAction;
 
   if (action === "open-assets") openAssetLibrary();
-  if (action === "open-review") reviewController.open();
+  if (action === "open-review") void reviewController?.open();
 
   if (action === "save-draft" && autosaveController) {
     await autosaveController.saveNow();
@@ -183,6 +184,21 @@ const initializeDraftFoundation = async () => {
     assetPreviewResolver,
   });
 
+  reviewPreview = createReviewPreview({
+    getDraft: () => studioState.getDraft(),
+    assetPreviewResolver,
+  });
+
+  reviewController = createReviewDialogController(reviewDialog, {
+    createPreview: () => reviewPreview.render(),
+    getEditorValidation: () =>
+      editorController.getReviewInputValidation(),
+    getDraftFingerprint: () =>
+      fingerprintDocument(studioState.getDraft()),
+    onValidationChange: (reviewValidation) =>
+      editorController.setReviewValidation(reviewValidation),
+  });
+
   validationAwareState = createValidationAwareState({
     state: studioState,
     getValidationResults:
@@ -198,6 +214,7 @@ const initializeDraftFoundation = async () => {
     (snapshot) => {
       shell.setDraftState(snapshot);
       editorController.handleSnapshot(snapshot);
+      reviewController.scheduleRefresh();
     },
   );
 
@@ -232,6 +249,10 @@ const initializeDraftFoundation = async () => {
     },
     openAssetLibrary: (options = {}) =>
       assetLibraryController.open(options),
+    openReview: () => reviewController.open(),
+    refreshReview: () => reviewController.refresh(),
+    getReviewValidation: () =>
+      reviewController.getValidation(),
     getValidation: () => editorController.getValidation(),
     getSectionStatuses: () =>
       editorController.getSectionStatuses(),
@@ -270,6 +291,8 @@ const initializeDraftFoundation = async () => {
       pendingUploads:
         assetLibraryController.getPendingAssetIds().size,
       assetLibraryMode: "indexeddb-pending",
+      reviewPreviewMode: "current-draft-srcdoc",
+      reviewOpen: reviewController.isOpen(),
     }),
     dispose: async () => {
       window.removeEventListener(
@@ -278,6 +301,7 @@ const initializeDraftFoundation = async () => {
       );
       unsubscribeDraftState?.();
       assetLibraryController?.dispose();
+      reviewController?.dispose();
       assetPreviewResolver?.dispose();
       editorController?.dispose();
       await autosaveController.dispose();

@@ -350,22 +350,28 @@ export const renderStudioShell = ({ root, statuses }) => {
             <div class="review-stage" data-review-stage>
               <iframe
                 title="Current Paragon Purveyors Monthly Specials review"
-                src="/specials/monthly-specials.html"
+                data-review-frame
+                data-live-authority-src="/specials/monthly-specials.html"
               ></iframe>
             </div>
           </div>
 
-          <aside class="review-validation">
+          <aside
+            class="review-validation"
+            data-review-validation
+            role="status"
+            aria-live="polite"
+          >
             <p class="workspace-eyebrow">Validation</p>
-            <h3>Secure publishing is not connected.</h3>
-            <p>
-              Publishing becomes available after secure Studio authentication
-              is connected.
+            <h3 data-review-summary>Preparing current draft…</h3>
+            <p data-review-detail>
+              The shared Monthly Specials renderer is preparing the Legal page.
             </p>
             <dl>
-              <div><dt>Errors</dt><dd>0</dd></div>
-              <div><dt>Warnings</dt><dd>1</dd></div>
+              <div><dt>Errors</dt><dd data-review-errors>--</dd></div>
+              <div><dt>Warnings</dt><dd data-review-warnings>--</dd></div>
             </dl>
+            <ol class="review-validation__issues" data-review-issues></ol>
           </aside>
         </div>
       </div>

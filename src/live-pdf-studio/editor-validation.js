@@ -5,6 +5,7 @@ import { fingerprintDocument } from "./state.js";
 import {
   createInitialSectionStatuses,
   getAssetLibraryStatus,
+  getReviewStatus,
   STUDIO_SECTION_STATUS,
 } from "./status-model.js";
 import { pathToFieldKey } from "./editor-field-registry.js";
@@ -528,6 +529,9 @@ export const validateCompleteStudioDraft = (options = {}) => {
     registry: visualRegistry,
   });
   const assetIssues = validateAssetCatalog(options.draft);
+  const reviewIssues = Object.freeze([
+    ...(options.reviewValidation?.issues || []),
+  ]);
   const assetErrorCount = assetIssues.filter(
     (issue) => issue.kind === "error",
   ).length;
@@ -537,6 +541,17 @@ export const validateCompleteStudioDraft = (options = {}) => {
   const catalogModified =
     fingerprintDocument(options.draft.assetLibrary) !==
     fingerprintDocument(options.liveDocument.assetLibrary);
+  const draftModified =
+    fingerprintDocument(options.draft) !==
+    fingerprintDocument(options.liveDocument);
+  const blockingIssueCount = [
+    ...content.issues,
+    ...visual.issues,
+    ...assetIssues,
+    ...reviewIssues,
+  ].filter((issue) =>
+    ["error", "missing"].includes(issue.kind),
+  ).length;
 
   const statuses = {
     ...content.statuses,
@@ -548,6 +563,10 @@ export const validateCompleteStudioDraft = (options = {}) => {
       missingCount: assetMissingCount,
       catalogModified,
     }),
+    review: getReviewStatus({
+      errorCount: blockingIssueCount,
+      isModified: draftModified,
+    }),
   };
   statuses.overview = [
     statuses.header,
@@ -556,12 +575,15 @@ export const validateCompleteStudioDraft = (options = {}) => {
     statuses.contacts,
     statuses.footer,
     statuses.assets,
+    statuses.review,
   ].reduce(mergeStatus, STUDIO_SECTION_STATUS.COMPLETE);
+
   return Object.freeze({
     issues: Object.freeze([
       ...content.issues,
       ...visual.issues,
       ...assetIssues,
+      ...reviewIssues,
     ]),
     fieldIssues: Object.freeze({
       ...content.fieldIssues,
@@ -574,6 +596,7 @@ export const validateCompleteStudioDraft = (options = {}) => {
       cuts: content.issueCounts.cuts + visual.issueCounts.cuts,
       footer: content.issueCounts.footer + visual.issueCounts.footer,
       assets: assetIssues.length,
+      review: reviewIssues.length,
     }),
   });
 };
