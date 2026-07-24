@@ -1,0 +1,13 @@
+{
+  "name": "paragon-live-pdf-worker",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local --port 8787",
+    "test": "node --test test/auth-session.test.mjs test/cors-rate-limit.test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.36.0"
+  }
+}

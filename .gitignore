@@ -22,3 +22,8 @@ archive/
 .env.local
 .env*.local
 !.env.example
+
+# Local Cloudflare Worker secrets
+tools/paragon-live-pdf-worker/.dev.vars
+tools/paragon-live-pdf-worker/.dev.vars.*
+!tools/paragon-live-pdf-worker/.dev.vars.example

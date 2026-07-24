@@ -1,0 +1,8 @@
+# Copy this file to .dev.vars for local development only.
+# Never commit .dev.vars or real credentials.
+
+PASSWORD_SALT_B64=REPLACE_WITH_BASE64_16_BYTE_SALT
+PASSWORD_HASH_B64=REPLACE_WITH_BASE64_32_BYTE_PBKDF2_HASH
+SESSION_SECRET_B64=REPLACE_WITH_BASE64_SECRET_AT_LEAST_32_BYTES
+ALLOWED_ORIGIN=https://paragonpurveyors.com
+LOCAL_ALLOWED_ORIGIN=http://127.0.0.1:5190
