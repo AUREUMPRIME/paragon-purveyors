@@ -155,6 +155,24 @@ test("Review validation reports every unresolved image while preserving the secu
   assert.equal(result.imageCount, 2);
   assert.equal(result.readyImageCount, 1);
   assert.deepEqual(result.warnings[0], SECURE_PUBLISHING_WARNING);
+
+  const geometryFailure = createReviewValidation({
+    geometryResults: {
+      checkedCount: 17,
+      pageWidth: 816,
+      pageHeight: 1344,
+      issues: [
+        {
+          fieldKey: "review.geometry.productNames.0",
+          message: "Product name exceeds its guardrail.",
+        },
+      ],
+    },
+  });
+  assert.equal(geometryFailure.geometryChecked, true);
+  assert.equal(geometryFailure.geometryErrorCount, 1);
+  assert.equal(geometryFailure.geometryCheckedCount, 17);
+  assert.equal(geometryFailure.errorCount, 1);
 });
 
 test("Review image inspection accepts complete images only when naturalWidth is positive", async () => {
@@ -202,6 +220,8 @@ test("Review controller renders srcdoc, checks images, refreshes while open, and
   for (const marker of [
     "frame.srcdoc = html",
     "inspectReviewFrameImages",
+    "inspectReviewFrameGeometry",
+    "geometryResults",
     "createReviewValidation",
     "scheduleRefresh",
     "onValidationChange",
@@ -211,7 +231,7 @@ test("Review controller renders srcdoc, checks images, refreshes while open, and
   }
 });
 
-test("Studio integration connects current draft rendering, pending previews, dynamic status, and 103 contracts without publication writes", async () => {
+test("Studio integration connects current draft rendering, pending previews, dynamic status, and 113 contracts without publication writes", async () => {
   const [main, validation, status, packageText] = await Promise.all([
     read("src/live-pdf-studio/main.js"),
     read("src/live-pdf-studio/editor-validation.js"),
@@ -228,6 +248,14 @@ test("Studio integration connects current draft rendering, pending previews, dyn
   assert.match(
     JSON.parse(packageText).scripts["test:specials:contracts"],
     /live-pdf-studio-review-pdf/,
+  );
+  assert.match(
+    JSON.parse(packageText).scripts["test:specials:contracts"],
+    /live-pdf-studio-geometry/,
+  );
+  assert.equal(
+    JSON.parse(packageText).scripts["specials:validate:geometry"],
+    "node tools/validate-live-pdf-geometry.mjs",
   );
   assert.doesNotMatch(
     main,

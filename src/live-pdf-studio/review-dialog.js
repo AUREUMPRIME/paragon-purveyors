@@ -1,3 +1,4 @@
+import { inspectReviewFrameGeometry } from "./review-geometry.js";
 import {
   createReviewValidation,
   inspectReviewFrameImages,
@@ -161,6 +162,7 @@ export const createReviewDialogController = (
     getDraftFingerprint,
     onValidationChange = () => {},
     inspectImages = inspectReviewFrameImages,
+    inspectGeometry = inspectReviewFrameGeometry,
     createValidation = createReviewValidation,
   } = {},
 ) => {
@@ -198,12 +200,17 @@ export const createReviewDialogController = (
 
     let preview = null;
     let imageResults = [];
+    let geometryResults = null;
     let renderError = null;
 
     try {
       preview = await createPreview();
       await waitForFrameLoad({ frame, html: preview.html });
       imageResults = await inspectImages({ frame });
+
+      if (imageResults.every((result) => result.ready)) {
+        geometryResults = inspectGeometry({ frame });
+      }
     } catch (error) {
       renderError = error instanceof Error ? error : new Error(String(error));
       frame.srcdoc = errorDocument(renderError);
@@ -215,6 +222,7 @@ export const createReviewDialogController = (
       editorValidation: getEditorValidation(),
       renderError,
       imageResults,
+      geometryResults,
       draftFingerprint:
         preview?.draftFingerprint || draftFingerprint,
     });

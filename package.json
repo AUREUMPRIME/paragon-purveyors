@@ -9,11 +9,12 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test": "npm run test:specials:contracts",
-    "test:specials:contracts": "node --test tests/monthly-specials-contracts.test.mjs tests/paragon-live-pdf-studio-source.test.mjs tests/live-pdf-core.test.mjs tests/live-pdf-studio-shell.test.mjs tests/live-pdf-studio-draft-state.test.mjs tests/live-pdf-studio-editors.test.mjs tests/live-pdf-studio-visual-controls.test.mjs tests/live-pdf-studio-asset-library.test.mjs tests/live-pdf-studio-review-pdf.test.mjs",
+    "test:specials:contracts": "node --test tests/monthly-specials-contracts.test.mjs tests/paragon-live-pdf-studio-source.test.mjs tests/live-pdf-core.test.mjs tests/live-pdf-studio-shell.test.mjs tests/live-pdf-studio-draft-state.test.mjs tests/live-pdf-studio-editors.test.mjs tests/live-pdf-studio-visual-controls.test.mjs tests/live-pdf-studio-asset-library.test.mjs tests/live-pdf-studio-review-pdf.test.mjs tests/live-pdf-studio-geometry.test.mjs",
     "test:specials:baseline": "node --test tests/monthly-specials-authority.test.mjs",
     "specials:build": "node tools/build-monthly-specials.mjs",
     "specials:v2:build": "node tools/build-monthly-specials-v2.mjs",
-    "specials:v2:build:workbook": "python tools/export-monthly-specials-v2-workbook.py && node tools/build-monthly-specials-v2.mjs"
+    "specials:v2:build:workbook": "python tools/export-monthly-specials-v2-workbook.py && node tools/build-monthly-specials-v2.mjs",
+    "specials:validate:geometry": "node tools/validate-live-pdf-geometry.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",

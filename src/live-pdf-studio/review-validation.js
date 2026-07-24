@@ -44,10 +44,22 @@ const imageIssue = (result, index) =>
     )} could not be loaded in the Review PDF.`,
   });
 
+const geometryIssue = (issue, index) =>
+  Object.freeze({
+    section: "review",
+    fieldKey: issue.fieldKey || `review.geometry.${index}`,
+    kind: "error",
+    message: normalizeMessage(
+      issue.message,
+      `Review geometry guardrail ${index + 1} failed.`,
+    ),
+  });
+
 export const createReviewValidation = ({
   editorValidation = null,
   renderError = null,
   imageResults = [],
+  geometryResults = null,
   draftFingerprint = "",
 } = {}) => {
   const editorIssues = (editorValidation?.issues || []).map(
@@ -75,11 +87,15 @@ export const createReviewValidation = ({
   const imageIssues = imageResults
     .filter((result) => !result.ready)
     .map(imageIssue);
+  const geometryIssues = (geometryResults?.issues || []).map(
+    geometryIssue,
+  );
   const errors = Object.freeze(
     uniqueIssues([
       ...editorErrors,
       ...renderIssues,
       ...imageIssues,
+      ...geometryIssues,
     ]),
   );
   const warnings = Object.freeze(
@@ -99,6 +115,11 @@ export const createReviewValidation = ({
     warningCount: warnings.length,
     imageCount: imageResults.length,
     readyImageCount: imageResults.filter((result) => result.ready).length,
+    geometryChecked: Boolean(geometryResults),
+    geometryErrorCount: geometryIssues.length,
+    geometryCheckedCount: geometryResults?.checkedCount || 0,
+    pageWidth: geometryResults?.pageWidth || 0,
+    pageHeight: geometryResults?.pageHeight || 0,
     isValid: errors.length === 0,
     rendered: !renderError,
   });
