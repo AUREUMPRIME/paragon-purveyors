@@ -72,8 +72,6 @@ jobs:
     name: Build shadow and production package
     needs: conflict-gate
     runs-on: ubuntu-latest
-    env:
-      PUBLICATION_EVIDENCE_ROOT: ${{ runner.temp }}/paragon-studio-publication
     steps:
       - name: Check out exact draft commit
         uses: actions/checkout@v4
@@ -93,14 +91,20 @@ jobs:
       - name: Run publication workflow contracts
         run: npm run studio:workflow:test
       - name: Build temporary shadow publication
+        env:
+          PUBLICATION_EVIDENCE_ROOT: ${{ runner.temp }}/paragon-studio-publication
         run: >-
           node tools/paragon-live-pdf-workflow/build-shadow-publication.mjs
           --output "$PUBLICATION_EVIDENCE_ROOT/shadow"
       - name: Validate temporary shadow publication
+        env:
+          PUBLICATION_EVIDENCE_ROOT: ${{ runner.temp }}/paragon-studio-publication
         run: >-
           node tools/paragon-live-pdf-workflow/validate-shadow-publication.mjs
           --output "$PUBLICATION_EVIDENCE_ROOT/shadow"
       - name: Prepare exact production package
+        env:
+          PUBLICATION_EVIDENCE_ROOT: ${{ runner.temp }}/paragon-studio-publication
         run: >-
           node tools/paragon-live-pdf-workflow/prepare-production-publication.mjs
           --shadow "$PUBLICATION_EVIDENCE_ROOT/shadow"
