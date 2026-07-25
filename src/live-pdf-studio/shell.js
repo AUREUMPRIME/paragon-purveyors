@@ -183,7 +183,111 @@ const placeholderMarkup = (sectionId) => {
 
 export const renderStudioShell = ({ root, statuses }) => {
   root.innerHTML = `
-    <div class="studio-shell" data-studio-ready="true">
+    <div class="studio-shell" data-studio-auth>
+      <aside class="studio-sidebar">
+        <a class="studio-brand" href="/" aria-label="Paragon Purveyors home">
+          <span class="studio-brand__mark">PP</span>
+          <span>
+            <strong>Paragon Purveyors</strong>
+            <small>Live PDF Studio</small>
+          </span>
+        </a>
+
+        <div class="studio-sidebar__footer">
+          <span class="connection-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Secure Studio</strong>
+            <small>Authentication required</small>
+          </div>
+        </div>
+      </aside>
+
+      <main class="studio-main">
+        <div class="studio-content">
+          <section class="studio-workspace">
+            <header class="workspace-header">
+              <div>
+                <p class="workspace-eyebrow">Private Administration</p>
+                <h1>Live PDF Studio</h1>
+                <p>
+                  Sign in to manage the current Monthly Specials document,
+                  protected assets, and browser drafts.
+                </p>
+              </div>
+              <span class="workspace-phase">Secure Access</span>
+            </header>
+
+            <div class="workspace-grid">
+              <form
+                class="workspace-card workspace-card--primary"
+                data-studio-auth-form
+              >
+                <p class="workspace-card__eyebrow">Studio authentication</p>
+                <h2>Enter the Studio password.</h2>
+                <p>
+                  The password is sent only to the secured authentication
+                  service and is never stored by the browser.
+                </p>
+
+                <div class="asset-library-toolbar">
+                  <label>
+                    <span>Studio password</span>
+                    <input
+                      type="password"
+                      name="password"
+                      autocomplete="current-password"
+                      data-studio-password
+                      required
+                    >
+                  </label>
+                  <button
+                    class="studio-action studio-action--primary"
+                    type="submit"
+                    data-studio-login
+                  >
+                    Unlock Studio
+                  </button>
+                </div>
+
+                <p
+                  data-studio-auth-message
+                  data-message-tone="neutral"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Checking secure session…
+                </p>
+              </form>
+
+              <article class="workspace-card">
+                <p class="workspace-card__eyebrow">Browser privacy</p>
+                <h2>Session-only access.</h2>
+                <p>
+                  Only the temporary access token and expiration are retained
+                  in this browser tab. Closing the tab ends local access.
+                </p>
+              </article>
+
+              <article class="workspace-card">
+                <p class="workspace-card__eyebrow">Draft protection</p>
+                <h2>Local work remains preserved.</h2>
+                <p>
+                  Existing IndexedDB documents, metadata, and pending uploads
+                  are not removed when a session expires or is cleared.
+                </p>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div
+      class="studio-shell"
+      data-studio-ready="true"
+      data-studio-workspace
+      hidden
+    >
       <aside class="studio-sidebar">
         <a class="studio-brand" href="/" aria-label="Paragon Purveyors home">
           <span class="studio-brand__mark">PP</span>
@@ -397,6 +501,17 @@ export const renderStudioShell = ({ root, statuses }) => {
   const assetStatusNode = root.querySelector(
     '[data-studio-nav-status="assets"]',
   );
+  const authView = root.querySelector("[data-studio-auth]");
+  const studioWorkspace = root.querySelector(
+    "[data-studio-workspace]",
+  );
+  const authPassword = root.querySelector(
+    "[data-studio-password]",
+  );
+  const authButton = root.querySelector("[data-studio-login]");
+  const authMessage = root.querySelector(
+    "[data-studio-auth-message]",
+  );
 
   let latestDraftSnapshot = null;
 
@@ -492,6 +607,23 @@ export const renderStudioShell = ({ root, statuses }) => {
   };
 
   return {
+    setAuthState({
+      authenticated = false,
+      loading = false,
+      message = "",
+    } = {}) {
+      authView.hidden = authenticated;
+      studioWorkspace.hidden = !authenticated;
+      authPassword.disabled = loading;
+      authButton.disabled = loading;
+      authMessage.textContent =
+        message
+        || (loading
+          ? "Checking secure session…"
+          : "Enter the Studio password.");
+      authMessage.dataset.messageTone =
+        message && !loading ? "error" : "neutral";
+    },
     renderWorkspace(sectionId, workspaceMarkup = "") {
       root.querySelector("[data-studio-content]").innerHTML =
         workspaceMarkup || placeholderMarkup(sectionId);

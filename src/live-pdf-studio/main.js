@@ -1,6 +1,8 @@
 import "./styles.css";
+import { createStudioApiClient } from "./api-client.js";
 import { createAssetLibraryController } from "./asset-library-controller.js";
 import { createAssetPreviewResolver } from "./asset-preview-resolver.js";
+import { createStudioAuthController } from "./auth.js";
 import { createAutosaveController } from "./autosave-controller.js";
 import {
   loadCanonicalDocument,
@@ -27,6 +29,43 @@ const statuses = createInitialSectionStatuses();
 const shell = renderStudioShell({ root, statuses });
 const reviewDialog = root.querySelector("[data-review-dialog]");
 const assetDialog = root.querySelector("[data-asset-library-dialog]");
+const authForm = root.querySelector("[data-studio-auth-form]");
+const passwordInput = root.querySelector("[data-studio-password]");
+
+if (!authForm || !passwordInput) {
+  throw new Error("Live PDF Studio authentication controls not found.");
+}
+
+const resolveStudioApiBaseUrl = () => {
+  const override =
+    globalThis.__PARAGON_LIVE_PDF_STUDIO_API_BASE__;
+
+  if (typeof override === "string") return override;
+
+  return ["127.0.0.1", "localhost"].includes(
+    window.location.hostname,
+  )
+    ? "http://127.0.0.1:8787"
+    : "";
+};
+
+const apiClient = createStudioApiClient({
+  baseUrl: resolveStudioApiBaseUrl(),
+});
+
+const authController = createStudioAuthController({
+  client: apiClient,
+  onStateChange: (state) => {
+    if (!state.authenticated) {
+      shell.setAuthState({
+        authenticated: false,
+        loading: false,
+        message: "",
+      });
+    }
+  },
+});
+
 let studioState = null;
 let validationAwareState = null;
 let draftStore = null;
@@ -150,8 +189,14 @@ const handleBeforeUnload = (event) => {
   event.returnValue = "";
 };
 
-const initializeDraftFoundation = async () => {
-  const source = await loadCanonicalDocument();
+const initializeDraftFoundation = async (bootstrap) => {
+  if (studioState) return validationAwareState.getSnapshot();
+
+  const source = {
+    document: bootstrap.document,
+    baseMainSha: bootstrap.currentMainSha,
+  };
+
   draftStore = createDraftStore();
 
   const storedRecord = await draftStore.loadDraft(
@@ -311,6 +356,65 @@ const initializeDraftFoundation = async () => {
   return validationAwareState.getSnapshot();
 };
 
+const initializeAuthenticatedStudio = async (bootstrap) => {
+  if (
+    !bootstrap?.document
+    || typeof bootstrap.currentMainSha !== "string"
+    || bootstrap.currentMainSha.length === 0
+  ) {
+    throw new TypeError(
+      "Authenticated Studio bootstrap is invalid.",
+    );
+  }
+
+  await initializeDraftFoundation(bootstrap);
+  shell.setAuthState({
+    authenticated: true,
+    loading: false,
+    message: "",
+  });
+};
+
+const formatAuthError = (error) => {
+  const message =
+    error instanceof Error
+      ? error.message
+      : "Unable to authenticate.";
+
+  if (Number.isFinite(error?.retryAfterSeconds)) {
+    return `${message} Try again in ${error.retryAfterSeconds} seconds.`;
+  }
+
+  return message;
+};
+
+authForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const password = passwordInput.value;
+
+  shell.setAuthState({
+    authenticated: false,
+    loading: true,
+    message: "Verifying secure access…",
+  });
+
+  try {
+    const result = await authController.login(password);
+    passwordInput.value = "";
+    await initializeAuthenticatedStudio(result.bootstrap);
+  } catch (error) {
+    passwordInput.value = "";
+    authController.clearSession();
+    console.error(error);
+    shell.setAuthState({
+      authenticated: false,
+      loading: false,
+      message: formatAuthError(error),
+    });
+  }
+});
+
 shell.setDraftState({
   persistenceStatus: STUDIO_DRAFT_STATUS.LOADING,
   isModified: false,
@@ -319,9 +423,41 @@ shell.setDraftState({
   errorMessage: "",
 });
 
-initializeDraftFoundation().catch((error) => {
+shell.setAuthState({
+  authenticated: false,
+  loading: true,
+  message: "Checking secure session…",
+});
+
+const startStudio = async () => {
+  const result = await authController.startup();
+
+  if (!result.authenticated) {
+    shell.setAuthState({
+      authenticated: false,
+      loading: false,
+      message: "",
+    });
+    return;
+  }
+
+  await initializeAuthenticatedStudio(result.bootstrap);
+};
+
+startStudio().catch((error) => {
+  authController.clearSession();
   console.error(error);
-  shell.setDraftError(error.message);
+  shell.setAuthState({
+    authenticated: false,
+    loading: false,
+    message: formatAuthError(error),
+  });
+});
+
+window.__PARAGON_LIVE_PDF_STUDIO_AUTH__ = Object.freeze({
+  version: 1,
+  getSession: () => authController.getSession(),
+  logout: () => authController.logout(),
 });
 
 window.__PARAGON_LIVE_PDF_STUDIO_SHELL__ = Object.freeze({
