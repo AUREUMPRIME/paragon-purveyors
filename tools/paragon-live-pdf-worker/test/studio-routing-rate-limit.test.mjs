@@ -15,7 +15,11 @@ const documentFixture = () => ({
   assetLibrary: {},
 });
 
-const env = { ALLOWED_ORIGIN: "https://paragonpurveyors.com", LOCAL_ALLOWED_ORIGIN: "http://127.0.0.1:5190" };
+const env = {
+  ALLOWED_ORIGIN: "https://paragonpurveyors.com",
+  LOCAL_ALLOWED_ORIGIN: "http://127.0.0.1:5190",
+  PRODUCTION_PUBLISHING_ENABLED: "false",
+};
 const claims = Object.freeze({ sub: "paragon-admin", nonce: "nonce-value-1234567890" });
 const options = { verifySessionToken: async () => claims };
 const auth = { authorization: "Bearer token.value.signature", origin: env.ALLOWED_ORIGIN };
@@ -64,10 +68,27 @@ test("Validate route returns Retry-After when its session limit is exceeded", as
   assert.equal(response.headers.get("retry-after"), "17");
 });
 
+test("Authenticated publish route remains disabled unless the strict Worker gate is true", async () => {
+  const form = new FormData();
+  form.set("document", JSON.stringify(documentFixture()));
+  form.set("assetCatalog", "{}");
+  form.set("baseMainSha", SHA);
+  form.set("publishId", UUID);
+  form.set("commitMessage", "Publish monthly specials");
+  form.set("fileMetadata", "{}");
+  const response = await handleRequest(
+    new Request("https://worker.test/v1/studio/publish", { method: "POST", headers: auth, body: form }),
+    env,
+    { ...options, publishStudioRevision: async () => { throw new Error("must not run"); } },
+  );
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).code, "PUBLISHING_DISABLED");
+});
+
 test("Authenticated publish route accepts validated multipart data", async () => {
   const form = new FormData();
   form.set("document", JSON.stringify(documentFixture())); form.set("assetCatalog", "{}"); form.set("baseMainSha", SHA); form.set("publishId", UUID); form.set("commitMessage", "Publish monthly specials"); form.set("fileMetadata", "{}");
-  const response = await handleRequest(new Request("https://worker.test/v1/studio/publish", { method: "POST", headers: auth, body: form }), env, { ...options, publishStudioRevision: async () => ({ accepted: true, publishId: UUID, status: "queued" }) });
+  const response = await handleRequest(new Request("https://worker.test/v1/studio/publish", { method: "POST", headers: auth, body: form }), env, { ...options, productionPublishingEnabled: true, publishStudioRevision: async () => ({ accepted: true, publishId: UUID, status: "queued" }) });
   assert.equal(response.status, 202);
   assert.equal((await response.json()).status, "queued");
 });
@@ -75,7 +96,7 @@ test("Authenticated publish route accepts validated multipart data", async () =>
 test("Publish route returns Retry-After when its session limit is exceeded", async () => {
   const form = new FormData();
   for (const [key, value] of Object.entries({ document: "{}", assetCatalog: "{}", baseMainSha: SHA, publishId: UUID, commitMessage: "Publish", fileMetadata: "{}" })) form.set(key, value);
-  const response = await handleRequest(new Request("https://worker.test/v1/studio/publish", { method: "POST", headers: auth, body: form }), env, { ...options, limiter: { consume: () => ({ allowed: false, retryAfterSeconds: 9 }) } });
+  const response = await handleRequest(new Request("https://worker.test/v1/studio/publish", { method: "POST", headers: auth, body: form }), env, { ...options, productionPublishingEnabled: true, limiter: { consume: () => ({ allowed: false, retryAfterSeconds: 9 }) } });
   assert.equal(response.status, 429);
   assert.equal(response.headers.get("retry-after"), "9");
 });

@@ -11,6 +11,7 @@
     "SESSION_AUDIENCE": "paragon-live-pdf-studio",
     "PUBLISH_WORKFLOW_ID": "publish-live-pdf-studio.yml",
     "PUBLISH_WORKFLOW_REF": "main",
+    "PRODUCTION_PUBLISHING_ENABLED": "false",
     "VALIDATION_RATE_LIMIT": "60",
     "PUBLISH_RATE_LIMIT": "10",
     "RATE_LIMIT_WINDOW_SECONDS": "3600",

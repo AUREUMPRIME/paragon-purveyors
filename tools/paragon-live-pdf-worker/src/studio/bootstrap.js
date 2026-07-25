@@ -10,6 +10,7 @@ import {
   MAX_VALIDATION_BODY_BYTES,
   REPOSITORY_NAME,
   REPOSITORY_OWNER,
+  isProductionPublishingEnabled,
 } from "../github/policy.js";
 import { PUBLISH_RATE_LIMIT, VALIDATION_RATE_LIMIT } from "../rate-limit.js";
 
@@ -31,6 +32,10 @@ export const getBootstrap = async (env, options = {}) => {
     assetCatalog: Object.freeze(structuredClone(document.assetLibrary ?? {})),
     revision: document.revision ?? null,
     schemaVersion: document.schemaVersion,
+    productionPublishingEnabled: isProductionPublishingEnabled(
+      env,
+      options.productionPublishingEnabled,
+    ),
     publication,
     limits: Object.freeze({
       validationPerHour: VALIDATION_RATE_LIMIT.limit,

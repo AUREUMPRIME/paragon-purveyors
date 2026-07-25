@@ -18,6 +18,11 @@ export const MAX_VALIDATION_BODY_BYTES = 1024 * 1024;
 export const MAX_CHANGE_COUNT = 64;
 export const MAX_TEXT_BYTES = 512 * 1024;
 export const MAX_ASSET_BYTES = 8 * 1024 * 1024;
+export const PRODUCTION_PUBLISHING_ENV = "PRODUCTION_PUBLISHING_ENABLED";
+
+export const isProductionPublishingEnabled = (env = {}, override) => (
+  override === true || (override === undefined && env?.[PRODUCTION_PUBLISHING_ENV] === "true")
+);
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const SHA_PATTERN = /^[0-9a-f]{40}$/u;

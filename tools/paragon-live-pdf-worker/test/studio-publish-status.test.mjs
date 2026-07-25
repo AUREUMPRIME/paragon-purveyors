@@ -31,14 +31,42 @@ test("Workflow state maps active validation jobs", () => {
   assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Validate source", status: "in_progress" }]), "validating");
 });
 
-test("Workflow state maps active build and publication jobs", () => {
-  assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Build PDF", status: "in_progress" }]), "building");
-  assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Deploy Pages", status: "in_progress" }]), "publishing");
+test("Workflow state maps active build promotion deployment and verification jobs", () => {
+  assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Build shadow and production package", status: "in_progress" }]), "building");
+  assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Promote one production commit", status: "in_progress" }]), "promoting");
+  assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Deploy exact promoted site", status: "in_progress" }]), "deploying");
+  assert.equal(mapWorkflowRunState({ status: "in_progress" }, [{ name: "Verify live publication", status: "in_progress" }]), "verifying");
 });
 
-test("Workflow state maps terminal success and failure", () => {
+test("Workflow state maps terminal success failure and conflict", () => {
   assert.equal(mapWorkflowRunState({ status: "completed", conclusion: "success" }), "success");
   assert.equal(mapWorkflowRunState({ status: "completed", conclusion: "cancelled" }), "failed");
+  assert.equal(
+    mapWorkflowRunState(
+      { status: "completed", conclusion: "failure" },
+      [{ name: "Conflict gate", status: "completed", conclusion: "failure" }],
+    ),
+    "conflict",
+  );
+  assert.equal(
+    mapWorkflowRunState(
+      { status: "completed", conclusion: "failure" },
+      [{
+        name: "Build shadow and production package",
+        status: "completed",
+        conclusion: "failure",
+        steps: [{ name: "Recheck post-build conflict state", conclusion: "failure" }],
+      }],
+    ),
+    "conflict",
+  );
+  assert.equal(
+    mapWorkflowRunState(
+      { status: "in_progress" },
+      [{ name: "Report production publication", status: "queued" }],
+    ),
+    "verifying",
+  );
 });
 
 test("Workflow dispatch uses exact repository workflow, main ref, and four inputs", async () => {
@@ -51,13 +79,13 @@ test("Workflow dispatch uses exact repository workflow, main ref, and four input
 test("Status discovers only the exact workflow title and returns sanitized metadata", async () => {
   const requests = [];
   const result = await getPublicationStatus(UUID, {}, { tokenProvider: provider, createClient: () => ({ request: async (endpoint) => { requests.push(endpoint); if (endpoint.includes("/runs?")) return { workflow_runs: [{ id: 42, display_title: createPublishRunTitle(UUID), event: "workflow_dispatch", head_branch: "main", status: "completed", conclusion: "success", html_url: "https://github.test/run/42" }] }; return { jobs: [] }; } }) });
-  assert.deepEqual(result, { publishId: UUID, status: "success", runId: 42, conclusion: "success", url: "https://github.test/run/42" });
+  assert.deepEqual(result, { publishId: UUID, status: "success", runId: 42, conclusion: "success", workflowUrl: "https://github.test/run/42" });
   assert.equal(requests.length, 2);
 });
 
 test("Status maps an existing staging ref without a propagated run to queued", async () => {
   const result = await getPublicationStatus(UUID, {}, { tokenProvider: provider, createClient: () => ({ request: async (endpoint) => endpoint.includes("/runs?") ? { workflow_runs: [] } : { ref: `refs/heads/studio-publish/${UUID}` } }) });
-  assert.deepEqual(result, { publishId: UUID, status: "queued", runId: null, conclusion: null, url: null });
+  assert.deepEqual(result, { publishId: UUID, status: "queued", runId: null, conclusion: null, workflowUrl: null });
 });
 
 test("Status returns null when neither workflow run nor staging ref exists", async () => {

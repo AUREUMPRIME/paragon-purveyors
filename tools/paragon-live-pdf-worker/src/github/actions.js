@@ -22,13 +22,27 @@ export const createPublishRunTitle = (publishId) => (
 export const mapWorkflowRunState = (run, jobs = []) => {
   if (!run) return "queued";
   if (run.status === "queued" || run.status === "waiting" || run.status === "requested") return "queued";
-  if (run.status === "completed") return run.conclusion === "success" ? "success" : "failed";
 
-  const active = requireArray(jobs).find((job) => job?.status === "in_progress")
-    ?? requireArray(jobs).find((job) => job?.status === "queued");
+  const normalizedJobs = requireArray(jobs);
+  if (run.status === "completed") {
+    if (run.conclusion === "success") return "success";
+    const conflictFailure = normalizedJobs.some((job) => {
+      if (/conflict/u.test(String(job?.name ?? "").toLowerCase())) return true;
+      return requireArray(job?.steps).some((step) => (
+        step?.conclusion === "failure"
+        && /conflict|recheck/u.test(String(step?.name ?? "").toLowerCase())
+      ));
+    });
+    return conflictFailure ? "conflict" : "failed";
+  }
+
+  const active = normalizedJobs.find((job) => job?.status === "in_progress")
+    ?? normalizedJobs.find((job) => job?.status === "queued");
   const name = String(active?.name ?? "").toLowerCase();
-  if (/publish|deploy/u.test(name)) return "publishing";
-  if (/build|render|pdf/u.test(name)) return "building";
+  if (/verify|live acceptance|cleanup|report/u.test(name)) return "verifying";
+  if (/deploy|pages/u.test(name)) return "deploying";
+  if (/promot|fast-forward|main publication/u.test(name)) return "promoting";
+  if (/build|render|pdf|shadow/u.test(name)) return "building";
   return "validating";
 };
 
@@ -93,7 +107,13 @@ export const getPublicationStatus = async (publishIdValue, env, options = {}) =>
 
   if (!run) {
     if (!await refExists(client, publishId)) return null;
-    return freeze({ publishId, status: "queued", runId: null, conclusion: null, url: null });
+    return freeze({
+      publishId,
+      status: "queued",
+      runId: null,
+      conclusion: null,
+      workflowUrl: null,
+    });
   }
 
   let jobs = [];
@@ -107,7 +127,7 @@ export const getPublicationStatus = async (publishIdValue, env, options = {}) =>
     status: mapWorkflowRunState(run, jobs),
     runId: Number.isInteger(run.id) ? run.id : null,
     conclusion: typeof run.conclusion === "string" ? run.conclusion : null,
-    url: typeof run.html_url === "string" ? run.html_url : null,
+    workflowUrl: typeof run.html_url === "string" ? run.html_url : null,
   });
 };
 

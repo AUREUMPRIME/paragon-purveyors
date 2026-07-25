@@ -12,8 +12,13 @@ const builder = await read("tools/paragon-live-pdf-workflow/build-shadow-publica
 const validator = await read("tools/paragon-live-pdf-workflow/validate-shadow-publication.mjs");
 const conflict = await read("tools/paragon-live-pdf-workflow/validate-conflict-state.mjs");
 
-test("workflow identity is dispatch-only with exact run title", () => {
-  assert.match(workflow, /^name: Paragon Studio Shadow Publish$/mu);
+// Phase 4F keeps every Phase 4E shadow validation contract while adding a
+// separately tested production promotion path. These tests intentionally
+// protect the retained shadow machinery rather than the superseded
+// shadow-only workflow permissions and job count.
+
+test("workflow remains dispatch-only with the exact publication run title", () => {
+  assert.match(workflow, /^name: Paragon Studio Production Publish$/mu);
   assert.match(workflow, /^run-name: Paragon Studio Publish \$\{\{ inputs\.publish_id \}\}$/mu);
   assert.match(workflow, /^\s{2}workflow_dispatch:$/mu);
   assert.doesNotMatch(workflow, /^\s{2}(?:push|pull_request|schedule):/mu);
@@ -27,38 +32,25 @@ test("workflow locks the four required string inputs", () => {
   assert.equal((workflow.match(/^\s{8}type: string$/gmu) ?? []).length, 4);
 });
 
-test("workflow permissions remain contents-read only without environments or secrets", () => {
-  assert.match(workflow, /^permissions:\n\s{2}contents: read$/mu);
-  assert.doesNotMatch(workflow, /pages:\s*write|id-token:\s*write|contents:\s*write|environment:|secrets\./iu);
-});
-
-test("workflow concurrency is publication scoped and never cancels in progress", () => {
-  assert.match(workflow, /group: paragon-studio-shadow-\$\{\{ inputs\.publish_id \}\}/u);
+test("workflow concurrency remains publication scoped and never cancels in progress", () => {
+  assert.match(workflow, /group: paragon-studio-production-\$\{\{ inputs\.publish_id \}\}/u);
   assert.match(workflow, /cancel-in-progress: false/u);
 });
 
-test("workflow exposes exact validation build and report jobs with dependencies", () => {
-  for (const name of ["Validate draft", "Build shadow", "Report shadow"]) {
-    assert.match(workflow, new RegExp(`name: ${name.replaceAll(" ", "\\s")}`, "u"));
-  }
-  assert.match(workflow, /build-shadow:\n\s{4}name: Build shadow\n\s{4}needs: validate-draft/u);
-  assert.match(workflow, /report-shadow:\n\s{4}name: Report shadow\n\s{4}needs: build-shadow/u);
+test("exact credential-free draft checkout and two-commit history protect conflict checks", () => {
+  assert.equal((workflow.match(/ref: \$\{\{ inputs\.draft_commit \}\}/gu) ?? []).length >= 3, true);
+  assert.equal((workflow.match(/fetch-depth: 2/gu) ?? []).length >= 3, true);
+  assert.equal((workflow.match(/persist-credentials: false/gu) ?? []).length >= 5, true);
 });
 
-test("checkout is exact credential-free and uses two-commit history", () => {
-  assert.equal((workflow.match(/ref: \$\{\{ inputs\.draft_commit \}\}/gu) ?? []).length, 2);
-  assert.equal((workflow.match(/fetch-depth: 2/gu) ?? []).length, 2);
-  assert.equal((workflow.match(/persist-credentials: false/gu) ?? []).length, 2);
-});
-
-test("workflow uses Node 22 locked dependencies and Chromium only", () => {
+test("workflow uses Node 22 locked dependencies Chromium and the production build", () => {
   assert.match(workflow, /node-version: 22/u);
   assert.match(workflow, /run: npm ci/u);
   assert.match(workflow, /npx playwright install --with-deps chromium/u);
   assert.match(workflow, /run: npm run build/u);
 });
 
-test("pre-build and post-build conflict checks surround the shadow build", () => {
+test("pre-build and post-build conflict checks still surround the shadow build", () => {
   const pre = workflow.indexOf("--phase pre-build");
   const build = workflow.indexOf("build-shadow-publication.mjs");
   const post = workflow.indexOf("--phase post-build");
@@ -66,28 +58,28 @@ test("pre-build and post-build conflict checks surround the shadow build", () =>
   assert.equal(pre >= 0 && build > pre && post > build && upload > post, true);
 });
 
-test("shadow artifact identity and seven-day retention are exact", () => {
-  assert.match(workflow, /name: paragon-studio-shadow-\$\{\{ inputs\.publish_id \}\}/u);
-  assert.match(workflow, /path: \.paragon-studio-shadow\//u);
+test("shadow and production evidence remain outside protected repository roots", () => {
+  assert.match(workflow, /name: paragon-studio-publication-\$\{\{ inputs\.publish_id \}\}/u);
+  assert.match(workflow, /PUBLICATION_EVIDENCE_ROOT: \$\{\{ runner\.temp \}\}\/paragon-studio-publication/u);
+  assert.match(workflow, /path: \$\{\{ runner\.temp \}\}\/paragon-studio-publication\//u);
   assert.match(workflow, /if-no-files-found: error/u);
   assert.match(workflow, /retention-days: 7/u);
 });
 
-test("workflow contains no main promotion Pages deployment or branch cleanup commands", () => {
-  assert.doesNotMatch(
-    workflow,
-    /git\s+(?:add|commit|push|merge|reset|revert|branch\s+-d|update-ref)|actions\/deploy-pages|configure-pages|upload-pages-artifact|wrangler\s+deploy/iu,
-  );
-});
-
-test("package scripts register 28 workflow contracts and permanent integration", () => {
-  assert.equal(
-    packageDocument.scripts["studio:workflow:test"],
-    "node --test tests/live-pdf-studio-publication-conflict.test.mjs tests/live-pdf-studio-publication-workflow.test.mjs",
-  );
-  const permanent = packageDocument.scripts["test:specials:contracts"];
-  assert.match(permanent, /live-pdf-studio-publication-conflict\.test\.mjs/u);
-  assert.match(permanent, /live-pdf-studio-publication-workflow\.test\.mjs/u);
+test("package scripts preserve shadow conflict contracts and add production contracts", () => {
+  const workflowScript = packageDocument.scripts["studio:workflow:test"];
+  for (const file of [
+    "live-pdf-studio-publication-conflict.test.mjs",
+    "live-pdf-studio-publication-workflow.test.mjs",
+    "live-pdf-studio-production-promotion.test.mjs",
+    "live-pdf-studio-production-workflow.test.mjs",
+  ]) {
+    assert.match(workflowScript, new RegExp(file.replaceAll(".", "\\."), "u"));
+    assert.match(
+      packageDocument.scripts["test:specials:contracts"],
+      new RegExp(file.replaceAll(".", "\\."), "u"),
+    );
+  }
 });
 
 test("shadow builder locks canonical output names renderer schema assets geometry and PDF", () => {
@@ -138,7 +130,7 @@ test("shadow validator locks file hashes four cards canonical JSON and one Legal
   }
 });
 
-test("workflow utilities remain isolated from production outputs and remote mutation", () => {
+test("shadow utilities remain isolated from production outputs and remote mutation", () => {
   const combined = `${builder}\n${validator}\n${conflict}`;
   assert.doesNotMatch(combined, /public\/specials\/monthly-specials\.(?:html|json|pdf)/u);
   assert.doesNotMatch(combined, /git\s+(?:push|commit|merge|update-ref)|gh\s+api|workflow\s+run|wrangler\s+deploy/iu);

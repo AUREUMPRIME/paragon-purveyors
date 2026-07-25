@@ -9,6 +9,7 @@ import {
 import { RequestValidationError, readJsonRequest, readPublishForm } from "../validate-upload.js";
 import { StagingConflictError } from "../github/staging.js";
 import { GitHubApiError } from "../github/client.js";
+import { isProductionPublishingEnabled } from "../github/policy.js";
 import { getBootstrap } from "../studio/bootstrap.js";
 import { publishStudioRevision } from "../studio/publish.js";
 import { readStudioPublishStatus } from "../studio/status.js";
@@ -18,6 +19,7 @@ const PUBLIC_MESSAGES = Object.freeze({
   INVALID_DOCUMENT: "Document validation failed.",
   STALE_MAIN: "The live revision changed. Reload before continuing.",
   STAGING_REF_EXISTS: "This publication already exists.",
+  PUBLISHING_DISABLED: "Production publishing is disabled.",
 });
 
 const errorResponse = (request, env, error) => {
@@ -74,6 +76,16 @@ export const handleStudioRoute = async (request, env, options = {}) => {
     }
 
     if (request.method === "POST" && url.pathname === "/v1/studio/publish") {
+      const enabled = (options.isProductionPublishingEnabled ?? isProductionPublishingEnabled)(
+        env,
+        options.productionPublishingEnabled,
+      );
+      if (!enabled) {
+        return jsonResponse(request, env, {
+          error: PUBLIC_MESSAGES.PUBLISHING_DISABLED,
+          code: "PUBLISHING_DISABLED",
+        }, { status: 503 });
+      }
       const rate = consume(claims, "publish", limiter, nowMs);
       if (!rate.allowed) return jsonResponse(request, env, { error: "Too many publication attempts." }, { status: 429, headers: { "retry-after": String(rate.retryAfterSeconds) } });
       const payload = await readPublishForm(request, options.limits);

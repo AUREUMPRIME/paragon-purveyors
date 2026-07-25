@@ -227,6 +227,7 @@ test("Worker rejects unapproved origins and locks local-only configuration witho
     MAX_UPLOAD_COUNT: "32",
     MAX_UPLOAD_FILE_BYTES: "8388608",
     MAX_MULTIPART_BYTES: "67108864",
+    PRODUCTION_PUBLISHING_ENABLED: "false",
   });
   assert.deepEqual(wrangler.secrets.required, [
     "PASSWORD_SALT_B64",

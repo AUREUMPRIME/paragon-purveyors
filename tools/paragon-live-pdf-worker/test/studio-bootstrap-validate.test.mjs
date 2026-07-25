@@ -64,6 +64,7 @@ test("Bootstrap reads current main, canonical source, catalog, publication, and 
   assert.equal(result.currentMainSha, SHA);
   assert.equal(result.assetCatalog.asset_a.id, "asset_a");
   assert.equal(result.publication.runId, 7);
+  assert.equal(result.productionPublishingEnabled, false);
   assert.equal(result.limits.validationPerHour, 60);
   assert.match(calls[0], /contents\/src\/data\/paragon-live-pdf-studio\.json\?ref=/u);
 });
@@ -77,6 +78,18 @@ test("Bootstrap result is immutable and exposes no credential fields", async () 
   });
   assert.equal(Object.isFrozen(result), true);
   assert.doesNotMatch(JSON.stringify(result), /secret-token|private|jwt/iu);
+});
+
+
+test("Bootstrap exposes the strict Worker production gate without credentials", async () => {
+  const result = await getBootstrap({ PRODUCTION_PUBLISHING_ENABLED: "true" }, {
+    tokenProvider: { getToken: async () => "secret-token-value-abcdefghijklmnop" },
+    createClient: () => ({ request: async () => ({ content: btoa(JSON.stringify(documentFixture())) }) }),
+    createDatabase: () => ({ getMainReference: async () => ({ sha: SHA }) }),
+    getLatestPublicationSummary: async () => null,
+  });
+  assert.equal(result.productionPublishingEnabled, true);
+  assert.doesNotMatch(JSON.stringify(result), /PRODUCTION_PUBLISHING_ENABLED|secret-token/iu);
 });
 
 test("JSON request reader accepts application JSON within one MiB", async () => {
