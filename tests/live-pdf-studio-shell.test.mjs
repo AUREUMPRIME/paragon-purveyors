@@ -10,6 +10,16 @@ const projectRoot = path.resolve(path.dirname(currentFile), "..");
 const read = (relativePath) =>
   fs.readFile(path.join(projectRoot, relativePath), "utf8");
 
+
+const exists = async (relativePath) => {
+  try {
+    await fs.access(path.join(projectRoot, relativePath));
+    return true;
+  } catch (error) {
+    if (error?.code === "ENOENT") return false;
+    throw error;
+  }
+};
 test("permanent Studio shell exposes the locked eight-section navigation", async () => {
   const navigation = await read("src/live-pdf-studio/navigation.js");
   const labels = [
@@ -88,7 +98,7 @@ test("Review PDF uses a full-screen fit-to-screen dialog with secure publishing 
   assert.match(styles, /overflow: hidden/);
 });
 
-test("Phase 3.1C remains local-only and preserves the production specials owner", async () => {
+test("production /specials/ is owned by the password-gated Studio entry", async () => {
   const packageJson = JSON.parse(await read("package.json"));
   const viteConfig = await read("vite.config.js");
   const studioEntry = await read("specials/index.html");
@@ -101,6 +111,25 @@ test("Phase 3.1C remains local-only and preserves the production specials owner"
     packageJson.scripts["test:specials:contracts"],
     /tests\/live-pdf-studio-shell\.test\.mjs/,
   );
-  assert.doesNotMatch(viteConfig, /specials\/index\.html|rollupOptions|rolldownOptions/);
+  assert.match(viteConfig, /rollupOptions/);
+  assert.match(
+    viteConfig,
+    /specials:\s*resolve\(projectRoot,\s*"specials\/index\.html"\)/,
+  );
+  assert.match(studioEntry, /id="studio-app"/);
   assert.match(studioEntry, /src="\/src\/live-pdf-studio\/main\.js"/);
+  assert.match(studioEntry, /noindex,\s*nofollow/);
+  assert.equal(
+    await exists("public/specials/index.html"),
+    false,
+    "The obsolete static landing page must not override the Studio entry.",
+  );
+
+  for (const outputPath of [
+    "public/specials/monthly-specials.pdf",
+    "public/specials/monthly-specials.html",
+    "public/specials/monthly-specials.json",
+  ]) {
+    assert.equal(await exists(outputPath), true, `${outputPath} must remain public.`);
+  }
 });
