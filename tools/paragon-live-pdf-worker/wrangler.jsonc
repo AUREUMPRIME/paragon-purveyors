@@ -8,7 +8,15 @@
   "vars": {
     "PASSWORD_PBKDF2_ITERATIONS": "210000",
     "SESSION_TTL_SECONDS": "28800",
-    "SESSION_AUDIENCE": "paragon-live-pdf-studio"
+    "SESSION_AUDIENCE": "paragon-live-pdf-studio",
+    "PUBLISH_WORKFLOW_ID": "publish-live-pdf-studio.yml",
+    "PUBLISH_WORKFLOW_REF": "main",
+    "VALIDATION_RATE_LIMIT": "60",
+    "PUBLISH_RATE_LIMIT": "10",
+    "RATE_LIMIT_WINDOW_SECONDS": "3600",
+    "MAX_UPLOAD_COUNT": "32",
+    "MAX_UPLOAD_FILE_BYTES": "8388608",
+    "MAX_MULTIPART_BYTES": "67108864"
   },
   "secrets": {
     "required": [
@@ -16,7 +24,10 @@
       "PASSWORD_HASH_B64",
       "SESSION_SECRET_B64",
       "ALLOWED_ORIGIN",
-      "LOCAL_ALLOWED_ORIGIN"
+      "LOCAL_ALLOWED_ORIGIN",
+      "GITHUB_APP_CLIENT_ID",
+      "GITHUB_APP_INSTALLATION_ID",
+      "GITHUB_APP_PRIVATE_KEY_PKCS8_PEM"
     ]
   }
 }

@@ -128,7 +128,7 @@ export const requestInstallationToken = async (
       method: "POST",
       body: {
         repositories: [REPOSITORY_NAME],
-        permissions: { contents: "write" },
+        permissions: { contents: "write", actions: "write" },
       },
     },
   );

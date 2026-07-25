@@ -142,7 +142,7 @@ test("Installation token request scopes repository and permissions exactly", asy
   await requestInstallationToken(env, { nowMs, cryptoImpl: webcrypto, fetchImpl });
   assert.deepEqual(body, {
     repositories: ["paragon-purveyors"],
-    permissions: { contents: "write" },
+    permissions: { contents: "write", actions: "write" },
   });
 });
 

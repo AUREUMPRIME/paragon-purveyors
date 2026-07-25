@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test": "npm run test:specials:contracts",
-    "test:specials:contracts": "node --test tests/monthly-specials-contracts.test.mjs tests/paragon-live-pdf-studio-source.test.mjs tests/live-pdf-core.test.mjs tests/live-pdf-studio-shell.test.mjs tests/live-pdf-studio-draft-state.test.mjs tests/live-pdf-studio-editors.test.mjs tests/live-pdf-studio-visual-controls.test.mjs tests/live-pdf-studio-asset-library.test.mjs tests/live-pdf-studio-review-pdf.test.mjs tests/live-pdf-studio-geometry.test.mjs tools/paragon-live-pdf-worker/test/auth-session.test.mjs tools/paragon-live-pdf-worker/test/cors-rate-limit.test.mjs tools/paragon-live-pdf-worker/test/github-app-auth.test.mjs tools/paragon-live-pdf-worker/test/github-git-staging.test.mjs",
+    "test:specials:contracts": "node --test tests/monthly-specials-contracts.test.mjs tests/paragon-live-pdf-studio-source.test.mjs tests/live-pdf-core.test.mjs tests/live-pdf-studio-shell.test.mjs tests/live-pdf-studio-draft-state.test.mjs tests/live-pdf-studio-editors.test.mjs tests/live-pdf-studio-visual-controls.test.mjs tests/live-pdf-studio-asset-library.test.mjs tests/live-pdf-studio-review-pdf.test.mjs tests/live-pdf-studio-geometry.test.mjs tools/paragon-live-pdf-worker/test/auth-session.test.mjs tools/paragon-live-pdf-worker/test/cors-rate-limit.test.mjs tools/paragon-live-pdf-worker/test/github-app-auth.test.mjs tools/paragon-live-pdf-worker/test/github-git-staging.test.mjs tools/paragon-live-pdf-worker/test/studio-bootstrap-validate.test.mjs tools/paragon-live-pdf-worker/test/studio-publish-status.test.mjs tools/paragon-live-pdf-worker/test/studio-routing-rate-limit.test.mjs",
     "test:specials:baseline": "node --test tests/monthly-specials-authority.test.mjs",
     "specials:build": "node tools/build-monthly-specials.mjs",
     "specials:v2:build": "node tools/build-monthly-specials-v2.mjs",
@@ -17,7 +17,8 @@
     "specials:validate:geometry": "node tools/validate-live-pdf-geometry.mjs",
     "studio:worker:test": "node --test tools/paragon-live-pdf-worker/test/auth-session.test.mjs tools/paragon-live-pdf-worker/test/cors-rate-limit.test.mjs",
     "studio:worker:dev": "npm --prefix tools/paragon-live-pdf-worker run dev",
-    "studio:github:test": "node --test tools/paragon-live-pdf-worker/test/github-app-auth.test.mjs tools/paragon-live-pdf-worker/test/github-git-staging.test.mjs"
+    "studio:github:test": "node --test tools/paragon-live-pdf-worker/test/github-app-auth.test.mjs tools/paragon-live-pdf-worker/test/github-git-staging.test.mjs",
+    "studio:routes:test": "node --test tools/paragon-live-pdf-worker/test/studio-bootstrap-validate.test.mjs tools/paragon-live-pdf-worker/test/studio-publish-status.test.mjs tools/paragon-live-pdf-worker/test/studio-routing-rate-limit.test.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",

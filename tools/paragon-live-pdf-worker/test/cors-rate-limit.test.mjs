@@ -219,6 +219,14 @@ test("Worker rejects unapproved origins and locks local-only configuration witho
     PASSWORD_PBKDF2_ITERATIONS: "210000",
     SESSION_TTL_SECONDS: "28800",
     SESSION_AUDIENCE: "paragon-live-pdf-studio",
+    PUBLISH_WORKFLOW_ID: "publish-live-pdf-studio.yml",
+    PUBLISH_WORKFLOW_REF: "main",
+    VALIDATION_RATE_LIMIT: "60",
+    PUBLISH_RATE_LIMIT: "10",
+    RATE_LIMIT_WINDOW_SECONDS: "3600",
+    MAX_UPLOAD_COUNT: "32",
+    MAX_UPLOAD_FILE_BYTES: "8388608",
+    MAX_MULTIPART_BYTES: "67108864",
   });
   assert.deepEqual(wrangler.secrets.required, [
     "PASSWORD_SALT_B64",
@@ -226,6 +234,9 @@ test("Worker rejects unapproved origins and locks local-only configuration witho
     "SESSION_SECRET_B64",
     "ALLOWED_ORIGIN",
     "LOCAL_ALLOWED_ORIGIN",
+    "GITHUB_APP_CLIENT_ID",
+    "GITHUB_APP_INSTALLATION_ID",
+    "GITHUB_APP_PRIVATE_KEY_PKCS8_PEM",
   ]);
   assert.match(exampleText, /REPLACE_WITH_BASE64_16_BYTE_SALT/u);
   assert.doesNotMatch(exampleText, /ghp_|github_pat_|PRIVATE KEY/u);

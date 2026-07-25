@@ -156,6 +156,9 @@ test("Validated staging requests are immutable and preserve no extra fields", as
     "SESSION_SECRET_B64",
     "ALLOWED_ORIGIN",
     "LOCAL_ALLOWED_ORIGIN",
+    "GITHUB_APP_CLIENT_ID",
+    "GITHUB_APP_INSTALLATION_ID",
+    "GITHUB_APP_PRIVATE_KEY_PKCS8_PEM",
   ]);
   assert.match(example, /GITHUB_APP_CLIENT_ID=REPLACE_WITH_GITHUB_APP_CLIENT_ID/u);
   assert.match(example, /GITHUB_APP_INSTALLATION_ID=REPLACE_WITH_GITHUB_APP_INSTALLATION_ID/u);

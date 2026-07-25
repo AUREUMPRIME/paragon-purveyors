@@ -3,25 +3,26 @@ export const LOGIN_RATE_LIMIT = Object.freeze({
   windowMs: 15 * 60 * 1000,
 });
 
+export const VALIDATION_RATE_LIMIT = Object.freeze({
+  limit: 60,
+  windowMs: 60 * 60 * 1000,
+});
+
+export const PUBLISH_RATE_LIMIT = Object.freeze({
+  limit: 10,
+  windowMs: 60 * 60 * 1000,
+});
+
 export class FixedWindowRateLimiter {
   #entries = new Map();
 
-  consume(
-    key,
-    {
-      limit,
-      windowMs,
-      nowMs = Date.now(),
-    },
-  ) {
+  consume(key, { limit, windowMs, nowMs = Date.now() }) {
     if (typeof key !== "string" || key.length === 0) {
       throw new Error("Rate-limit key is required.");
     }
-
     if (!Number.isInteger(limit) || limit <= 0) {
       throw new Error("Rate-limit maximum is invalid.");
     }
-
     if (!Number.isInteger(windowMs) || windowMs <= 0) {
       throw new Error("Rate-limit window is invalid.");
     }
@@ -52,13 +53,22 @@ export class FixedWindowRateLimiter {
 
 export const getClientIp = (request) => {
   const cloudflareIp = request?.headers?.get?.("cf-connecting-ip")?.trim();
-  if (cloudflareIp) {
-    return cloudflareIp;
-  }
-
+  if (cloudflareIp) return cloudflareIp;
   const forwarded = request?.headers?.get?.("x-forwarded-for");
   const first = forwarded?.split(",", 1)?.[0]?.trim();
   return first || "unknown";
 };
 
+export const createSessionRateKey = (claims, operation) => {
+  const nonce = claims?.nonce;
+  if (typeof nonce !== "string" || nonce.length < 16 || nonce.length > 128) {
+    throw new Error("Authenticated session nonce is invalid.");
+  }
+  if (!new Set(["validate", "publish"]).has(operation)) {
+    throw new Error("Rate-limit operation is invalid.");
+  }
+  return `session:${nonce}:${operation}`;
+};
+
 export const loginRateLimiter = new FixedWindowRateLimiter();
+export const studioRateLimiter = new FixedWindowRateLimiter();
