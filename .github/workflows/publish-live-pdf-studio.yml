@@ -1,0 +1,114 @@
+name: Paragon Studio Shadow Publish
+run-name: Paragon Studio Publish ${{ inputs.publish_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_id:
+        description: Canonical lowercase publication UUID
+        required: true
+        type: string
+      draft_branch:
+        description: Exact studio-publish publication branch
+        required: true
+        type: string
+      draft_commit:
+        description: Exact staged publication commit
+        required: true
+        type: string
+      base_main_sha:
+        description: Main SHA used to create the staged publication
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: paragon-studio-shadow-${{ inputs.publish_id }}
+  cancel-in-progress: false
+
+jobs:
+  validate-draft:
+    name: Validate draft
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact draft commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.draft_commit }}
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate dispatch inputs and conflict state
+        run: >-
+          node tools/paragon-live-pdf-workflow/validate-conflict-state.mjs
+          --phase pre-build
+          --publish-id "${{ inputs.publish_id }}"
+          --draft-branch "${{ inputs.draft_branch }}"
+          --draft-commit "${{ inputs.draft_commit }}"
+          --base-main-sha "${{ inputs.base_main_sha }}"
+
+  build-shadow:
+    name: Build shadow
+    needs: validate-draft
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact draft commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.draft_commit }}
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Chromium only
+        run: npx playwright install --with-deps chromium
+      - name: Run publication workflow contracts
+        run: npm run studio:workflow:test
+      - name: Build temporary shadow publication
+        run: >-
+          node tools/paragon-live-pdf-workflow/build-shadow-publication.mjs
+          --output .paragon-studio-shadow
+      - name: Validate temporary shadow publication
+        run: >-
+          node tools/paragon-live-pdf-workflow/validate-shadow-publication.mjs
+          --output .paragon-studio-shadow
+      - name: Verify website production build
+        run: npm run build
+      - name: Recheck post-build conflict state
+        run: >-
+          node tools/paragon-live-pdf-workflow/validate-conflict-state.mjs
+          --phase post-build
+          --publish-id "${{ inputs.publish_id }}"
+          --draft-branch "${{ inputs.draft_branch }}"
+          --draft-commit "${{ inputs.draft_commit }}"
+          --base-main-sha "${{ inputs.base_main_sha }}"
+      - name: Upload seven-day shadow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paragon-studio-shadow-${{ inputs.publish_id }}
+          path: .paragon-studio-shadow/
+          if-no-files-found: error
+          retention-days: 7
+
+  report-shadow:
+    name: Report shadow
+    needs: build-shadow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report non-production acceptance
+        run: |
+          echo "## Paragon Studio shadow accepted" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Publication: ${{ inputs.publish_id }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Draft commit: ${{ inputs.draft_commit }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Main promotion: not performed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Pages deployment: not performed" >> "$GITHUB_STEP_SUMMARY"
