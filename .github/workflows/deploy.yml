@@ -23,6 +23,7 @@ jobs:
 
     env:
       VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/' }}
+      VITE_PARAGON_STUDIO_API_BASE: ${{ vars.VITE_PARAGON_STUDIO_API_BASE || '' }}
 
     steps:
       - name: Checkout

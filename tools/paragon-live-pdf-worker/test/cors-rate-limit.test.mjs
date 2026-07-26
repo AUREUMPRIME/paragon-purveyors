@@ -172,7 +172,7 @@ test("Worker routing exposes health and returns hardened JSON for unknown routes
   assert.equal(missing.headers.get("cache-control"), "no-store");
 });
 
-test("Worker rejects unapproved origins and locks local-only configuration without publication routes", async () => {
+test("Worker rejects unapproved origins and enables workers.dev without publication routes", async () => {
   const rejected = await handleRequest(
     new Request("https://worker.test/v1/health", {
       headers: { origin: "https://evil.example" },
@@ -214,7 +214,7 @@ test("Worker rejects unapproved origins and locks local-only configuration witho
   const rootPackage = JSON.parse(rootPackageText);
 
   assert.match(workerPackage.devDependencies.wrangler, /^\^4\.36\.0$/u);
-  assert.equal(wrangler.workers_dev, false);
+  assert.equal(wrangler.workers_dev, true);
   assert.deepEqual(wrangler.vars, {
     PASSWORD_PBKDF2_ITERATIONS: "210000",
     SESSION_TTL_SECONDS: "28800",

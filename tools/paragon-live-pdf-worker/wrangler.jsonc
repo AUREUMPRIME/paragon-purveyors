@@ -3,7 +3,7 @@
   "name": "paragon-live-pdf-worker",
   "main": "src/index.js",
   "compatibility_date": "2026-07-24",
-  "workers_dev": false,
+  "workers_dev": true,
   "preview_urls": false,
   "vars": {
     "PASSWORD_PBKDF2_ITERATIONS": "210000",

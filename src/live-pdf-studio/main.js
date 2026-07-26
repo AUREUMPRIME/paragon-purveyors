@@ -36,17 +36,30 @@ if (!authForm || !passwordInput) {
   throw new Error("Live PDF Studio authentication controls not found.");
 }
 
+const getConfiguredStudioApiBaseUrl = () => {
+  const value =
+    import.meta.env.VITE_PARAGON_STUDIO_API_BASE;
+
+  return typeof value === "string" ? value.trim() : "";
+};
+
 const resolveStudioApiBaseUrl = () => {
   const override =
     globalThis.__PARAGON_LIVE_PDF_STUDIO_API_BASE__;
 
-  if (typeof override === "string") return override;
+  if (typeof override === "string" && override.trim()) {
+    return override.trim();
+  }
 
-  return ["127.0.0.1", "localhost"].includes(
-    window.location.hostname,
-  )
-    ? "http://127.0.0.1:8787"
-    : "";
+  if (
+    ["127.0.0.1", "localhost"].includes(
+      window.location.hostname,
+    )
+  ) {
+    return "http://127.0.0.1:8787";
+  }
+
+  return getConfiguredStudioApiBaseUrl();
 };
 
 const apiClient = createStudioApiClient({

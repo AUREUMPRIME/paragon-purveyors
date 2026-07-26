@@ -146,3 +146,44 @@ test("Frontend authentication suite is permanent and publication remains deferre
     false,
   );
 });
+
+test("Worker configuration enables workers.dev without enabling publication", async () => {
+  const config = JSON.parse(
+    await readOptional("tools/paragon-live-pdf-worker/wrangler.jsonc"),
+  );
+
+  assert.equal(config.workers_dev, true);
+  assert.equal(config.preview_urls, false);
+  assert.equal(config.vars.PRODUCTION_PUBLISHING_ENABLED, "false");
+  assert.ok(config.secrets.required.includes("PASSWORD_SALT_B64"));
+  assert.ok(config.secrets.required.includes("PASSWORD_HASH_B64"));
+  assert.ok(config.secrets.required.includes("SESSION_SECRET_B64"));
+});
+
+test("Studio production API base is injected by Vite while localhost remains isolated", async () => {
+  const source = await readOptional("src/live-pdf-studio/main.js");
+
+  assert.match(
+    source,
+    /import\.meta\.env\.VITE_PARAGON_STUDIO_API_BASE/,
+  );
+  assert.match(source, /http:\/\/127\.0\.0\.1:8787/);
+  assert.match(source, /getConfiguredStudioApiBaseUrl/);
+  assert.doesNotMatch(
+    source,
+    /https:\/\/[^"'`\s]+\.workers\.dev/iu,
+  );
+});
+
+test("Pages build receives only the public Worker endpoint repository variable", async () => {
+  const workflow = await readOptional(".github/workflows/deploy.yml");
+
+  assert.match(
+    workflow,
+    /VITE_PARAGON_STUDIO_API_BASE:\s*\$\{\{\s*vars\.VITE_PARAGON_STUDIO_API_BASE\s*\|\|\s*''\s*\}\}/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /PASSWORD_(?:SALT|HASH)|SESSION_SECRET|GITHUB_APP_PRIVATE_KEY/iu,
+  );
+});

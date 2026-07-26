@@ -148,7 +148,7 @@ test("Validated staging requests are immutable and preserve no extra fields", as
   const rootPackage = JSON.parse(await (await import("node:fs/promises")).readFile(new URL("../../package.json", workerRoot), "utf8"));
   const wrangler = JSON.parse(await (await import("node:fs/promises")).readFile(new URL("wrangler.jsonc", workerRoot), "utf8"));
   const example = await (await import("node:fs/promises")).readFile(new URL(".dev.vars.example", workerRoot), "utf8");
-  assert.equal(wrangler.workers_dev, false);
+  assert.equal(wrangler.workers_dev, true);
   assert.equal(wrangler.preview_urls, false);
   assert.deepEqual(wrangler.secrets.required, [
     "PASSWORD_SALT_B64",
