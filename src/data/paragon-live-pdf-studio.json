@@ -154,7 +154,7 @@
         "label": "Cube Roll AVG 13+ lb",
         "price": 459,
         "image": {
-          "assetId": "asset_ribeye_8be297e0f5cf",
+          "assetId": "asset_ribeye_72380d229204",
           "visible": true,
           "alt": "Black Opal whole Cube Roll cut",
           "fit": "contain",
@@ -415,7 +415,7 @@
       "width": 1600,
       "height": 1066,
       "createdAt": "2026-07-22T00:15:42.881Z",
-      "archived": false
+      "archived": true
     },
     "asset_striploin_ad97428e172c": {
       "id": "asset_striploin_ad97428e172c",
@@ -471,6 +471,20 @@
       "width": 1600,
       "height": 1066,
       "createdAt": "2026-07-22T00:15:42.881Z",
+      "archived": false
+    },
+    "asset_ribeye_72380d229204": {
+      "id": "asset_ribeye_72380d229204",
+      "label": "Ribeye Whole Cut Upload Test",
+      "category": "product-photo",
+      "library": "ribeye",
+      "path": "assets/specials/library/ribeye/ribeye-whole-cut-upload-test-72380d229204.webp",
+      "mimeType": "image/webp",
+      "sha256": "72380d229204d458d82601efad2ff8bb2d5d6ba4280bf72a842606119cd6d111",
+      "bytes": 313628,
+      "width": 1536,
+      "height": 1024,
+      "createdAt": "2026-07-27T18:25:04.495Z",
       "archived": false
     }
   },
