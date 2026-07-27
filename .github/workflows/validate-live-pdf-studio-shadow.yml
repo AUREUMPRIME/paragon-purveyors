@@ -1,0 +1,83 @@
+name: Paragon Studio Shadow Validation
+run-name: Paragon Studio Shadow ${{ inputs.source_commit }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact lowercase 40-character Git commit to validate
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: paragon-studio-shadow-${{ inputs.source_commit }}
+  cancel-in-progress: false
+
+jobs:
+  validate-shadow:
+    name: Build and validate shadow artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate exact source commit input
+        shell: bash
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+        run: |
+          if [[ ! "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error title=INVALID_SOURCE_COMMIT::source_commit must be a lowercase 40-character Git SHA."
+            exit 1
+          fi
+
+      - name: Check out exact source commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_commit }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install Chromium only
+        run: npx playwright install --with-deps chromium
+
+      - name: Run shadow-only workflow contracts
+        run: npm run studio:shadow:workflow:test
+
+      - name: Build temporary shadow publication
+        env:
+          SHADOW_OUTPUT_ROOT: ${{ runner.temp }}/paragon-studio-shadow
+        run: >-
+          node tools/paragon-live-pdf-workflow/build-shadow-publication.mjs
+          --output "$SHADOW_OUTPUT_ROOT"
+
+      - name: Validate temporary shadow publication
+        env:
+          SHADOW_OUTPUT_ROOT: ${{ runner.temp }}/paragon-studio-shadow
+        run: >-
+          node tools/paragon-live-pdf-workflow/validate-shadow-publication.mjs
+          --output "$SHADOW_OUTPUT_ROOT"
+
+      - name: Upload seven-day shadow evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: paragon-studio-shadow-${{ inputs.source_commit }}
+          path: ${{ runner.temp }}/paragon-studio-shadow/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Report shadow validation
+        run: |
+          echo "## Paragon Studio shadow validation passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Source commit: ${{ inputs.source_commit }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Output: artifact only" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Production publication: unchanged" >> "$GITHUB_STEP_SUMMARY"
