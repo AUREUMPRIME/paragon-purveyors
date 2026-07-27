@@ -1,6 +1,6 @@
 const encoder = new TextEncoder();
 
-export const DEFAULT_PBKDF2_ITERATIONS = 210_000;
+export const DEFAULT_PBKDF2_ITERATIONS = 100_000;
 export const PASSWORD_MAX_LENGTH = 512;
 export const PASSWORD_SALT_BYTES = 16;
 export const PASSWORD_HASH_BYTES = 32;
@@ -108,7 +108,7 @@ export const timingSafeEqual = (
 
 const normalizeIterations = (value) => {
   const parsed = Number(value ?? DEFAULT_PBKDF2_ITERATIONS);
-  if (!Number.isInteger(parsed) || parsed < 100_000 || parsed > 1_000_000) {
+  if (!Number.isInteger(parsed) || parsed !== DEFAULT_PBKDF2_ITERATIONS) {
     throw new Error("PBKDF2 iteration count is invalid.");
   }
 

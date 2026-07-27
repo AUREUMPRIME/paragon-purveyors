@@ -37,7 +37,7 @@ const createEnv = async () => {
 
 test("PBKDF2 verifier records contain salt and hash only and validate the password", async () => {
   const record = await createPasswordVerifierRecord(PASSWORD);
-  assert.equal(record.iterations, 210_000);
+  assert.equal(record.iterations, 100_000);
   assert.notEqual(record.saltBase64, PASSWORD);
   assert.notEqual(record.hashBase64, PASSWORD);
   assert.equal(Object.hasOwn(record, "password"), false);
@@ -48,6 +48,15 @@ test("PBKDF2 verifier records contain salt and hash only and validate the passwo
     PASSWORD_PBKDF2_ITERATIONS: String(record.iterations),
   };
   assert.equal(await verifyPassword(PASSWORD, env), true);
+});
+
+test("PBKDF2 iterations are locked to the Cloudflare runtime ceiling", async () => {
+  await assert.rejects(
+    () => createPasswordVerifierRecord(PASSWORD, {
+      iterations: 100_001,
+    }),
+    /PBKDF2 iteration count is invalid/u,
+  );
 });
 
 test("Password verification rejects incorrect and oversized credentials", async () => {

@@ -216,7 +216,7 @@ test("Worker rejects unapproved origins and enables workers.dev without publicat
   assert.match(workerPackage.devDependencies.wrangler, /^\^4\.36\.0$/u);
   assert.equal(wrangler.workers_dev, true);
   assert.deepEqual(wrangler.vars, {
-    PASSWORD_PBKDF2_ITERATIONS: "210000",
+    PASSWORD_PBKDF2_ITERATIONS: "100000",
     SESSION_TTL_SECONDS: "28800",
     SESSION_AUDIENCE: "paragon-live-pdf-studio",
     PUBLISH_WORKFLOW_ID: "publish-live-pdf-studio.yml",
