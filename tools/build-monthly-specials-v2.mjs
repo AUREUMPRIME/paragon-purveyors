@@ -54,6 +54,15 @@ const readJson = async (filePath) => JSON.parse(await fs.readFile(filePath, "utf
 
 const sha256Hex = (value) => createHash("sha256").update(value).digest("hex");
 
+const normalizeLineEndingsForHash = (bytes) =>
+  Buffer.from(
+    bytes
+      .toString("utf8")
+      .replaceAll("\r\n", "\n")
+      .replaceAll("\r", "\n"),
+    "utf8",
+  );
+
 const resolveRequiredNumber = (value, label, minimum, maximum) => {
   const parsed = Number(value);
 
@@ -556,7 +565,7 @@ const loadVisualAuthority = async () => {
     }
   }
 
-  const manifestHash = sha256Hex(rawManifest);
+  const manifestHash = sha256Hex(normalizeLineEndingsForHash(rawManifest));
 
   return {
     manifest,

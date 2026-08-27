@@ -22,6 +22,15 @@ const normalizeAssetPath = (value) =>
   normalizeText(value).replaceAll("\\", "/").replace(/^public\//, "");
 const sha256Hex = (value) => createHash("sha256").update(value).digest("hex");
 
+const normalizeLineEndingsForHash = (bytes) =>
+  Buffer.from(
+    bytes
+      .toString("utf8")
+      .replaceAll("\r\n", "\n")
+      .replaceAll("\r", "\n"),
+    "utf8",
+  );
+
 const fail = (message) => {
   throw new Error(message);
 };
@@ -48,7 +57,7 @@ const [manifestBytes, publicJsonText] = await Promise.all([
 
 const manifest = JSON.parse(manifestBytes.toString("utf8"));
 const data = JSON.parse(publicJsonText);
-const manifestHash = sha256Hex(manifestBytes);
+const manifestHash = sha256Hex(normalizeLineEndingsForHash(manifestBytes));
 
 if (manifest?.schema !== "typed-asset-slots") {
   fail(`Unsupported Studio manifest schema: ${manifest?.schema || "<missing>"}`);

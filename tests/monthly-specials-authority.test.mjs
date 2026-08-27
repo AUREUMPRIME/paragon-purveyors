@@ -43,6 +43,15 @@ const publicPdfPath = path.join(
 const sha256 = (bytes) =>
   createHash("sha256").update(bytes).digest("hex");
 
+const normalizeLineEndingsForHash = (bytes) =>
+  Buffer.from(
+    bytes
+      .toString("utf8")
+      .replaceAll("\r\n", "\n")
+      .replaceAll("\r", "\n"),
+    "utf8",
+  );
+
 const normalizeJsonBytes = (bytes) =>
   Buffer.from(
     bytes
@@ -198,7 +207,7 @@ test(
 
     assert.equal(
       publicJson.visualSource?.sha256,
-      sha256(manifestBytes),
+      sha256(normalizeLineEndingsForHash(manifestBytes)),
     );
 
     assert.equal(
