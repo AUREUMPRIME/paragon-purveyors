@@ -303,6 +303,41 @@ test("shared renderer returns the complete monthly document with injected CSS", 
   assert.match(html, /<\/html>$/);
 });
 
+test("shared renderer makes contact phones clickable without changing visible text", async () => {
+  const fixture = createRendererFixture({
+    contacts: [
+      {
+        active: true,
+        name: "Blake B.",
+        location: "Irvine / Orange County",
+        phone: "(949) 303-9726",
+        email: "blake@paragonpurveyors.com",
+      },
+      {
+        active: true,
+        name: "Clayton U.",
+        location: "French Valley / Temecula",
+        phone: "(951) 414-5230",
+        email: "clay@paragonpurveyors.com",
+      },
+    ],
+  });
+
+  const html = await renderMonthlySpecialsHtml({
+    ...fixture,
+    resolveAssetDataUrl: async () => "data:image/webp;base64,UFA=",
+  });
+
+  assert.match(
+    html,
+    /class="contact-phone-link" href="tel:\+19493039726">\(949\) 303-9726<\/a>/,
+  );
+  assert.match(
+    html,
+    /class="contact-phone-link" href="tel:\+19514145230">\(951\) 414-5230<\/a>/,
+  );
+});
+
 test("shared renderer resolves header, campaign, product, dual, and footer media through injection", async () => {
   const calls = [];
   const fixture = createRendererFixture({

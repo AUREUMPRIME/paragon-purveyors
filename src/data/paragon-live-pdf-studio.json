@@ -85,11 +85,11 @@
         "focusY": 50
       },
       "productLine": "Australian Wagyu",
-      "marblingScore": "MB 4-5",
+      "marblingScore": "MB 6-7",
       "quantityAvailable": "Available",
       "primaryOffer": {
-        "label": "6+ oz steak",
-        "price": 22,
+        "label": "2-Pack / 6+ oz",
+        "price": 60,
         "image": {
           "assetId": "asset_tenderloin_436ae92089e2",
           "visible": true,
@@ -200,7 +200,7 @@
       "description": "Classic steakhouse cut with a clean bite, rich flavor, and refined texture.",
       "secondaryOffer": {
         "label": "Primal AVG 14+ lb",
-        "price": 449,
+        "price": 260,
         "image": {
           "assetId": "asset_striploin_1afd3bb1e8d5",
           "visible": true,

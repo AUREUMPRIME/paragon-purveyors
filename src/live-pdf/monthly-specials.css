@@ -1395,3 +1395,9 @@ body {
   line-height: 1;
 }
 /* LIVE_PDF_V2_CONTACT_AREA_POLISH_END */
+/* CLICKABLE_CONTACT_PHONE_START */
+.contact-phone-link {
+  color: inherit;
+  text-decoration: none;
+}
+/* CLICKABLE_CONTACT_PHONE_END */

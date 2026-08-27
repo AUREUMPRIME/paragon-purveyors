@@ -1110,9 +1110,8 @@ const main = async () => {
   await fs.writeFile(activeOutputPaths.html, html, "utf8");
   await fs.writeFile(activeOutputPaths.json, `${JSON.stringify(publicJson, null, 2)}\n`, "utf8");
 
-  if (publishMode) {
-    await fs.writeFile(activeOutputPaths.index, createLandingHtml(data, activeSpecials, buildId), "utf8");
-  }
+  // /specials/ is owned by the password-gated Studio entry.
+  // Production publishing updates the public PDF/HTML/JSON artifacts only.
 
   const skipPdf = isActive(process.env.MONTHLY_SPECIALS_V2_SKIP_PDF);
   let pdfStats = null;
@@ -1149,9 +1148,6 @@ const main = async () => {
   console.log(`- public/specials/${outputLabel}.html`);
   console.log(`- public/specials/${outputLabel}.json`);
   console.log(`- visual source: ${data.visualSource?.type || "unknown"} (${data.visualSource?.sha256 || "missing hash"})`);
-  if (publishMode) {
-    console.log("- public/specials/index.html");
-  }
 
 };
 

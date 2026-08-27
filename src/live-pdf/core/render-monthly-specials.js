@@ -120,6 +120,23 @@ const createSpecialCard = async (item, resolveAssetDataUrl) => {
       </article>`;
   };
 
+  const createPhoneMarkup = (phone) => {
+    const visiblePhone = normalizeText(phone);
+    if (!visiblePhone) return "Phone pending";
+
+    const digits = visiblePhone.replace(/\D/g, "");
+    const telNumber =
+      digits.length === 10
+        ? `+1${digits}`
+        : digits.length === 11 && digits.startsWith("1")
+          ? `+${digits}`
+          : "";
+
+    return telNumber
+      ? `<a class="contact-phone-link" href="tel:${telNumber}">${escapeHtml(visiblePhone)}</a>`
+      : escapeHtml(visiblePhone);
+  };
+
   const createContactCards = (contacts) =>
   contacts
     .filter(
@@ -140,7 +157,7 @@ const createSpecialCard = async (item, resolveAssetDataUrl) => {
             <h2 class="contact-name">${escapeHtml(contact.name || "Paragon Purveyors")}</h2>
           </div>
           <div class="contact-card__row contact-card__row--secondary">
-            <p class="contact-meta">${escapeHtml(contact.phone || "Phone pending")}</p>
+            <p class="contact-meta">${createPhoneMarkup(contact.phone)}</p>
             ${contact.email ? `<p class="contact-email">${escapeHtml(contact.email)}</p>` : ""}
           </div>
         </article>`,

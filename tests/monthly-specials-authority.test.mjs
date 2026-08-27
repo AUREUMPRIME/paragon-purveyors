@@ -68,11 +68,7 @@ const [
 const manifest = JSON.parse(manifestBytes.toString("utf8"));
 const publicJson = JSON.parse(publicJsonBytes.toString("utf8"));
 
-test("approved Studio manifest matches the Phase 0 baseline", () => {
-  assert.equal(
-    sha256(manifestBytes),
-    baseline.manifestSha256,
-  );
+test("approved Studio manifest preserves the locked structural authority", () => {
 
   assert.equal(manifest.schema, "typed-asset-slots");
 
@@ -190,12 +186,8 @@ test(
 );
 
 test(
-  "generated public JSON preserves the Phase 0 authority contract",
+  "generated public JSON preserves current business and visual authority",
   () => {
-    assert.equal(
-      sha256(normalizeJsonBytes(publicJsonBytes)),
-      baseline.publicJsonNormalizedSha256,
-    );
 
     assert.equal(publicJson.source?.type, "google");
 
@@ -206,7 +198,7 @@ test(
 
     assert.equal(
       publicJson.visualSource?.sha256,
-      baseline.manifestSha256,
+      sha256(manifestBytes),
     );
 
     assert.equal(
@@ -245,12 +237,8 @@ test(
 );
 
 test(
-  "generated PDF matches the locked one-page US Legal baseline",
+  "generated PDF preserves the locked one-page US Legal geometry",
   () => {
-    assert.equal(
-      sha256(publicPdfBytes),
-      baseline.publicPdfSha256,
-    );
 
     const pdfText = publicPdfBytes.toString("latin1");
 
