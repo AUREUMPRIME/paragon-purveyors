@@ -55,7 +55,7 @@
       "visible": true
     },
     "month": {
-      "value": "July / August",
+      "value": "September",
       "visible": true
     },
     "year": {
@@ -104,7 +104,7 @@
       "description": "Lean, tender, and refined. A classic center-plate cut for elegant preparations.",
       "secondaryOffer": {
         "label": "Tenderloin AVG 5.5+ lb",
-        "price": 249,
+        "price": 260,
         "image": {
           "assetId": "asset_tenderloin_e3602dbdc4f2",
           "visible": true,
@@ -152,7 +152,7 @@
       "description": "Richly marbled with full beef flavor. Built for a bold, memorable steak experience.",
       "secondaryOffer": {
         "label": "Cube Roll AVG 13+ lb",
-        "price": 459,
+        "price": 460,
         "image": {
           "assetId": "asset_ribeye_8be297e0f5cf",
           "visible": true,
@@ -200,7 +200,7 @@
       "description": "Classic steakhouse cut with a clean bite, rich flavor, and refined texture.",
       "secondaryOffer": {
         "label": "Primal AVG 14+ lb",
-        "price": 260,
+        "price": 450,
         "image": {
           "assetId": "asset_striploin_1afd3bb1e8d5",
           "visible": true,
