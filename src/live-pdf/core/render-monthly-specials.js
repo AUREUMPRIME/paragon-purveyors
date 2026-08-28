@@ -120,10 +120,8 @@ const createSpecialCard = async (item, resolveAssetDataUrl) => {
       </article>`;
   };
 
-  const createPhoneMarkup = (phone) => {
+  const createPhoneTarget = (phone) => {
     const visiblePhone = normalizeText(phone);
-    if (!visiblePhone) return "Phone pending";
-
     const digits = visiblePhone.replace(/\D/g, "");
     const telNumber =
       digits.length === 10
@@ -132,37 +130,49 @@ const createSpecialCard = async (item, resolveAssetDataUrl) => {
           ? `+${digits}`
           : "";
 
-    return telNumber
-      ? `<a class="contact-phone-link" href="tel:${telNumber}">${escapeHtml(visiblePhone)}</a>`
-      : escapeHtml(visiblePhone);
+    return {
+      visiblePhone,
+      telNumber,
+    };
   };
 
   const createContactCards = (contacts) =>
-  contacts
-    .filter(
-      (contact) =>
-        contact.active !== false &&
-        (
-          normalizeText(contact.name) ||
-          normalizeText(contact.phone) ||
-          normalizeText(contact.location) ||
-          normalizeText(contact.email)
-        ),
-    )
-    .map(
-      (contact) => `
-        <article class="contact-card">
-          <div class="contact-card__row contact-card__row--primary">
-            <p class="contact-kicker">${escapeHtml(contact.location || "Contact")}</p>
-            <h2 class="contact-name">${escapeHtml(contact.name || "Paragon Purveyors")}</h2>
-          </div>
-          <div class="contact-card__row contact-card__row--secondary">
-            <p class="contact-meta">${createPhoneMarkup(contact.phone)}</p>
-            ${contact.email ? `<p class="contact-email">${escapeHtml(contact.email)}</p>` : ""}
-          </div>
-        </article>`,
-    )
-    .join("");
+    contacts
+      .filter(
+        (contact) =>
+          contact.active !== false &&
+          (
+            normalizeText(contact.name) ||
+            normalizeText(contact.phone) ||
+            normalizeText(contact.location) ||
+            normalizeText(contact.email)
+          ),
+      )
+      .map((contact) => {
+        const { visiblePhone, telNumber } = createPhoneTarget(contact.phone);
+        const contactName =
+          normalizeText(contact.name) || "Paragon Purveyors";
+        const cardTag = telNumber ? "a" : "article";
+        const cardClass = telNumber
+          ? "contact-card contact-card--call"
+          : "contact-card";
+        const callAttributes = telNumber
+          ? ` href="tel:${telNumber}" aria-label="Call ${escapeHtml(contactName)} at ${escapeHtml(visiblePhone)}"`
+          : "";
+
+        return `
+          <${cardTag} class="${cardClass}"${callAttributes}>
+            <div class="contact-card__row contact-card__row--primary">
+              <p class="contact-kicker">${escapeHtml(contact.location || "Contact")}</p>
+              <h2 class="contact-name">${escapeHtml(contactName)}</h2>
+            </div>
+            <div class="contact-card__row contact-card__row--secondary">
+              <p class="contact-meta">${visiblePhone ? escapeHtml(visiblePhone) : "Phone pending"}</p>
+              ${contact.email ? `<p class="contact-email">${escapeHtml(contact.email)}</p>` : ""}
+            </div>
+          </${cardTag}>`;
+      })
+      .join("");
 
 export const renderMonthlySpecialsHtml = async ({ data, activeSpecials, css, resolveAssetDataUrl }) => {
   const settings = data.settings || {};

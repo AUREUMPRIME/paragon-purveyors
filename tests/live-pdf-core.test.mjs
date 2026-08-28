@@ -303,7 +303,7 @@ test("shared renderer returns the complete monthly document with injected CSS", 
   assert.match(html, /<\/html>$/);
 });
 
-test("shared renderer makes contact phones clickable without changing visible text", async () => {
+test("shared renderer makes each valid contact card callable without changing visible contact content", async () => {
   const fixture = createRendererFixture({
     contacts: [
       {
@@ -320,6 +320,13 @@ test("shared renderer makes contact phones clickable without changing visible te
         phone: "(951) 414-5230",
         email: "clay@paragonpurveyors.com",
       },
+      {
+        active: true,
+        name: "No Phone",
+        location: "Fallback",
+        phone: "",
+        email: "fallback@paragonpurveyors.com",
+      },
     ],
   });
 
@@ -330,12 +337,25 @@ test("shared renderer makes contact phones clickable without changing visible te
 
   assert.match(
     html,
-    /class="contact-phone-link" href="tel:\+19493039726">\(949\) 303-9726<\/a>/,
+    /<a class="contact-card contact-card--call" href="tel:\+19493039726" aria-label="Call Blake B\. at \(949\) 303-9726">[\s\S]*?<h2 class="contact-name">Blake B\.<\/h2>[\s\S]*?<p class="contact-meta">\(949\) 303-9726<\/p>[\s\S]*?<p class="contact-email">blake@paragonpurveyors\.com<\/p>[\s\S]*?<\/a>/,
   );
   assert.match(
     html,
-    /class="contact-phone-link" href="tel:\+19514145230">\(951\) 414-5230<\/a>/,
+    /<a class="contact-card contact-card--call" href="tel:\+19514145230" aria-label="Call Clayton U\. at \(951\) 414-5230">[\s\S]*?<h2 class="contact-name">Clayton U\.<\/h2>[\s\S]*?<p class="contact-meta">\(951\) 414-5230<\/p>[\s\S]*?<p class="contact-email">clay@paragonpurveyors\.com<\/p>[\s\S]*?<\/a>/,
   );
+
+  assert.equal(
+    (html.match(/class="contact-card contact-card--call"/g) || []).length,
+    2,
+  );
+
+  assert.match(
+    html,
+    /<article class="contact-card">[\s\S]*?<h2 class="contact-name">No Phone<\/h2>[\s\S]*?<p class="contact-meta">Phone pending<\/p>[\s\S]*?<p class="contact-email">fallback@paragonpurveyors\.com<\/p>[\s\S]*?<\/article>/,
+  );
+
+  assert.doesNotMatch(html, /contact-phone-link/);
+  assert.doesNotMatch(html, /href="mailto:/i);
 });
 
 test("shared renderer resolves header, campaign, product, dual, and footer media through injection", async () => {

@@ -88,7 +88,7 @@
       "marblingScore": "MB 6-7",
       "quantityAvailable": "Available",
       "primaryOffer": {
-        "label": "2-Pack / 6+ oz",
+        "label": "2-Pack / 6+ oz each",
         "price": 60,
         "image": {
           "assetId": "asset_tenderloin_436ae92089e2",
@@ -169,7 +169,7 @@
       "sort": 3,
       "active": true,
       "offerMode": "dual-offer",
-      "displayName": "Primal / NY Strip",
+      "displayName": "Striploin / NY Strip",
       "brand": "Black Opal",
       "brandLogo": {
         "assetId": "asset_product_brand_logos_f3813ec833cd",

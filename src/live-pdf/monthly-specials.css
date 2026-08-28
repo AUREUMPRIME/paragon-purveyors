@@ -1396,8 +1396,12 @@ body {
 }
 /* LIVE_PDF_V2_CONTACT_AREA_POLISH_END */
 /* CLICKABLE_CONTACT_PHONE_START */
-.contact-phone-link {
+.contact-card--call {
   color: inherit;
   text-decoration: none;
+}
+.contact-card--call:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
 }
 /* CLICKABLE_CONTACT_PHONE_END */
