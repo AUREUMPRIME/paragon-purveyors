@@ -174,7 +174,13 @@ const createSpecialCard = async (item, resolveAssetDataUrl) => {
       })
       .join("");
 
-export const renderMonthlySpecialsHtml = async ({ data, activeSpecials, css, resolveAssetDataUrl }) => {
+export const renderMonthlySpecialsHtml = async ({
+  data,
+  activeSpecials,
+  css,
+  fontCss = "",
+  resolveAssetDataUrl,
+}) => {
   const settings = data.settings || {};
   const activeContacts = (data.contacts || []).filter((contact) => contact.active !== false);
   const headerBrandMarkVisible = isSettingVisible(settings, "headerBrandMarkVisible");
@@ -351,6 +357,8 @@ export const renderMonthlySpecialsHtml = async ({ data, activeSpecials, css, res
     ? "specials-closing specials-closing--with-broll"
     : "specials-closing";
 
+  const resolvedCss = fontCss ? `${css}\n${fontCss}` : css;
+
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -360,7 +368,7 @@ export const renderMonthlySpecialsHtml = async ({ data, activeSpecials, css, res
   <link rel="icon" type="image/png" sizes="32x32" href="/PP32x32.png">
   <link rel="icon" type="image/png" sizes="48x48" href="/PP48x48.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>${css}</style>
+  <style>${resolvedCss}</style>
 </head>
 <body>
   <main class="monthly-specials-page" aria-label="${escapeHtml(campaignTitle)}">

@@ -10,6 +10,7 @@ import { chromium } from "playwright";
 import { adaptCanonicalDocument } from "../../src/live-pdf/core/adapt-canonical-document.js";
 import { renderMonthlySpecialsHtml } from "../../src/live-pdf/core/render-monthly-specials.js";
 import { createAssetDataUrlResolver } from "../../src/live-pdf/core/resolve-asset.js";
+import { loadPdfFontCss, waitForPdfFonts } from "./pdf-font-lock.mjs";
 
 export const SHADOW_FILE_NAMES = Object.freeze({
   html: "studio-preview.html",
@@ -171,11 +172,12 @@ export const buildShadowPublication = async ({
   const schemaPath = path.join(projectRoot, "src/live-pdf/schema/paragon-live-pdf-studio.schema.json");
   const cssPath = path.join(projectRoot, "src/live-pdf/monthly-specials.css");
   const geometryPath = path.join(projectRoot, "src/live-pdf-studio/review-geometry.js");
-  const [document, schema, css, geometrySource] = await Promise.all([
+  const [document, schema, css, geometrySource, fontLock] = await Promise.all([
     fs.readFile(sourcePath, "utf8").then(JSON.parse),
     fs.readFile(schemaPath, "utf8").then(JSON.parse),
     fs.readFile(cssPath, "utf8"),
     fs.readFile(geometryPath, "utf8"),
+    loadPdfFontCss(projectRoot),
   ]);
 
   const sourceAcceptance = await validateCanonicalShadowSource({
@@ -192,6 +194,7 @@ export const buildShadowPublication = async ({
     data: adapted,
     activeSpecials: adapted.specials,
     css,
+    fontCss: fontLock.css,
     resolveAssetDataUrl,
   }));
 
@@ -215,6 +218,8 @@ export const buildShadowPublication = async ({
     if (images.some((image) => !image.ready)) {
       throw new Error("Shadow HTML contains unresolved images.");
     }
+
+    const fonts = await waitForPdfFonts(page);
 
     const geometryModuleUrl = `data:text/javascript;base64,${Buffer.from(geometrySource).toString("base64")}`;
     const geometry = await page.evaluate(async (moduleUrl) => {
@@ -266,6 +271,10 @@ export const buildShadowPublication = async ({
         activeContacts: sourceAcceptance.activeContacts,
         assetCount: sourceAcceptance.assets.length,
         imageCount: images.length,
+        fontFamilyCount: 2,
+        fontRequirementCount: fonts.requirements.length,
+        fontSelectorCount: fonts.selectors.length,
+        fontAssetHashes: fontLock.assets.map((asset) => asset.actualSha256),
         guardrailCount: geometry.guardrailCount,
         checkedNodeCount: geometry.checkedCount,
         pageWidth: geometry.pageWidth,

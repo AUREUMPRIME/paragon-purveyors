@@ -6,6 +6,7 @@ import { chromium } from "playwright";
 import { adaptCanonicalDocument } from "../src/live-pdf/core/adapt-canonical-document.js";
 import { renderMonthlySpecialsHtml } from "../src/live-pdf/core/render-monthly-specials.js";
 import { createAssetDataUrlResolver } from "../src/live-pdf/core/resolve-asset.js";
+import { loadPdfFontCss, waitForPdfFonts } from "./paragon-live-pdf-workflow/pdf-font-lock.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 const sourcePath = path.join(
@@ -70,12 +71,13 @@ const main = async () => {
   let browser = null;
 
   try {
-    const [document, css, productionHtml, geometrySource] =
+    const [document, css, productionHtml, geometrySource, fontLock] =
       await Promise.all([
         fs.readFile(sourcePath, "utf8").then(JSON.parse),
         fs.readFile(cssPath, "utf8"),
         fs.readFile(productionHtmlPath, "utf8"),
         fs.readFile(geometryModulePath, "utf8"),
+        loadPdfFontCss(root),
       ]);
     const adapted = adaptCanonicalDocument(document);
     const resolveAssetDataUrl = createAssetDataUrlResolver({
@@ -83,7 +85,7 @@ const main = async () => {
         fs.readFile(path.join(root, "public", normalizedPath)),
       encodeBase64: (data) => data.toString("base64"),
     });
-    const html = (
+    const productionComparableHtml = (
       await renderMonthlySpecialsHtml({
         data: adapted,
         activeSpecials: adapted.specials,
@@ -91,9 +93,18 @@ const main = async () => {
         resolveAssetDataUrl,
       })
     ).replace(/^[ \t]+$/gm, "");
+    const html = (
+      await renderMonthlySpecialsHtml({
+        data: adapted,
+        activeSpecials: adapted.specials,
+        css,
+        fontCss: fontLock.css,
+        resolveAssetDataUrl,
+      })
+    ).replace(/^[ \t]+$/gm, "");
 
     if (
-      normalizeComparableHtml(html) !==
+      normalizeComparableHtml(productionComparableHtml) !==
       normalizeComparableHtml(productionHtml)
     ) {
       throw new Error(
@@ -116,6 +127,8 @@ const main = async () => {
         `Temporary Review PDF contains ${failedImages.length} unresolved image(s).`,
       );
     }
+
+    const fontResults = await waitForPdfFonts(page);
 
     const geometryModuleUrl = `data:text/javascript;base64,${Buffer.from(
       geometrySource,
@@ -155,6 +168,8 @@ const main = async () => {
     console.log(`[DOM NODES CHECKED] ${geometry.checkedCount}`);
     console.log(`[PAGE FRAME] ${geometry.pageWidth} x ${geometry.pageHeight} CSS pixels`);
     console.log(`[IMAGES READY] ${imageResults.length}`);
+    console.log(`[PDF FONT REQUIREMENTS READY] ${fontResults.requirements.length}`);
+    console.log(`[PDF FONT SELECTORS READY] ${fontResults.selectors.length}`);
     console.log(`[PDF BYTES] ${pdfResult.bytes}`);
     console.log(`[PDF PAGES] ${pdfResult.pageCount}`);
     console.log("[PDF MEDIABOX] 0 0 612 1008");
