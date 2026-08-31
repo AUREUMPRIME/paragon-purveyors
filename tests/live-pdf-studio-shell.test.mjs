@@ -74,25 +74,27 @@ test("Asset Library is an in-Studio workspace and never a File Explorer action",
   const main = await read("src/live-pdf-studio/main.js");
 
   assert.match(shell, /data-asset-library-dialog/);
-  assert.match(shell, /Upload, assign, archive, and remove/);
-  assert.match(shell, /File Explorer is never used/);
+  assert.match(shell, /Upload, organize, assign, archive, and remove/);
+  assert.doesNotMatch(shell, /explorer\.exe|\/api\/open-library/);
   assert.match(main, /assetDialog\.showModal\(\)/);
   assert.doesNotMatch(main, /fetch\("\/api\/open-library"/);
 });
 
-test("Review PDF uses a full-screen fit-to-screen dialog with secure publishing disabled", async () => {
+test("Review PDF keeps full-screen geometry while Publish follows runtime Studio authority", async () => {
   const shell = await read("src/live-pdf-studio/shell.js");
   const review = await read("src/live-pdf-studio/review-dialog.js");
   const styles = await read("src/live-pdf-studio/styles.css");
 
   assert.match(shell, /data-review-dialog/);
-  assert.match(shell, /src="\/specials\/monthly-specials\.html"/);
   assert.match(
     shell,
-    /Publishing becomes available after secure Studio authentication is connected\./,
+    /data-live-authority-src="\/specials\/monthly-specials\.html"/,
   );
-  assert.match(review, /availableWidth \/ PAGE_WIDTH/);
-  assert.match(review, /availableHeight \/ PAGE_HEIGHT/);
+  assert.match(shell, /data-studio-action="publish"/);
+  assert.match(shell, /setPublishingState/);
+  assert.match(review, /getPublishingEnabled/);
+  assert.match(review, /Number\(availableWidth\) \/ PAGE_WIDTH/);
+  assert.match(review, /Number\(availableHeight\) \/ PAGE_HEIGHT/);
   assert.match(styles, /height: 100vh/);
   assert.match(styles, /place-items: center/);
   assert.match(styles, /overflow: hidden/);

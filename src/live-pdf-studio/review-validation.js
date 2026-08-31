@@ -61,6 +61,7 @@ export const createReviewValidation = ({
   imageResults = [],
   geometryResults = null,
   draftFingerprint = "",
+  publishingEnabled = false,
 } = {}) => {
   const editorIssues = (editorValidation?.issues || []).map(
     normalizeEditorIssue,
@@ -99,7 +100,7 @@ export const createReviewValidation = ({
   const warnings = Object.freeze(
     uniqueIssues([
       ...editorWarnings,
-      SECURE_PUBLISHING_WARNING,
+      ...(publishingEnabled ? [] : [SECURE_PUBLISHING_WARNING]),
     ]),
   );
   const issues = Object.freeze([...errors, ...warnings]);

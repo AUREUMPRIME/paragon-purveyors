@@ -32,9 +32,15 @@ const fixture = async () =>
 const read = (relativePath) =>
   fs.readFile(path.join(root, relativePath), "utf8");
 
-test("canonical asset catalog preserves thirteen records and fifteen compatible slots", async () => {
+test("canonical asset catalog validates independently of upload-driven record cardinality and preserves fifteen compatible slots", async () => {
   const document = await fixture();
-  assert.equal(Object.keys(document.assetLibrary).length, 13);
+  const assetIds = Object.keys(document.assetLibrary);
+  assert.ok(assetIds.length > 0);
+  assert.equal(new Set(assetIds).size, assetIds.length);
+  assert.equal(
+    assetIds.every((assetId) => document.assetLibrary[assetId].id === assetId),
+    true,
+  );
   assert.equal(createAssetSlotRecords(document).length, 15);
   assert.equal(validateAssetCatalog(document).length, 0);
 });

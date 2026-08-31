@@ -11,6 +11,7 @@ import { createDraftStore } from "./draft-store.js";
 import { createDave2DialogController } from "./dave2-dialog.js";
 import { createEditorController } from "./editor-controller.js";
 import { createNavigationController } from "./navigation.js";
+import { createPublishController } from "./publish-controller.js";
 import { createReviewDialogController } from "./review-dialog.js";
 import { createReviewPreview } from "./review-preview.js";
 import { renderStudioShell } from "./shell.js";
@@ -93,6 +94,8 @@ let assetLibraryController = null;
 let assetPreviewResolver = null;
 let reviewPreview = null;
 let reviewController = null;
+let publishController = null;
+let productionPublishingEnabled = false;
 let unsubscribeDraftState = null;
 let activeSection = "overview";
 
@@ -190,6 +193,7 @@ root.addEventListener("click", async (event) => {
 
   if (action === "open-assets") openAssetLibrary();
   if (action === "open-review") void reviewController?.open();
+  if (action === "publish") void publishController?.publish();
 
   if (action === "save-draft" && autosaveController) {
     await autosaveController.saveNow();
@@ -258,6 +262,7 @@ const initializeDraftFoundation = async (bootstrap) => {
       editorController.getReviewInputValidation(),
     getDraftFingerprint: () =>
       fingerprintDocument(studioState.getDraft()),
+    getPublishingEnabled: () => productionPublishingEnabled,
     onValidationChange: (reviewValidation) =>
       editorController.setReviewValidation(reviewValidation),
   });
@@ -290,6 +295,16 @@ const initializeDraftFoundation = async (bootstrap) => {
     onDraftChanged: () => editorController.refresh(),
   });
 
+  publishController = createPublishController({
+    apiClient,
+    authController,
+    shell,
+    state: studioState,
+    store: draftStore,
+    reviewController,
+  });
+  publishController.setAvailability(productionPublishingEnabled);
+
   await assetLibraryController.refresh();
   editorController.navigate(activeSection);
 
@@ -316,6 +331,8 @@ const initializeDraftFoundation = async (bootstrap) => {
     refreshReview: () => reviewController.refresh(),
     getReviewValidation: () =>
       reviewController.getValidation(),
+    publish: () => publishController.publish(),
+    getPublicationState: () => publishController.getState(),
     getValidation: () => editorController.getValidation(),
     getSectionStatuses: () =>
       editorController.getSectionStatuses(),
@@ -364,6 +381,7 @@ const initializeDraftFoundation = async (bootstrap) => {
       );
       unsubscribeDraftState?.();
       assetLibraryController?.dispose();
+      publishController?.dispose();
       reviewController?.dispose();
       assetPreviewResolver?.dispose();
       editorController?.dispose();
@@ -386,7 +404,10 @@ const initializeAuthenticatedStudio = async (bootstrap) => {
     );
   }
 
+  productionPublishingEnabled =
+    bootstrap.productionPublishingEnabled === true;
   await initializeDraftFoundation(bootstrap);
+  publishController?.setAvailability(productionPublishingEnabled);
   shell.setAuthState({
     authenticated: true,
     loading: false,
@@ -483,7 +504,10 @@ window.__PARAGON_LIVE_PDF_STUDIO_SHELL__ = Object.freeze({
   version: 4,
   navigationSections: 8,
   primaryActions: 5,
-  productionPublishingEnabled: false,
+  get productionPublishingEnabled() {
+    return productionPublishingEnabled;
+  },
+  publicationBridge: "worker-validated",
   draftFoundation: "indexeddb",
   contentEditors: 4,
   visualEditors: 3,

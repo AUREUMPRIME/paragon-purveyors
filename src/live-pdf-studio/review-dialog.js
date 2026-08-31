@@ -190,6 +190,7 @@ export const createReviewDialogController = (
     createPreview,
     getEditorValidation,
     getDraftFingerprint,
+    getPublishingEnabled = () => false,
     onValidationChange = () => {},
     inspectImages = inspectReviewFrameImages,
     inspectGeometry = inspectReviewFrameGeometry,
@@ -268,6 +269,7 @@ export const createReviewDialogController = (
       geometryResults,
       draftFingerprint:
         preview?.draftFingerprint || draftFingerprint,
+      publishingEnabled: getPublishingEnabled() === true,
     });
 
     setReviewPresentation(dialog, currentValidation);

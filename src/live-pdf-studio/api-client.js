@@ -2,6 +2,8 @@ const STUDIO_API_ROUTES = Object.freeze({
   login: "/v1/auth/login",
   session: "/v1/auth/session",
   bootstrap: "/v1/studio/bootstrap",
+  validate: "/v1/studio/validate",
+  publish: "/v1/studio/publish",
 });
 
 const normalizeBaseUrl = (value) => String(value ?? "").replace(/\/+$/u, "");
@@ -61,6 +63,7 @@ export const createStudioApiClient = ({
     {
       method = "GET",
       body,
+      bodyType = "json",
       accessToken = null,
     } = {},
   ) => {
@@ -68,7 +71,7 @@ export const createStudioApiClient = ({
       Accept: "application/json",
     });
 
-    if (body !== undefined) {
+    if (body !== undefined && bodyType === "json") {
       headers.set("Content-Type", "application/json");
     }
 
@@ -133,6 +136,36 @@ export const createStudioApiClient = ({
     },
     bootstrap(accessToken) {
       return request(STUDIO_API_ROUTES.bootstrap, { accessToken });
+    },
+    validate(accessToken, payload) {
+      if (!payload || typeof payload !== "object") {
+        throw new TypeError("A validation payload is required.");
+      }
+      return request(STUDIO_API_ROUTES.validate, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        accessToken,
+      });
+    },
+    publish(accessToken, formData) {
+      if (!formData || typeof formData.append !== "function") {
+        throw new TypeError("Publication FormData is required.");
+      }
+      return request(STUDIO_API_ROUTES.publish, {
+        method: "POST",
+        body: formData,
+        bodyType: "form",
+        accessToken,
+      });
+    },
+    publicationStatus(accessToken, publishId) {
+      if (typeof publishId !== "string" || publishId.length === 0) {
+        throw new TypeError("A publication ID is required.");
+      }
+      return request(
+        `${STUDIO_API_ROUTES.publish}/${encodeURIComponent(publishId)}`,
+        { accessToken },
+      );
     },
     setUnauthorizedHandler(handler) {
       unauthorizedHandler = typeof handler === "function" ? handler : () => {};

@@ -78,8 +78,7 @@ const primaryActions = Object.freeze([
     action: "publish",
     disabled: true,
     primary: true,
-    title:
-      "Publishing is currently disabled for this Studio session.",
+    title: "Review and publish the current Monthly Specials.",
   },
 ]);
 
@@ -308,7 +307,7 @@ export const renderStudioShell = ({ root, statuses }) => {
           <span class="connection-dot" aria-hidden="true"></span>
           <div>
             <strong>Live Studio</strong>
-            <small>Publishing disabled</small>
+            <small data-publishing-status>Publishing unavailable</small>
           </div>
           <button
             type="button"
@@ -442,6 +441,32 @@ export const renderStudioShell = ({ root, statuses }) => {
       </div>
     </dialog>
 
+    <dialog class="studio-dialog" data-publish-live-dialog>
+      <div class="studio-dialog__panel">
+        <header class="studio-dialog__header">
+          <div>
+            <p class="workspace-eyebrow">Live Publication</p>
+            <h2>Publish Monthly Specials?</h2>
+            <p>
+              This sends the reviewed draft through the protected publication
+              workflow. The live Monthly Specials will update only after the
+              deployment and verification finish successfully.
+            </p>
+          </div>
+        </header>
+        <div class="asset-library-toolbar">
+          <button type="button" data-publish-cancel>Keep Reviewing</button>
+          <button
+            class="studio-action studio-action--primary"
+            type="button"
+            data-publish-confirm
+          >
+            Publish Live PDF
+          </button>
+        </div>
+      </div>
+    </dialog>
+
     <dialog class="studio-dialog review-dialog" data-review-dialog>
       <div class="review-dialog__panel">
         <header class="review-dialog__header">
@@ -466,8 +491,9 @@ export const renderStudioShell = ({ root, statuses }) => {
             <button
               class="studio-action studio-action--primary"
               type="button"
+              data-studio-action="publish"
               disabled
-              title="Publishing is currently disabled for this Studio session."
+              title="Review and publish the current Monthly Specials."
             >
               Publish Live PDF
             </button>
@@ -520,6 +546,15 @@ export const renderStudioShell = ({ root, statuses }) => {
   const restoreButton = root.querySelector(
     '[data-studio-action="restore-live"]',
   );
+  const publishButtons = [...root.querySelectorAll(
+    '[data-studio-action="publish"]',
+  )];
+  const publishingStatusNode = root.querySelector(
+    "[data-publishing-status]",
+  );
+  const publishDialog = root.querySelector(
+    "[data-publish-live-dialog]",
+  );
   const restoreDialog = root.querySelector(
     "[data-restore-live-dialog]",
   );
@@ -539,6 +574,7 @@ export const renderStudioShell = ({ root, statuses }) => {
   );
 
   let latestDraftSnapshot = null;
+  let publishingBusy = false;
 
   const applyDraftSnapshot = (snapshot) => {
     latestDraftSnapshot = snapshot;
@@ -552,8 +588,9 @@ export const renderStudioShell = ({ root, statuses }) => {
       snapshot.persistenceStatus,
     );
 
-    saveButton.disabled = isBusy;
-    restoreButton.disabled = isBusy || !snapshot.isModified;
+    saveButton.disabled = isBusy || publishingBusy;
+    restoreButton.disabled =
+      isBusy || publishingBusy || !snapshot.isModified;
 
     const workspaceLabel = root.querySelector(
       "[data-workspace-draft-label]",
@@ -617,6 +654,45 @@ export const renderStudioShell = ({ root, statuses }) => {
       restoreDialog.showModal();
     });
 
+  const confirmPublishLive = () =>
+    new Promise((resolve) => {
+      let settled = false;
+      const abortController = new AbortController();
+      const { signal } = abortController;
+
+      const settle = (confirmed) => {
+        if (settled) return;
+        settled = true;
+        abortController.abort();
+        if (publishDialog.open) publishDialog.close();
+        resolve(confirmed);
+      };
+
+      publishDialog
+        .querySelector("[data-publish-confirm]")
+        .addEventListener("click", () => settle(true), { signal });
+      publishDialog
+        .querySelector("[data-publish-cancel]")
+        .addEventListener("click", () => settle(false), { signal });
+      publishDialog.addEventListener(
+        "cancel",
+        (event) => {
+          event.preventDefault();
+          settle(false);
+        },
+        { signal },
+      );
+      publishDialog.addEventListener(
+        "click",
+        (event) => {
+          if (event.target === publishDialog) settle(false);
+        },
+        { signal },
+      );
+
+      publishDialog.showModal();
+    });
+
   const setSectionStatuses = (nextStatuses) => {
     for (const section of STUDIO_SECTIONS) {
       const status = nextStatuses[section.id];
@@ -658,6 +734,58 @@ export const renderStudioShell = ({ root, statuses }) => {
       }
     },
     setSectionStatuses,
+    setPublishingState({
+      enabled = false,
+      state = "disabled",
+      message = "",
+    } = {}) {
+      const busyStates = new Set([
+        "reviewing",
+        "validating",
+        "confirming",
+        "submitting",
+        "queued",
+        "building",
+        "promoting",
+        "deploying",
+        "verifying",
+      ]);
+      publishingBusy = busyStates.has(state);
+
+      const statusText = message || ({
+        disabled: "Publishing unavailable",
+        ready: "Ready to publish",
+        reviewing: "Reviewing draft",
+        validating: "Validating",
+        confirming: "Awaiting approval",
+        submitting: "Starting publication",
+        queued: "Publication queued",
+        building: "Building live PDF",
+        promoting: "Preparing live update",
+        deploying: "Deploying",
+        verifying: "Verifying live PDF",
+        success: "Published",
+        conflict: "Publication conflict",
+        failed: "Publication failed",
+      }[state] || "Publishing unavailable");
+
+      if (publishingStatusNode) {
+        publishingStatusNode.textContent = statusText;
+      }
+
+      for (const button of publishButtons) {
+        button.disabled = !enabled || publishingBusy;
+        button.title = !enabled
+          ? "Live publishing is currently unavailable."
+          : publishingBusy
+            ? statusText
+            : "Review and publish the current Monthly Specials.";
+      }
+
+      if (latestDraftSnapshot) {
+        applyDraftSnapshot(latestDraftSnapshot);
+      }
+    },
     setAssetLibraryState({ pending = 0, total = 0 } = {}) {
       if (!assetStatusNode) return;
       assetStatusNode.textContent =
@@ -678,5 +806,6 @@ export const renderStudioShell = ({ root, statuses }) => {
       });
     },
     confirmRestoreLive,
+    confirmPublishLive,
   };
 };

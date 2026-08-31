@@ -34,6 +34,9 @@ test("API client declares the locked Worker routes and request factory", async (
   assert.match(source, /["']\/v1\/auth\/login["']/);
   assert.match(source, /["']\/v1\/auth\/session["']/);
   assert.match(source, /["']\/v1\/studio\/bootstrap["']/);
+  assert.match(source, /["']\/v1\/studio\/validate["']/);
+  assert.match(source, /["']\/v1\/studio\/publish["']/);
+  assert.match(source, /publicationStatus/);
 });
 
 test("API client sends no-store JSON login without persisting credentials", async () => {
@@ -93,18 +96,20 @@ test("Login logout and unauthorized handling preserve IndexedDB drafts", async (
   );
 });
 
-test("Studio main initializes from authenticated bootstrap while publishing stays disabled", async () => {
+test("Studio main consumes authenticated bootstrap publication authority through the isolated bridge", async () => {
   const source = await readOptional("src/live-pdf-studio/main.js");
 
   assert.match(source, /from "\.\/api-client\.js"/);
   assert.match(source, /from "\.\/auth\.js"/);
+  assert.match(source, /from "\.\/publish-controller\.js"/);
   assert.match(source, /bootstrap\.document/);
   assert.match(source, /bootstrap\.currentMainSha/);
-  assert.match(source, /productionPublishingEnabled:\s*false/);
-  assert.doesNotMatch(source, /publish-controller\.js/);
+  assert.match(source, /bootstrap\.productionPublishingEnabled/);
+  assert.match(source, /createPublishController/);
+  assert.doesNotMatch(source, /productionPublishingEnabled:\s*false/);
 });
 
-test("Studio shell exposes an accessible login gate and keeps publish controls disabled", async () => {
+test("Studio shell exposes accessible authentication and two runtime-controlled Publish actions", async () => {
   const source = await readOptional("src/live-pdf-studio/shell.js");
 
   assert.match(source, /data-studio-auth/);
@@ -115,10 +120,11 @@ test("Studio shell exposes an accessible login gate and keeps publish controls d
     (source.match(/Publish Live PDF/g) || []).length >= 2,
     "Both Studio publish controls must remain present.",
   );
-  assert.match(
-    source,
-    /Publishing becomes available after secure Studio authentication is connected\./,
-  );
+  assert.match(source, /action:\s*"publish"/);
+  assert.match(source, /data-studio-action="\$\{action\.action\}"/);
+  assert.match(source, /data-studio-action="publish"/);
+  assert.match(source, /setPublishingState/);
+  assert.match(source, /data-publishing-status/);
 });
 
 test("hidden Studio regions are removed from layout even when component CSS sets display", async () => {
@@ -130,20 +136,32 @@ test("hidden Studio regions are removed from layout even when component CSS sets
   );
 });
 
-test("Frontend authentication suite is permanent and publication remains deferred", async () => {
+test("Frontend authentication and Publish Bridge suites are permanent", async () => {
   const packageJson = JSON.parse(await readOptional("package.json"));
 
   assert.equal(
     packageJson.scripts["studio:frontend-auth:test"],
     "node --test tests/live-pdf-studio-frontend-auth.test.mjs",
   );
+  assert.equal(
+    packageJson.scripts["studio:publish-bridge:test"],
+    "node --test tests/live-pdf-studio-publish-bridge.test.mjs",
+  );
   assert.match(
     packageJson.scripts["test:specials:contracts"],
     /tests\/live-pdf-studio-frontend-auth\.test\.mjs/,
   );
+  assert.match(
+    packageJson.scripts["test:specials:contracts"],
+    /tests\/live-pdf-studio-publish-bridge\.test\.mjs/,
+  );
   assert.equal(
     await exists("src/live-pdf-studio/publish-controller.js"),
-    false,
+    true,
+  );
+  assert.equal(
+    await exists("src/live-pdf-studio/publish-payload.js"),
+    true,
   );
 });
 

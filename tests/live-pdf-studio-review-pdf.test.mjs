@@ -152,6 +152,20 @@ test("Review validation reports renderer failures as blocking errors", () => {
   );
 });
 
+test("Review omits the secure-publishing warning when runtime publication is enabled", () => {
+  const result = createReviewValidation({
+    publishingEnabled: true,
+  });
+
+  assert.equal(result.warningCount, 0);
+  assert.equal(
+    result.warnings.some(
+      (issue) => issue.fieldKey === SECURE_PUBLISHING_WARNING.fieldKey,
+    ),
+    false,
+  );
+});
+
 test("Review validation reports every unresolved image while preserving the secure-auth warning", () => {
   const result = createReviewValidation({
     imageResults: [
@@ -212,7 +226,7 @@ test("Review status is Error for invalid drafts, Modified for valid changes, and
   );
 });
 
-test("Review shell uses a dynamic srcdoc frame and actionable validation panel while publishing stays disabled", async () => {
+test("Review shell uses a dynamic srcdoc frame, actionable validation, and runtime Publish control", async () => {
   const [shell, styles] = await Promise.all([
     read("src/live-pdf-studio/shell.js"),
     read("src/live-pdf-studio/styles.css"),
@@ -235,7 +249,9 @@ test("Review shell uses a dynamic srcdoc frame and actionable validation panel w
     /US Legal|Professional Studio Foundation|File Explorer|IndexedDB|Phase 3|publication authorities|Current checkpoint/i,
   );
   assert.doesNotMatch(shell, /<iframe[\s\S]{0,400}\ssrc="\/specials\/monthly-specials\.html"/);
-  assert.match(shell, /Publish Live PDF[\s\S]{0,300}disabled|disabled[\s\S]{0,300}Publish Live PDF/);
+  assert.match(shell, /data-studio-action="publish"/);
+  assert.match(shell, /data-publishing-status/);
+  assert.match(shell, /data-publish-live-dialog/);
 });
 
 test("Review controller renders srcdoc, checks images, refreshes while open, and reports runtime validation", async () => {
@@ -276,7 +292,7 @@ test("Review controller renders srcdoc, checks images, refreshes while open, and
   assert.equal(REVIEW_FIT_MODE.ACTUAL, undefined);
 });
 
-test("Studio integration connects current draft rendering, pending previews, dynamic status, and 113 contracts without publication writes", async () => {
+test("Studio integration connects current draft rendering, pending previews, dynamic status, and the isolated publication bridge", async () => {
   const [main, validation, status, packageText] = await Promise.all([
     read("src/live-pdf-studio/main.js"),
     read("src/live-pdf-studio/editor-validation.js"),
@@ -287,6 +303,8 @@ test("Studio integration connects current draft rendering, pending previews, dyn
   assert.match(main, /fingerprintDocument/);
   assert.match(main, /reviewController\.scheduleRefresh/);
   assert.match(main, /getReviewInputValidation/);
+  assert.match(main, /createPublishController/);
+  assert.match(main, /bootstrap\.productionPublishingEnabled/);
   assert.match(main, /editorController\.setReviewValidation/);
   assert.match(validation, /getReviewStatus/);
   assert.match(status, /export const getReviewStatus/);

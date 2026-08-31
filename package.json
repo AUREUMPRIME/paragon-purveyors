@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test": "npm run test:specials:contracts",
-    "test:specials:contracts": "node --test tests/monthly-specials-contracts.test.mjs tests/paragon-live-pdf-studio-source.test.mjs tests/live-pdf-core.test.mjs tests/live-pdf-font-lock.test.mjs tests/live-pdf-studio-shell.test.mjs tests/live-pdf-studio-draft-state.test.mjs tests/live-pdf-studio-editors.test.mjs tests/live-pdf-studio-visual-controls.test.mjs tests/live-pdf-studio-asset-library.test.mjs tests/live-pdf-studio-review-pdf.test.mjs tests/live-pdf-studio-frontend-auth.test.mjs tests/live-pdf-studio-geometry.test.mjs tools/paragon-live-pdf-worker/test/auth-session.test.mjs tools/paragon-live-pdf-worker/test/cors-rate-limit.test.mjs tools/paragon-live-pdf-worker/test/github-app-auth.test.mjs tools/paragon-live-pdf-worker/test/github-git-staging.test.mjs tools/paragon-live-pdf-worker/test/studio-bootstrap-validate.test.mjs tools/paragon-live-pdf-worker/test/studio-publish-status.test.mjs tools/paragon-live-pdf-worker/test/studio-routing-rate-limit.test.mjs tests/live-pdf-studio-publication-conflict.test.mjs tests/live-pdf-studio-publication-workflow.test.mjs tests/live-pdf-studio-production-promotion.test.mjs tests/live-pdf-studio-production-workflow.test.mjs tests/live-pdf-studio-shadow-only-workflow.test.mjs",
+    "test:specials:contracts": "node --test tests/monthly-specials-contracts.test.mjs tests/paragon-live-pdf-studio-source.test.mjs tests/live-pdf-core.test.mjs tests/live-pdf-font-lock.test.mjs tests/live-pdf-studio-shell.test.mjs tests/live-pdf-studio-draft-state.test.mjs tests/live-pdf-studio-editors.test.mjs tests/live-pdf-studio-visual-controls.test.mjs tests/live-pdf-studio-asset-library.test.mjs tests/live-pdf-studio-review-pdf.test.mjs tests/live-pdf-studio-frontend-auth.test.mjs tests/live-pdf-studio-publish-bridge.test.mjs tests/live-pdf-studio-geometry.test.mjs tools/paragon-live-pdf-worker/test/auth-session.test.mjs tools/paragon-live-pdf-worker/test/cors-rate-limit.test.mjs tools/paragon-live-pdf-worker/test/github-app-auth.test.mjs tools/paragon-live-pdf-worker/test/github-git-staging.test.mjs tools/paragon-live-pdf-worker/test/studio-bootstrap-validate.test.mjs tools/paragon-live-pdf-worker/test/studio-publish-status.test.mjs tools/paragon-live-pdf-worker/test/studio-routing-rate-limit.test.mjs tests/live-pdf-studio-publication-conflict.test.mjs tests/live-pdf-studio-publication-workflow.test.mjs tests/live-pdf-studio-production-promotion.test.mjs tests/live-pdf-studio-production-workflow.test.mjs tests/live-pdf-studio-shadow-only-workflow.test.mjs",
     "test:specials:baseline": "node --test tests/monthly-specials-authority.test.mjs",
     "specials:build": "node tools/build-monthly-specials.mjs",
     "specials:v2:build": "node tools/build-monthly-specials-v2.mjs",
@@ -24,7 +24,8 @@
     "studio:shadow:build": "node tools/paragon-live-pdf-workflow/build-shadow-publication.mjs",
     "studio:shadow:validate": "node tools/paragon-live-pdf-workflow/validate-shadow-publication.mjs",
     "studio:production:test": "node --test tests/live-pdf-studio-production-promotion.test.mjs tests/live-pdf-studio-production-workflow.test.mjs",
-    "studio:shadow:workflow:test": "node --test tests/live-pdf-studio-shadow-only-workflow.test.mjs"
+    "studio:shadow:workflow:test": "node --test tests/live-pdf-studio-shadow-only-workflow.test.mjs",
+    "studio:publish-bridge:test": "node --test tests/live-pdf-studio-publish-bridge.test.mjs"
   },
   "dependencies": {
     "gsap": "^3.13.0",
