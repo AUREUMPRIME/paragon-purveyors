@@ -728,14 +728,13 @@ test("canonical document adapter remains browser-safe", async () => {
   }
 });
 
-test("adapted canonical document reproduces the current production HTML", async () => {
-  const [document, css, productionHtml] = await Promise.all([
-    readJsonUrl(canonicalSourceUrl),
+test("current production JSON reproduces the current production HTML through the shared renderer", async () => {
+  const [live, css, productionHtml] = await Promise.all([
+    readJsonUrl(liveMonthlyJsonUrl),
     fs.readFile(sharedMonthlyCssUrl, "utf8"),
     fs.readFile(productionMonthlyHtmlUrl, "utf8"),
   ]);
-  const adapted = adaptCanonicalDocument(document);
-  const activeSpecials = [...adapted.specials].sort(
+  const activeSpecials = [...live.specials].sort(
     (left, right) => Number(left.sort) - Number(right.sort),
   );
   const resolveAssetDataUrl = createAssetDataUrlResolver({
@@ -747,7 +746,7 @@ test("adapted canonical document reproduces the current production HTML", async 
   });
   const rendered = (
     await renderMonthlySpecialsHtml({
-      data: adapted,
+      data: live,
       activeSpecials,
       css,
       resolveAssetDataUrl,

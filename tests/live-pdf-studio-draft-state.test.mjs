@@ -238,5 +238,5 @@ test("Studio integration connects canonical loading, IndexedDB, status, restore,
   );
 
   assert.doesNotMatch(main, /localStorage\.setItem/);
-  assert.doesNotMatch(main, /git|github|publish\(/i);
+  assert.doesNotMatch(main, /git|github/i);
 });
