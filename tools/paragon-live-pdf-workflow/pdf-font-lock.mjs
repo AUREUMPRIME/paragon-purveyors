@@ -291,4 +291,3 @@ export const waitForPdfFonts = async (
     ),
   });
 };
-
