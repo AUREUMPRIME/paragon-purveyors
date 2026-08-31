@@ -8,6 +8,7 @@ import {
   loadCanonicalDocument,
 } from "./document-source.js";
 import { createDraftStore } from "./draft-store.js";
+import { createDave2DialogController } from "./dave2-dialog.js";
 import { createEditorController } from "./editor-controller.js";
 import { createNavigationController } from "./navigation.js";
 import { createReviewDialogController } from "./review-dialog.js";
@@ -27,6 +28,10 @@ if (!root) {
 
 const statuses = createInitialSectionStatuses();
 const shell = renderStudioShell({ root, statuses });
+
+const dave2DialogController =
+  createDave2DialogController({ root });
+
 const reviewDialog = root.querySelector("[data-review-dialog]");
 const assetDialog = root.querySelector("[data-asset-library-dialog]");
 const authForm = root.querySelector("[data-studio-auth-form]");
@@ -362,6 +367,7 @@ const initializeDraftFoundation = async (bootstrap) => {
       reviewController?.dispose();
       assetPreviewResolver?.dispose();
       editorController?.dispose();
+      dave2DialogController.dispose();
       await autosaveController.dispose();
     },
   });

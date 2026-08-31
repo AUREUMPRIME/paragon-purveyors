@@ -10,21 +10,51 @@ const SAFE_ZONE = 64;
 const REFRESH_DELAY = 120;
 const FRAME_LOAD_TIMEOUT = 5000;
 
-const fitReviewPage = (dialog) => {
+export const REVIEW_FIT_MODE = Object.freeze({
+  PAGE: "page",
+  WIDTH: "width",
+
+});
+
+export const calculateReviewScale = ({
+  mode = REVIEW_FIT_MODE.PAGE,
+  availableWidth,
+  availableHeight,
+}) => {
+  const widthScale =
+    Math.max(0.01, Number(availableWidth) / PAGE_WIDTH);
+  const heightScale =
+    Math.max(0.01, Number(availableHeight) / PAGE_HEIGHT);
+
+
+
+  if (mode === REVIEW_FIT_MODE.WIDTH) {
+    return Math.min(widthScale, 1);
+  }
+
+  return Math.min(widthScale, heightScale, 1);
+};
+const fitReviewPage = (
+  dialog,
+  mode = REVIEW_FIT_MODE.PAGE,
+) => {
   const viewport = dialog.querySelector("[data-review-viewport]");
   const stage = dialog.querySelector("[data-review-stage]");
   const scaleOutput = dialog.querySelector("[data-review-scale]");
 
   if (!viewport || !stage || !scaleOutput) return;
 
-  const availableWidth = Math.max(1, viewport.clientWidth - SAFE_ZONE);
-  const availableHeight = Math.max(1, viewport.clientHeight - SAFE_ZONE);
-  const scale = Math.min(
-    availableWidth / PAGE_WIDTH,
-    availableHeight / PAGE_HEIGHT,
-    1,
-  );
+  const availableWidth =
+    Math.max(1, viewport.clientWidth - SAFE_ZONE);
+  const availableHeight =
+    Math.max(1, viewport.clientHeight - SAFE_ZONE);
+  const scale = calculateReviewScale({
+    mode,
+    availableWidth,
+    availableHeight,
+  });
 
+  viewport.dataset.reviewFitMode = mode;
   stage.style.setProperty("--review-scale", String(scale));
   scaleOutput.textContent = `${Math.round(scale * 100)}%`;
 };
@@ -108,7 +138,7 @@ const setReviewPresentation = (dialog, validation, state = "ready") => {
   if (state === "rendering") {
     summary.textContent = "Rendering the current draft…";
     detail.textContent =
-      "The shared Monthly Specials renderer is preparing the Legal page.";
+      "Preparing the Monthly Specials preview.";
     errorCount.textContent = "--";
     warningCount.textContent = "--";
     issues.replaceChildren();
@@ -121,8 +151,8 @@ const setReviewPresentation = (dialog, validation, state = "ready") => {
     ? "Review needs attention."
     : "Current draft preview is ready.";
   detail.textContent = hasErrors
-    ? "Resolve every error before the future secured publishing workflow can be enabled."
-    : "The complete current draft rendered successfully. Secure publishing remains intentionally disabled.";
+    ? "Resolve every error before publishing."
+    : "The current draft rendered successfully. Review the page before publishing.";
   errorCount.textContent = String(validation.errorCount);
   warningCount.textContent = String(validation.warningCount);
   issues.replaceChildren(
@@ -148,7 +178,7 @@ const errorDocument = (error) => `<!doctype html>
   <main>
     <div>
       <h1>Review preview unavailable</h1>
-      <p>${escapeHtml(error?.message || error || "Unknown renderer failure.")}</p>
+      <p>The preview could not be prepared. Return to the editor and try again.</p>
     </div>
   </main>
 </body>
@@ -178,18 +208,31 @@ export const createReviewDialogController = (
   }
 
   const frame = dialog.querySelector("[data-review-frame]");
+  const fitControl = dialog.querySelector("[data-review-fit-mode]");
 
   if (!frame) {
     throw new TypeError("Review dialog frame is missing.");
   }
 
+  if (!fitControl) {
+    throw new TypeError("Review dialog fit control is missing.");
+  }
+
+  let fitMode = fitControl.value || REVIEW_FIT_MODE.PAGE;
   let refreshToken = 0;
   let refreshTimer = null;
   let currentValidation = null;
 
   const handleResize = () => {
-    if (dialog.open) fitReviewPage(dialog);
+    if (dialog.open) fitReviewPage(dialog, fitMode);
   };
+
+  const handleFitChange = () => {
+    fitMode = fitControl.value || REVIEW_FIT_MODE.PAGE;
+    fitReviewPage(dialog, fitMode);
+  };
+
+  fitControl.addEventListener("change", handleFitChange);
 
   const refresh = async () => {
     if (!dialog.open) return currentValidation;
@@ -229,7 +272,7 @@ export const createReviewDialogController = (
 
     setReviewPresentation(dialog, currentValidation);
     onValidationChange(currentValidation);
-    requestAnimationFrame(() => fitReviewPage(dialog));
+    requestAnimationFrame(() => fitReviewPage(dialog, fitMode));
     return currentValidation;
   };
 
@@ -245,7 +288,7 @@ export const createReviewDialogController = (
   const open = async () => {
     if (!dialog.open) dialog.showModal();
     window.addEventListener("resize", handleResize);
-    requestAnimationFrame(() => fitReviewPage(dialog));
+    requestAnimationFrame(() => fitReviewPage(dialog, fitMode));
     return refresh();
   };
 
@@ -276,10 +319,11 @@ export const createReviewDialogController = (
     close,
     refresh,
     scheduleRefresh,
-    fit: () => fitReviewPage(dialog),
+    fit: () => fitReviewPage(dialog, fitMode),
     isOpen: () => dialog.open,
     getValidation: () => currentValidation,
     dispose() {
+      fitControl.removeEventListener("change", handleFitChange);
       close();
       currentValidation = null;
     },

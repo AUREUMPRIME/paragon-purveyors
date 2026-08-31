@@ -3,7 +3,7 @@ export const SECURE_PUBLISHING_WARNING = Object.freeze({
   fieldKey: "review.securePublishing",
   kind: "warning",
   message:
-    "Publishing becomes available after secure Studio authentication is connected.",
+    "Publishing is currently disabled for this Studio session.",
 });
 
 const normalizeMessage = (value, fallback) => {
@@ -51,7 +51,7 @@ const geometryIssue = (issue, index) =>
     kind: "error",
     message: normalizeMessage(
       issue.message,
-      `Review geometry guardrail ${index + 1} failed.`,
+      "A layout check could not be completed.",
     ),
   });
 
@@ -77,10 +77,8 @@ export const createReviewValidation = ({
           section: "review",
           fieldKey: "review.renderer",
           kind: "error",
-          message: `Review rendering failed: ${normalizeMessage(
-            renderError.message || renderError,
-            "Unknown renderer failure.",
-          )}`,
+          message:
+            "The Review PDF could not be prepared. Return to the editor and try again.",
         }),
       ]
     : [];

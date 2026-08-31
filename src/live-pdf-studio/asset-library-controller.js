@@ -128,7 +128,7 @@ export const createAssetLibraryController = ({
               ? `<img src="${escapeHtml(previewUrl)}" alt="">`
               : `<span>Preview unavailable</span>`
           }
-          ${asset.pending ? `<span class="asset-card__badge">Pending</span>` : ""}
+          ${asset.pending ? `<span class="asset-card__badge">Draft Upload</span>` : ""}
           ${asset.archived ? `<span class="asset-card__badge asset-card__badge--muted">Archived</span>` : ""}
         </div>
         <div class="asset-card__body">
@@ -177,8 +177,8 @@ export const createAssetLibraryController = ({
                   type="button"
                   data-assets-remove="${escapeHtml(asset.id)}"
                   ${removable ? "" : "disabled"}
-                  title="${removable ? "Remove this uncommitted upload." : "Assigned pending uploads cannot be removed."}"
-                >Remove Pending</button>`
+                  title="${removable ? "Remove this uploaded asset." : "This asset is currently assigned and cannot be removed."}"
+                >Remove Upload</button>`
               : ""
           }
         </footer>
@@ -203,7 +203,7 @@ export const createAssetLibraryController = ({
         <strong>Assigning ${escapeHtml(assignmentContext.label)}</strong>
         <span>Showing compatible ${escapeHtml(
           ASSET_LIBRARY_DEFINITIONS[assignmentContext.library].label,
-        )} only. Crop geometry will be preserved.</span>
+        )} only. Image framing will be preserved.</span>
         <button type="button" data-assets-clear-context>Browse All</button>
       `;
     } else {
@@ -213,7 +213,7 @@ export const createAssetLibraryController = ({
 
     summary.textContent =
       `${assets.length} ${assets.length === 1 ? "asset" : "assets"} shown · ` +
-      `${pendingAssetIds.size} pending upload${pendingAssetIds.size === 1 ? "" : "s"}`;
+      `${pendingAssetIds.size} new upload${pendingAssetIds.size === 1 ? "" : "s"}`;
 
     grid.innerHTML = assets.length
       ? assets.map(renderCard).join("")
@@ -341,7 +341,7 @@ export const createAssetLibraryController = ({
 
       labelInput.value = "";
       setMessage(
-        `${normalized.record.label} is saved locally as a pending upload.`,
+        `${normalized.record.label} was added to this draft.`,
         "success",
       );
       await refresh();
@@ -382,7 +382,7 @@ export const createAssetLibraryController = ({
           assetId: assignId,
         });
         state.setValue(assignment.path, assignment.value);
-        setMessage("Asset assigned. Existing geometry was preserved.", "success");
+        setMessage("Asset assigned. Image framing was preserved.", "success");
         onDraftChanged();
         render();
       } catch (error) {
@@ -435,7 +435,7 @@ export const createAssetLibraryController = ({
           removeId,
         );
         previewResolver.remove(removeId);
-        setMessage("Pending upload removed.", "success");
+        setMessage("Upload removed.", "success");
         await refresh();
         onDraftChanged();
       } catch (error) {

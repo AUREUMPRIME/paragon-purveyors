@@ -60,7 +60,7 @@ export const renderHeaderEditor = ({
     eyebrow: "Document Header",
     title: "Header & Campaign",
     copy:
-      "Edit campaign messaging, month, year, and supporting copy. Visual marks remain protected until Phase 3.4.",
+      "Update the campaign message, title, month, year, and supporting line.",
     body,
     issueCount: validation.issueCounts.header,
     status: validation.statuses.header,

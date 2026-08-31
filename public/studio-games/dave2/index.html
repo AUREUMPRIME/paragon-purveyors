@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+  <title>Dave 2</title>
+
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+    }
+
+    #dos {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: hidden;
+      background: #000;
+      outline: none;
+      image-rendering: pixelated;
+    }
+
+    #dos,
+    #dos > div,
+    #dos canvas {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+
+  <script src="./vendor/jsdos/emulators/emulators.js"></script>
+
+  <script>
+    emulators.pathPrefix =
+      "./vendor/jsdos/emulators/";
+  </script>
+
+  <script src="./vendor/jsdos/js-dos.js"></script>
+</head>
+
+<body>
+  <div
+    id="dos"
+    tabindex="0"
+    aria-label="Dangerous Dave in the Haunted Mansion"
+  ></div>
+
+  <script src="./game.js"></script>
+</body>
+</html>

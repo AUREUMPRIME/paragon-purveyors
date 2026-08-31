@@ -9,6 +9,10 @@ import {
   createReviewPreview,
 } from "../src/live-pdf-studio/review-preview.js";
 import {
+  calculateReviewScale,
+  REVIEW_FIT_MODE,
+} from "../src/live-pdf-studio/review-dialog.js";
+import {
   createReviewValidation,
   inspectReviewFrameImages,
   SECURE_PUBLISHING_WARNING,
@@ -32,7 +36,7 @@ const imageDataUrl =
 test("Review asset path index maps every canonical asset path to its immutable ID", async () => {
   const document = await fixture();
   const index = createReviewAssetPathIndex(document);
-  assert.equal(index.size, 13);
+  assert.equal(index.size, 14);
   assert.equal(
     index.get(
       "assets/specials/library/tenderloin/filet-mignon2-436ae92089e2.webp",
@@ -83,7 +87,7 @@ test("Review preview renders the current in-memory draft through the shared adap
   const result = await preview.render();
   assert.match(result.html, /August/);
   assert.match(result.html, /body\{background:#fff\}/);
-  assert.equal(result.assetCount, 13);
+  assert.equal(result.assetCount, 14);
   assert.equal(result.pendingAssetCount, 1);
   assert.ok(result.draftFingerprint.length > 100);
 });
@@ -132,7 +136,7 @@ test("Review validation reports renderer failures as blocking errors", () => {
     renderError: new Error("Adapter failed"),
   });
   assert.equal(result.errorCount, 1);
-  assert.match(result.errors[0].message, /Adapter failed/);
+  assert.equal(result.errors[0].message, "The Review PDF could not be prepared. Return to the editor and try again.");
   assert.equal(result.rendered, false);
 
   const repeated = createReviewValidation({
@@ -142,6 +146,10 @@ test("Review validation reports renderer failures as blocking errors", () => {
   });
   assert.equal(repeated.errorCount, 0);
   assert.equal(repeated.warningCount, 1);
+  assert.equal(
+    SECURE_PUBLISHING_WARNING.message,
+    "Publishing is currently disabled for this Studio session.",
+  );
 });
 
 test("Review validation reports every unresolved image while preserving the secure-auth warning", () => {
@@ -205,12 +213,27 @@ test("Review status is Error for invalid drafts, Modified for valid changes, and
 });
 
 test("Review shell uses a dynamic srcdoc frame and actionable validation panel while publishing stays disabled", async () => {
-  const shell = await read("src/live-pdf-studio/shell.js");
+  const [shell, styles] = await Promise.all([
+    read("src/live-pdf-studio/shell.js"),
+    read("src/live-pdf-studio/styles.css"),
+  ]);
   assert.match(shell, /data-review-frame/);
   assert.match(shell, /data-review-summary/);
   assert.match(shell, /data-review-errors/);
   assert.match(shell, /data-review-warnings/);
   assert.match(shell, /data-review-issues/);
+  assert.match(shell, /data-review-fit-mode/);
+  assert.match(shell, /Fit Page/);
+  assert.match(shell, /Fit Width/);
+  assert.doesNotMatch(shell, /value="actual"|>100%</);
+  assert.match(shell, /paragon-cow-mark\.svg/);
+  assert.match(shell, /Live Studio/);
+  assert.match(styles, /overview-extra-b-roll\.webp/);
+  assert.match(styles, /visual-control__label/);
+  assert.doesNotMatch(
+    shell,
+    /US Legal|Professional Studio Foundation|File Explorer|IndexedDB|Phase 3|publication authorities|Current checkpoint/i,
+  );
   assert.doesNotMatch(shell, /<iframe[\s\S]{0,400}\ssrc="\/specials\/monthly-specials\.html"/);
   assert.match(shell, /Publish Live PDF[\s\S]{0,300}disabled|disabled[\s\S]{0,300}Publish Live PDF/);
 });
@@ -226,9 +249,31 @@ test("Review controller renders srcdoc, checks images, refreshes while open, and
     "scheduleRefresh",
     "onValidationChange",
     "data-review-issues",
+    "data-review-fit-mode",
+    "dataset.reviewFitMode",
   ]) {
     assert.match(review, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
+
+  assert.equal(
+    calculateReviewScale({
+      mode: REVIEW_FIT_MODE.PAGE,
+      availableWidth: 408,
+      availableHeight: 672,
+    }),
+    0.5,
+  );
+
+  assert.equal(
+    calculateReviewScale({
+      mode: REVIEW_FIT_MODE.WIDTH,
+      availableWidth: 408,
+      availableHeight: 100,
+    }),
+    0.5,
+  );
+
+  assert.equal(REVIEW_FIT_MODE.ACTUAL, undefined);
 });
 
 test("Studio integration connects current draft rendering, pending previews, dynamic status, and 113 contracts without publication writes", async () => {

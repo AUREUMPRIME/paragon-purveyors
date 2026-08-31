@@ -33,7 +33,7 @@ export const renderCutsEditor = ({
           })}
         </div>
         <p class="editor-panel__copy">
-          Edit product content and art-direct the currently assigned images. Asset replacement remains in Phase 3.5.
+          Edit product details and adjust the assigned images below.
         </p>
         ${renderFieldGrid({
           fields,
@@ -52,7 +52,7 @@ export const renderCutsEditor = ({
     eyebrow: "Product Content",
     title: "Featured Cuts",
     copy:
-      "Edit the four launch-profile cuts, display order, offer text, pricing, availability, savings, and descriptions.",
+      "Edit product names, display order, pricing, availability, offers, savings, descriptions, and images.",
     body: `<div class="editor-stack">${cards}</div>`,
     issueCount: validation.issueCounts.cuts,
     status: validation.statuses.cuts,

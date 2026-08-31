@@ -9,49 +9,49 @@ const sectionCopy = Object.freeze({
     eyebrow: "Studio Overview",
     title: "Monthly Specials",
     copy:
-      "Work through each section in order, review the complete Legal page, and publish only after every requirement passes.",
+      "Manage the current Monthly Specials draft and review it before publishing.",
   },
   header: {
     eyebrow: "Document Header",
     title: "Header & Campaign",
     copy:
-      "Brand marks, campaign messaging, month, year, and supporting copy will be managed here.",
+      "Update campaign messaging, month, year, supporting copy, and brand presentation.",
   },
   cuts: {
     eyebrow: "Product Content",
     title: "Featured Cuts",
     copy:
-      "Product names, pricing, offers, descriptions, availability, and images will be edited in this section.",
+      "Update product details, pricing, offers, availability, descriptions, and images.",
   },
   logos: {
     eyebrow: "Brand Assets",
     title: "Logos & Marks",
     copy:
-      "Paragon marks, campaign artwork, and product brand logos will be assigned and adjusted here.",
+      "Adjust brand marks, campaign artwork, product logos, and image presentation.",
   },
   contacts: {
     eyebrow: "Ordering Contacts",
     title: "Contacts",
     copy:
-      "Representative names, service areas, phone numbers, email addresses, and display order will be controlled here.",
+      "Update ordering instructions and representative contact details.",
   },
   footer: {
     eyebrow: "Closing Content",
     title: "Footer",
     copy:
-      "Footer messaging, disclaimer, destination link, and editorial B-roll will be edited here.",
+      "Update closing copy, disclaimer, destination link, and footer imagery.",
   },
   assets: {
     eyebrow: "Managed Media",
     title: "Asset Library",
     copy:
-      "Upload, review, assign, archive, and safely remove reusable images and logos without opening File Explorer.",
+      "Upload, organize, and assign reusable images and logos.",
   },
   review: {
     eyebrow: "Final Approval",
     title: "Review & Publish",
     copy:
-      "Inspect the full Legal page, resolve validation issues, and publish only through the secured workflow.",
+      "Preview the complete Monthly Specials page, resolve any issues, and confirm it is ready.",
   },
 });
 
@@ -62,7 +62,7 @@ const primaryActions = Object.freeze([
     label: "Restore Live Version",
     action: "restore-live",
     disabled: true,
-    title: "Restore the local draft to the committed live version.",
+    title: "Restore the draft to the current live version.",
   },
   {
     id: "save",
@@ -79,7 +79,7 @@ const primaryActions = Object.freeze([
     disabled: true,
     primary: true,
     title:
-      "Publishing becomes available after secure Studio authentication is connected.",
+      "Publishing is currently disabled for this Studio session.",
   },
 ]);
 
@@ -138,42 +138,46 @@ const assetLibraryOptionsMarkup = () =>
 
 const placeholderMarkup = (sectionId) => {
   const content = sectionCopy[sectionId];
+  const overview = sectionId === "overview";
 
   return `
-    <section class="studio-workspace" data-workspace="${sectionId}">
+    <section
+      class="studio-workspace${overview ? " studio-workspace--overview" : ""}"
+      data-workspace="${sectionId}"
+    >
       <header class="workspace-header">
         <div>
           <p class="workspace-eyebrow">${content.eyebrow}</p>
           <h1>${content.title}</h1>
           <p>${content.copy}</p>
         </div>
-        <span class="workspace-phase">Professional Studio Foundation</span>
+        <span class="workspace-phase">Live Studio</span>
       </header>
 
-      <div class="workspace-grid">
+      <div class="workspace-grid${overview ? " workspace-grid--overview" : ""}">
         <article class="workspace-card workspace-card--primary">
-          <p class="workspace-card__eyebrow">Current checkpoint</p>
-          <h2>Shell and navigation are active.</h2>
+          <p class="workspace-card__eyebrow">Current Draft</p>
+          <h2>Continue editing.</h2>
           <p>
-            Editors and data mutation are intentionally withheld until their
-            dedicated checkpoints are implemented and tested.
+            Update product details, imagery, contacts, and supporting content
+            from one place.
           </p>
         </article>
 
         <article class="workspace-card">
-          <p class="workspace-card__eyebrow">Live protection</p>
-          <h2>Production remains unchanged.</h2>
+          <p class="workspace-card__eyebrow">Review PDF</p>
+          <h2>Preview before publishing.</h2>
           <p>
-            The current Monthly Specials landing, HTML, JSON, and PDF remain
-            the active publication authorities.
+            Open Review PDF to inspect the complete Monthly Specials page and
+            resolve any issues.
           </p>
         </article>
 
         <article class="workspace-card">
-          <p class="workspace-card__eyebrow">Draft status</p>
+          <p class="workspace-card__eyebrow">Draft Status</p>
           <h2 data-workspace-draft-label>Loading draft.</h2>
           <p data-workspace-draft-detail>
-            Preparing local draft storage.
+            Checking saved draft status.
           </p>
         </article>
       </div>
@@ -186,7 +190,7 @@ export const renderStudioShell = ({ root, statuses }) => {
     <div class="studio-shell" data-studio-auth>
       <aside class="studio-sidebar">
         <a class="studio-brand" href="/" aria-label="Paragon Purveyors home">
-          <span class="studio-brand__mark">PP</span>
+          <img class="studio-brand__mark" src="/assets/brand/paragon-cow-mark.svg" alt="" aria-hidden="true">
           <span>
             <strong>Paragon Purveyors</strong>
             <small>Live PDF Studio</small>
@@ -210,8 +214,8 @@ export const renderStudioShell = ({ root, statuses }) => {
                 <p class="workspace-eyebrow">Private Administration</p>
                 <h1>Live PDF Studio</h1>
                 <p>
-                  Sign in to manage the current Monthly Specials document,
-                  protected assets, and browser drafts.
+                  Sign in to manage Monthly Specials content, images, and
+                  saved drafts.
                 </p>
               </div>
               <span class="workspace-phase">Secure Access</span>
@@ -225,8 +229,7 @@ export const renderStudioShell = ({ root, statuses }) => {
                 <p class="workspace-card__eyebrow">Studio authentication</p>
                 <h2>Enter the Studio password.</h2>
                 <p>
-                  The password is sent only to the secured authentication
-                  service and is never stored by the browser.
+                  Use your Studio password to unlock this workspace.
                 </p>
 
                 <div class="asset-library-toolbar">
@@ -260,20 +263,20 @@ export const renderStudioShell = ({ root, statuses }) => {
               </form>
 
               <article class="workspace-card">
-                <p class="workspace-card__eyebrow">Browser privacy</p>
-                <h2>Session-only access.</h2>
+                <p class="workspace-card__eyebrow">Private Session</p>
+                <h2>Access stays in this window.</h2>
                 <p>
-                  Only the temporary access token and expiration are retained
-                  in this browser tab. Closing the tab ends local access.
+                  Closing this Studio window ends the current signed-in
+                  session.
                 </p>
               </article>
 
               <article class="workspace-card">
-                <p class="workspace-card__eyebrow">Draft protection</p>
-                <h2>Local work remains preserved.</h2>
+                <p class="workspace-card__eyebrow">Saved Drafts</p>
+                <h2>Your draft stays available.</h2>
                 <p>
-                  Existing IndexedDB documents, metadata, and pending uploads
-                  are not removed when a session expires or is cleared.
+                  Saved edits and uploaded images remain available in this
+                  browser between Studio sessions.
                 </p>
               </article>
             </div>
@@ -290,7 +293,7 @@ export const renderStudioShell = ({ root, statuses }) => {
     >
       <aside class="studio-sidebar">
         <a class="studio-brand" href="/" aria-label="Paragon Purveyors home">
-          <span class="studio-brand__mark">PP</span>
+          <img class="studio-brand__mark" src="/assets/brand/paragon-cow-mark.svg" alt="" aria-hidden="true">
           <span>
             <strong>Paragon Purveyors</strong>
             <small>Live PDF Studio</small>
@@ -304,16 +307,29 @@ export const renderStudioShell = ({ root, statuses }) => {
         <div class="studio-sidebar__footer">
           <span class="connection-dot" aria-hidden="true"></span>
           <div>
-            <strong>Local Studio</strong>
+            <strong>Live Studio</strong>
             <small>Publishing disabled</small>
           </div>
+          <button
+            type="button"
+            class="studio-sidebar__credit"
+            data-dave2-launch
+            aria-label="Open Metadator entertainment module"
+            title="Open Dave 2"
+          >
+            <img
+              src="/assets/studio/metadator-prime-mascot.png"
+              alt=""
+              aria-hidden="true"
+            >
+          </button>
         </div>
       </aside>
 
       <main class="studio-main">
         <header class="studio-topbar">
           <div>
-            <p class="studio-topbar__eyebrow">Monthly Specials · US Legal</p>
+            <p class="studio-topbar__eyebrow">Monthly Specials</p>
             <strong>Draft workspace</strong>
           </div>
           <div
@@ -324,7 +340,7 @@ export const renderStudioShell = ({ root, statuses }) => {
             aria-live="polite"
           >
             <strong data-draft-status-label>Loading draft</strong>
-            <small data-draft-status-detail>Preparing local draft storage.</small>
+            <small data-draft-status-detail>Checking saved draft status.</small>
           </div>
           <div class="studio-actions" aria-label="Studio actions">
             ${actionMarkup()}
@@ -344,9 +360,8 @@ export const renderStudioShell = ({ root, statuses }) => {
             <p class="workspace-eyebrow">Managed Media</p>
             <h2>Asset Library</h2>
             <p>
-              Upload, assign, archive, and remove pending reusable images and
-              logos entirely inside the Studio. Existing committed asset bytes
-              remain immutable.
+              Upload, organize, assign, archive, and remove reusable images
+              and logos from the Studio.
             </p>
           </div>
           <button type="button" data-assets-close aria-label="Close Asset Library">
@@ -396,9 +411,8 @@ export const renderStudioShell = ({ root, statuses }) => {
         <div class="asset-library-grid" data-assets-grid></div>
 
         <p class="studio-dialog__notice">
-          File Explorer is never used by the permanent Studio. New files remain
-          local pending uploads in IndexedDB until a future secured publication
-          workflow is connected. Assigned crop geometry is preserved.
+          Choose, upload, assign, archive, or remove assets as needed. Images
+          currently used in the draft are protected from accidental removal.
         </p>
       </div>
     </dialog>
@@ -410,8 +424,8 @@ export const renderStudioShell = ({ root, statuses }) => {
             <p class="workspace-eyebrow">Discard Local Changes</p>
             <h2>Restore Live Version?</h2>
             <p>
-              This replaces the local draft with a fresh copy of the committed
-              live document and clears its saved browser draft.
+              This replaces the current draft with the latest live version and
+              clears the saved draft in this browser.
             </p>
           </div>
         </header>
@@ -436,13 +450,24 @@ export const renderStudioShell = ({ root, statuses }) => {
             <h2>Review Monthly Specials PDF</h2>
           </div>
           <div class="review-dialog__tools">
-            <span>Fit <strong data-review-scale>--</strong></span>
+            <label class="review-fit-control">
+              <span>Fit</span>
+              <select
+                data-review-fit-mode
+                aria-label="Review PDF fit mode"
+              >
+                <option value="page">Fit Page</option>
+                <option value="width">Fit Width</option>
+
+              </select>
+            </label>
+            <span><strong data-review-scale>--</strong></span>
             <button type="button" data-review-close>Back to Edit</button>
             <button
               class="studio-action studio-action--primary"
               type="button"
               disabled
-              title="Publishing becomes available after secure Studio authentication is connected."
+              title="Publishing is currently disabled for this Studio session."
             >
               Publish Live PDF
             </button>
@@ -469,7 +494,7 @@ export const renderStudioShell = ({ root, statuses }) => {
             <p class="workspace-eyebrow">Validation</p>
             <h3 data-review-summary>Preparing current draft…</h3>
             <p data-review-detail>
-              The shared Monthly Specials renderer is preparing the Legal page.
+              Preparing the Monthly Specials preview.
             </p>
             <dl>
               <div><dt>Errors</dt><dd data-review-errors>--</dd></div>

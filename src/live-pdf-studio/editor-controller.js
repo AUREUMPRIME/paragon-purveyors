@@ -237,50 +237,162 @@ export const createEditorController = ({
 
     transientErrors.delete(field.key);
     state.setValue(field.path, parsed.value);
+    syncVisualControlPresentation({
+      element,
+      field,
+      value: parsed.value,
+    });
   };
 
-  let dragState = null;
-  const getVisualFields = (prefix) => ({
-    focusX: registry.byKey.get(`${prefix}.focusX`),
-    focusY: registry.byKey.get(`${prefix}.focusY`),
-    zoom: registry.byKey.get(`${prefix}.zoom`),
-  });
-  const updateFocusFromPointer = (stage, event) => {
-    const fields = getVisualFields(stage.dataset.visualStage);
-    if (!fields.focusX || !fields.focusY) return;
-    const rect = stage.getBoundingClientRect();
-    const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
-    const y = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
-    state.setValue(fields.focusX.path, Math.round(x));
-    state.setValue(fields.focusY.path, Math.round(y));
-    renderActiveSection();
-  };
-  const handlePointerDown = (event) => {
-    const stage = event.target.closest("[data-visual-stage]");
-    if (!stage) return;
-    dragState = stage;
-    stage.setPointerCapture?.(event.pointerId);
-    updateFocusFromPointer(stage, event);
-  };
-  const handlePointerMove = (event) => { if (dragState) updateFocusFromPointer(dragState, event); };
-  const handlePointerUp = () => { dragState = null; };
-  const handleWheel = (event) => {
-    const stage = event.target.closest("[data-visual-stage]");
-    if (!stage) return;
-    const field = getVisualFields(stage.dataset.visualStage).zoom;
-    if (!field) return;
-    event.preventDefault();
-    const current = field.path.reduce((value, segment) => value?.[segment], state.getDraft());
-    const next = Math.max(1, Math.min(2.5, Number((current + (event.deltaY < 0 ? 0.05 : -0.05)).toFixed(2))));
-    state.setValue(field.path, next);
-    renderActiveSection();
+  const visualPreviewProperties = new Set([
+    "visible",
+    "fit",
+    "zoom",
+    "focusX",
+    "focusY",
+    "opacity",
+    "saturation",
+    "contrast",
+    "brightness",
+  ]);
+
+  const getVisualPreviewContext = (field) => {
+    if (
+      !field ||
+      !Array.isArray(field.path) ||
+      field.path.length < 2 ||
+      typeof field.key !== "string"
+    ) {
+      return null;
+    }
+
+    const property = field.path.at(-1);
+
+    if (!visualPreviewProperties.has(property)) {
+      return null;
+    }
+
+    const separator = field.key.lastIndexOf(".");
+
+    if (separator < 1) {
+      return null;
+    }
+
+    const prefix = field.key.slice(0, separator);
+
+    const stage = Array.from(
+      root.querySelectorAll("[data-visual-stage]"),
+    ).find(
+      (candidate) =>
+        candidate.dataset.visualStage === prefix,
+    );
+
+    if (!stage) {
+      return null;
+    }
+
+    const reference = field.path
+      .slice(0, -1)
+      .reduce(
+        (value, segment) => value?.[segment],
+        state.getDraft(),
+      );
+
+    return {
+      image: stage.querySelector("img"),
+      reference,
+      stage,
+    };
   };
 
-  root.addEventListener("pointerdown", handlePointerDown);
-  root.addEventListener("pointermove", handlePointerMove);
-  root.addEventListener("pointerup", handlePointerUp);
-  root.addEventListener("pointercancel", handlePointerUp);
-  root.addEventListener("wheel", handleWheel, { passive: false });
+  const syncVisualPreview = (field) => {
+    const context = getVisualPreviewContext(field);
+
+    if (!context?.image || !context.reference) {
+      return;
+    }
+
+    const { image, reference, stage } = context;
+
+    const outputVisibility = stage
+      .closest("[data-visual-editor]")
+      ?.querySelector("[data-visual-output-visibility]");
+
+    if (outputVisibility) {
+      const includedInPdf = reference.visible !== false;
+      outputVisibility.dataset.outputVisible =
+        String(includedInPdf);
+      outputVisibility.textContent =
+        includedInPdf
+          ? "Included in PDF"
+          : "Hidden in PDF";
+    }
+
+    if (typeof reference.fit === "string") {
+      image.style.objectFit = reference.fit;
+    }
+
+    if (
+      Number.isFinite(reference.focusX) &&
+      Number.isFinite(reference.focusY)
+    ) {
+      image.style.objectPosition =
+        `${reference.focusX}% ${reference.focusY}%`;
+      image.style.transformOrigin =
+        `${reference.focusX}% ${reference.focusY}%`;
+    }
+
+    if (Number.isFinite(reference.zoom)) {
+      image.style.transform =
+        `scale(${reference.zoom})`;
+    }
+
+    if (Number.isFinite(reference.opacity)) {
+      image.style.opacity = String(reference.opacity);
+    } else {
+      image.style.removeProperty("opacity");
+    }
+
+    const filters = [];
+
+    if (Number.isFinite(reference.saturation)) {
+      filters.push(`saturate(${reference.saturation})`);
+    }
+
+    if (Number.isFinite(reference.contrast)) {
+      filters.push(`contrast(${reference.contrast})`);
+    }
+
+    if (Number.isFinite(reference.brightness)) {
+      filters.push(`brightness(${reference.brightness})`);
+    }
+
+    if (filters.length > 0) {
+      image.style.filter = filters.join(" ");
+    } else {
+      image.style.removeProperty("filter");
+    }
+  };
+
+  const syncVisualControlPresentation = ({
+    element,
+    field,
+    value,
+  }) => {
+    if (field.control === "range") {
+      const output = element
+        .closest("[data-editor-field-wrapper]")
+        ?.querySelector("output");
+
+      if (output) {
+        output.textContent = String(value ?? "");
+      }
+    }
+
+    syncVisualPreview(field);
+  };
+
+
   root.addEventListener("input", handleEditorEvent);
   root.addEventListener("change", handleEditorEvent);
 
@@ -317,11 +429,8 @@ export const createEditorController = ({
       ...computeValidation().statuses,
     }),
     dispose() {
-      root.removeEventListener("pointerdown", handlePointerDown);
-      root.removeEventListener("pointermove", handlePointerMove);
-      root.removeEventListener("pointerup", handlePointerUp);
-      root.removeEventListener("pointercancel", handlePointerUp);
-      root.removeEventListener("wheel", handleWheel);
+
+
       root.removeEventListener("input", handleEditorEvent);
       root.removeEventListener("change", handleEditorEvent);
     },

@@ -66,7 +66,7 @@ export const renderContactsEditor = ({
     eyebrow: "Ordering Contacts",
     title: "Contacts",
     copy:
-      "Control the ordering instruction, representative state, display order, service area, phone, and email.",
+      "Update the ordering instruction and each representative's service area, phone, email, and display order.",
     body,
     issueCount: validation.issueCounts.contacts,
     status: validation.statuses.contacts,

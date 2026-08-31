@@ -14,8 +14,8 @@ export const renderFooterEditor = ({
       <fieldset class="editor-panel">
         <legend>Closing Content</legend>
         <p class="editor-panel__copy">
-          Edit the closing message, disclaimer, destination label, and secure
-          website URL. Art-direct the assigned footer B-roll below. Asset replacement remains in Phase 3.5.
+          Edit the closing message, disclaimer, destination label, website URL,
+          and footer image.
         </p>
         ${renderFieldGrid({
           fields: registry.bySection.footer,
@@ -32,7 +32,7 @@ export const renderFooterEditor = ({
     eyebrow: "Closing Content",
     title: "Footer",
     copy:
-      "Edit the footer message, pricing disclaimer, destination label, and website URL.",
+      "Update the closing message, pricing disclaimer, destination link, and footer image.",
     body,
     issueCount: validation.issueCounts.footer,
     status: validation.statuses.footer,
