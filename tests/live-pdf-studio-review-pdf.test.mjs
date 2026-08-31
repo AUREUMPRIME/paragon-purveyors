@@ -325,3 +325,18 @@ test("Studio integration connects current draft rendering, pending previews, dyn
     /git push|gh workflow|workflow_dispatch|Cloudflare Worker/i,
   );
 });
+test("Review CSS URL is bundler-resolved instead of a source-tree public URL", async () => {
+  const reviewPreview = await read(
+    "src/live-pdf-studio/review-preview.js",
+  );
+
+  assert.match(
+    reviewPreview,
+    /new URL\(\s*"\.\.\/live-pdf\/monthly-specials\.css",\s*import\.meta\.url,\s*\)\.href/,
+  );
+
+  assert.doesNotMatch(
+    reviewPreview,
+    /\/src\/live-pdf\/monthly-specials\.css/,
+  );
+});

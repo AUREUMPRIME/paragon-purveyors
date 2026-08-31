@@ -4,7 +4,11 @@ import { normalizeAssetReference } from "../live-pdf/core/resolve-asset.js";
 import { renderMonthlySpecialsHtml } from "../live-pdf/core/render-monthly-specials.js";
 import { fingerprintDocument } from "./state.js";
 
-export const REVIEW_CSS_URL = "/src/live-pdf/monthly-specials.css";
+export const REVIEW_CSS_URL =
+  new URL(
+    "../live-pdf/monthly-specials.css",
+    import.meta.url,
+  ).href;
 
 const normalizePath = (value) =>
   normalizeAssetReference(value).replace(/^\/+/, "");
