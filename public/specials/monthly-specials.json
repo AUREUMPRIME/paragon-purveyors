@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T08:52:23.071Z",
+  "generatedAt": "2026-09-01T10:26:16.161Z",
   "source": {
     "type": "canonical",
     "file": "src/data/paragon-live-pdf-studio.json",
@@ -134,7 +134,7 @@
       "description": "Richly marbled with full beef flavor. Built for a bold, memorable steak experience.",
       "secondaryPriceLabel": "Cube Roll AVG 13+ lb",
       "secondaryPrice": "$460.00",
-      "secondaryImagePath": "assets/specials/library/ribeye/ribeye-whole-cut-upload-test-72380d229204.webp",
+      "secondaryImagePath": "assets/specials/library/ribeye/rib-eye-cube-roll-8be297e0f5cf.webp",
       "secondaryImageAlt": "Black Opal whole Cube Roll cut",
       "secondaryImageFit": "contain",
       "secondaryImagePosition": "61% 47%",
