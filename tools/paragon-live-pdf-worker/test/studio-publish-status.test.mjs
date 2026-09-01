@@ -51,6 +51,34 @@ test("Workflow state maps terminal success failure and conflict", () => {
   assert.equal(
     mapWorkflowRunState(
       { status: "completed", conclusion: "failure" },
+      [
+        { name: "Conflict gate", status: "completed", conclusion: "success" },
+        { name: "Deploy exact promoted site", status: "completed", conclusion: "failure" },
+      ],
+    ),
+    "failed",
+  );
+  assert.equal(
+    mapWorkflowRunState(
+      { status: "completed", conclusion: "failure" },
+      [
+        { name: "Conflict gate", status: "completed", conclusion: "success" },
+        {
+          name: "Build shadow and production package",
+          status: "completed",
+          conclusion: "failure",
+          steps: [
+            { name: "Recheck post-build conflict state", conclusion: "success" },
+            { name: "Build production package", conclusion: "failure" },
+          ],
+        },
+      ],
+    ),
+    "failed",
+  );
+  assert.equal(
+    mapWorkflowRunState(
+      { status: "completed", conclusion: "failure" },
       [{
         name: "Build shadow and production package",
         status: "completed",

@@ -27,7 +27,10 @@ export const mapWorkflowRunState = (run, jobs = []) => {
   if (run.status === "completed") {
     if (run.conclusion === "success") return "success";
     const conflictFailure = normalizedJobs.some((job) => {
-      if (/conflict/u.test(String(job?.name ?? "").toLowerCase())) return true;
+      if (
+        job?.conclusion === "failure"
+        && /conflict/u.test(String(job?.name ?? "").toLowerCase())
+      ) return true;
       return requireArray(job?.steps).some((step) => (
         step?.conclusion === "failure"
         && /conflict|recheck/u.test(String(step?.name ?? "").toLowerCase())
