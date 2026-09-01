@@ -120,3 +120,25 @@ test("package scripts register Phase 4F-A tests permanently", () => {
   assert.match(packageDocument.scripts["studio:workflow:test"], /production-promotion/u);
   assert.match(packageDocument.scripts["test:specials:contracts"], /production-workflow/u);
 });
+test("production Pages build injects the Studio Worker API base", () => {
+  const deployStart = workflow.indexOf("\n  deploy-pages:");
+  const verifyStart = workflow.indexOf("\n  verify-live:");
+
+  assert.notEqual(deployStart, -1);
+  assert.notEqual(verifyStart, -1);
+  assert.equal(verifyStart > deployStart, true);
+
+  const deployPages = workflow.slice(deployStart, verifyStart);
+
+  assert.match(
+    deployPages,
+    /- name: Build exact promoted site[\s\S]*VITE_BASE_PATH:[\s\S]*VITE_PARAGON_STUDIO_API_BASE:[\s\S]*run: npm run build/u,
+  );
+
+  assert.equal(
+    deployPages.includes(
+      "VITE_PARAGON_STUDIO_API_BASE: ${{ vars.VITE_PARAGON_STUDIO_API_BASE || '' }}",
+    ),
+    true,
+  );
+});
