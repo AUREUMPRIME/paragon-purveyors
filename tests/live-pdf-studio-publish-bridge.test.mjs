@@ -168,6 +168,10 @@ const createControllerFixture = ({
   const order = [];
   let cleared = false;
   let reloaded = false;
+  let reviewClosed = false;
+  let overviewSelected = false;
+  let progressOpened = false;
+  let progressClosed = false;
   let statusIndex = 0;
 
   const controller = createPublishController({
@@ -203,6 +207,14 @@ const createControllerFixture = ({
         order.push("confirm");
         return true;
       },
+      openPublicationProgress: () => {
+        order.push("progress-open");
+        progressOpened = true;
+      },
+      waitForPublicationClose: async () => {
+        order.push("progress-close");
+        progressClosed = true;
+      },
     },
     state: {
       getDraft: () => structuredClone(draft),
@@ -230,6 +242,14 @@ const createControllerFixture = ({
           draftFingerprint: fingerprintDocument(draft),
         };
       },
+      close: () => {
+        order.push("review-close");
+        reviewClosed = true;
+      },
+    },
+    navigateToOverview: () => {
+      order.push("overview");
+      overviewSelected = true;
     },
     reload: async () => {
       order.push("reload");
@@ -246,6 +266,10 @@ const createControllerFixture = ({
     shellStates,
     wasCleared: () => cleared,
     wasReloaded: () => reloaded,
+    wasReviewClosed: () => reviewClosed,
+    wasOverviewSelected: () => overviewSelected,
+    wasProgressOpened: () => progressOpened,
+    wasProgressClosed: () => progressClosed,
   };
 };
 
@@ -264,7 +288,7 @@ test("publish controller is inert while the Worker publication gate is off", asy
   );
 });
 
-test("publish controller reviews validates confirms publishes polls then clears and reloads only on terminal success", async () => {
+test("publish controller reviews validates confirms moves to Overview locks progress then clears and reloads only after MISSION PASS Close", async () => {
   const fixture = createControllerFixture({
     publicationStatuses: [
       { status: "building" },
@@ -282,16 +306,59 @@ test("publish controller reviews validates confirms publishes polls then clears 
     "review",
     "validate",
     "confirm",
+    "review-close",
+    "overview",
+    "progress-open",
     "uploads",
     "publish",
     "status",
     "status",
     "status",
+    "progress-close",
     "clear",
     "reload",
   ]);
+  assert.equal(fixture.wasReviewClosed(), true);
+  assert.equal(fixture.wasOverviewSelected(), true);
+  assert.equal(fixture.wasProgressOpened(), true);
+  assert.equal(fixture.wasProgressClosed(), true);
   assert.equal(fixture.wasCleared(), true);
   assert.equal(fixture.wasReloaded(), true);
+});
+
+test("terminal publication failure waits for MISSION FAIL Close and preserves the draft without reload", async () => {
+  const fixture = createControllerFixture({
+    publicationStatuses: [
+      { status: "building" },
+      { status: "failed" },
+    ],
+  });
+
+  fixture.controller.setAvailability(true);
+  const result = await fixture.controller.publish();
+
+  assert.equal(result.accepted, false);
+  assert.equal(result.status, "failed");
+  assert.equal(fixture.wasReviewClosed(), true);
+  assert.equal(fixture.wasOverviewSelected(), true);
+  assert.equal(fixture.wasProgressOpened(), true);
+  assert.equal(fixture.wasProgressClosed(), true);
+  assert.equal(fixture.wasCleared(), false);
+  assert.equal(fixture.wasReloaded(), false);
+
+  assert.deepEqual(fixture.order, [
+    "review",
+    "validate",
+    "confirm",
+    "review-close",
+    "overview",
+    "progress-open",
+    "uploads",
+    "publish",
+    "status",
+    "status",
+    "progress-close",
+  ]);
 });
 
 test("STALE_MAIN preserves the local draft and pending uploads", async () => {

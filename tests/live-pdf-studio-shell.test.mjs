@@ -135,3 +135,38 @@ test("production /specials/ is owned by the password-gated Studio entry", async 
     assert.equal(await exists(outputPath), true, `${outputPath} must remain public.`);
   }
 });
+test("RUPERT-SYSTEMS blocks Studio interaction until MISSION PASS Close and connection light uses semantic publication tones", async () => {
+  const shell = await read("src/live-pdf-studio/shell.js");
+  const styles = await read("src/live-pdf-studio/styles.css");
+  const main = await read("src/live-pdf-studio/main.js");
+
+  assert.match(shell, /data-publication-progress-dialog/);
+  assert.match(shell, /RUPERT-SYSTEMS/);
+  assert.match(shell, /MISSION PASS/);
+  assert.match(shell, /MISSION FAIL/);
+  assert.match(shell, /"████████"/);
+  assert.match(shell, /"XXXXXXXX"/);
+  assert.match(shell, /dataset\.scanTone/);
+  assert.match(shell, /data-publication-progress-close/);
+  assert.match(shell, /publicationProgressClose\.disabled = !terminal/);
+  assert.match(shell, /publicationProgressDialog\.showModal\(\)/);
+  assert.match(shell, /event\.preventDefault\(\)/);
+  assert.match(shell, /dataConnectionTone|connectionTone|dataset\.connectionTone/);
+
+  assert.match(main, /navigationController\.setActive\("overview"\)/);
+
+  assert.match(styles, /\.connection-dot\[data-connection-tone="ok"\]/);
+  assert.match(styles, /\.connection-dot\[data-connection-tone="warning"\]/);
+  assert.match(styles, /\.connection-dot\[data-connection-tone="problem"\]/);
+  assert.match(styles, /\.publication-progress-dialog\[open\]/);
+  assert.match(
+    styles,
+    /\.publication-progress-dialog\[data-publication-state="failed"\][\s\S]*\.publication-progress-dialog__mission/,
+  );
+  assert.match(
+    styles,
+    /\.publication-progress-dialog\[data-publication-state="conflict"\][\s\S]*\.publication-progress-dialog__mission/,
+  );
+  assert.match(styles, /#ef7075/);
+  assert.match(styles, /prefers-reduced-motion: reduce/);
+});

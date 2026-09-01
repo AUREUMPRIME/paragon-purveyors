@@ -467,6 +467,65 @@ export const renderStudioShell = ({ root, statuses }) => {
       </div>
     </dialog>
 
+    <dialog
+      class="studio-dialog publication-progress-dialog"
+      data-publication-progress-dialog
+      aria-labelledby="publication-progress-title"
+    >
+      <div class="publication-progress-dialog__panel">
+        <div class="publication-progress-dialog__terminal">
+          <p class="workspace-eyebrow">Protected Publication</p>
+          <pre
+            class="publication-progress-dialog__ascii"
+            id="publication-progress-title"
+            aria-label="RUPERT-SYSTEMS"
+          >RUPERT-SYSTEMS</pre>
+
+          <div
+            class="publication-progress-dialog__activity"
+            aria-hidden="true"
+            data-publication-activity
+          >
+            <span>[</span><span data-publication-scan>████░░░░</span><span>]</span>
+          </div>
+
+          <p
+            class="publication-progress-dialog__state"
+            data-publication-progress-state
+            aria-live="polite"
+          >
+            Preparing publication…
+          </p>
+
+          <ol class="publication-progress-dialog__stages">
+            <li data-publication-stage="validating">Validate reviewed draft</li>
+            <li data-publication-stage="submitting">Submit protected publication</li>
+            <li data-publication-stage="queued">Queue workflow</li>
+            <li data-publication-stage="building">Build production package</li>
+            <li data-publication-stage="promoting">Promote production commit</li>
+            <li data-publication-stage="deploying">Deploy exact site</li>
+            <li data-publication-stage="verifying">Verify live publication</li>
+          </ol>
+
+          <div
+            class="publication-progress-dialog__mission"
+            data-publication-mission
+            hidden
+          >
+            MISSION PASS
+          </div>
+
+          <button
+            class="studio-action studio-action--primary publication-progress-dialog__close"
+            type="button"
+            data-publication-progress-close
+            disabled
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </dialog>
     <dialog class="studio-dialog review-dialog" data-review-dialog>
       <div class="review-dialog__panel">
         <header class="review-dialog__header">
@@ -552,6 +611,19 @@ export const renderStudioShell = ({ root, statuses }) => {
   const publishingStatusNode = root.querySelector(
     "[data-publishing-status]",
   );
+  const connectionDot = root.querySelector(".connection-dot");
+  const publicationProgressDialog = root.querySelector(
+    "[data-publication-progress-dialog]",
+  );
+  const publicationProgressState = root.querySelector(
+    "[data-publication-progress-state]",
+  );
+  const publicationProgressMission = root.querySelector(
+    "[data-publication-mission]",
+  );
+  const publicationProgressClose = root.querySelector(
+    "[data-publication-progress-close]",
+  );
   const publishDialog = root.querySelector(
     "[data-publish-live-dialog]",
   );
@@ -575,6 +647,141 @@ export const renderStudioShell = ({ root, statuses }) => {
 
   let latestDraftSnapshot = null;
   let publishingBusy = false;
+  let publicationProgressResolve = null;
+
+  const publicationStageOrder = Object.freeze([
+    "validating",
+    "submitting",
+    "queued",
+    "building",
+    "promoting",
+    "deploying",
+    "verifying",
+  ]);
+
+  const publicationStateTone = (state) => {
+    if (["ready", "success"].includes(state)) return "ok";
+    if (
+      [
+        "reviewing",
+        "validating",
+        "confirming",
+        "submitting",
+        "queued",
+        "building",
+        "promoting",
+        "deploying",
+        "verifying",
+      ].includes(state)
+    ) {
+      return "warning";
+    }
+
+    if (["disabled", "conflict", "failed"].includes(state)) {
+      return "problem";
+    }
+
+    return "warning";
+  };
+
+  const updatePublicationProgress = (state, statusText) => {
+    if (!publicationProgressDialog) return;
+
+    publicationProgressDialog.dataset.publicationState = state;
+
+    if (publicationProgressState) {
+      publicationProgressState.textContent = statusText;
+    }
+
+    const activeIndex = publicationStageOrder.indexOf(state);
+
+    publicationProgressDialog
+      .querySelectorAll("[data-publication-stage]")
+      .forEach((node) => {
+        const stageIndex = publicationStageOrder.indexOf(
+          node.dataset.publicationStage,
+        );
+
+        node.dataset.stageState =
+          state === "success"
+            ? "complete"
+            : activeIndex >= 0 && stageIndex < activeIndex
+              ? "complete"
+              : activeIndex >= 0 && stageIndex === activeIndex
+                ? "active"
+                : "pending";
+      });
+
+    const success = state === "success";
+    const terminal = ["success", "conflict", "failed"].includes(state);
+    const scan = publicationProgressDialog.querySelector(
+      "[data-publication-scan]",
+    );
+
+    if (scan) {
+      scan.textContent =
+        success
+          ? "████████"
+          : terminal
+            ? "XXXXXXXX"
+            : "████░░░░";
+
+      scan.dataset.scanTone =
+        success
+          ? "success"
+          : terminal
+            ? "failure"
+            : "active";
+    }
+
+    if (publicationProgressMission) {
+      publicationProgressMission.hidden = !terminal;
+      publicationProgressMission.textContent =
+        success ? "MISSION PASS" : "MISSION FAIL";
+    }
+
+    if (publicationProgressClose) {
+      publicationProgressClose.disabled = !terminal;
+    }
+  };
+
+  const openPublicationProgress = () => {
+    if (!publicationProgressDialog.open) {
+      publicationProgressDialog.showModal();
+    }
+
+    publicationProgressDialog.dataset.publicationState = "submitting";
+
+    if (publicationProgressMission) {
+      publicationProgressMission.hidden = true;
+    }
+
+    if (publicationProgressClose) {
+      publicationProgressClose.disabled = true;
+    }
+  };
+
+  const waitForPublicationClose = () =>
+    new Promise((resolve) => {
+      publicationProgressResolve = resolve;
+    });
+
+  publicationProgressDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+  });
+
+  publicationProgressDialog?.addEventListener("click", (event) => {
+    if (!event.target.matches("[data-publication-progress-close]")) return;
+    if (publicationProgressClose?.disabled) return;
+
+    if (publicationProgressDialog.open) {
+      publicationProgressDialog.close();
+    }
+
+    const resolve = publicationProgressResolve;
+    publicationProgressResolve = null;
+    resolve?.();
+  });
 
   const applyDraftSnapshot = (snapshot) => {
     latestDraftSnapshot = snapshot;
@@ -773,6 +980,12 @@ export const renderStudioShell = ({ root, statuses }) => {
         publishingStatusNode.textContent = statusText;
       }
 
+      if (connectionDot) {
+        connectionDot.dataset.connectionTone = publicationStateTone(state);
+      }
+
+      updatePublicationProgress(state, statusText);
+
       for (const button of publishButtons) {
         button.disabled = !enabled || publishingBusy;
         button.title = !enabled
@@ -805,6 +1018,8 @@ export const renderStudioShell = ({ root, statuses }) => {
         errorMessage: message,
       });
     },
+    openPublicationProgress,
+    waitForPublicationClose,
     confirmRestoreLive,
     confirmPublishLive,
   };

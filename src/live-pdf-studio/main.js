@@ -117,7 +117,7 @@ assetDialog.addEventListener("click", (event) => {
   if (event.target === assetDialog) closeAssetLibrary();
 });
 
-createNavigationController({
+const navigationController = createNavigationController({
   root,
   onNavigate: (sectionId) => {
     activeSection = sectionId;
@@ -302,6 +302,7 @@ const initializeDraftFoundation = async (bootstrap) => {
     state: studioState,
     store: draftStore,
     reviewController,
+    navigateToOverview: () => navigationController.setActive("overview"),
   });
   publishController.setAvailability(productionPublishingEnabled);
 

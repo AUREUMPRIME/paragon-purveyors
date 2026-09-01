@@ -72,6 +72,7 @@ export const createPublishController = ({
   state,
   store,
   reviewController,
+  navigateToOverview = () => {},
   reload = () => globalThis.location?.reload(),
   sleep = sleepDefault,
   pollIntervalMs = 2000,
@@ -199,6 +200,8 @@ export const createPublishController = ({
   };
 
   const publish = async () => {
+    let progressOpened = false;
+
     if (disposed) {
       return Object.freeze({ accepted: false, reason: "DISPOSED" });
     }
@@ -236,6 +239,11 @@ export const createPublishController = ({
         return Object.freeze({ accepted: false, reason: "CANCELLED" });
       }
 
+      reviewController.close();
+      navigateToOverview();
+      shell.openPublicationProgress();
+      progressOpened = true;
+
       const uploads = await store.listUploads(snapshot.documentId);
       const payload = createPublishFormData({
         document,
@@ -265,14 +273,18 @@ export const createPublishController = ({
       );
 
       if (terminal?.status === "success") {
+        await shell.waitForPublicationClose();
         await store.clearDraft(snapshot.documentId);
         await reload();
+
         return Object.freeze({
           accepted: true,
           publishId: payload.publishId,
           status: "success",
         });
       }
+
+      await shell.waitForPublicationClose();
 
       return Object.freeze({
         accepted: false,
@@ -290,6 +302,10 @@ export const createPublishController = ({
           : PUBLICATION_STATE.FAILED,
         publicationErrorMessage(error),
       );
+
+      if (progressOpened) {
+        await shell.waitForPublicationClose();
+      }
 
       return Object.freeze({
         accepted: false,

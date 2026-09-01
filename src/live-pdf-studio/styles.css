@@ -183,6 +183,21 @@ select:focus-visible {
   box-shadow: 0 0 0 4px rgba(200, 169, 108, 0.1);
 }
 
+.connection-dot[data-connection-tone="ok"] {
+  background: #83b88f;
+  box-shadow: 0 0 0 4px rgba(131, 184, 143, 0.12);
+}
+
+.connection-dot[data-connection-tone="warning"] {
+  background: #d5b977;
+  box-shadow: 0 0 0 4px rgba(213, 185, 119, 0.12);
+}
+
+.connection-dot[data-connection-tone="problem"] {
+  background: #ef7075;
+  box-shadow: 0 0 0 4px rgba(239, 112, 117, 0.12);
+}
+
 .studio-sidebar__credit {
   width: 42px;
   height: 42px;
@@ -3618,5 +3633,145 @@ button:disabled {
     transform:
       translate3d(0, 0, 0)
       rotate(-5deg);
+  }
+}
+/* RUPERT-SYSTEMS publication lock */
+
+.publication-progress-dialog {
+  place-items: center;
+  overflow: hidden;
+}
+
+.publication-progress-dialog[open] {
+  display: grid;
+}
+
+.publication-progress-dialog__panel {
+  width: min(720px, calc(100vw - 40px));
+  border: 1px solid var(--studio-border-strong);
+  background:
+    linear-gradient(180deg, rgba(246, 239, 229, 0.025), transparent 42%),
+    var(--studio-panel-deep);
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.68);
+}
+
+.publication-progress-dialog__terminal {
+  display: grid;
+  gap: 22px;
+  padding: clamp(28px, 5vw, 52px);
+}
+
+.publication-progress-dialog__ascii {
+  margin: 0;
+  overflow: hidden;
+  color: var(--studio-cream);
+  font: 600 clamp(22px, 4.5vw, 42px)/1 "Courier New", monospace;
+  letter-spacing: 0.08em;
+  white-space: pre;
+}
+
+.publication-progress-dialog__activity {
+  display: flex;
+  gap: 8px;
+  color: #d5b977;
+  font: 500 13px/1.4 "Courier New", monospace;
+  letter-spacing: 0.12em;
+}
+
+.publication-progress-dialog__activity [data-publication-scan] {
+  animation: rupert-publication-scan 900ms steps(4, end) infinite alternate;
+}
+
+.publication-progress-dialog__activity [data-scan-tone="success"] {
+  color: #83b88f;
+  animation: none;
+}
+
+.publication-progress-dialog__activity [data-scan-tone="failure"] {
+  color: #ef7075;
+  animation: none;
+}
+
+.publication-progress-dialog__state {
+  margin: 0;
+  color: var(--studio-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.publication-progress-dialog__stages {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: publication-stage;
+}
+
+.publication-progress-dialog__stages li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  color: var(--studio-soft);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.publication-progress-dialog__stages li::before {
+  counter-increment: publication-stage;
+  content: "[" counter(publication-stage, decimal-leading-zero) "]";
+  font-family: "Courier New", monospace;
+}
+
+.publication-progress-dialog__stages li[data-stage-state="active"] {
+  color: #d5b977;
+}
+
+.publication-progress-dialog__stages li[data-stage-state="complete"] {
+  color: #83b88f;
+}
+
+.publication-progress-dialog__mission {
+  padding-top: 8px;
+  color: #83b88f;
+  font: 700 clamp(24px, 5vw, 44px)/1 "Courier New", monospace;
+  letter-spacing: 0.12em;
+}
+
+.publication-progress-dialog[data-publication-state="failed"]
+  .publication-progress-dialog__mission,
+.publication-progress-dialog[data-publication-state="conflict"]
+  .publication-progress-dialog__mission {
+  color: #ef7075;
+}
+
+.publication-progress-dialog[data-publication-state="failed"]
+  .publication-progress-dialog__state,
+.publication-progress-dialog[data-publication-state="conflict"]
+  .publication-progress-dialog__state {
+  color: #ef7075;
+}
+
+.publication-progress-dialog__close {
+  justify-self: start;
+  min-width: 120px;
+}
+
+@keyframes rupert-publication-scan {
+  from {
+    opacity: 0.46;
+    transform: translateX(-2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .publication-progress-dialog__activity [data-publication-scan] {
+    animation: none;
   }
 }
