@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T06:33:13.879Z",
+  "generatedAt": "2026-09-01T08:52:23.071Z",
   "source": {
     "type": "canonical",
     "file": "src/data/paragon-live-pdf-studio.json",
@@ -17,7 +17,7 @@
     "assetCount": 14
   },
   "settings": {
-    "month": "September-October",
+    "month": "September",
     "monthVisible": "yes",
     "year": "2026",
     "yearVisible": "yes",
