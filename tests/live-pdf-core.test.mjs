@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import { createPriceRows } from "../src/live-pdf/core/format-price.js";
 import {
@@ -26,6 +27,11 @@ import {
 import {
   validatePublicationSource,
 } from "../src/live-pdf/core/validate-publication-source.js";
+import {
+  loadPdfFontCss,
+} from "../tools/paragon-live-pdf-workflow/pdf-font-lock.mjs";
+
+const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
 test("normalizeText preserves the current trimmed-string contract", () => {
   assert.equal(normalizeText(null), "");
@@ -536,15 +542,17 @@ test("Studio controller serves the shared monthly CSS authority", async () => {
   );
 });
 
-test("production monthly HTML embeds the shared CSS bytes", async () => {
-  const [css, html] = await Promise.all([
+test("production monthly HTML embeds shared CSS followed by deterministic font-lock CSS", async () => {
+  const [css, html, fontLock] = await Promise.all([
     fs.readFile(sharedMonthlyCssUrl, "utf8"),
     fs.readFile(productionMonthlyHtmlUrl, "utf8"),
+    loadPdfFontCss(projectRoot),
   ]);
   const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/);
+  const expectedStyle = normalizeCssText(`${css}\n${fontLock.css}`);
 
   assert.ok(styleMatch, "Expected production monthly HTML to contain one style block.");
-  assert.equal(normalizeCssText(styleMatch[1]), normalizeCssText(css));
+  assert.equal(normalizeCssText(styleMatch[1]), expectedStyle);
 });
 
 const canonicalSourceUrl = new URL(
@@ -728,11 +736,12 @@ test("canonical document adapter remains browser-safe", async () => {
   }
 });
 
-test("current production JSON reproduces the current production HTML through the shared renderer", async () => {
-  const [live, css, productionHtml] = await Promise.all([
+test("current production JSON and deterministic font lock reproduce the current production HTML through the shared renderer", async () => {
+  const [live, css, productionHtml, fontLock] = await Promise.all([
     readJsonUrl(liveMonthlyJsonUrl),
     fs.readFile(sharedMonthlyCssUrl, "utf8"),
     fs.readFile(productionMonthlyHtmlUrl, "utf8"),
+    loadPdfFontCss(projectRoot),
   ]);
   const activeSpecials = [...live.specials].sort(
     (left, right) => Number(left.sort) - Number(right.sort),
@@ -749,6 +758,7 @@ test("current production JSON reproduces the current production HTML through the
       data: live,
       activeSpecials,
       css,
+      fontCss: fontLock.css,
       resolveAssetDataUrl,
     })
   ).replace(/^[ \t]+$/gm, "");

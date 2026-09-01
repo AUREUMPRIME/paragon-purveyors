@@ -6,6 +6,8 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
+import { adaptCanonicalDocument } from "../src/live-pdf/core/adapt-canonical-document.js";
+
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -17,6 +19,13 @@ const manifestPath = path.join(
   "paragon-cut-image-studio",
   "manifests",
   "approved-selection.json",
+);
+
+const canonicalSourcePath = path.join(
+  projectRoot,
+  "src",
+  "data",
+  "paragon-live-pdf-studio.json",
 );
 
 const publicJsonPath = path.join(
@@ -103,11 +112,13 @@ const escapeHtmlText = (value) =>
 
 const [
   manifestBytes,
+  canonicalSourceBytes,
   publicJsonBytes,
   publicHtmlBytes,
   publicPdfBytes,
 ] = await Promise.all([
   readFile(manifestPath),
+  readFile(canonicalSourcePath),
   readFile(publicJsonPath),
   readFile(publicHtmlPath),
   readFile(publicPdfPath),
@@ -116,6 +127,13 @@ const [
 const manifest = JSON.parse(
   manifestBytes.toString("utf8"),
 );
+
+const canonicalSource = JSON.parse(
+  canonicalSourceBytes.toString("utf8"),
+);
+
+const canonicalPublicDocument =
+  adaptCanonicalDocument(canonicalSource);
 
 const publicJson = JSON.parse(
   publicJsonBytes.toString("utf8"),
@@ -380,50 +398,84 @@ test(
 );
 
 test(
-  "generated JSON preserves business mutability and visual authority",
+  "generated JSON exactly preserves canonical business and visual authority",
   () => {
+    const {
+      generatedAt,
+      ...publishedDocument
+    } = publicJson;
+
+    assertNonEmptyString(
+      generatedAt,
+      "publicJson.generatedAt",
+    );
+
+    assert.deepEqual(
+      publishedDocument,
+      canonicalPublicDocument,
+    );
+
     assert.equal(
       publicJson.source?.type,
-      "google",
+      "canonical",
+    );
+
+    assert.equal(
+      publicJson.source?.file,
+      "src/data/paragon-live-pdf-studio.json",
+    );
+
+    assert.equal(
+      publicJson.source?.schemaVersion,
+      canonicalSource.schemaVersion,
+    );
+
+    assert.equal(
+      publicJson.source?.documentId,
+      canonicalSource.documentId,
+    );
+
+    assert.equal(
+      publicJson.source?.revision,
+      canonicalSource.revision,
     );
 
     assert.equal(
       publicJson.visualSource?.type,
-      "studio-manifest",
+      "canonical-document",
     );
 
     assert.equal(
-      publicJson.visualSource?.schema,
-      manifest.schema,
+      publicJson.visualSource?.schemaVersion,
+      canonicalSource.schemaVersion,
     );
 
     assert.equal(
-      publicJson.visualSource?.sha256,
-      sha256(normalizeLineEndingsForHash(manifestBytes)),
+      publicJson.visualSource?.documentId,
+      canonicalSource.documentId,
     );
 
     assert.equal(
-      publicJson.visualSource?.slotCount,
-      manifest.slots.length,
+      publicJson.visualSource?.revision,
+      canonicalSource.revision,
     );
 
     assert.equal(
-      publicJson.visualSource?.productSlotCount,
-      productSlots.length,
+      publicJson.visualSource?.updatedAt,
+      canonicalSource.updatedAt,
     );
 
     assert.equal(
-      publicJson.visualSource?.footerSlotCount,
-      footerSlots.length,
+      publicJson.visualSource?.updatedBy,
+      canonicalSource.updatedBy,
+    );
+
+    assert.equal(
+      publicJson.visualSource?.assetCount,
+      Object.keys(canonicalSource.assetLibrary).length,
     );
 
     assert.ok(Array.isArray(publicJson.specials));
-
-    assert.equal(
-      publicJson.specials.length,
-      productSections.length,
-    );
-
     assert.equal(publicJson.specials.length, 4);
 
     assertUnique(
@@ -438,19 +490,6 @@ test(
         (special) => special.sort,
       ),
       "special sort values",
-    );
-
-    const expectedCutIds = productSections
-      .map((section) => section.sectionId)
-      .sort();
-
-    const actualCutIds = publicJson.specials
-      .map((special) => special.cutId)
-      .sort();
-
-    assert.deepEqual(
-      actualCutIds,
-      expectedCutIds,
     );
 
     for (const special of publicJson.specials) {
@@ -475,139 +514,7 @@ test(
         special.primaryPrice,
         `${special.cutId}.primaryPrice`,
       );
-
-      const section = productSections.find(
-        (candidate) =>
-          candidate.sectionId === special.cutId,
-      );
-
-      assert.ok(
-        section,
-        `Missing manifest section for ${special.cutId}`,
-      );
-
-      const sectionSlots =
-        resolveSectionSlots(section);
-
-      const primarySlot = sectionSlots[0];
-
-      assert.equal(
-        special.primaryImagePath,
-        primarySlot.productionPath,
-      );
-
-      assert.equal(
-        special.primaryImageFit,
-        primarySlot.fit,
-      );
-
-      assert.equal(
-        special.primaryImageZoom,
-        primarySlot.zoom,
-      );
-
-      assert.equal(
-        special.primaryImageFocusX,
-        primarySlot.focusX,
-      );
-
-      assert.equal(
-        special.primaryImageFocusY,
-        primarySlot.focusY,
-      );
-
-      if (section.layout === "single") {
-        assert.equal(
-          special.offerMode,
-          "single-offer",
-        );
-
-        assert.equal(
-          String(
-            special.secondaryImagePath ?? "",
-          ).trim(),
-          "",
-        );
-
-        assert.equal(
-          String(
-            special.secondaryPrice ?? "",
-          ).trim(),
-          "",
-        );
-      }
-
-      if (section.layout === "dual") {
-        assert.equal(
-          special.offerMode,
-          "dual-offer",
-        );
-
-        const secondarySlot = sectionSlots[1];
-
-        assertNonEmptyString(
-          special.secondaryPriceLabel,
-          `${special.cutId}.secondaryPriceLabel`,
-        );
-
-        assertNonEmptyString(
-          special.secondaryPrice,
-          `${special.cutId}.secondaryPrice`,
-        );
-
-        assert.equal(
-          special.secondaryImagePath,
-          secondarySlot.productionPath,
-        );
-
-        assert.equal(
-          special.secondaryImageFit,
-          secondarySlot.fit,
-        );
-
-        assert.equal(
-          special.secondaryImageZoom,
-          secondarySlot.zoom,
-        );
-
-        assert.equal(
-          special.secondaryImageFocusX,
-          secondarySlot.focusX,
-        );
-
-        assert.equal(
-          special.secondaryImageFocusY,
-          secondarySlot.focusY,
-        );
-      }
     }
-
-    const footerSlot = footerSlots[0];
-
-    assert.equal(
-      publicJson.settings?.footerBrollPath,
-      footerSlot.productionPath,
-    );
-
-    assert.equal(
-      publicJson.settings?.footerBrollFit,
-      footerSlot.fit,
-    );
-
-    assert.equal(
-      publicJson.settings?.footerBrollZoom,
-      footerSlot.zoom,
-    );
-
-    assert.equal(
-      publicJson.settings?.footerBrollFocusX,
-      footerSlot.focusX,
-    );
-
-    assert.equal(
-      publicJson.settings?.footerBrollFocusY,
-      footerSlot.focusY,
-    );
 
     assert.ok(Array.isArray(publicJson.contacts));
 
@@ -648,7 +555,6 @@ test(
     assert.equal(footerUrl.protocol, "https:");
   },
 );
-
 test(
   "generated HTML contains four current product cards",
   async () => {
@@ -740,7 +646,7 @@ test(
 
     assert.match(
       result.stdout,
-      /MONTHLY SPECIALS VISUAL AUTHORITY VERIFIED/,
+      /MONTHLY SPECIALS CANONICAL VISUAL AUTHORITY VERIFIED/,
     );
   },
 );

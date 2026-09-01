@@ -3,6 +3,9 @@ import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isDeepStrictEqual } from "node:util";
+
+import { adaptCanonicalDocument } from "../src/live-pdf/core/adapt-canonical-document.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(
@@ -11,6 +14,13 @@ const manifestPath = path.join(
   "paragon-cut-image-studio",
   "manifests",
   "approved-selection.json",
+);
+
+const canonicalSourcePath = path.join(
+  projectRoot,
+  "src",
+  "data",
+  "paragon-live-pdf-studio.json",
 );
 const publicJsonPath = path.resolve(
   projectRoot,
@@ -58,6 +68,173 @@ const [manifestBytes, publicJsonText] = await Promise.all([
 const manifest = JSON.parse(manifestBytes.toString("utf8"));
 const data = JSON.parse(publicJsonText);
 const manifestHash = sha256Hex(normalizeLineEndingsForHash(manifestBytes));
+
+if (data.visualSource?.type === "canonical-document") {
+  const canonical = JSON.parse(
+    await fs.readFile(canonicalSourcePath, "utf8"),
+  );
+  const expectedDocument = adaptCanonicalDocument(canonical);
+  const {
+    generatedAt,
+    ...publishedDocument
+  } = data;
+
+  if (!normalizeText(generatedAt)) {
+    fail("Published canonical JSON is missing generatedAt.");
+  }
+
+  if (!isDeepStrictEqual(publishedDocument, expectedDocument)) {
+    fail("Published JSON does not exactly match canonical adapter output.");
+  }
+
+  assertEqual(data.source?.type, "canonical", "source.type");
+  assertEqual(
+    data.source?.file,
+    "src/data/paragon-live-pdf-studio.json",
+    "source.file",
+  );
+  assertNumber(
+    data.source?.schemaVersion,
+    canonical.schemaVersion,
+    "source.schemaVersion",
+  );
+  assertEqual(
+    data.source?.documentId,
+    canonical.documentId,
+    "source.documentId",
+  );
+  assertNumber(
+    data.source?.revision,
+    canonical.revision,
+    "source.revision",
+  );
+
+  assertNumber(
+    data.visualSource?.schemaVersion,
+    canonical.schemaVersion,
+    "visualSource.schemaVersion",
+  );
+  assertEqual(
+    data.visualSource?.documentId,
+    canonical.documentId,
+    "visualSource.documentId",
+  );
+  assertNumber(
+    data.visualSource?.revision,
+    canonical.revision,
+    "visualSource.revision",
+  );
+  assertEqual(
+    data.visualSource?.updatedAt,
+    canonical.updatedAt,
+    "visualSource.updatedAt",
+  );
+  assertEqual(
+    data.visualSource?.updatedBy,
+    canonical.updatedBy,
+    "visualSource.updatedBy",
+  );
+  assertNumber(
+    data.visualSource?.assetCount,
+    Object.keys(canonical.assetLibrary).length,
+    "visualSource.assetCount",
+  );
+
+  const references = [];
+
+  const addReference = (label, reference) => {
+    const assetId = normalizeText(reference?.assetId);
+
+    if (assetId) {
+      references.push({ label, assetId });
+    }
+  };
+
+  addReference("header.brandMark", canonical.header?.brandMark);
+  addReference("header.wordmark", canonical.header?.wordmark);
+  addReference("header.campaignMark", canonical.header?.campaignMark);
+
+  for (const special of canonical.specials || []) {
+    addReference(
+      `${special.id}.brandLogo`,
+      special.brandLogo,
+    );
+    addReference(
+      `${special.id}.primaryOffer.image`,
+      special.primaryOffer?.image,
+    );
+    addReference(
+      `${special.id}.secondaryOffer.image`,
+      special.secondaryOffer?.image,
+    );
+  }
+
+  addReference("footer.broll", canonical.footer?.broll);
+
+  assertNumber(references.length, 15, "Canonical visual reference count");
+  assertNumber(
+    new Set(references.map(({ assetId }) => assetId)).size,
+    13,
+    "Canonical unique referenced asset count",
+  );
+
+  for (const { label, assetId } of references) {
+    const asset = canonical.assetLibrary?.[assetId];
+
+    if (!asset) {
+      fail(`${label} references missing canonical asset: ${assetId}`);
+    }
+
+    assertEqual(asset.id, assetId, `${label} asset.id`);
+    assertEqual(asset.archived, false, `${label} asset.archived`);
+
+    const assetPath = normalizeAssetPath(asset.path);
+    const productionFilePath = path.join(
+      projectRoot,
+      "public",
+      assetPath,
+    );
+
+    if (!existsSync(productionFilePath)) {
+      fail(`${label} production asset is missing: ${assetPath}`);
+    }
+
+    const productionBytes = await fs.readFile(productionFilePath);
+
+    assertNumber(
+      productionBytes.length,
+      asset.bytes,
+      `${label} production asset bytes`,
+    );
+
+    assertEqual(
+      sha256Hex(productionBytes),
+      asset.sha256,
+      `${label} production asset SHA-256`,
+    );
+
+    if (!assetPath.includes(asset.sha256.slice(0, 12))) {
+      fail(
+        `${label} production path is not content-addressed by its canonical SHA-256.`,
+      );
+    }
+  }
+
+  assertNumber(data.specials?.length, 4, "Published special count");
+
+  console.log(
+    `[OK] Canonical document revision: ${canonical.revision}`,
+  );
+  console.log(
+    "[OK] Fifteen canonical visual references resolve through thirteen active content-addressed assets.",
+  );
+  console.log(
+    "[OK] Production asset bytes and SHA-256 values match the canonical asset library.",
+  );
+  console.log("[PASS] MONTHLY SPECIALS CANONICAL VISUAL AUTHORITY VERIFIED");
+
+  process.exit(0);
+}
 
 if (manifest?.schema !== "typed-asset-slots") {
   fail(`Unsupported Studio manifest schema: ${manifest?.schema || "<missing>"}`);
