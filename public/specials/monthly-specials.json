@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T10:26:16.161Z",
+  "generatedAt": "2026-09-09T16:23:41.700Z",
   "source": {
     "type": "canonical",
     "file": "src/data/paragon-live-pdf-studio.json",
@@ -87,7 +87,7 @@
       "productLine": "Australian Wagyu",
       "marblingScore": "MB 4-5",
       "quantityAvailable": "Available",
-      "primaryPriceLabel": "2-Pack / 6+ oz each",
+      "primaryPriceLabel": "2-Pack / 8+ oz each",
       "primaryPrice": "$60.00",
       "primaryImagePath": "assets/specials/library/tenderloin/filet-mignon2-436ae92089e2.webp",
       "primaryImageAlt": "Black Opal Filet Mignon steak",
